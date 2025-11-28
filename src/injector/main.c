@@ -14,6 +14,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <mach-o/dyld.h>
+#include <mach-o/loader.h>
 #include <dirent.h>
 #include <sys/stat.h>
 #include <zlib.h>
@@ -36,7 +37,7 @@ extern "C" {
 #endif
 
 // Version info
-#define BG3SE_VERSION "0.9.2"
+#define BG3SE_VERSION "0.9.3"
 #define BG3SE_NAME "BG3SE-macOS"
 
 // Log file for debugging
@@ -204,6 +205,299 @@ static int g_seenFuncIdCount = 0;
 
 // Track if hooks are already installed
 static int hooks_installed = 0;
+
+// ============================================================================
+// Pattern Scanning Infrastructure
+// ============================================================================
+
+// Pattern structure for byte pattern matching
+// Supports Ghidra/IDA style patterns like "48 8D 05 ?? ?? ?? ?? E8"
+typedef struct {
+    unsigned char *bytes;   // Pattern bytes to match
+    unsigned char *mask;    // Mask: 0xFF = must match, 0x00 = wildcard
+    size_t length;          // Pattern length
+} BytePattern;
+
+/**
+ * Parse a pattern string into a BytePattern structure.
+ * Format: "48 8D 05 ?? ?? ?? ?? E8" where ?? = wildcard byte
+ * Returns NULL on parse error. Caller must free with free_pattern().
+ */
+static BytePattern *parse_pattern(const char *pattern_str) {
+    if (!pattern_str || !*pattern_str) return NULL;
+
+    // First pass: count bytes
+    size_t count = 0;
+    const char *p = pattern_str;
+    while (*p) {
+        // Skip whitespace
+        while (*p == ' ' || *p == '\t') p++;
+        if (!*p) break;
+
+        // Check for wildcard or hex byte
+        if (p[0] == '?' && p[1] == '?') {
+            count++;
+            p += 2;
+        } else if ((p[0] >= '0' && p[0] <= '9') ||
+                   (p[0] >= 'A' && p[0] <= 'F') ||
+                   (p[0] >= 'a' && p[0] <= 'f')) {
+            if ((p[1] >= '0' && p[1] <= '9') ||
+                (p[1] >= 'A' && p[1] <= 'F') ||
+                (p[1] >= 'a' && p[1] <= 'f')) {
+                count++;
+                p += 2;
+            } else {
+                return NULL;  // Invalid hex
+            }
+        } else if (*p) {
+            return NULL;  // Invalid character
+        }
+    }
+
+    if (count == 0) return NULL;
+
+    // Allocate pattern structure
+    BytePattern *pat = (BytePattern *)malloc(sizeof(BytePattern));
+    if (!pat) return NULL;
+
+    pat->bytes = (unsigned char *)malloc(count);
+    pat->mask = (unsigned char *)malloc(count);
+    pat->length = count;
+
+    if (!pat->bytes || !pat->mask) {
+        free(pat->bytes);
+        free(pat->mask);
+        free(pat);
+        return NULL;
+    }
+
+    // Second pass: fill bytes and mask
+    p = pattern_str;
+    size_t i = 0;
+    while (*p && i < count) {
+        // Skip whitespace
+        while (*p == ' ' || *p == '\t') p++;
+        if (!*p) break;
+
+        if (p[0] == '?' && p[1] == '?') {
+            pat->bytes[i] = 0x00;
+            pat->mask[i] = 0x00;  // Wildcard
+            p += 2;
+            i++;
+        } else {
+            // Parse hex byte
+            unsigned int byte = 0;
+            sscanf(p, "%2x", &byte);
+            pat->bytes[i] = (unsigned char)byte;
+            pat->mask[i] = 0xFF;  // Must match
+            p += 2;
+            i++;
+        }
+    }
+
+    return pat;
+}
+
+/**
+ * Free a BytePattern allocated by parse_pattern()
+ */
+static void free_pattern(BytePattern *pat) {
+    if (pat) {
+        free(pat->bytes);
+        free(pat->mask);
+        free(pat);
+    }
+}
+
+/**
+ * Scan memory for a byte pattern.
+ * Returns pointer to first match, or NULL if not found.
+ */
+static void *find_pattern(const void *start, size_t size, const BytePattern *pattern) {
+    if (!start || !pattern || size < pattern->length) return NULL;
+
+    const unsigned char *base = (const unsigned char *)start;
+    size_t scan_size = size - pattern->length + 1;
+
+    for (size_t i = 0; i < scan_size; i++) {
+        int found = 1;
+        for (size_t j = 0; j < pattern->length; j++) {
+            // Check if byte matches or is wildcard (mask == 0)
+            if (pattern->mask[j] != 0x00 && base[i + j] != pattern->bytes[j]) {
+                found = 0;
+                break;
+            }
+        }
+        if (found) {
+            return (void *)&base[i];
+        }
+    }
+
+    return NULL;
+}
+
+/**
+ * Convenience function: parse pattern string and scan in one call.
+ * Returns pointer to first match, or NULL if not found.
+ */
+static void *find_pattern_str(const void *start, size_t size, const char *pattern_str) {
+    BytePattern *pat = parse_pattern(pattern_str);
+    if (!pat) return NULL;
+
+    void *result = find_pattern(start, size, pat);
+    free_pattern(pat);
+    return result;
+}
+
+/**
+ * Get the __TEXT,__text section bounds from a loaded Mach-O image.
+ * This is where code resides in the binary.
+ */
+static int get_macho_text_section(const char *image_name, void **start, size_t *size) {
+    if (!start || !size) return 0;
+    *start = NULL;
+    *size = 0;
+
+    // Find the image by name
+    uint32_t image_count = _dyld_image_count();
+    const struct mach_header_64 *header = NULL;
+    intptr_t slide = 0;
+
+    for (uint32_t i = 0; i < image_count; i++) {
+        const char *name = _dyld_get_image_name(i);
+        if (name && strstr(name, image_name)) {
+            header = (const struct mach_header_64 *)_dyld_get_image_header(i);
+            slide = _dyld_get_image_vmaddr_slide(i);
+            break;
+        }
+    }
+
+    if (!header) {
+        return 0;  // Image not found
+    }
+
+    // Make sure it's a 64-bit Mach-O
+    if (header->magic != MH_MAGIC_64) {
+        return 0;
+    }
+
+    // Walk load commands to find __TEXT segment, then __text section
+    const uint8_t *ptr = (const uint8_t *)header + sizeof(struct mach_header_64);
+    for (uint32_t i = 0; i < header->ncmds; i++) {
+        const struct load_command *lc = (const struct load_command *)ptr;
+
+        if (lc->cmd == LC_SEGMENT_64) {
+            const struct segment_command_64 *seg = (const struct segment_command_64 *)ptr;
+
+            if (strcmp(seg->segname, "__TEXT") == 0) {
+                // Found __TEXT segment - now find __text section
+                const struct section_64 *sections = (const struct section_64 *)(ptr + sizeof(struct segment_command_64));
+                for (uint32_t j = 0; j < seg->nsects; j++) {
+                    if (strcmp(sections[j].sectname, "__text") == 0) {
+                        *start = (void *)(sections[j].addr + slide);
+                        *size = sections[j].size;
+                        return 1;
+                    }
+                }
+                // If no __text section, use whole __TEXT segment
+                *start = (void *)(seg->vmaddr + slide);
+                *size = seg->vmsize;
+                return 1;
+            }
+        }
+
+        ptr += lc->cmdsize;
+    }
+
+    return 0;
+}
+
+/**
+ * Debug helper: Log a pattern scan result
+ */
+static void log_pattern_scan(const char *name, const char *pattern, void *result) {
+    if (result) {
+        log_message("[PatternScan] %s found at %p (pattern: %s)", name, result, pattern);
+    } else {
+        log_message("[PatternScan] %s NOT FOUND (pattern: %s)", name, pattern);
+    }
+}
+
+// ============================================================================
+// ARM64 Pattern Database for Fallback Symbol Resolution
+// ============================================================================
+// These patterns are unique byte sequences found in function bodies.
+// They're used when dlsym fails (e.g., after game updates change symbol names).
+// Pattern offset is bytes from function start where pattern is found.
+
+typedef struct {
+    const char *name;           // Function name (for logging)
+    const char *symbol;         // Mangled symbol name for dlsym
+    const char *pattern;        // Unique byte pattern (body, not prologue)
+    int pattern_offset;         // Offset from function start where pattern appears
+} FunctionPattern;
+
+// Patterns discovered from libOsiris.dylib ARM64 (BG3 Patch 7)
+// These patterns are at offset +28 (after function prologue)
+static const FunctionPattern g_osirisPatterns[] = {
+    {
+        "InternalQuery",
+        "_Z13InternalQueryjP16COsiArgumentDesc",
+        "FD 43 04 91 F3 03 01 AA 15 90 01 51 BF 22 00 71 A2 04 00 54 53 1B 00 B4",
+        28
+    },
+    {
+        "InternalCall",
+        "_Z12InternalCalljP18COsipParameterList",
+        "F3 03 00 AA 28 20 00 91 09 04 00 51 3F 0D 00 71 E2 02 00 54 29 08 40 F9",
+        28
+    },
+    {
+        "COsiris::Event",
+        "_ZN7COsiris5EventEjP16COsiArgumentDesc",
+        "F4 03 02 AA F3 03 01 AA 76 02 00 D0 C8 4A 4D 39 68 02 18 36 68 02 00 D0",
+        28
+    },
+    { NULL, NULL, NULL, 0 }  // Sentinel
+};
+
+/**
+ * Try to resolve a function address using pattern scanning.
+ * Returns function pointer if found, NULL otherwise.
+ */
+static void *resolve_by_pattern(const char *image_name, const FunctionPattern *pat) {
+    void *text_start = NULL;
+    size_t text_size = 0;
+
+    if (!get_macho_text_section(image_name, &text_start, &text_size)) {
+        return NULL;
+    }
+
+    void *found = find_pattern_str(text_start, text_size, pat->pattern);
+    if (found) {
+        // Adjust back by pattern offset to get function start
+        void *func_addr = (void *)((uintptr_t)found - pat->pattern_offset);
+        log_message("[PatternScan] %s found via pattern at %p", pat->name, func_addr);
+        return func_addr;
+    }
+
+    return NULL;
+}
+
+/**
+ * Resolve symbol with dlsym, falling back to pattern scan if needed.
+ */
+static void *resolve_osiris_symbol(void *handle, const FunctionPattern *pat) {
+    // First try dlsym (fast path)
+    void *addr = dlsym(handle, pat->symbol);
+    if (addr) {
+        return addr;
+    }
+
+    // Fallback to pattern scanning
+    log_message("[Resolve] dlsym failed for %s, trying pattern scan...", pat->name);
+    return resolve_by_pattern("libOsiris.dylib", pat);
+}
 
 // Lua state
 static lua_State *L = NULL;
@@ -2530,10 +2824,45 @@ static void install_hooks(void) {
         return;
     }
 
+    // Test pattern scanner infrastructure
+    log_message("=== Pattern Scanner Test ===");
+    void *text_start = NULL;
+    size_t text_size = 0;
+    if (get_macho_text_section("libOsiris.dylib", &text_start, &text_size)) {
+        log_message("  libOsiris __TEXT,__text: %p (size: 0x%zx / %zu MB)",
+                    text_start, text_size, text_size / (1024 * 1024));
+    } else {
+        log_message("  WARNING: Could not get libOsiris __TEXT section");
+    }
+
     // Get function addresses (C++ mangled names)
     void *initGameAddr = dlsym(osiris, "_ZN7COsiris8InitGameEv");
     void *loadAddr = dlsym(osiris, "_ZN7COsiris4LoadER12COsiSmartBuf");
     void *eventAddr = dlsym(osiris, "_ZN7COsiris5EventEjP16COsiArgumentDesc");
+
+    // Pattern scanner verification: create pattern from known function bytes
+    if (text_start && text_size > 0 && eventAddr) {
+        // Read first 8 bytes of COsiris::Event and convert to pattern
+        const unsigned char *event_bytes = (const unsigned char *)eventAddr;
+        char test_pattern[64];
+        snprintf(test_pattern, sizeof(test_pattern),
+                 "%02X %02X %02X %02X %02X %02X %02X %02X",
+                 event_bytes[0], event_bytes[1], event_bytes[2], event_bytes[3],
+                 event_bytes[4], event_bytes[5], event_bytes[6], event_bytes[7]);
+
+        log_message("  COsiris::Event first 8 bytes: %s", test_pattern);
+
+        // Try to find this pattern
+        void *found = find_pattern_str(text_start, text_size, test_pattern);
+        if (found == eventAddr) {
+            log_message("  Pattern scanner VERIFIED: found COsiris::Event at correct address");
+        } else if (found) {
+            log_message("  Pattern found at %p (expected %p) - multiple matches?", found, eventAddr);
+        } else {
+            log_message("  WARNING: Pattern scanner failed to find COsiris::Event");
+        }
+    }
+    log_message("=== End Pattern Scanner Test ===");
 
     // Also resolve function pointers for Osiris calls (not hooked, just called)
     pfn_InternalQuery = (InternalQueryFn)dlsym(osiris, "_Z13InternalQueryjP16COsiArgumentDesc");

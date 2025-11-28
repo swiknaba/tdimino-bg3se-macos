@@ -105,7 +105,7 @@ BG3SE-macOS reads scripts directly from PAK files - no extraction needed!
 
 Check `/tmp/bg3se_macos.log` for injection and mod loading logs:
 ```
-=== BG3SE-macOS v0.9.2 ===
+=== BG3SE-macOS v0.9.3 ===
 [timestamp] === BG3SE-macOS v0.9.0 initialized ===
 [timestamp] Running in process: Baldur's Gate 3 (PID: XXXXX)
 [timestamp] Architecture: ARM64 (Apple Silicon)
@@ -265,6 +265,22 @@ bg3se-macos/
 
 Osiris functions like `COsiris::Load`, `COsiris::InitGame`, etc. are internal to `libOsiris.dylib`, requiring inline hooking via Dobby.
 
+### Pattern Scanning (Cross-Version Support)
+
+BG3SE-macOS includes a pattern scanning infrastructure for resilience across game updates:
+
+- **Pattern Database**: Unique ARM64 byte sequences for key Osiris functions
+- **Fallback Resolution**: If `dlsym` fails, pattern scanning locates functions by signature
+- **Mach-O Support**: Scans `__TEXT,__text` section of loaded dylibs
+
+Example patterns (BG3 Patch 7):
+```
+InternalQuery: FD 43 04 91 F3 03 01 AA 15 90 01 51 ...
+InternalCall:  F3 03 00 AA 28 20 00 91 09 04 00 51 ...
+```
+
+When Larian updates the game, if symbol names change but function code remains similar, pattern scanning can still locate the functions.
+
 ### Key libOsiris Symbols
 
 ```
@@ -306,12 +322,14 @@ This is useful for examining mod structure and Lua scripts. Note: BG3SE-macOS no
 
 ### Next Steps
 
-1. **Additional Osi.* Functions** - Implement remaining stub functions (GetDistanceTo, etc.)
-2. **More Event Discovery** - Map additional function IDs for combat, spells, etc.
+1. **Direct Osiris Calls** - Implement osiris_query() and osiris_call() wrappers for full Windows BG3SE parity
+2. **Replace Stubs** - Implement real GetDistanceTo, IsTagged, etc. using direct Osiris queries
 3. **Full MRC Testing** - Verify visible companion behavior changes in-game
 
 ### Completed
 
+- ✅ ARM64 pattern database with fallback symbol resolution (v0.9.3)
+- ✅ Pattern scanning infrastructure for cross-version compatibility (v0.9.3)
 - ✅ Real Osiris bindings via event observation (v0.9.2)
 - ✅ COsiris::Event() hook with callback dispatch (v0.9.1)
 - ✅ PAK file reading - load scripts directly from .pak files (v0.9.0)
