@@ -14,12 +14,25 @@
 #include <time.h>
 #include <unistd.h>
 #include <mach-o/dyld.h>
+#include <dirent.h>
+#include <sys/stat.h>
 
 // Dobby hooking framework
 #include "Dobby/include/dobby.h"
 
+// Lua runtime (C library, needs extern "C" for C++ linkage)
+#ifdef __cplusplus
+extern "C" {
+#endif
+#include "lua.h"
+#include "lauxlib.h"
+#include "lualib.h"
+#ifdef __cplusplus
+}
+#endif
+
 // Version info
-#define BG3SE_VERSION "0.4.0"
+#define BG3SE_VERSION "0.5.0"
 #define BG3SE_NAME "BG3SE-macOS"
 
 // Log file for debugging
@@ -33,6 +46,9 @@ static void log_message(const char *format, ...);
 static void enumerate_loaded_images(void);
 static void check_osiris_library(void);
 static void install_hooks(void);
+static void init_lua(void);
+static void shutdown_lua(void);
+static void detect_enabled_mods(void);
 
 // Original function pointers (filled by Dobby)
 static void *orig_InitGame = NULL;
@@ -44,6 +60,9 @@ static int load_call_count = 0;
 
 // Track if hooks are already installed
 static int hooks_installed = 0;
+
+// Lua state
+static lua_State *L = NULL;
 
 /**
  * Write to both syslog and our log file
@@ -71,6 +90,317 @@ static void log_message(const char *format, ...) {
     }
 }
 
+// ============================================================================
+// Mod Detection
+// ============================================================================
+
+/**
+ * Parse modsettings.lsx and log enabled mods
+ * The file is XML-based, we do simple string parsing to extract mod names
+ */
+static void detect_enabled_mods(void) {
+    // Build path to modsettings.lsx
+    const char *home = getenv("HOME");
+    if (!home) {
+        log_message("Could not get HOME environment variable");
+        return;
+    }
+
+    char path[1024];
+    snprintf(path, sizeof(path),
+             "%s/Documents/Larian Studios/Baldur's Gate 3/PlayerProfiles/Public/modsettings.lsx",
+             home);
+
+    FILE *f = fopen(path, "r");
+    if (!f) {
+        log_message("Could not open modsettings.lsx at: %s", path);
+        return;
+    }
+
+    // Read entire file
+    fseek(f, 0, SEEK_END);
+    long size = ftell(f);
+    fseek(f, 0, SEEK_SET);
+
+    char *content = (char *)malloc(size + 1);
+    if (!content) {
+        fclose(f);
+        log_message("Out of memory reading modsettings.lsx");
+        return;
+    }
+
+    fread(content, 1, size, f);
+    content[size] = '\0';
+    fclose(f);
+
+    // Count and extract mod names
+    // Look for: attribute id="Name" type="LSString" value="ModName"
+    log_message("=== Enabled Mods ===");
+
+    int mod_count = 0;
+    char *ptr = content;
+    const char *name_marker = "attribute id=\"Name\" type=\"LSString\" value=\"";
+    size_t marker_len = strlen(name_marker);
+
+    while ((ptr = strstr(ptr, name_marker)) != NULL) {
+        ptr += marker_len;
+
+        // Find the closing quote
+        char *end = strchr(ptr, '"');
+        if (end) {
+            size_t name_len = end - ptr;
+            if (name_len < 256) {
+                char mod_name[256];
+                strncpy(mod_name, ptr, name_len);
+                mod_name[name_len] = '\0';
+
+                mod_count++;
+                // Skip GustavX as it's the base game, but still count it
+                if (strcmp(mod_name, "GustavX") == 0) {
+                    log_message("  [%d] %s (base game)", mod_count, mod_name);
+                } else {
+                    log_message("  [%d] %s", mod_count, mod_name);
+                }
+            }
+            ptr = end;
+        }
+    }
+
+    log_message("Total mods: %d (%d user mods)", mod_count, mod_count > 0 ? mod_count - 1 : 0);
+    log_message("====================");
+
+    free(content);
+}
+
+// ============================================================================
+// Lua API: Ext namespace functions
+// ============================================================================
+
+/**
+ * Ext.Print(...) - Print to BG3SE log
+ */
+static int lua_ext_print(lua_State *L) {
+    int n = lua_gettop(L);
+    luaL_Buffer b;
+    luaL_buffinit(L, &b);
+
+    for (int i = 1; i <= n; i++) {
+        size_t len;
+        const char *s = luaL_tolstring(L, i, &len);
+        if (i > 1) luaL_addchar(&b, '\t');
+        luaL_addlstring(&b, s, len);
+        lua_pop(L, 1);  // pop the string from luaL_tolstring
+    }
+
+    luaL_pushresult(&b);
+    const char *msg = lua_tostring(L, -1);
+    log_message("[Lua] %s", msg);
+
+    return 0;
+}
+
+/**
+ * Ext.GetVersion() - Return BG3SE version
+ */
+static int lua_ext_getversion(lua_State *L) {
+    lua_pushstring(L, BG3SE_VERSION);
+    return 1;
+}
+
+/**
+ * Ext.IsServer() - Check if running on server context
+ */
+static int lua_ext_isserver(lua_State *L) {
+    // For now, always return false (client-side)
+    lua_pushboolean(L, 0);
+    return 1;
+}
+
+/**
+ * Ext.IsClient() - Check if running on client context
+ */
+static int lua_ext_isclient(lua_State *L) {
+    // For now, always return true (client-side)
+    lua_pushboolean(L, 1);
+    return 1;
+}
+
+/**
+ * Ext.Require(path) - Load and execute a Lua module
+ */
+static int lua_ext_require(lua_State *L) {
+    const char *path = luaL_checkstring(L, 1);
+    log_message("[Lua] Ext.Require('%s')", path);
+
+    // TODO: Implement proper module loading from mod directories
+    // For now, just log the request
+    lua_pushnil(L);
+    return 1;
+}
+
+// Ext.IO namespace
+static int lua_ext_io_loadfile(lua_State *L) {
+    const char *path = luaL_checkstring(L, 1);
+    log_message("[Lua] Ext.IO.LoadFile('%s')", path);
+
+    FILE *f = fopen(path, "r");
+    if (!f) {
+        lua_pushnil(L);
+        lua_pushstring(L, "File not found");
+        return 2;
+    }
+
+    fseek(f, 0, SEEK_END);
+    long size = ftell(f);
+    fseek(f, 0, SEEK_SET);
+
+    char *content = (char *)malloc(size + 1);
+    if (!content) {
+        fclose(f);
+        lua_pushnil(L);
+        lua_pushstring(L, "Out of memory");
+        return 2;
+    }
+
+    fread(content, 1, size, f);
+    content[size] = '\0';
+    fclose(f);
+
+    lua_pushstring(L, content);
+    free(content);
+    return 1;
+}
+
+static int lua_ext_io_savefile(lua_State *L) {
+    const char *path = luaL_checkstring(L, 1);
+    const char *content = luaL_checkstring(L, 2);
+    log_message("[Lua] Ext.IO.SaveFile('%s')", path);
+
+    FILE *f = fopen(path, "w");
+    if (!f) {
+        lua_pushboolean(L, 0);
+        return 1;
+    }
+
+    fputs(content, f);
+    fclose(f);
+
+    lua_pushboolean(L, 1);
+    return 1;
+}
+
+// Ext.Json namespace
+static int lua_ext_json_parse(lua_State *L) {
+    const char *json = luaL_checkstring(L, 1);
+    log_message("[Lua] Ext.Json.Parse called (len: %zu)", strlen(json));
+
+    // TODO: Implement proper JSON parsing
+    // For now, return empty table
+    lua_newtable(L);
+    return 1;
+}
+
+static int lua_ext_json_stringify(lua_State *L) {
+    // TODO: Implement proper JSON stringification
+    // For now, return empty object
+    lua_pushstring(L, "{}");
+    return 1;
+}
+
+/**
+ * Register the Ext API in Lua
+ */
+static void register_ext_api(lua_State *L) {
+    // Create Ext table
+    lua_newtable(L);
+
+    // Basic functions
+    lua_pushcfunction(L, lua_ext_print);
+    lua_setfield(L, -2, "Print");
+
+    lua_pushcfunction(L, lua_ext_getversion);
+    lua_setfield(L, -2, "GetVersion");
+
+    lua_pushcfunction(L, lua_ext_isserver);
+    lua_setfield(L, -2, "IsServer");
+
+    lua_pushcfunction(L, lua_ext_isclient);
+    lua_setfield(L, -2, "IsClient");
+
+    lua_pushcfunction(L, lua_ext_require);
+    lua_setfield(L, -2, "Require");
+
+    // Create Ext.IO table
+    lua_newtable(L);
+    lua_pushcfunction(L, lua_ext_io_loadfile);
+    lua_setfield(L, -2, "LoadFile");
+    lua_pushcfunction(L, lua_ext_io_savefile);
+    lua_setfield(L, -2, "SaveFile");
+    lua_setfield(L, -2, "IO");
+
+    // Create Ext.Json table
+    lua_newtable(L);
+    lua_pushcfunction(L, lua_ext_json_parse);
+    lua_setfield(L, -2, "Parse");
+    lua_pushcfunction(L, lua_ext_json_stringify);
+    lua_setfield(L, -2, "Stringify");
+    lua_setfield(L, -2, "Json");
+
+    // Set Ext as global
+    lua_setglobal(L, "Ext");
+
+    log_message("Ext API registered in Lua");
+}
+
+/**
+ * Initialize Lua runtime
+ */
+static void init_lua(void) {
+    log_message("Initializing Lua runtime...");
+
+    L = luaL_newstate();
+    if (!L) {
+        log_message("ERROR: Failed to create Lua state");
+        return;
+    }
+
+    // Open standard libraries
+    luaL_openlibs(L);
+
+    // Register our Ext API
+    register_ext_api(L);
+
+    // Run a test script
+    const char *test_script =
+        "Ext.Print('BG3SE-macOS Lua runtime initialized!')\n"
+        "Ext.Print('Version: ' .. Ext.GetVersion())\n"
+        "Ext.Print('IsClient: ' .. tostring(Ext.IsClient()))\n"
+        "Ext.Print('IsServer: ' .. tostring(Ext.IsServer()))\n";
+
+    if (luaL_dostring(L, test_script) != LUA_OK) {
+        const char *error = lua_tostring(L, -1);
+        log_message("Lua error: %s", error);
+        lua_pop(L, 1);
+    }
+
+    log_message("Lua %s initialized", LUA_VERSION);
+}
+
+/**
+ * Shutdown Lua runtime
+ */
+static void shutdown_lua(void) {
+    if (L) {
+        log_message("Shutting down Lua runtime...");
+        lua_close(L);
+        L = NULL;
+    }
+}
+
+// ============================================================================
+// Osiris Hooks
+// ============================================================================
+
 /**
  * Hooked COsiris::InitGame - called when game initializes Osiris
  * Mangled name: _ZN7COsiris8InitGameEv
@@ -86,6 +416,11 @@ static void fake_InitGame(void *thisPtr) {
     }
 
     log_message(">>> COsiris::InitGame returned");
+
+    // Notify Lua that Osiris is initialized
+    if (L) {
+        luaL_dostring(L, "Ext.Print('Osiris initialized!')");
+    }
 }
 
 /**
@@ -105,6 +440,12 @@ static int fake_Load(void *thisPtr, void *smartBuf) {
     }
 
     log_message(">>> COsiris::Load returned: %d", result);
+
+    // Notify Lua that a save was loaded
+    if (L && result) {
+        luaL_dostring(L, "Ext.Print('Story/save data loaded!')");
+    }
+
     return result;
 }
 
@@ -300,6 +641,12 @@ static void bg3se_init(void) {
     // Log Dobby availability
     log_message("Dobby inline hooking: enabled");
 
+    // Detect and log enabled mods
+    detect_enabled_mods();
+
+    // Initialize Lua runtime
+    init_lua();
+
     // Enumerate loaded images
     enumerate_loaded_images();
 
@@ -325,4 +672,7 @@ static void bg3se_cleanup(void) {
     log_message("Final hook call counts:");
     log_message("  COsiris::InitGame: %d calls", initGame_call_count);
     log_message("  COsiris::Load: %d calls", load_call_count);
+
+    // Shutdown Lua
+    shutdown_lua();
 }

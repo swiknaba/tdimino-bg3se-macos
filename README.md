@@ -6,14 +6,15 @@ A native macOS implementation of the BG3 Script Extender, enabling mods that req
 
 ## Status
 
-🚧 **Work in Progress** - Function Hooking Working!
+🚧 **Work in Progress** - Lua Runtime Working!
 
 | Phase | Status | Notes |
 |-------|--------|-------|
 | DYLD Injection | ✅ Complete | Working via `open --env` launch method |
 | Symbol Resolution | ✅ Complete | All 6/6 libOsiris symbols resolved |
 | Function Hooking | ✅ Complete | Dobby inline hooking verified working |
-| Lua Runtime | ⏳ Pending | |
+| Lua Runtime | ✅ Complete | Lua 5.4 with Ext API |
+| Mod Detection | ✅ Complete | Reads modsettings.lsx at startup |
 | Mod Compatibility | ⏳ Pending | Target: More Reactive Companions |
 
 ### Verified Working (Nov 27, 2025)
@@ -27,6 +28,10 @@ A native macOS implementation of the BG3 Script Extender, enabling mods that req
 - ✅ libOsiris.dylib symbol addresses resolved (6/6)
 - ✅ **Dobby inline hooks intercepting `COsiris::Load` calls**
 - ✅ **Hook return values properly preserved (game loads correctly)**
+- ✅ **Lua 5.4 runtime initialized and executing scripts**
+- ✅ **Ext API functions working (Print, GetVersion, IsClient, IsServer)**
+- ✅ **Mod list detection from modsettings.lsx**
+- ✅ **Hooks triggering Lua callbacks on game events**
 
 ## Requirements
 
@@ -75,21 +80,26 @@ See `scripts/*.example` files for reference wrapper scripts.
 
 Check `/tmp/bg3se_macos.log` for injection logs:
 ```
-=== BG3SE-macOS v0.4.0 ===
-[timestamp] === BG3SE-macOS v0.4.0 initialized ===
+=== BG3SE-macOS v0.5.0 ===
+[timestamp] === BG3SE-macOS v0.5.0 initialized ===
 [timestamp] Running in process: Baldur's Gate 3 (PID: XXXXX)
 [timestamp] Architecture: ARM64 (Apple Silicon)
 [timestamp] Dobby inline hooking: enabled
-[timestamp] Loaded images: 533
-[timestamp] libOsiris.dylib handle obtained!
+[timestamp] === Enabled Mods ===
+[timestamp]   [1] GustavX (base game)
+[timestamp]   [2] YourMod1
+[timestamp]   [3] YourMod2
+[timestamp] Total mods: 3 (2 user mods)
+[timestamp] ====================
+[timestamp] Initializing Lua runtime...
+[timestamp] [Lua] BG3SE-macOS Lua runtime initialized!
+[timestamp] [Lua] Version: 0.5.0
 [timestamp] Found 6/6 key Osiris symbols
-[timestamp] Installing Dobby hooks...
-[timestamp]   COsiris::InitGame hooked successfully
-[timestamp]   COsiris::Load hooked successfully
 [timestamp] Hooks installed: 2/2
 ...
 [timestamp] >>> COsiris::Load called! (count: 1, this: 0x..., buf: 0x...)
 [timestamp] >>> COsiris::Load returned: 1
+[timestamp] [Lua] Story/save data loaded!
 ```
 
 ## How It Works
@@ -150,10 +160,13 @@ When hooking C++ member functions, the return value must be captured and returne
 bg3se-macos/
 ├── src/
 │   └── injector/
-│       └── main.c              # Entry point, hooks & initialization
+│       └── main.c              # Entry point, hooks, Lua runtime & Ext API
 ├── lib/
 │   ├── fishhook/               # Symbol rebinding (for imported symbols)
-│   └── Dobby/                  # Inline hooking (for internal functions)
+│   ├── Dobby/                  # Inline hooking (for internal functions)
+│   └── lua/                    # Lua 5.4 source and build scripts
+│       ├── src/                # Lua 5.4.7 source code
+│       └── build_universal.sh  # Builds universal static library
 ├── scripts/
 │   ├── build.sh                # Build script (universal binary)
 │   ├── bg3-wrapper.sh.example  # Example Steam wrapper
@@ -194,25 +207,41 @@ _ZN7COsiris8InitGameEv          - COsiris::InitGame()
 _ZN7COsiris4LoadER12COsiSmartBuf - COsiris::Load(COsiSmartBuf&)
 ```
 
-### Sample Log Output (v0.4.0)
+### Sample Log Output (v0.5.0)
 
 ```
-=== BG3SE-macOS v0.4.0 ===
-Injection timestamp: 1764286916
-Process ID: 46727
-[2025-11-27 18:41:56] === BG3SE-macOS v0.4.0 initialized ===
-[2025-11-27 18:41:56] Running in process: Baldur's Gate 3 (PID: 46727)
-[2025-11-27 18:41:56] Architecture: ARM64 (Apple Silicon)
-[2025-11-27 18:41:56] Dobby inline hooking: enabled
-[2025-11-27 18:41:56] Loaded images: 533
-[2025-11-27 18:41:56] libOsiris.dylib handle obtained!
-[2025-11-27 18:41:56] Found 6/6 key Osiris symbols
-[2025-11-27 18:41:56] Installing Dobby hooks...
-[2025-11-27 18:41:56]   COsiris::InitGame hooked successfully (orig: 0x10f754000)
-[2025-11-27 18:41:56]   COsiris::Load hooked successfully (orig: 0x10f754020)
-[2025-11-27 18:41:56] Hooks installed: 2/2
-[2025-11-27 18:42:20] >>> COsiris::Load called! (count: 1, this: 0x60001a6fe360, buf: 0x45f462098)
-[2025-11-27 18:42:21] >>> COsiris::Load returned: 1
+=== BG3SE-macOS v0.5.0 ===
+Injection timestamp: 1764288141
+Process ID: 53033
+[2025-11-27 19:02:21] === BG3SE-macOS v0.5.0 initialized ===
+[2025-11-27 19:02:21] Running in process: Baldur's Gate 3 (PID: 53033)
+[2025-11-27 19:02:21] Architecture: ARM64 (Apple Silicon)
+[2025-11-27 19:02:21] Dobby inline hooking: enabled
+[2025-11-27 19:02:21] === Enabled Mods ===
+[2025-11-27 19:02:21]   [1] GustavX (base game)
+[2025-11-27 19:02:21]   [2] LIX_OriginDialogTags
+[2025-11-27 19:02:21]   [3] Facial Animations
+[2025-11-27 19:02:21]   [4] ACT1 Capes and Cloaks
+[2025-11-27 19:02:21]   [5] Better Inventory UI
+[2025-11-27 19:02:21]   [6] HT_Camp Event Overhaul
+[2025-11-27 19:02:21]   [7] IN_Core_1_03
+[2025-11-27 19:02:21] Total mods: 7 (6 user mods)
+[2025-11-27 19:02:21] ====================
+[2025-11-27 19:02:21] Initializing Lua runtime...
+[2025-11-27 19:02:21] Ext API registered in Lua
+[2025-11-27 19:02:21] [Lua] BG3SE-macOS Lua runtime initialized!
+[2025-11-27 19:02:21] [Lua] Version: 0.5.0
+[2025-11-27 19:02:21] [Lua] IsClient: true
+[2025-11-27 19:02:21] [Lua] IsServer: false
+[2025-11-27 19:02:21] Lua Lua 5.4 initialized
+[2025-11-27 19:02:21] Found 6/6 key Osiris symbols
+[2025-11-27 19:02:21] Installing Dobby hooks...
+[2025-11-27 19:02:21]   COsiris::InitGame hooked successfully (orig: 0x110e08000)
+[2025-11-27 19:02:21]   COsiris::Load hooked successfully (orig: 0x110e08020)
+[2025-11-27 19:02:21] Hooks installed: 2/2
+[2025-11-27 19:02:45] >>> COsiris::Load called! (count: 1, this: 0x600019f34080, buf: 0x44d5ea098)
+[2025-11-27 19:02:45] >>> COsiris::Load returned: 1
+[2025-11-27 19:02:45] [Lua] Story/save data loaded!
 ```
 
 ## Target Mod

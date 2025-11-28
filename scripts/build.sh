@@ -20,6 +20,17 @@ echo "=========================================="
 mkdir -p "${BUILD_DIR}/lib"
 mkdir -p "${BUILD_DIR}/obj"
 
+# Check for Lua library
+LUA_LIB="${LIB_DIR}/lua/liblua-universal.a"
+if [ ! -f "$LUA_LIB" ]; then
+    echo ""
+    echo "Lua universal library not found. Building..."
+    cd "${LIB_DIR}/lua"
+    chmod +x build_universal.sh
+    ./build_universal.sh
+    cd "${PROJECT_ROOT}"
+fi
+
 # Check for Dobby library
 DOBBY_LIB="${LIB_DIR}/Dobby/libdobby-universal.a"
 if [ ! -f "$DOBBY_LIB" ]; then
@@ -62,7 +73,7 @@ for src in "${SOURCES[@]}"; do
     echo "  - $(basename "$src")"
 done
 
-# Compile universal binary with Dobby
+# Compile universal binary with Dobby and Lua
 clang++ \
     -arch x86_64 \
     -arch arm64 \
@@ -70,12 +81,14 @@ clang++ \
     -o "${BUILD_DIR}/lib/libbg3se.dylib" \
     -I"${SRC_DIR}" \
     -I"${LIB_DIR}" \
+    -I"${LIB_DIR}/lua/src" \
     -L"${LIB_DIR}/Dobby" \
     -Wall -Wextra \
     -O2 \
     -fvisibility=hidden \
     "${SOURCES[@]}" \
     "${DOBBY_LIB}" \
+    "${LUA_LIB}" \
     -lc++
 
 echo ""
