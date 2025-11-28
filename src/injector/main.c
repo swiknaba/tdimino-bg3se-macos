@@ -37,7 +37,7 @@ extern "C" {
 #endif
 
 // Version info
-#define BG3SE_VERSION "0.9.4"
+#define BG3SE_VERSION "0.9.5"
 #define BG3SE_NAME "BG3SE-macOS"
 
 // Log file for debugging
@@ -64,6 +64,9 @@ static int osiris_query_by_id(uint32_t funcId, struct OsiArgumentDesc *args);
 static int osi_is_tagged(const char *character, const char *tag);
 static float osi_get_distance_to(const char *char1, const char *char2);
 static void osi_dialog_request_stop(const char *dialog);
+static void enumerate_osiris_functions(void);
+static void try_cache_function_from_event(uint32_t funcId);
+static const char *get_function_name(uint32_t funcId);
 
 // Original function pointers (filled by Dobby)
 static void *orig_InitGame = NULL;
@@ -177,7 +180,6 @@ typedef struct {
 
 static CachedFunction g_funcCache[MAX_CACHED_FUNCTIONS];
 static int g_funcCacheCount = 0;
-static int g_funcCacheBuilt = 0;
 
 // Reverse lookup: funcId -> cache index (for fast event dispatch)
 #define FUNC_HASH_SIZE 8192
@@ -425,6 +427,7 @@ static int get_macho_text_section(const char *image_name, void **start, size_t *
 /**
  * Debug helper: Log a pattern scan result
  */
+__attribute__((unused))
 static void log_pattern_scan(const char *name, const char *pattern, void *result) {
     if (result) {
         log_message("[PatternScan] %s found at %p (pattern: %s)", name, result, pattern);
@@ -780,6 +783,7 @@ static char *pak_read_file(PakFile *pak, int entry_idx, size_t *out_size) {
 /**
  * Check if a PAK file contains a specific file path
  */
+__attribute__((unused))
 static int pak_contains_file(PakFile *pak, const char *path) {
     return pak_find_entry(pak, path) >= 0;
 }
@@ -2374,6 +2378,13 @@ static void fake_InitGame(void *thisPtr) {
 
     log_message(">>> COsiris::InitGame returned");
 
+    // Enumerate Osiris functions after initialization (only once)
+    static int functions_enumerated = 0;
+    if (!functions_enumerated && g_pOsiFunctionMan && *g_pOsiFunctionMan) {
+        functions_enumerated = 1;
+        enumerate_osiris_functions();
+    }
+
     // Notify Lua that Osiris is initialized
     if (L) {
         luaL_dostring(L, "Ext.Print('Osiris initialized!')");
@@ -2516,6 +2527,7 @@ static const char *extract_func_name_from_def(void *funcDef) {
  * Probe structure layout by dumping bytes from a function definition
  * This is called once during cache building for debugging
  */
+__attribute__((unused))
 static void probe_funcdef_structure(void *funcDef, uint32_t funcId) {
     if (!funcDef) return;
 
@@ -2583,17 +2595,96 @@ static void track_seen_func_id(uint32_t funcId, uint8_t arity) {
 }
 
 /**
- * Build function cache by probing known function IDs from events
- * DISABLED: Calling pFunctionData with incorrect this pointer causes hangs
- * TODO: Find correct way to get COsiFunctionMan instance
+ * Try to get function definition and cache it
+ * Uses the global OsiFunctionMan if available
+ */
+static int try_cache_function_by_id(uint32_t funcId) {
+    // Need both the function pointer and the manager instance
+    if (!pfn_pFunctionData || !g_pOsiFunctionMan || !*g_pOsiFunctionMan) {
+        return 0;
+    }
+
+    void *funcMan = *g_pOsiFunctionMan;
+    void *funcDef = pfn_pFunctionData(funcMan, funcId);
+
+    if (funcDef) {
+        const char *name = extract_func_name_from_def(funcDef);
+        if (name && name[0]) {
+            // Determine arity from structure (offset 21 based on OsiFunctionDef)
+            uint8_t *p = (uint8_t *)funcDef;
+            uint8_t arity = p[21];  // numInParams
+            uint8_t type = p[20];   // funcType
+
+            cache_function(name, funcId, arity, type);
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+/**
+ * Enumerate Osiris functions by probing ID ranges
+ * Called once during initialization to build the function cache
+ */
+static void enumerate_osiris_functions(void) {
+    if (!pfn_pFunctionData || !g_pOsiFunctionMan || !*g_pOsiFunctionMan) {
+        log_message("[FuncEnum] Cannot enumerate - pFunctionData or OsiFunctionMan not available");
+        return;
+    }
+
+    log_message("[FuncEnum] Starting function enumeration...");
+    int found_count = 0;
+
+    // Osiris function IDs are split into two ranges:
+    // 1. Regular functions: 0 to ~64K (low IDs)
+    // 2. Registered functions: 0x80000000 + offset (high bit set)
+
+    // Probe low range (regular functions) - usually 0-10000
+    for (uint32_t id = 1; id < 10000 && found_count < 1000; id++) {
+        if (try_cache_function_by_id(id)) {
+            found_count++;
+        }
+    }
+
+    // Probe high range (registered functions) - 0x80000000 + 0 to ~30000
+    for (uint32_t offset = 0; offset < 30000 && found_count < 2000; offset++) {
+        uint32_t id = 0x80000000 | offset;
+        if (try_cache_function_by_id(id)) {
+            found_count++;
+        }
+    }
+
+    log_message("[FuncEnum] Enumeration complete: %d functions cached", found_count);
+
+    // Log some key functions we're looking for
+    const char *key_funcs[] = {
+        "QRY_IsTagged", "IsTagged", "GetDistanceTo", "QRY_GetDistance",
+        "DialogRequestStop", "QRY_StartDialog_Fixed", "StartDialog",
+        "DB_Players", "CharacterGetDisplayName", NULL
+    };
+
+    log_message("[FuncEnum] Checking key functions:");
+    for (int i = 0; key_funcs[i]; i++) {
+        uint32_t fid = lookup_function_by_name(key_funcs[i]);
+        if (fid != INVALID_FUNCTION_ID) {
+            log_message("  %s -> 0x%08x", key_funcs[i], fid);
+        }
+    }
+}
+
+/**
+ * Cache function from observed event (called from event handler)
+ * This is a fallback when enumeration didn't find everything
  */
 static void try_cache_function_from_event(uint32_t funcId) {
-    (void)funcId;  // Unused for now
+    // Skip if already cached
+    if (get_function_name(funcId) != NULL) {
+        return;
+    }
 
-    // DISABLED - calling pFunctionData crashes/hangs the game
-    // Need to find the correct COsiFunctionMan instance first
-    // The COsiris pointer we have is not the same as COsiFunctionMan
-    return;
+    // Try to get the function definition
+    try_cache_function_by_id(funcId);
 }
 
 /**
@@ -2653,6 +2744,7 @@ static uint32_t lookup_function_by_name(const char *name) {
  * Get function info (arity and type) by name
  * Returns 1 on success, 0 if not found
  */
+__attribute__((unused))
 static int get_function_info(const char *name, uint8_t *out_arity, uint8_t *out_type) {
     if (!name) return 0;
 
@@ -2722,6 +2814,7 @@ static void set_arg_string(OsiArgumentDesc *arg, const char *value, int isGuid) 
 /**
  * Set argument value as integer
  */
+__attribute__((unused))
 static void set_arg_int(OsiArgumentDesc *arg, int32_t value) {
     if (!arg) return;
     arg->value.typeId = OSI_TYPE_INTEGER;
@@ -2731,6 +2824,7 @@ static void set_arg_int(OsiArgumentDesc *arg, int32_t value) {
 /**
  * Set argument value as real (float)
  */
+__attribute__((unused))
 static void set_arg_real(OsiArgumentDesc *arg, float value) {
     if (!arg) return;
     arg->value.typeId = OSI_TYPE_REAL;
@@ -2756,6 +2850,7 @@ static int osiris_query_by_id(uint32_t funcId, OsiArgumentDesc *args) {
  * Execute an Osiris query by name
  * Returns 1 on success, 0 on failure
  */
+__attribute__((unused))
 static int osiris_query(const char *funcName, OsiArgumentDesc *args) {
     uint32_t funcId = lookup_function_by_name(funcName);
     if (funcId == INVALID_FUNCTION_ID) {
@@ -2787,6 +2882,7 @@ static int osiris_call_by_id(uint32_t funcId, OsiArgumentDesc *args) {
  * Execute an Osiris call by name
  * Returns 1 on success, 0 on failure
  */
+__attribute__((unused))
 static int osiris_call(const char *funcName, OsiArgumentDesc *args) {
     uint32_t funcId = lookup_function_by_name(funcName);
     if (funcId == INVALID_FUNCTION_ID) {
@@ -2892,6 +2988,7 @@ static int count_osi_args(OsiArgumentDesc *args) {
  */
 static void dispatch_event_to_lua(const char *eventName, int arity,
                                    OsiArgumentDesc *args, const char *timing) {
+    (void)arity;  // Currently unused - listener uses its own requested arity
     if (!L || !eventName) return;
 
     for (int i = 0; i < osiris_listener_count; i++) {
@@ -2968,9 +3065,15 @@ static void fake_Event(void *thisPtr, uint32_t funcId, OsiArgumentDesc *args) {
         log_message(">>> Captured COsiris from Event: %p", g_COsiris);
     }
 
-    // Get function name if available
+    // Get function name if available (may trigger cache lookup)
     const char *funcName = get_function_name(funcId);
     int arity = count_osi_args(args);
+
+    // Try to cache this function if we don't know it yet
+    if (!funcName) {
+        try_cache_function_from_event(funcId);
+        funcName = get_function_name(funcId);  // Try again after caching
+    }
 
     // Track unique function IDs for analysis
     track_seen_func_id(funcId, (uint8_t)arity);
