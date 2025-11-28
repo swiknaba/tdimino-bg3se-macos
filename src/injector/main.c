@@ -1484,9 +1484,32 @@ static void register_ext_osiris(lua_State *L) {
  * For now returns a placeholder string
  */
 static int lua_gethostcharacter(lua_State *L) {
-    // Return a placeholder - in real implementation this would call Osiris
-    lua_pushstring(L, "S_Player_Tav_00000000-0000-0000-0000-000000000000");
-    log_message("[Lua] GetHostCharacter() called (stub)");
+    // Find the host character - it's the player GUID that doesn't match origin companions
+    // Origin companions have GUIDs like "S_Player_Astarion_xxx", "S_Player_Gale_xxx", etc.
+    // The custom/host character has a different pattern (e.g., "HalfElves_Male_High_Player_Dev_xxx")
+    const char *hostGuid = NULL;
+
+    for (int i = 0; i < g_knownPlayerCount; i++) {
+        const char *guid = g_knownPlayerGuids[i];
+        // Check if this is NOT an origin companion (origin companions start with "S_Player_")
+        if (strncmp(guid, "S_Player_", 9) != 0) {
+            hostGuid = guid;
+            break;
+        }
+    }
+
+    // Fallback: if no custom character found, return first player
+    if (!hostGuid && g_knownPlayerCount > 0) {
+        hostGuid = g_knownPlayerGuids[0];
+    }
+
+    if (hostGuid) {
+        log_message("[Lua] GetHostCharacter() -> '%s'", hostGuid);
+        lua_pushstring(L, hostGuid);
+    } else {
+        log_message("[Lua] GetHostCharacter() -> nil (no players discovered yet)");
+        lua_pushnil(L);
+    }
     return 1;
 }
 

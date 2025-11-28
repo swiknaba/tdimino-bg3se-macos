@@ -204,7 +204,7 @@ When hooking C++ member functions, the return value must be captured and returne
 |-----|--------|-------------|
 | `_P(...)` | ✅ Working | Debug print (alias for Ext.Print) |
 | `_D(value)` | ✅ Working | Debug dump (JSON for tables) |
-| `GetHostCharacter()` | ⏳ Stub | Returns placeholder UUID |
+| `GetHostCharacter()` | ✅ Working | Returns main player GUID (non-origin character) |
 
 ### Osi Namespace
 
@@ -369,9 +369,20 @@ When BG3 updates:
 
 MIT License
 
-## Credits
+## Acknowledgments
 
-- Inspired by [Norbyte's BG3SE](https://github.com/Norbyte/bg3se)
-- [Dobby](https://github.com/jmpews/Dobby) - Inline hooking framework
+### Special Thanks
+
+This project would not be possible without **[Norbyte](https://github.com/Norbyte)** and their pioneering work on the original [BG3 Script Extender](https://github.com/Norbyte/bg3se) for Windows. Their reverse engineering of Larian's Osiris scripting engine, comprehensive API design, and years of dedication to the modding community laid the foundation that made this macOS port conceivable. We are deeply grateful for their open-source contribution to the BG3 modding ecosystem.
+
+### Credits
+
+- [Norbyte's BG3SE](https://github.com/Norbyte/bg3se) - The original Windows Script Extender
+- [Dobby](https://github.com/jmpews/Dobby) - Inline hooking framework for ARM64/x86_64
 - [fishhook](https://github.com/facebook/fishhook) - Symbol rebinding library
+- [LZ4](https://github.com/lz4/lz4) - Fast compression for PAK file reading
 - Test mod: [More Reactive Companions](https://www.nexusmods.com/baldursgate3/mods/5447) by LightningLarryL
+
+### P.S.
+
+I also want to extend my thanks to the OP and commenters of this BG3SE issue: **["[Feature Bounty - $350] MacOS Supported Version of BG3 SE"](https://github.com/Norbyte/bg3se/issues/162)**. You kicked off the quest :)
