@@ -25,6 +25,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/core
     ${CMAKE_SOURCE_DIR}/src/entity
     ${CMAKE_SOURCE_DIR}/src/lua
+    ${CMAKE_SOURCE_DIR}/src/mod
     ${CMAKE_SOURCE_DIR}/src/osiris
     ${CMAKE_SOURCE_DIR}/src/pak
 )
@@ -35,6 +36,7 @@ add_library(bg3se SHARED
     src/lua/lua_ext.c
     src/lua/lua_json.c
     src/lua/lua_osiris.c
+    src/mod/mod_loader.c
     src/osiris/pattern_scan.c
     src/osiris/osiris_functions.c
     src/pak/pak_reader.c
