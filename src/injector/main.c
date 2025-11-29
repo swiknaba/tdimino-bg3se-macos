@@ -41,7 +41,7 @@ extern "C" {
 #endif
 
 // Version info
-#define BG3SE_VERSION "0.9.9"
+#define BG3SE_VERSION "0.10.0"
 #define BG3SE_NAME "BG3SE-macOS"
 
 // Log file for debugging
@@ -2049,6 +2049,39 @@ static int lua_osi_db_players_get(lua_State *L) {
 // ============================================================================
 
 /**
+ * Convert an Osiris argument value to a Lua value and push onto stack.
+ * Returns 1 if value was pushed, 0 if type unknown.
+ */
+static int osi_value_to_lua(lua_State *L, OsiArgumentValue *val) {
+    switch (val->typeId) {
+        case OSI_TYPE_NONE:
+            lua_pushnil(L);
+            return 1;
+        case OSI_TYPE_INTEGER:
+            lua_pushinteger(L, val->int32Val);
+            return 1;
+        case OSI_TYPE_INTEGER64:
+            lua_pushinteger(L, val->int64Val);
+            return 1;
+        case OSI_TYPE_REAL:
+            lua_pushnumber(L, val->floatVal);
+            return 1;
+        case OSI_TYPE_STRING:
+        case OSI_TYPE_GUIDSTRING:
+            if (val->stringVal) {
+                lua_pushstring(L, val->stringVal);
+            } else {
+                lua_pushstring(L, "");
+            }
+            return 1;
+        default:
+            log_message("[OsiValue] Unknown type %d", val->typeId);
+            lua_pushnil(L);
+            return 1;
+    }
+}
+
+/**
  * Dynamic Osiris function dispatcher
  * This closure is returned by Osi.__index for unknown function names.
  * The function name is stored as upvalue 1.
@@ -2139,22 +2172,58 @@ static int osi_dynamic_call(lua_State *L) {
     if (funcType == OSI_FUNC_QUERY && pfn_InternalQuery) {
         result = pfn_InternalQuery(funcId, args);
         log_message("[Osi.%s] InternalQuery returned %d", funcName, result);
-        lua_pushboolean(L, result);
-        return 1;
-    } else if (pfn_InternalCall) {
+
+        if (result && numArgs > 0) {
+            // Query succeeded - return all argument values (OUT params will have been filled)
+            // Convention: queries return their arguments, with OUT params updated
+            int returnCount = 0;
+            for (int i = 0; i < numArgs; i++) {
+                osi_value_to_lua(L, &args[i].value);
+                returnCount++;
+            }
+            log_message("[Osi.%s] Returning %d values from query", funcName, returnCount);
+            return returnCount;
+        } else if (result) {
+            // Query succeeded but no args - return true
+            lua_pushboolean(L, 1);
+            return 1;
+        } else {
+            // Query failed - return nil
+            lua_pushnil(L);
+            return 1;
+        }
+    } else if (funcType == OSI_FUNC_CALL && pfn_InternalCall) {
         result = pfn_InternalCall(funcId, (void *)args);
         log_message("[Osi.%s] InternalCall returned %d", funcName, result);
         // Calls don't return values
         return 0;
     }
 
-    // Fallback - try query first, then call
+    // Unknown type - try query first, then call
     if (pfn_InternalQuery) {
         result = pfn_InternalQuery(funcId, args);
         if (result) {
-            log_message("[Osi.%s] Query succeeded", funcName);
+            log_message("[Osi.%s] Query (fallback) succeeded", funcName);
+            // Return all argument values
+            if (numArgs > 0) {
+                int returnCount = 0;
+                for (int i = 0; i < numArgs; i++) {
+                    osi_value_to_lua(L, &args[i].value);
+                    returnCount++;
+                }
+                return returnCount;
+            }
             lua_pushboolean(L, 1);
             return 1;
+        }
+    }
+
+    // Try as a call
+    if (pfn_InternalCall) {
+        result = pfn_InternalCall(funcId, (void *)args);
+        if (result) {
+            log_message("[Osi.%s] Call (fallback) succeeded", funcName);
+            return 0;
         }
     }
 

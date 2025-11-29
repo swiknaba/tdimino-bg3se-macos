@@ -2,7 +2,7 @@
 
 This document tracks the development roadmap for achieving feature parity with Windows BG3SE (Norbyte's Script Extender).
 
-## Current Status: v0.9.9
+## Current Status: v0.10.0
 
 **Working Features:**
 - DYLD injection and Dobby hooking infrastructure
@@ -11,6 +11,7 @@ This document tracks the development roadmap for achieving feature parity with W
 - Basic Ext.* API (Print, Require, RegisterListener, Json, IO)
 - Osiris listener callbacks (before/after event dispatch)
 - Dynamic Osi.* metatable with lazy function lookup
+- Query output parameters (queries return values, not just bool)
 - PAK file extraction and Lua script loading
 - Player GUID tracking from observed events
 
@@ -26,7 +27,7 @@ Lazy function lookup matching Windows BG3SE's OsirisBinding pattern:
 - [x] Creates closures that dispatch via InternalQuery/InternalCall
 - [x] Automatic Lua-to-Osiris argument type conversion
 - [x] Result caching in Osi table for subsequent accesses
-- [ ] **Query output parameters** - Return values from queries (not just bool)
+- [x] **Query output parameters** - Return values from queries (v0.10.0)
 - [ ] **Function type detection** - Distinguish Query vs Call vs Event
 
 ### 1.2 Function Discovery
@@ -279,6 +280,7 @@ Complete Lua type annotations for IDE support and runtime validation.
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| v0.10.0 | 2025-11-28 | Query output parameters, enhanced dynamic dispatch |
 | v0.9.9 | 2025-11-28 | Dynamic Osi.* metatable, lazy function lookup |
 | v0.9.5 | 2025-11-28 | Stable event observation, MRC mod support |
 | v0.9.0 | 2025-11-27 | Initial Lua runtime, basic Ext.* API |
