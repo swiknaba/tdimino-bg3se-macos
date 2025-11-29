@@ -122,6 +122,48 @@ typedef struct {
 } BaseHpComponent;
 
 // ============================================================================
+// Health Component
+// ============================================================================
+
+typedef struct {
+    int32_t current_hp;
+    int32_t max_hp;
+    int32_t temp_hp;
+    // Additional fields TBD from reverse engineering
+} HealthComponent;
+
+// ============================================================================
+// Armor Component
+// ============================================================================
+
+typedef struct {
+    int32_t armor_type;
+    int32_t armor_class;
+    int32_t ability_modifier_cap;
+    uint8_t armor_class_ability;
+    uint8_t equipment_type;
+} ArmorComponent;
+
+// ============================================================================
+// Classes Component
+// ============================================================================
+
+typedef struct {
+    uint64_t class_uuid_lo;
+    uint64_t class_uuid_hi;
+    uint64_t subclass_uuid_lo;
+    uint64_t subclass_uuid_hi;
+    int32_t level;
+} ClassInfo;
+
+typedef struct {
+    // Array of ClassInfo - in practice this is a dynamic array
+    // For now, support up to 4 multiclass levels
+    ClassInfo classes[4];
+    int32_t num_classes;
+} ClassesComponent;
+
+// ============================================================================
 // EntityWorld Interface
 // ============================================================================
 

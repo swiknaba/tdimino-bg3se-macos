@@ -33,7 +33,7 @@ src/
 - `src/lua/lua_*.c` - Ext.* API implementations
 - `src/osiris/osiris_functions.c` - Osiris function enumeration
 - `src/entity/entity_system.c` - Entity Component System with Lua bindings
-- `ghidra/OFFSETS.md` - Reverse-engineered memory offsets
+- `ghidra/offsets/` - Modular offset documentation (Osiris, Entity, Components, Structures)
 
 ## Modular Architecture
 
@@ -266,7 +266,12 @@ osgrep "Osiris function registration" -p /Users/tomdimino/Desktop/Programming/bg
 
 ## Entity System Offsets (from Ghidra analysis)
 
-See `ghidra/ENTITY_OFFSETS.md` for complete analysis. Key findings:
+See `ghidra/offsets/` for modular documentation:
+- `ENTITY_SYSTEM.md` - ECS architecture, EntityWorld capture, GUID lookup
+- `COMPONENTS.md` - GetComponent addresses and discovery status
+- `STRUCTURES.md` - C structure definitions
+
+Key findings:
 
 ### Capturing EntityWorld Pointer
 Hook `eoc::CombatHelpers::LEGACY_IsInCombat` at `0x10124f92c` to capture `EntityWorld&` parameter.

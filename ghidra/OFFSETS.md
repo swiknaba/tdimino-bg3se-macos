@@ -1,5 +1,8 @@
 # BG3SE-macOS: Ghidra-Derived Offsets
 
+> **Note:** This document is superseded by the modular offset docs in `ghidra/offsets/`.
+> See [offsets/README.md](offsets/README.md) for the index.
+
 **Game Version:** Baldur's Gate 3 (macOS ARM64)
 **Analysis Date:** 2025-01-28
 **Library:** libOsiris.dylib (ARM64 slice)

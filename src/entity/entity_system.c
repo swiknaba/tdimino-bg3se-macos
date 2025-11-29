@@ -72,10 +72,28 @@ static int g_GuidCacheCount = 0;
 
 // ecs::EntityWorld::GetComponent<T> template instances
 // These are direct function addresses from Ghidra analysis
+//
+// ls:: components (working - addresses verified)
 #define OFFSET_GET_TRANSFORM_COMPONENT 0x10010d5b00
 #define OFFSET_GET_LEVEL_COMPONENT     0x10010d588c
 #define OFFSET_GET_PHYSICS_COMPONENT   0x101ba0898
 #define OFFSET_GET_VISUAL_COMPONENT    0x102e56350
+
+// eoc:: components (TODO - addresses not yet discovered)
+// These need to be found via:
+// 1. Runtime detection by hooking functions that access them
+// 2. More targeted Ghidra analysis (template instantiations may be elsewhere)
+// String addresses for reference:
+//   eoc::StatsComponent:  0x107b7ca22
+//   eoc::BaseHpComponent: 0x107b84c63
+//   eoc::ArmorComponent:  0x107b7c9e7
+//   eoc::HealthComponent: 0x107ba9b5c
+//   eoc::ClassesComponent: 0x107b7ca5d
+#define OFFSET_GET_STATS_COMPONENT    0  // TODO: Find via RE
+#define OFFSET_GET_BASEHP_COMPONENT   0  // TODO: Find via RE
+#define OFFSET_GET_HEALTH_COMPONENT   0  // TODO: Find via RE
+#define OFFSET_GET_ARMOR_COMPONENT    0  // TODO: Find via RE
+#define OFFSET_GET_CLASSES_COMPONENT  0  // TODO: Find via RE
 
 // Ghidra base address (macOS ARM64)
 #define GHIDRA_BASE_ADDRESS 0x100000000
@@ -88,10 +106,18 @@ static int g_GuidCacheCount = 0;
 typedef void* (*GetComponentFn)(void *entityWorld, uint64_t handle);
 
 // Function pointers for each component type (initialized in entity_system_init)
+// ls:: components (working)
 static GetComponentFn g_GetTransformComponent = NULL;
 static GetComponentFn g_GetLevelComponent = NULL;
 static GetComponentFn g_GetPhysicsComponent = NULL;
 static GetComponentFn g_GetVisualComponent = NULL;
+
+// eoc:: components (placeholders - addresses not yet discovered)
+static GetComponentFn g_GetStatsComponent = NULL;
+static GetComponentFn g_GetBaseHpComponent = NULL;
+static GetComponentFn g_GetHealthComponent = NULL;
+static GetComponentFn g_GetArmorComponent = NULL;
+static GetComponentFn g_GetClassesComponent = NULL;
 
 // ============================================================================
 // HashMap Memory Layout (from Windows BG3SE reference)
@@ -370,12 +396,47 @@ void* entity_get_component(EntityHandle handle, ComponentType type) {
             }
             break;
 
-        // Not yet implemented - need to find GetComponent addresses
+        // eoc:: components - function pointers set when addresses discovered
         case COMPONENT_STATS:
+            if (g_GetStatsComponent) {
+                component = g_GetStatsComponent(g_EntityWorld, handle);
+            } else {
+                log_entity("GetComponent<Stats> address not yet discovered");
+            }
+            break;
+
         case COMPONENT_BASE_HP:
+            if (g_GetBaseHpComponent) {
+                component = g_GetBaseHpComponent(g_EntityWorld, handle);
+            } else {
+                log_entity("GetComponent<BaseHp> address not yet discovered");
+            }
+            break;
+
         case COMPONENT_HEALTH:
+            if (g_GetHealthComponent) {
+                component = g_GetHealthComponent(g_EntityWorld, handle);
+            } else {
+                log_entity("GetComponent<Health> address not yet discovered");
+            }
+            break;
+
         case COMPONENT_ARMOR:
+            if (g_GetArmorComponent) {
+                component = g_GetArmorComponent(g_EntityWorld, handle);
+            } else {
+                log_entity("GetComponent<Armor> address not yet discovered");
+            }
+            break;
+
         case COMPONENT_CLASSES:
+            if (g_GetClassesComponent) {
+                component = g_GetClassesComponent(g_EntityWorld, handle);
+            } else {
+                log_entity("GetComponent<Classes> address not yet discovered");
+            }
+            break;
+
         case COMPONENT_RACE:
         case COMPONENT_PLAYER:
             log_entity("GetComponent for type %d not yet implemented", type);
@@ -448,15 +509,36 @@ int entity_system_init(void *main_binary_base) {
     // Set up function pointers for component accessors and singleton getters
     // These don't need hooks - we just need to know where to call
     g_TryGetUuidMappingSingleton = (TryGetSingletonFn)(OFFSET_TRY_GET_UUID_MAPPING_SINGLETON - ghidra_base + actual_base);
+
+    // ls:: components (working - addresses verified via Ghidra)
     g_GetTransformComponent = (GetComponentFn)(OFFSET_GET_TRANSFORM_COMPONENT - ghidra_base + actual_base);
     g_GetLevelComponent = (GetComponentFn)(OFFSET_GET_LEVEL_COMPONENT - ghidra_base + actual_base);
     g_GetPhysicsComponent = (GetComponentFn)(OFFSET_GET_PHYSICS_COMPONENT - ghidra_base + actual_base);
     g_GetVisualComponent = (GetComponentFn)(OFFSET_GET_VISUAL_COMPONENT - ghidra_base + actual_base);
 
+    // eoc:: components (TODO: addresses not yet discovered)
+    // When addresses are found, update OFFSET_GET_*_COMPONENT defines and uncomment:
+    if (OFFSET_GET_STATS_COMPONENT != 0) {
+        g_GetStatsComponent = (GetComponentFn)(OFFSET_GET_STATS_COMPONENT - ghidra_base + actual_base);
+    }
+    if (OFFSET_GET_BASEHP_COMPONENT != 0) {
+        g_GetBaseHpComponent = (GetComponentFn)(OFFSET_GET_BASEHP_COMPONENT - ghidra_base + actual_base);
+    }
+    if (OFFSET_GET_HEALTH_COMPONENT != 0) {
+        g_GetHealthComponent = (GetComponentFn)(OFFSET_GET_HEALTH_COMPONENT - ghidra_base + actual_base);
+    }
+    if (OFFSET_GET_ARMOR_COMPONENT != 0) {
+        g_GetArmorComponent = (GetComponentFn)(OFFSET_GET_ARMOR_COMPONENT - ghidra_base + actual_base);
+    }
+    if (OFFSET_GET_CLASSES_COMPONENT != 0) {
+        g_GetClassesComponent = (GetComponentFn)(OFFSET_GET_CLASSES_COMPONENT - ghidra_base + actual_base);
+    }
+
     log_entity("Function pointers initialized:");
     log_entity("  TryGetUuidMappingSingleton: %p", (void*)g_TryGetUuidMappingSingleton);
     log_entity("  GetTransformComponent: %p", (void*)g_GetTransformComponent);
     log_entity("  GetLevelComponent: %p", (void*)g_GetLevelComponent);
+    log_entity("  eoc:: components: %s", (g_GetStatsComponent ? "enabled" : "pending discovery"));
 
     g_Initialized = true;
 
