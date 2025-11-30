@@ -23,7 +23,8 @@ A native macOS implementation of the BG3 Script Extender, enabling mods that req
 | Osi.* Functions | ✅ Partial | Key functions return real data (see below) |
 | Ghidra RE Analysis | ✅ Complete | Headless analysis for offset discovery |
 | Function Enumeration | 🔄 Testing | OsiFunctionMan offset-based lookup |
-| Entity System | ✅ Complete | EntityWorld capture, GUID lookup, component access |
+| EntityWorld Capture | ✅ Complete | Direct memory read from `esv::EocServer::m_ptr` |
+| GUID → Entity Lookup | 🔄 Blocked | [TryGetSingleton crash](#1) needs fix |
 
 ### Verified Working (Nov 29, 2025)
 
@@ -49,8 +50,8 @@ A native macOS implementation of the BG3 Script Extender, enabling mods that req
 - ✅ **Real player GUIDs discovered from events (6 party members)**
 - ✅ **Dialog tracking from AutomatedDialogStarted/Ended events**
 - ✅ **MRC mod receiving real game data and identifying dialog participants**
-- ✅ **Entity system hooks capturing EntityWorld pointer**
-- ✅ **GUID to EntityHandle lookup via HashMap (reverse-engineered)**
+- ✅ **EntityWorld capture via direct memory read** (macOS Hardened Runtime workaround)
+- ✅ **EoCServer singleton discovered at `esv::EocServer::m_ptr`** via Ghidra analysis
 - ✅ **Component accessors for Transform, Level, Physics, Visual**
 - ✅ **Ext.Entity Lua API registered and functional**
 
@@ -359,15 +360,29 @@ This is useful for examining mod structure and Lua scripts. Note: BG3SE-macOS no
 
 ## Roadmap
 
+See [GitHub Issues](https://github.com/tdimino/bg3se-macos/issues) for detailed task tracking.
+
+### Current Blockers
+
+1. **[#1 - TryGetSingleton crash](https://github.com/tdimino/bg3se-macos/issues/1)** - Blocks GUID → EntityHandle lookup
+
 ### Next Steps
 
-1. **Stats System** - Read/write game stats via `Ext.Stats`
-2. **Full MRC Testing** - Verify visible companion behavior changes in-game
-3. **Additional Components** - Stats, BaseHp, Armor component accessors
+1. **[#2 - Component Discovery](https://github.com/tdimino/bg3se-macos/issues/2)** - Find eoc:: component addresses (Stats, Health, Armor)
+2. **[#3 - Stats System](https://github.com/tdimino/bg3se-macos/issues/3)** - Read/write game stats via `Ext.Stats`
+3. **[#5 - Debug Console](https://github.com/tdimino/bg3se-macos/issues/5)** - In-game Lua REPL
+
+### Future Phases
+
+- **[#4 - Custom Osiris Functions](https://github.com/tdimino/bg3se-macos/issues/4)** - Register functions callable from story scripts
+- **[#6 - Networking API](https://github.com/tdimino/bg3se-macos/issues/6)** - Multiplayer mod state sync
+- **[#7 - Type System](https://github.com/tdimino/bg3se-macos/issues/7)** - IDE integration and autocomplete
+- **[#8 - Technical Debt](https://github.com/tdimino/bg3se-macos/issues/8)** - Stability, testing, documentation
 
 ### Completed
 
-- ✅ Entity/Component System - EntityWorld capture, GUID lookup, Ext.Entity API (v0.10.0)
+- ✅ EntityWorld capture via direct memory read - bypasses Hardened Runtime (v0.10.2)
+- ✅ Entity/Component System - Ext.Entity API, component accessors (v0.10.0)
 - ✅ Ghidra headless RE analysis - discovered OsiFunctionMan offset (v0.9.8)
 - ✅ Offset-based symbol resolution for unexported symbols (v0.9.8)
 - ✅ Function enumeration via pFunctionData (v0.9.8)
