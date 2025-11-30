@@ -8,21 +8,31 @@ until correct addresses are verified.
 
 Valid macOS ARM64 addresses should be 10 hex digits: `0x1XXXXXXXX` (40-bit virtual address space).
 
-## Known Component String Addresses (Verified)
+## Known Component String Addresses (Updated Nov 30, 2025)
 
-These string addresses are confirmed correct (10 digits):
+These string addresses were re-verified via fresh Ghidra analysis:
 
 | Component | String Address | Notes |
 |-----------|----------------|-------|
-| `ls::TransformComponent` | `0x107b619cc` | ✅ Verified |
-| `ls::LevelComponent` | `0x107b4e44c` | ✅ Verified |
-| `ls::PhysicsComponent` | `0x107b685dd` | ✅ Verified |
-| `ls::VisualComponent` | `0x107b7fad0` | ✅ Verified |
-| `eoc::StatsComponent` | `0x107b7ca22` | ✅ Verified |
-| `eoc::BaseHpComponent` | `0x107b84c63` | ✅ Verified |
-| `eoc::HealthComponent` | `0x107ba9b5c` | ✅ Verified |
-| `eoc::ArmorComponent` | `0x107b7c9e7` | ✅ Verified |
-| `eoc::ActionResourcesComponent` | `0x107b4c17d` | ✅ Verified |
+| `ls::TransformComponent` | `0x107b6196c` | ✅ Updated (was off by ~0x60) |
+| `ls::LevelComponent` | `0x107b4e3bf` | ✅ Updated (was off by ~0x8d) |
+| `eoc::StatsComponent` | `0x107b7c9fc` | ✅ Updated (was off by ~0x26) |
+| `eoc::BaseHpComponent` | `0x107b84c3d` | ✅ Updated (was off by ~0x26) |
+| `eoc::HealthComponent` | `0x107bce7b4` | ✅ Updated (was very different) |
+| `eoc::ArmorComponent` | `0x107b7c9c1` | ✅ Updated (was off by ~0x26) |
+| `ALL_COMPONENTS_META` | `0x107ba7dd3` | ✅ NEW - Contains all component names in one string |
+
+### Analysis Findings (Nov 30, 2025)
+
+**Key Discovery:** Component strings have **NO XREFs** in the analyzed database. This means:
+- They are likely **RTTI (Runtime Type Info)** metadata, not directly referenced by code
+- BG3 probably uses a table/registry structure where indices map to component types
+- Direct string-to-function XRef approach won't work for GetComponent discovery
+
+**Analysis Stats:**
+- Total analysis time: 3047 seconds (~51 minutes) with optimized analyzers
+- OOM errors occurred during Objective-C decompiler phase
+- Reference analysis completed successfully despite OOM errors
 
 ## GetComponent Addresses (DISABLED)
 

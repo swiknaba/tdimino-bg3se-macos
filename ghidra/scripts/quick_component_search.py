@@ -9,14 +9,16 @@ print("=" * 60)
 print("Quick Component Function Search")
 print("=" * 60)
 
-# Known component string addresses from previous searches
+# Component string addresses from fresh Ghidra search (Nov 30, 2025)
 component_strings = {
-    "ls::TransformComponent": 0x107b619cc,
-    "ls::LevelComponent": 0x107b4e44c,
-    "eoc::StatsComponent": 0x107b7ca22,
-    "eoc::BaseHpComponent": 0x107b84c63,
-    "eoc::HealthComponent": 0x107ba9b5c,
-    "eoc::ArmorComponent": 0x107b7c9e7,
+    "ls::TransformComponent": 0x107b6196c,
+    "ls::LevelComponent": 0x107b4e3bf,
+    "eoc::StatsComponent": 0x107b7c9fc,
+    "eoc::BaseHpComponent": 0x107b84c3d,
+    "eoc::HealthComponent": 0x107bce7b4,
+    "eoc::ArmorComponent": 0x107b7c9c1,
+    # Special: Metadata struct with all component names
+    "ALL_COMPONENTS_META": 0x107ba7dd3,
 }
 
 print("\nSearching for references to component strings...")
