@@ -63,6 +63,11 @@ static struct {
 } g_GuidCache[GUID_CACHE_SIZE];
 static int g_GuidCacheCount = 0;
 
+// TypeId discovery state - discovery may need to be deferred until game initializes globals
+static bool g_TypeIdDiscoveryComplete = false;
+static int g_TypeIdRetryCount = 0;
+#define TYPEID_MAX_RETRIES 5
+
 // ============================================================================
 // ARM64 Function Addresses (relative to binary base)
 // From Ghidra analysis - see ghidra/ENTITY_OFFSETS.md
@@ -923,6 +928,76 @@ void* entity_get_binary_base(void) {
 }
 
 // ============================================================================
+// TypeId Discovery Retry
+// ============================================================================
+
+bool entity_typeid_discovery_complete(void) {
+    return g_TypeIdDiscoveryComplete;
+}
+
+int entity_retry_typeid_discovery(void) {
+    if (g_TypeIdDiscoveryComplete) {
+        // Already done - return cached count
+        return component_registry_count();
+    }
+
+    if (!g_MainBinaryBase) {
+        log_entity("Cannot retry TypeId discovery - binary base not set");
+        return 0;
+    }
+
+    // Ensure TypeId module is initialized
+    if (!component_typeid_init(g_MainBinaryBase)) {
+        log_entity("TypeId discovery init failed on retry");
+        return 0;
+    }
+
+    int discovered = component_typeid_discover();
+
+    // Check if any TypeIds were actually found with non-zero indices
+    // The issue is that TypeIds read as 0 before the game initializes them
+    if (discovered > 0) {
+        // Verify at least one key component has a non-zero index
+        const ComponentInfo *stats = component_registry_lookup("eoc::StatsComponent");
+        const ComponentInfo *hp = component_registry_lookup("eoc::BaseHpComponent");
+
+        bool hasValidIndex = false;
+        if (stats && stats->index != COMPONENT_INDEX_UNDEFINED && stats->index != 0) {
+            hasValidIndex = true;
+        }
+        if (hp && hp->index != COMPONENT_INDEX_UNDEFINED && hp->index != 0) {
+            hasValidIndex = true;
+        }
+
+        if (hasValidIndex) {
+            g_TypeIdDiscoveryComplete = true;
+            log_entity("TypeId discovery complete: %d components with valid indices", discovered);
+        } else {
+            g_TypeIdRetryCount++;
+            log_entity("TypeId discovery attempt %d/%d: %d components read (indices still 0)",
+                      g_TypeIdRetryCount, TYPEID_MAX_RETRIES, discovered);
+        }
+    } else {
+        g_TypeIdRetryCount++;
+        log_entity("TypeId discovery attempt %d/%d: no components discovered",
+                  g_TypeIdRetryCount, TYPEID_MAX_RETRIES);
+    }
+
+    return discovered;
+}
+
+// Called from SessionLoaded event handler to retry TypeId discovery
+void entity_on_session_loaded(void) {
+    if (g_TypeIdDiscoveryComplete) {
+        log_entity("SessionLoaded: TypeId discovery already complete");
+        return;
+    }
+
+    log_entity("SessionLoaded: Retrying TypeId discovery...");
+    entity_retry_typeid_discovery();
+}
+
+// ============================================================================
 // Lua Bindings
 // ============================================================================
 
@@ -1498,24 +1573,33 @@ static int lua_entity_dump_storage(lua_State *L) {
 }
 
 // Ext.Entity.DiscoverTypeIds() - Discover component type indices from TypeId globals
-// Usage: local count = Ext.Entity.DiscoverTypeIds()
+// Usage: local result = Ext.Entity.DiscoverTypeIds()
+// Returns: { success = bool, count = int, complete = bool, message = string }
 static int lua_entity_discover_type_ids(lua_State *L) {
-    if (!component_typeid_ready()) {
-        // Try to initialize first
-        if (g_MainBinaryBase && component_typeid_init(g_MainBinaryBase)) {
-            log_entity("TypeId system initialized on demand");
-        } else {
-            lua_pushinteger(L, 0);
-            lua_pushstring(L, "TypeId system not ready - binary base unknown");
-            return 2;
-        }
-    }
+    int discovered = entity_retry_typeid_discovery();
+    bool complete = entity_typeid_discovery_complete();
 
-    int discovered = component_typeid_discover();
+    lua_createtable(L, 0, 4);
+
+    lua_pushboolean(L, discovered > 0);
+    lua_setfield(L, -2, "success");
 
     lua_pushinteger(L, discovered);
-    lua_pushnil(L);  // No error
-    return 2;
+    lua_setfield(L, -2, "count");
+
+    lua_pushboolean(L, complete);
+    lua_setfield(L, -2, "complete");
+
+    if (complete) {
+        lua_pushstring(L, "TypeId discovery complete - indices are valid");
+    } else if (discovered > 0) {
+        lua_pushstring(L, "Components found but indices are 0 - game may not have initialized yet");
+    } else {
+        lua_pushstring(L, "No components discovered - check binary base");
+    }
+    lua_setfield(L, -2, "message");
+
+    return 1;
 }
 
 // Ext.Entity.DumpTypeIds() - Dump all known TypeId addresses and values
@@ -1530,6 +1614,59 @@ static int lua_entity_dump_type_ids(lua_State *L) {
 
     component_typeid_dump();
     return 0;
+}
+
+// Ext.Entity.DumpUuidMap(maxEntries) - Dump UUID to Handle mapping entries
+// Usage: Ext.Entity.DumpUuidMap(10)  -- dumps first 10 entries
+static int lua_entity_dump_uuid_map(lua_State *L) {
+    int maxEntries = (int)luaL_optinteger(L, 1, 10);
+
+    if (!g_EntityWorld) {
+        log_entity("DumpUuidMap: EntityWorld not available");
+        lua_pushinteger(L, 0);
+        return 1;
+    }
+
+    // Get the UuidToHandleMappingComponent singleton
+    void *mapping = NULL;
+    if (g_TryGetUuidMappingSingleton) {
+        mapping = call_try_get_singleton_with_x8(g_TryGetUuidMappingSingleton, g_EntityWorld);
+    }
+
+    if (!mapping) {
+        log_entity("DumpUuidMap: Could not get UuidToHandleMappingComponent");
+        lua_pushinteger(L, 0);
+        return 1;
+    }
+
+    // The HashMap is at offset 0 in UuidToHandleMappingComponent
+    HashMapGuidEntityHandle *hashmap = (HashMapGuidEntityHandle *)mapping;
+
+    log_entity("=== DumpUuidMap: First %d entries (total: %u) ===",
+               maxEntries, hashmap->Keys.size);
+
+    int count = maxEntries;
+    if ((uint32_t)count > hashmap->Keys.size) count = (int)hashmap->Keys.size;
+
+    for (int i = 0; i < count; i++) {
+        Guid *key = &hashmap->Keys.buf[i];
+        EntityHandle value = hashmap->Values.buf[i];
+
+        // Convert GUID to string for comparison
+        char guidStr[40];
+        guid_to_string(key, guidStr);
+
+        log_entity("  [%d] %s -> 0x%llx (raw: hi=0x%llx lo=0x%llx)",
+                   i, guidStr, (unsigned long long)value,
+                   (unsigned long long)key->hi, (unsigned long long)key->lo);
+    }
+
+    if ((int)hashmap->Keys.size > count) {
+        log_entity("  ... (%u more entries)", hashmap->Keys.size - count);
+    }
+
+    lua_pushinteger(L, hashmap->Keys.size);
+    return 1;
 }
 
 void entity_register_lua(lua_State *L) {
@@ -1598,6 +1735,9 @@ void entity_register_lua(lua_State *L) {
 
     lua_pushcfunction(L, lua_entity_lookup_component);
     lua_setfield(L, -2, "LookupComponent");
+
+    lua_pushcfunction(L, lua_entity_dump_uuid_map);
+    lua_setfield(L, -2, "DumpUuidMap");
 
     lua_setfield(L, -2, "Entity");  // Ext.Entity = table
 

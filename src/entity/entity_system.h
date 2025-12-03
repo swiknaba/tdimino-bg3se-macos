@@ -210,6 +210,29 @@ bool entity_discover_world(void);
 void* entity_get_binary_base(void);
 
 // ============================================================================
+// TypeId Discovery
+// ============================================================================
+
+/**
+ * Check if TypeId discovery is complete.
+ * TypeId globals may not be initialized at injection time.
+ */
+bool entity_typeid_discovery_complete(void);
+
+/**
+ * Retry TypeId discovery.
+ * Call after game is fully loaded (e.g., SessionLoaded event).
+ * Returns the number of components discovered.
+ */
+int entity_retry_typeid_discovery(void);
+
+/**
+ * Called when SessionLoaded event fires.
+ * Retries TypeId discovery if not yet complete.
+ */
+void entity_on_session_loaded(void);
+
+// ============================================================================
 // Lua Bindings
 // ============================================================================
 

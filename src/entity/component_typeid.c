@@ -9,6 +9,7 @@
 #include "component_registry.h"
 #include "entity_storage.h"  // For GHIDRA_BASE_ADDRESS
 #include "../core/logging.h"
+#include "../core/safe_memory.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -113,39 +114,45 @@ bool component_typeid_read(uint64_t ghidraAddr, uint16_t *outIndex) {
         return false;
     }
 
-    // Calculate runtime address
-    // Formula: runtime = ghidra - 0x100000000 + binary_base
+    /* Calculate runtime address
+     * Formula: runtime = ghidra - 0x100000000 + binary_base */
     uint64_t offset = ghidraAddr - GHIDRA_BASE_ADDRESS;
-    uintptr_t runtimeAddr = offset + (uintptr_t)g_BinaryBase;
+    mach_vm_address_t runtimeAddr = offset + (mach_vm_address_t)g_BinaryBase;
 
-    // Debug: Show the calculation
-    log_typeid("  Address calculation:");
-    log_typeid("    Ghidra addr:     0x%llx", (unsigned long long)ghidraAddr);
-    log_typeid("    GHIDRA_BASE:     0x%llx", (unsigned long long)GHIDRA_BASE_ADDRESS);
-    log_typeid("    Offset:          0x%llx", (unsigned long long)offset);
-    log_typeid("    Binary base:     %p", g_BinaryBase);
-    log_typeid("    Runtime addr:    0x%llx", (unsigned long long)runtimeAddr);
+    /* Validate the runtime address before attempting to read */
+    SafeMemoryInfo info = safe_memory_check_address(runtimeAddr);
+    if (!info.is_valid || !info.is_readable) {
+        log_typeid("  Address 0x%llx (Ghidra 0x%llx) is not readable",
+                   (unsigned long long)runtimeAddr, (unsigned long long)ghidraAddr);
+        return false;
+    }
 
-    // Debug: Hexdump 16 bytes at the address
-    unsigned char *bytes = (unsigned char *)runtimeAddr;
-    log_typeid("    Bytes at addr:   %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x",
-               bytes[0], bytes[1], bytes[2], bytes[3], bytes[4], bytes[5], bytes[6], bytes[7],
-               bytes[8], bytes[9], bytes[10], bytes[11], bytes[12], bytes[13], bytes[14], bytes[15]);
+    /* Check for GPU carveout region */
+    if (safe_memory_is_gpu_region(runtimeAddr)) {
+        log_typeid("  Address 0x%llx (Ghidra 0x%llx) is in GPU region",
+                   (unsigned long long)runtimeAddr, (unsigned long long)ghidraAddr);
+        return false;
+    }
 
-    // Read the 4-byte type index (stored as int32_t, but only lower 16 bits used)
-    // TypeId<T>::m_TypeIndex is typically a 32-bit integer
-    int32_t rawValue = *(volatile int32_t *)runtimeAddr;
+    /* Safely read the 4-byte type index
+     * TypeId<T>::m_TypeIndex is typically a 32-bit integer */
+    int32_t rawValue = -1;
+    if (!safe_memory_read_i32(runtimeAddr, &rawValue)) {
+        log_typeid("  Failed to safely read from 0x%llx (Ghidra 0x%llx)",
+                   (unsigned long long)runtimeAddr, (unsigned long long)ghidraAddr);
+        return false;
+    }
 
-    log_typeid("    Raw int32:       %d (0x%08x)", rawValue, rawValue);
-
-    // Check for uninitialized (-1 or very large values indicate not yet registered)
+    /* Check for uninitialized (-1 or very large values indicate not yet registered) */
     if (rawValue < 0 || rawValue > 0xFFFF) {
-        log_typeid("    => INVALID (expected 0-65535, got %d)", rawValue);
+        log_typeid("  Invalid TypeIndex value %d at 0x%llx (expected 0-65535)",
+                   rawValue, (unsigned long long)runtimeAddr);
         return false;
     }
 
     *outIndex = (uint16_t)rawValue;
-    log_typeid("    => Valid index:  %u", *outIndex);
+    log_typeid("  TypeIndex=%u at 0x%llx (Ghidra 0x%llx)",
+               *outIndex, (unsigned long long)runtimeAddr, (unsigned long long)ghidraAddr);
     return true;
 }
 
@@ -208,14 +215,31 @@ void component_typeid_dump(void) {
     for (int i = 0; g_KnownTypeIds[i].componentName != NULL; i++) {
         const TypeIdEntry *entry = &g_KnownTypeIds[i];
 
-        uintptr_t runtimeAddr = entry->ghidraAddr - GHIDRA_BASE_ADDRESS + (uintptr_t)g_BinaryBase;
-
-        // Try to read safely
-        int32_t rawValue = *(volatile int32_t *)runtimeAddr;
+        mach_vm_address_t runtimeAddr = entry->ghidraAddr - GHIDRA_BASE_ADDRESS + (mach_vm_address_t)g_BinaryBase;
 
         log_typeid("  %s:", entry->componentName);
         log_typeid("    Ghidra addr: 0x%llx", (unsigned long long)entry->ghidraAddr);
-        log_typeid("    Runtime addr: %p", (void *)runtimeAddr);
+        log_typeid("    Runtime addr: 0x%llx", (unsigned long long)runtimeAddr);
+
+        /* Check if address is readable */
+        SafeMemoryInfo info = safe_memory_check_address(runtimeAddr);
+        if (!info.is_valid || !info.is_readable) {
+            log_typeid("    => NOT READABLE");
+            continue;
+        }
+
+        if (safe_memory_is_gpu_region(runtimeAddr)) {
+            log_typeid("    => GPU REGION (unsafe)");
+            continue;
+        }
+
+        /* Safely read the value */
+        int32_t rawValue = -1;
+        if (!safe_memory_read_i32(runtimeAddr, &rawValue)) {
+            log_typeid("    => READ FAILED");
+            continue;
+        }
+
         log_typeid("    Raw value: %d (0x%x)", rawValue, rawValue);
 
         if (rawValue >= 0 && rawValue <= 0xFFFF) {

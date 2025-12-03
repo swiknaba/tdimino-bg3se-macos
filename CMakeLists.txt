@@ -33,6 +33,7 @@ include_directories(
 add_library(bg3se SHARED
     src/injector/main.c
     src/core/logging.c
+    src/core/safe_memory.c
     src/lua/lua_ext.c
     src/lua/lua_json.c
     src/lua/lua_osiris.c
