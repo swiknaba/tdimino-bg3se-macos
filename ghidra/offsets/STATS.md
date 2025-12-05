@@ -121,12 +121,77 @@ struct Object {
     void* VMT;                           // 0x00
     Array<int32_t> IndexedProperties;    // Indices into global pools
     FixedString Name;                    // Stat entry name
-    // ... AI flags, functors, requirements
+    // ... AI flags, functors, requirements, HashMaps
     int32_t Using;                       // Parent stat index (-1 if none)
     uint32_t ModifierListIndex;          // Type reference (which ModifierList)
     uint32_t Level;                      // Level value
 };
 ```
+
+### Runtime-Verified Object Offsets (Dec 5, 2025)
+
+Discovered via memory probing of WPN_Longsword at `0x600051fe00f0`:
+
+| Field | Offset | Verified Value | Notes |
+|-------|--------|----------------|-------|
+| VMT | +0x00 | - | Virtual method table |
+| IndexedProperties | +0x08 | - | Array of property indices |
+| Name | +0x20 | "WPN_Longsword" | FixedString (32-bit index) |
+| Using | +0xa8 | 0xFFFFFFFF (-1) | No parent stat |
+| ModifierListIndex | +0xac | 0x00000000 | **UNRELIABLE** - see note below |
+| Level | +0xb0 | 0x00000000 | Level = 0 |
+
+**Memory dump excerpt:**
+```
++0xa8: FF FF FF FF 00 00 00 00  // Using=-1, ModifierListIndex=0
++0xb0: 00 00 00 00 ...          // Level=0
+```
+
+### ModifierListIndex Offset Issue (Dec 5, 2025)
+
+**Problem:** The offset 0xac always reads 0 for all stats, even weapons (which should be index 8).
+
+**Root Cause:** The Object struct on macOS ARM64 has a different layout than Windows x64 due to different sizes of:
+- `HashMap<FixedString, Array<FunctorGroup>>` (Functors)
+- `HashMap<FixedString, Array<RollCondition>>` (RollConditions)
+- `Array<Requirement>` (Requirements)
+- `TrackedCompactSet<FixedString>` (ComboProperties, ComboCategories)
+
+These variable-size members between `Name` (+0x20) and `Using` cause offset differences.
+
+**Workaround Implemented:** Name-based type detection in `stats_get_type()`:
+- `WPN_*` → "Weapon"
+- `ARM_*` → "Armor"
+- `Target_*`, `Projectile_*`, `Rush_*`, etc. → "SpellData"
+- `Passive_*` → "PassiveData"
+- Falls back to ModifierListIndex lookup if no prefix matches
+
+**Future Work:** Use Ghidra to analyze functions that access `Object.ModifierListIndex` to discover the true ARM64 offset.
+
+## ModifierList Structure
+
+```c
+struct ModifierList {
+    CNamedElementManager<Modifier> Attributes;  // ~0x5c bytes
+    FixedString Name;                           // Type name ("Weapon", "Armor", etc.)
+};
+```
+
+### Runtime-Verified ModifierList Offsets (Dec 5, 2025)
+
+Discovered via debug probe of ModifierList[0] at `0x600009d31800`:
+
+| Field | Offset | Notes |
+|-------|--------|-------|
+| Attributes (CNamedElementManager) | +0x00 | Contains modifier definitions |
+| Name (FixedString) | +0x5c | Type name - verified: resolves to "Armor" |
+
+**Debug probe results:**
+```
+ML+0x5c: fs_idx=0x46d00030 -> Armor
+```
+
+Note: The CNamedElementManager<Modifier> is smaller than expected (~0x5c bytes instead of 0x60).
 
 ## Related TypeIds
 

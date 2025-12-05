@@ -157,12 +157,14 @@ static bool safe_read_i32(void *addr, int32_t *out_value) {
 #define OBJECT_OFFSET_INDEXED_PROPS    0x08
 #define OBJECT_OFFSET_NAME             0x20   // FixedString Name
 
-// These need runtime discovery - placeholders for now
-// From BG3SE: Using, ModifierListIndex, Level are near end of Object struct
-// Object struct is quite large (~200+ bytes), we'll probe to find these
-#define OBJECT_OFFSET_USING            0xC0   // Placeholder - int32_t Using (parent index)
-#define OBJECT_OFFSET_MODIFIERLIST_IDX 0xC4   // Placeholder - uint32_t ModifierListIndex
-#define OBJECT_OFFSET_LEVEL            0xC8   // Placeholder - uint32_t Level
+// Runtime-verified offsets (Dec 5, 2025 via memory probing)
+// Probed WPN_Longsword at 0x600051fe00f0:
+//   +0xa8: FF FF FF FF = Using = -1 (no parent)
+//   +0xac: 00 00 00 00 = ModifierListIndex = 0
+//   +0xb0: 00 00 00 00 = Level = 0
+#define OBJECT_OFFSET_USING            0xa8   // int32_t Using (parent stat index, -1 if none)
+#define OBJECT_OFFSET_MODIFIERLIST_IDX 0xac   // uint32_t ModifierListIndex (stat type)
+#define OBJECT_OFFSET_LEVEL            0xb0   // uint32_t Level
 
 // FixedString structure
 // FixedString is typically just a const char* pointer in Larian's engine
@@ -558,27 +560,48 @@ StatsObjectPtr stats_get(const char *name) {
 }
 
 const char* stats_get_type(StatsObjectPtr obj) {
+    static bool debug_done = false;
     if (!obj) return NULL;
 
-    // Read ModifierListIndex
-    uint32_t modifier_list_idx = 0;
-    if (!safe_read_u32((char*)obj + OBJECT_OFFSET_MODIFIERLIST_IDX, &modifier_list_idx)) {
-        return NULL;
+    // WORKAROUND: Use name-based type detection
+    // The Object struct layout on macOS ARM64 differs significantly from Windows x64
+    // due to different sizes of HashMap, Array, TrackedCompactSet, etc.
+    // Until we discover the true ModifierListIndex offset, use stat name prefixes.
+    const char *obj_name = read_fixed_string((char*)obj + OBJECT_OFFSET_NAME);
+    if (obj_name) {
+        // Common stat name prefixes map to types
+        if (strncmp(obj_name, "WPN_", 4) == 0) return "Weapon";
+        if (strncmp(obj_name, "ARM_", 4) == 0) return "Armor";
+        if (strncmp(obj_name, "Target_", 7) == 0) return "SpellData";
+        if (strncmp(obj_name, "Projectile_", 11) == 0) return "SpellData";
+        if (strncmp(obj_name, "Rush_", 5) == 0) return "SpellData";
+        if (strncmp(obj_name, "Shout_", 6) == 0) return "SpellData";
+        if (strncmp(obj_name, "Throw_", 6) == 0) return "SpellData";
+        if (strncmp(obj_name, "Zone_", 5) == 0) return "SpellData";
+        if (strncmp(obj_name, "Wall_", 5) == 0) return "SpellData";
+        if (strncmp(obj_name, "Teleportation_", 14) == 0) return "SpellData";
+        if (strncmp(obj_name, "Passive_", 8) == 0) return "PassiveData";
+        if (strncmp(obj_name, "Interrupt_", 10) == 0) return "InterruptData";
+        if (strncmp(obj_name, "CriticalHit_", 12) == 0) return "CriticalHitTypeData";
+        // Status names vary more, check common patterns
+        if (strstr(obj_name, "_STATUS") || strstr(obj_name, "Status_")) return "StatusData";
+
+        // Try ModifierListIndex lookup as fallback
+        uint32_t modifier_list_idx = 0;
+        if (safe_read_u32((char*)obj + OBJECT_OFFSET_MODIFIERLIST_IDX, &modifier_list_idx)) {
+            void *modifier_lists = get_modifier_lists_manager();
+            if (modifier_lists) {
+                void *modifier_list = get_manager_element(modifier_lists, modifier_list_idx);
+                if (modifier_list) {
+                    #define MODIFIERLIST_OFFSET_NAME 0x5c
+                    const char *type_name = read_fixed_string((char*)modifier_list + MODIFIERLIST_OFFSET_NAME);
+                    if (type_name) return type_name;
+                }
+            }
+        }
     }
 
-    // Look up ModifierList by index
-    void *modifier_lists = get_modifier_lists_manager();
-    if (!modifier_lists) return NULL;
-
-    void *modifier_list = get_manager_element(modifier_lists, modifier_list_idx);
-    if (!modifier_list) return NULL;
-
-    // ModifierList has Name field - find its offset
-    // struct ModifierList { CNamedElementManager<Modifier> Attributes; FixedString Name; }
-    // So Name is after the nested CNamedElementManager
-    #define MODIFIERLIST_OFFSET_NAME 0x60  // After Attributes manager
-
-    return read_fixed_string((char*)modifier_list + MODIFIERLIST_OFFSET_NAME);
+    return NULL;
 }
 
 const char* stats_get_name(StatsObjectPtr obj) {

@@ -37,7 +37,7 @@ This document tracks the development roadmap for achieving feature parity with W
 | `Ext.Json` | ✅ Full | ✅ Parse, Stringify | **90%** | 1 |
 | `Ext.IO` | ✅ Full | ✅ LoadFile, SaveFile | **80%** | 1 |
 | `Ext.Entity` | ✅ Full | ⚠️ Basic access | **40%** | 2 |
-| `Ext.Stats` | ✅ Full | ✅ Read working, write partial | **75%** | 3 |
+| `Ext.Stats` | ✅ Full | ✅ Read complete, type filtering working | **85%** | 3 |
 | `Ext.Events` | ✅ Full | ⚠️ 3 events only | **10%** | 2.5 |
 | `Ext.Timer` | ✅ Full | ❌ Not impl | **0%** | 2.3 |
 | `Ext.Vars` | ✅ Full | ❌ Not impl | **0%** | 2.6 |
@@ -415,8 +415,8 @@ end
 - [x] **stat.Name** - returns resolved string name
 
 **Pending:**
-- [ ] **Type filtering** - `Ext.Stats.GetAll("Weapon")` (needs ModifierList name resolution)
-- [ ] **stat.Type** - resolve type from ModifierListIndex
+- [x] **Type filtering** - `Ext.Stats.GetAll("Weapon")` ✅ Working (uses stats_get_type)
+- [x] **stat.Type** - ✅ Working via name-based detection (WPN_→Weapon, ARM_→Armor, etc.)
 - [ ] **Property write access** via `__newindex` (`stat.Damage = "2d6"`)
 - [ ] `stat:Sync()` - Propagate changes to clients
 - [ ] `Ext.Stats.Create(name, type, template)` - Create new stats

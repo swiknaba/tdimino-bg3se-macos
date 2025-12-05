@@ -4,6 +4,8 @@
 
 A native macOS implementation of the BG3 Script Extender, working toward full feature parity with Norbyte's Windows BG3SE. Enables mods that require scripting capabilities to work on Mac—including companion mods, gameplay tweaks, UI enhancements, and more. Development is powered by headless Ghidra analysis, a live Lua console, and comprehensive offset documentation.
 
+> **Note:** This is a ground-up rebuild, not a port—the Windows BG3SE uses x86_64 assembly and Windows APIs that don't exist on macOS ARM64. We use the Windows codebase as architectural reference while reverse-engineering the macOS binary via Ghidra.
+
 ## Status
 
 Script Extender mods now load and execute on macOS with real game data. Lua scripts, Osiris event listeners, entity queries, and stat lookups are functional—enabling most mods that don't rely on Windows-specific APIs.
@@ -559,7 +561,7 @@ See [GitHub Issues](https://github.com/tdimino/bg3se-macos/issues) for detailed 
 1. **[#11 - Ext.Events API](https://github.com/tdimino/bg3se-macos/issues/11)** - Engine lifecycle events (⚠️ 3/10+ events implemented)
 2. **[#12 - PersistentVars](https://github.com/tdimino/bg3se-macos/issues/12)** - Savegame data persistence
 3. **[#13 - Ext.Vars](https://github.com/tdimino/bg3se-macos/issues/13)** - Entity-attached custom data with sync
-4. **[#3 - Stats System](https://github.com/tdimino/bg3se-macos/issues/3)** - Full property read/write (⚠️ 60% complete)
+4. **[#3 - Stats System](https://github.com/tdimino/bg3se-macos/issues/3)** - Full property read/write (✅ 85% - read complete, type filtering working)
 
 ### High Priority
 
