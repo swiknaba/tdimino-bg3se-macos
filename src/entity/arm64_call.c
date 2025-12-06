@@ -28,7 +28,7 @@ static void log_arm64(const char *fmt, ...) {
 
 #if defined(__aarch64__) || defined(__arm64__)
 
-void* call_try_get_singleton_with_x8(void *fn, void *entityWorld) {
+void* call_try_get_singleton_with_x8(TryGetSingletonFn fn, void *entityWorld) {
     LsResult result;
     memset(&result, 0, sizeof(result));
     result.has_error = 1;  // Assume error until function sets success
@@ -166,7 +166,7 @@ void* call_try_get(void *fn_addr, void *storageContainer, uint64_t entityHandle)
 #else
 // x86_64 fallback - struct returns work differently
 
-void* call_try_get_singleton_with_x8(void *fn, void *entityWorld) {
+void* call_try_get_singleton_with_x8(TryGetSingletonFn fn, void *entityWorld) {
     (void)fn;
     (void)entityWorld;
     log_arm64("TryGetSingleton not implemented for x86_64");

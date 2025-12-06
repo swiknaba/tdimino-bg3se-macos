@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.20)
 project(bg3se-macos VERSION 0.1.0 LANGUAGES C CXX OBJC)
 
 # Set C/C++ standards
-set(CMAKE_C_STANDARD 17)
+# Using C23 for __VA_OPT__ support in variadic macros (logging.h)
+set(CMAKE_C_STANDARD 23)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -26,7 +27,9 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/core
     ${CMAKE_SOURCE_DIR}/src/entity
     ${CMAKE_SOURCE_DIR}/src/game
+    ${CMAKE_SOURCE_DIR}/src/input
     ${CMAKE_SOURCE_DIR}/src/lua
+    ${CMAKE_SOURCE_DIR}/src/math
     ${CMAKE_SOURCE_DIR}/src/mod
     ${CMAKE_SOURCE_DIR}/src/osiris
     ${CMAKE_SOURCE_DIR}/src/pak
@@ -62,6 +65,10 @@ add_library(bg3se SHARED
     src/lua/lua_persistentvars.c
     src/lua/lua_events.c
     src/game/game_state.c
+    src/input/input_hooks.m
+    src/input/lua_input.c
+    src/math/math_ext.c
+    src/math/lua_math.c
     lib/lz4/lz4.c
 )
 
@@ -88,6 +95,29 @@ set_target_properties(bg3se PROPERTIES
     # Allow undefined symbols (we'll resolve them at runtime)
     LINK_FLAGS "-undefined dynamic_lookup"
 )
+
+# ============================================
+# Console client tool
+# ============================================
+
+# Find readline (usually at /usr/local/opt/readline on macOS with Homebrew)
+find_library(READLINE_LIBRARY readline PATHS /usr/local/opt/readline/lib /opt/homebrew/opt/readline/lib)
+find_path(READLINE_INCLUDE_DIR readline/readline.h PATHS /usr/local/opt/readline/include /opt/homebrew/opt/readline/include)
+
+if(READLINE_LIBRARY AND READLINE_INCLUDE_DIR)
+    add_executable(bg3se-console tools/bg3se-console.c)
+    target_include_directories(bg3se-console PRIVATE ${READLINE_INCLUDE_DIR})
+    target_link_libraries(bg3se-console PRIVATE ${READLINE_LIBRARY})
+    target_compile_options(bg3se-console PRIVATE -Wall -Wextra)
+    # Console client is native arch only (not universal)
+    set_target_properties(bg3se-console PROPERTIES
+        OSX_ARCHITECTURES "${CMAKE_HOST_SYSTEM_PROCESSOR}"
+    )
+    message(STATUS "Building bg3se-console with readline from ${READLINE_LIBRARY}")
+else()
+    message(WARNING "readline not found - bg3se-console will not be built")
+    message(STATUS "Install with: brew install readline")
+endif()
 
 # ============================================
 # Installation

@@ -84,6 +84,12 @@ extern "C" {
 // Game state tracking
 #include "game_state.h"
 
+// Input system
+#include "input.h"
+
+// Math library
+#include "math_ext.h"
+
 // Enable hooks (set to 0 to disable for testing)
 #define ENABLE_HOOKS 1
 
@@ -1544,6 +1550,26 @@ static void init_lua(void) {
     // Initialize game state tracker
     game_state_init();
 
+    // Initialize input system (NSEvent swizzling)
+    if (input_init()) {
+        // Register Ext.Input namespace
+        lua_getglobal(L, "Ext");
+        if (lua_istable(L, -1)) {
+            lua_input_register(L, lua_gettop(L));
+        }
+        lua_pop(L, 1);  // pop Ext
+
+        // Set Lua state for input event dispatch
+        input_set_lua_state(L);
+    }
+
+    // Register Ext.Math namespace
+    lua_getglobal(L, "Ext");
+    if (lua_istable(L, -1)) {
+        lua_math_register(L, lua_gettop(L));
+    }
+    lua_pop(L, 1);  // pop Ext
+
     // Add GetDiscoveredPlayers to Ext.Entity (uses main.c's player tracking)
     lua_getglobal(L, "Ext");
     if (lua_istable(L, -1)) {
@@ -1587,6 +1613,10 @@ static void init_lua(void) {
 static void shutdown_lua(void) {
     if (L) {
         log_message("Shutting down Lua runtime...");
+
+        // Shutdown input system before closing Lua
+        input_shutdown();
+
         lua_close(L);
         L = NULL;
     }
