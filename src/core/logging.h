@@ -69,6 +69,7 @@ typedef enum {
     LOG_MODULE_MEMORY,       // Memory operations, Ext.Memory/Debug
     LOG_MODULE_PERSIST,      // PersistentVars
     LOG_MODULE_GAME,         // Game state tracking
+    LOG_MODULE_INPUT,        // Input system, Ext.Input
     LOG_MODULE_MAX
 } LogModule;
 
@@ -382,6 +383,12 @@ LogModule log_module_from_string(const char* str);
 #define LOG_GAME_INFO(fmt, ...)  LOGM_INFO(LOG_MODULE_GAME, fmt __VA_OPT__(,) __VA_ARGS__)
 #define LOG_GAME_WARN(fmt, ...)  LOGM_WARN(LOG_MODULE_GAME, fmt __VA_OPT__(,) __VA_ARGS__)
 #define LOG_GAME_ERROR(fmt, ...) LOGM_ERROR(LOG_MODULE_GAME, fmt __VA_OPT__(,) __VA_ARGS__)
+
+// Input module
+#define LOG_INPUT_DEBUG(fmt, ...) LOGM_DEBUG(LOG_MODULE_INPUT, fmt __VA_OPT__(,) __VA_ARGS__)
+#define LOG_INPUT_INFO(fmt, ...)  LOGM_INFO(LOG_MODULE_INPUT, fmt __VA_OPT__(,) __VA_ARGS__)
+#define LOG_INPUT_WARN(fmt, ...)  LOGM_WARN(LOG_MODULE_INPUT, fmt __VA_OPT__(,) __VA_ARGS__)
+#define LOG_INPUT_ERROR(fmt, ...) LOGM_ERROR(LOG_MODULE_INPUT, fmt __VA_OPT__(,) __VA_ARGS__)
 
 #ifdef __cplusplus
 }

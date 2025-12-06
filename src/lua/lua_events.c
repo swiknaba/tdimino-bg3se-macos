@@ -34,7 +34,7 @@ typedef struct {
 } EventHandler;
 
 typedef struct {
-    EventType event;
+    BG3SEEventType event;
     uint64_t handler_id;
 } DeferredUnsubscribe;
 
@@ -60,7 +60,8 @@ static const char *g_event_names[EVENT_MAX] = {
     "Tick",
     "StatsLoaded",
     "ModuleLoadStarted",
-    "GameStateChanged"
+    "GameStateChanged",
+    "KeyInput"
 };
 
 // ============================================================================
@@ -71,7 +72,7 @@ static const char *g_event_names[EVENT_MAX] = {
  * Sort handlers by priority (lower first) using insertion sort.
  * Stable sort preserves registration order for equal priorities.
  */
-static void sort_handlers_by_priority(EventType event) {
+static void sort_handlers_by_priority(BG3SEEventType event) {
     int count = g_handler_counts[event];
     if (count <= 1) return;
 
@@ -91,7 +92,7 @@ static void sort_handlers_by_priority(EventType event) {
 // Internal: Remove Handler
 // ============================================================================
 
-static int remove_handler_by_id(lua_State *L, EventType event, uint64_t handler_id) {
+static int remove_handler_by_id(lua_State *L, BG3SEEventType event, uint64_t handler_id) {
     for (int i = 0; i < g_handler_counts[event]; i++) {
         if (g_handlers[event][i].handler_id == handler_id) {
             // Release callback reference
@@ -119,7 +120,7 @@ static int remove_handler_by_id(lua_State *L, EventType event, uint64_t handler_
 // Internal: Process Deferred Unsubscriptions
 // ============================================================================
 
-static void process_deferred_unsubscribes(lua_State *L, EventType event) {
+static void process_deferred_unsubscribes(lua_State *L, BG3SEEventType event) {
     // Process all deferred unsubscriptions for this event
     // Using swap-and-pop for O(1) removal instead of O(n) shift
     int i = 0;
@@ -160,7 +161,7 @@ void events_init(void) {
 // Public API: Fire Event
 // ============================================================================
 
-void events_fire(lua_State *L, EventType event) {
+void events_fire(lua_State *L, BG3SEEventType event) {
     if (!L || event >= EVENT_MAX) return;
 
     int count = g_handler_counts[event];
@@ -327,11 +328,70 @@ void events_fire_game_state_changed(lua_State *L, int fromState, int toState) {
     }
 }
 
+void events_fire_key_input(lua_State *L, int keyCode, bool pressed, int modifiers, const char *character) {
+    if (!L) return;
+
+    int count = g_handler_counts[EVENT_KEY_INPUT];
+    if (count == 0) return;
+
+    LOG_EVENTS_DEBUG("Firing KeyInput (key=%d, pressed=%d, mods=0x%x, %d handlers)",
+                keyCode, pressed, modifiers, count);
+
+    g_dispatch_depth[EVENT_KEY_INPUT]++;
+
+    for (int i = 0; i < g_handler_counts[EVENT_KEY_INPUT]; i++) {
+        EventHandler *h = &g_handlers[EVENT_KEY_INPUT][i];
+        if (h->callback_ref == LUA_NOREF || h->callback_ref == LUA_REFNIL) {
+            continue;
+        }
+
+        lua_rawgeti(L, LUA_REGISTRYINDEX, h->callback_ref);
+        if (lua_isfunction(L, -1)) {
+            // Create event data table
+            lua_newtable(L);
+            lua_pushinteger(L, keyCode);
+            lua_setfield(L, -2, "Key");
+            lua_pushboolean(L, pressed);
+            lua_setfield(L, -2, "Pressed");
+            lua_pushinteger(L, modifiers);
+            lua_setfield(L, -2, "Modifiers");
+            if (character && character[0]) {
+                lua_pushstring(L, character);
+            } else {
+                lua_pushnil(L);
+            }
+            lua_setfield(L, -2, "Character");
+
+            if (lua_pcall(L, 1, 0, 0) != LUA_OK) {
+                const char *err = lua_tostring(L, -1);
+                LOG_EVENTS_ERROR("KeyInput handler %llu error: %s",
+                           (unsigned long long)h->handler_id, err ? err : "unknown");
+                lua_pop(L, 1);
+            }
+
+            if (h->once) {
+                if (g_deferred_unsub_count < MAX_DEFERRED_OPERATIONS) {
+                    g_deferred_unsubs[g_deferred_unsub_count++] =
+                        (DeferredUnsubscribe){EVENT_KEY_INPUT, h->handler_id};
+                }
+            }
+        } else {
+            lua_pop(L, 1);
+        }
+    }
+
+    g_dispatch_depth[EVENT_KEY_INPUT]--;
+
+    if (g_dispatch_depth[EVENT_KEY_INPUT] == 0) {
+        process_deferred_unsubscribes(L, EVENT_KEY_INPUT);
+    }
+}
+
 // ============================================================================
 // Public API: Get Handler Count
 // ============================================================================
 
-int events_get_handler_count(EventType event) {
+int events_get_handler_count(BG3SEEventType event) {
     if (event < 0 || event >= EVENT_MAX) return 0;
     return g_handler_counts[event];
 }
@@ -340,7 +400,7 @@ int events_get_handler_count(EventType event) {
 // Public API: Get Event Name
 // ============================================================================
 
-const char *events_get_name(EventType event) {
+const char *events_get_name(BG3SEEventType event) {
     if (event < 0 || event >= EVENT_MAX) return "Unknown";
     return g_event_names[event];
 }
@@ -506,7 +566,7 @@ static int lua_on_next_tick(lua_State *L) {
 // Internal: Create Event Object
 // ============================================================================
 
-static void create_event_object(lua_State *L, EventType event) {
+static void create_event_object(lua_State *L, BG3SEEventType event) {
     lua_newtable(L);
 
     // Subscribe method with event type as upvalue

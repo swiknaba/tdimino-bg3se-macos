@@ -57,7 +57,8 @@ static const char* g_module_names[] = {
     "Mod",      // LOG_MODULE_MOD
     "Memory",   // LOG_MODULE_MEMORY
     "Persist",  // LOG_MODULE_PERSIST
-    "Game"      // LOG_MODULE_GAME
+    "Game",     // LOG_MODULE_GAME
+    "Input"     // LOG_MODULE_INPUT
 };
 
 static const char* g_level_colors[] = {

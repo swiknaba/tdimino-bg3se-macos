@@ -23,9 +23,10 @@ typedef enum {
     EVENT_TICK,
     EVENT_STATS_LOADED,
     EVENT_MODULE_LOAD_STARTED,
-    EVENT_GAME_STATE_CHANGED,  // Phase 3 - deferred
+    EVENT_GAME_STATE_CHANGED,
+    EVENT_KEY_INPUT,           // Keyboard input event
     EVENT_MAX
-} EventType;
+} BG3SEEventType;
 
 // ============================================================================
 // Public API
@@ -44,7 +45,7 @@ void events_init(void);
  * @param L     Lua state
  * @param event Event type to fire
  */
-void events_fire(lua_State *L, EventType event);
+void events_fire(lua_State *L, BG3SEEventType event);
 
 /**
  * Fire the Tick event with delta time data.
@@ -72,6 +73,18 @@ void events_fire_tick(lua_State *L, float delta_time);
 void events_fire_game_state_changed(lua_State *L, int fromState, int toState);
 
 /**
+ * Fire the KeyInput event with key data.
+ * Handlers receive {Key = int, Pressed = bool, Modifiers = int, Character = string} table.
+ *
+ * @param L         Lua state
+ * @param keyCode   Virtual key code
+ * @param pressed   true for key down, false for key up
+ * @param modifiers Modifier bitmask (shift/ctrl/alt/cmd)
+ * @param character Character string (if printable)
+ */
+void events_fire_key_input(lua_State *L, int keyCode, bool pressed, int modifiers, const char *character);
+
+/**
  * Register the Ext.Events namespace and Ext.OnNextTick function.
  *
  * @param L               Lua state
@@ -85,7 +98,7 @@ void lua_events_register(lua_State *L, int ext_table_index);
  * @param event Event type
  * @return Number of registered handlers
  */
-int events_get_handler_count(EventType event);
+int events_get_handler_count(BG3SEEventType event);
 
 /**
  * Get event name string.
@@ -93,6 +106,6 @@ int events_get_handler_count(EventType event);
  * @param event Event type
  * @return Static event name string
  */
-const char *events_get_name(EventType event);
+const char *events_get_name(BG3SEEventType event);
 
 #endif /* LUA_EVENTS_H */
