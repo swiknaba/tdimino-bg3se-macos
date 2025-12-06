@@ -2,9 +2,9 @@
 
 This document tracks the development roadmap for achieving feature parity with Windows BG3SE (Norbyte's Script Extender).
 
-## Current Status: v0.14.0
+## Current Status: v0.16.0
 
-**Overall Feature Parity: ~45%** (based on [comprehensive gap analysis](plans/bg3se-docs-gap-analysis.md))
+**Overall Feature Parity: ~50%** (based on [comprehensive gap analysis](plans/bg3se-docs-gap-analysis.md))
 
 **Working Features:**
 - DYLD injection and Dobby hooking infrastructure
@@ -45,7 +45,7 @@ This document tracks the development roadmap for achieving feature parity with W
 | `Ext.Net` | ✅ Full | ❌ Not impl | **0%** | 6 |
 | `Ext.UI` | ✅ Full | ❌ Not impl | **0%** | 8 |
 | `Ext.Math` | ✅ Full | ❌ Not impl | **0%** | 7.5 |
-| `Ext.Input` | ✅ Full | ❌ Not impl | **0%** | 9 |
+| `Ext.Input` | ✅ Full | ✅ CGEventTap capture, hotkeys | **85%** | 9 |
 | `Ext.Level` | ✅ Full | ❌ Not impl | **0%** | 9 |
 | Console/REPL | ✅ Full | ✅ Socket + file-based | **90%** | 5 |
 | PersistentVars | ✅ Full | ✅ File-based | **90%** | 2.4 |

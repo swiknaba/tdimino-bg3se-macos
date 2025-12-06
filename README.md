@@ -32,8 +32,9 @@ Script Extender mods now load and execute on macOS with real game data. Lua scri
 | Stats API | ✅ Complete | 15,774 stats accessible, property read working (`stat.Damage` → "1d8") |
 | Timer API | ✅ Complete | WaitFor, Cancel, Pause, Resume, IsPaused, MonotonicTime |
 | Debug Console | ✅ Complete | Socket console + file-based, multi-line, commands, introspection |
-| Events API | ✅ Complete | 7 events with priority, Once, handler IDs, GameStateChanged |
+| Events API | ✅ Complete | 8 events with priority, Once, handler IDs, GameStateChanged, KeyInput |
 | PersistentVars | ✅ Complete | File-based persistence for mod data |
+| Input API | ✅ Complete | CGEventTap capture, hotkeys, key injection, KeyInput event |
 
 ### Verified Working (Dec 5, 2025)
 
@@ -78,6 +79,7 @@ Script Extender mods now load and execute on macOS with real game data. Lua scri
 - ✅ **Memory introspection APIs** - Ext.Debug.ReadPtr/U32/Float, ProbeStruct, HexDump
 - ✅ **Ext.Events expansion (v0.14.0)** - 7 events including GameStateChanged, priority ordering, Once flag
 - ✅ **PersistentVars (v0.14.0)** - File-based mod data persistence across sessions
+- ✅ **Ext.Input API (v0.16.0)** - CGEventTap keyboard capture, hotkey registration, key injection
 
 ## Compatibility
 
