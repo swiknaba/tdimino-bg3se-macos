@@ -624,16 +624,13 @@ void lua_ext_register_global_helpers(lua_State *L) {
         lua_pop(L, 1);
     }
 
-    // Register built-in console commands
-    const char *console_commands =
-        "-- !probe <addr> [range] - Probe memory at address\n"
+    // Register built-in console commands (split into smaller chunks to avoid
+    // exceeding the 4095 char limit that ISO C99 requires compilers to support)
+    static const char *console_cmd_probe =
         "Ext.RegisterConsoleCommand('probe', function(cmd, addr, range)\n"
         "  local base = tonumber(addr, 16) or tonumber(addr) or 0\n"
         "  local r = tonumber(range) or 256\n"
-        "  if base == 0 then\n"
-        "    Ext.Print('Usage: !probe <addr> [range]')\n"
-        "    return\n"
-        "  end\n"
+        "  if base == 0 then Ext.Print('Usage: !probe <addr> [range]') return end\n"
         "  Ext.Print('Probing ' .. _H(base) .. ' range=' .. r)\n"
         "  local results = Ext.Debug.ProbeStruct(base, 0, r, 8)\n"
         "  for offset, data in pairs(results) do\n"
@@ -643,85 +640,56 @@ void lua_ext_register_global_helpers(lua_State *L) {
         "    if data.float and data.float ~= 0 then line = line .. string.format(' f=%.3f', data.float) end\n"
         "    Ext.Print(line)\n"
         "  end\n"
-        "end)\n"
-        "\n"
-        "-- !dumpstat <name> - Dump stat object details\n"
+        "end)\n";
+
+    static const char *console_cmd_dumpstat =
         "Ext.RegisterConsoleCommand('dumpstat', function(cmd, name)\n"
-        "  if not name then\n"
-        "    Ext.Print('Usage: !dumpstat <statName>')\n"
-        "    return\n"
-        "  end\n"
+        "  if not name then Ext.Print('Usage: !dumpstat <statName>') return end\n"
         "  local stat = Ext.Stats.Get(name)\n"
-        "  if not stat then\n"
-        "    Ext.Print('Stat not found: ' .. name)\n"
-        "    return\n"
-        "  end\n"
+        "  if not stat then Ext.Print('Stat not found: ' .. name) return end\n"
         "  Ext.Print('=== ' .. name .. ' ===')\n"
         "  Ext.Print('Type: ' .. (stat.Type or 'unknown'))\n"
         "  Ext.Print('Level: ' .. (stat.Level or 0))\n"
         "  if stat.Using then Ext.Print('Using: ' .. stat.Using) end\n"
-        "  -- Get raw data\n"
         "  local raw = Ext.Stats.GetObjectRaw(name)\n"
         "  if raw then\n"
         "    Ext.Print('Address: ' .. _H(raw.Address))\n"
         "    Ext.Print('PropertyCount: ' .. raw.PropertyCount)\n"
         "  end\n"
-        "end)\n"
-        "\n"
-        "-- !findstr <pattern> - Search memory for string\n"
+        "end)\n";
+
+    static const char *console_cmd_findstr =
         "Ext.RegisterConsoleCommand('findstr', function(cmd, pattern)\n"
-        "  if not pattern then\n"
-        "    Ext.Print('Usage: !findstr <pattern>')\n"
-        "    return\n"
-        "  end\n"
+        "  if not pattern then Ext.Print('Usage: !findstr <pattern>') return end\n"
         "  Ext.Print('Searching for: ' .. pattern)\n"
-        "  -- Convert string to hex pattern\n"
         "  local hex = ''\n"
-        "  for i = 1, #pattern do\n"
-        "    hex = hex .. string.format('%02x ', string.byte(pattern, i))\n"
-        "  end\n"
+        "  for i = 1, #pattern do hex = hex .. string.format('%02x ', string.byte(pattern, i)) end\n"
         "  Ext.Print('Pattern: ' .. hex)\n"
         "  local results = Ext.Memory.Search(hex)\n"
-        "  if #results == 0 then\n"
-        "    Ext.Print('No matches found')\n"
+        "  if #results == 0 then Ext.Print('No matches found')\n"
         "  else\n"
         "    Ext.Print('Found ' .. #results .. ' matches:')\n"
-        "    for i, addr in ipairs(results) do\n"
-        "      if i <= 20 then\n"
-        "        Ext.Print('  ' .. _H(addr))\n"
-        "      end\n"
-        "    end\n"
-        "    if #results > 20 then\n"
-        "      Ext.Print('  ... and ' .. (#results - 20) .. ' more')\n"
-        "    end\n"
+        "    for i, addr in ipairs(results) do if i <= 20 then Ext.Print('  ' .. _H(addr)) end end\n"
+        "    if #results > 20 then Ext.Print('  ... and ' .. (#results - 20) .. ' more') end\n"
         "  end\n"
-        "end)\n"
-        "\n"
-        "-- !hexdump <addr> [size] - Hex dump memory\n"
+        "end)\n";
+
+    static const char *console_cmd_hexdump =
         "Ext.RegisterConsoleCommand('hexdump', function(cmd, addr, size)\n"
         "  local base = tonumber(addr, 16) or tonumber(addr) or 0\n"
         "  local sz = tonumber(size) or 64\n"
-        "  if base == 0 then\n"
-        "    Ext.Print('Usage: !hexdump <addr> [size]')\n"
-        "    return\n"
-        "  end\n"
+        "  if base == 0 then Ext.Print('Usage: !hexdump <addr> [size]') return end\n"
         "  local dump = Ext.Debug.HexDump(base, sz)\n"
-        "  if dump then\n"
-        "    Ext.Print(dump)\n"
-        "  else\n"
-        "    Ext.Print('Failed to read memory at ' .. _H(base))\n"
-        "  end\n"
-        "end)\n"
-        "\n"
-        "-- !types - List registered types\n"
+        "  if dump then Ext.Print(dump) else Ext.Print('Failed to read memory at ' .. _H(base)) end\n"
+        "end)\n";
+
+    static const char *console_cmd_types =
         "Ext.RegisterConsoleCommand('types', function(cmd)\n"
         "  Ext.Print('Registered types:')\n"
-        "  for i, t in ipairs(Ext.Types.GetAllTypes()) do\n"
-        "    Ext.Print('  ' .. t)\n"
-        "  end\n"
-        "end)\n"
-        "\n"
-        "-- !pv_dump - Dump all PersistentVars\n"
+        "  for i, t in ipairs(Ext.Types.GetAllTypes()) do Ext.Print('  ' .. t) end\n"
+        "end)\n";
+
+    static const char *console_cmd_pv =
         "Ext.RegisterConsoleCommand('pv_dump', function(cmd)\n"
         "  Ext.Print('=== PersistentVars ===')\n"
         "  local found = false\n"
@@ -729,47 +697,37 @@ void lua_ext_register_global_helpers(lua_State *L) {
         "    if mod.PersistentVars then\n"
         "      found = true\n"
         "      Ext.Print(modTable .. ':')\n"
-        "      local json = Ext.Json.Stringify(mod.PersistentVars)\n"
-        "      Ext.Print('  ' .. json)\n"
+        "      Ext.Print('  ' .. Ext.Json.Stringify(mod.PersistentVars))\n"
         "    end\n"
         "  end\n"
-        "  if not found then\n"
-        "    Ext.Print('No mods have PersistentVars set')\n"
-        "  end\n"
+        "  if not found then Ext.Print('No mods have PersistentVars set') end\n"
         "end)\n"
-        "\n"
-        "-- !pv_set <modTable> <key> <value> - Set a persistent var\n"
         "Ext.RegisterConsoleCommand('pv_set', function(cmd, modTable, key, value)\n"
-        "  if not modTable or not key then\n"
-        "    Ext.Print('Usage: !pv_set <modTable> <key> <value>')\n"
-        "    return\n"
-        "  end\n"
-        "  Mods = Mods or {}\n"
-        "  Mods[modTable] = Mods[modTable] or {}\n"
+        "  if not modTable or not key then Ext.Print('Usage: !pv_set <modTable> <key> <value>') return end\n"
+        "  Mods = Mods or {} Mods[modTable] = Mods[modTable] or {}\n"
         "  Mods[modTable].PersistentVars = Mods[modTable].PersistentVars or {}\n"
         "  Mods[modTable].PersistentVars[key] = value or ''\n"
         "  Ext.Vars.MarkDirty()\n"
         "  Ext.Print('Set Mods.' .. modTable .. '.PersistentVars.' .. key .. ' = ' .. tostring(value or ''))\n"
         "end)\n"
-        "\n"
-        "-- !pv_save - Force save all PersistentVars\n"
         "Ext.RegisterConsoleCommand('pv_save', function(cmd)\n"
-        "  Ext.Print('Saving PersistentVars...')\n"
-        "  Ext.Vars.SyncPersistentVars()\n"
-        "  Ext.Print('Save complete')\n"
+        "  Ext.Print('Saving...') Ext.Vars.SyncPersistentVars() Ext.Print('Save complete')\n"
         "end)\n"
-        "\n"
-        "-- !pv_reload - Force reload PersistentVars from disk\n"
         "Ext.RegisterConsoleCommand('pv_reload', function(cmd)\n"
-        "  Ext.Print('Reloading PersistentVars...')\n"
-        "  Ext.Vars.ReloadPersistentVars()\n"
-        "  Ext.Print('Reload complete')\n"
+        "  Ext.Print('Reloading...') Ext.Vars.ReloadPersistentVars() Ext.Print('Reload complete')\n"
         "end)\n";
 
-    if (luaL_dostring(L, console_commands) != LUA_OK) {
-        const char *err = lua_tostring(L, -1);
-        log_message("[Lua] Warning: Failed to register console commands: %s", err ? err : "(unknown)");
-        lua_pop(L, 1);
+    // Execute each command registration chunk
+    const char *console_cmds[] = {
+        console_cmd_probe, console_cmd_dumpstat, console_cmd_findstr,
+        console_cmd_hexdump, console_cmd_types, console_cmd_pv
+    };
+    for (size_t i = 0; i < sizeof(console_cmds) / sizeof(console_cmds[0]); i++) {
+        if (luaL_dostring(L, console_cmds[i]) != LUA_OK) {
+            const char *err = lua_tostring(L, -1);
+            log_message("[Lua] Warning: Failed to register console command: %s", err ? err : "(unknown)");
+            lua_pop(L, 1);
+        }
     }
 
     log_message("[Lua] Global helpers registered (_P, _D, _DS, _H, _PTR, _PE)");

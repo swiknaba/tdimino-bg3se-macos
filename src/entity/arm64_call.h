@@ -37,6 +37,12 @@ typedef struct __attribute__((aligned(16))) {
 // ============================================================================
 
 /**
+ * Function pointer type for TryGetSingleton functions.
+ * The signature takes an EntityWorld pointer; the actual return is via x8.
+ */
+typedef void (*TryGetSingletonFn)(void *entityWorld);
+
+/**
  * Call a TryGetSingleton function with proper ARM64 ABI.
  *
  * ARM64 calling convention: Functions returning structs >16 bytes
@@ -46,7 +52,7 @@ typedef struct __attribute__((aligned(16))) {
  * @param entityWorld Pointer to EntityWorld
  * @return The component pointer if successful, NULL on error
  */
-void* call_try_get_singleton_with_x8(void *fn, void *entityWorld);
+void* call_try_get_singleton_with_x8(TryGetSingletonFn fn, void *entityWorld);
 
 /**
  * Check if ARM64 call wrappers are available (vs x86_64 stubs).

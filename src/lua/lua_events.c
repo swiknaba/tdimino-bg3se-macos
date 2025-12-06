@@ -153,7 +153,7 @@ void events_init(void) {
     g_deferred_unsub_count = 0;
     g_initialized = 1;
 
-    log_message("[Events] Event system initialized");
+    LOG_EVENTS_INFO("Event system initialized");
 }
 
 // ============================================================================
@@ -168,7 +168,7 @@ void events_fire(lua_State *L, EventType event) {
 
     // Log for non-Tick events (Tick is too frequent)
     if (event != EVENT_TICK) {
-        log_message("[Events] Firing %s (%d handlers)", g_event_names[event], count);
+        LOG_EVENTS_DEBUG("Firing %s (%d handlers)", g_event_names[event], count);
     }
 
     g_dispatch_depth[event]++;
@@ -192,7 +192,7 @@ void events_fire(lua_State *L, EventType event) {
         // Protected call to prevent cascade failures
         if (lua_pcall(L, 1, 0, 0) != LUA_OK) {
             const char *err = lua_tostring(L, -1);
-            log_message("[Events] Error in %s handler (id=%llu): %s",
+            LOG_EVENTS_ERROR("Error in %s handler (id=%llu): %s",
                        g_event_names[event], h->handler_id, err ? err : "unknown");
             lua_pop(L, 1);
         }
@@ -247,7 +247,7 @@ void events_fire_tick(lua_State *L, float delta_time) {
         // Protected call
         if (lua_pcall(L, 1, 0, 0) != LUA_OK) {
             const char *err = lua_tostring(L, -1);
-            log_message("[Events] Tick handler error (id=%llu): %s",
+            LOG_EVENTS_ERROR("Tick handler error (id=%llu): %s",
                        h->handler_id, err ? err : "unknown");
             lua_pop(L, 1);
         }
@@ -278,7 +278,7 @@ void events_fire_game_state_changed(lua_State *L, int fromState, int toState) {
     int count = g_handler_counts[EVENT_GAME_STATE_CHANGED];
     if (count == 0) return;
 
-    log_message("[Events] Firing GameStateChanged (from=%d, to=%d, %d handlers)",
+    LOG_EVENTS_DEBUG("Firing GameStateChanged (from=%d, to=%d, %d handlers)",
                 fromState, toState, count);
 
     g_dispatch_depth[EVENT_GAME_STATE_CHANGED]++;
@@ -306,7 +306,7 @@ void events_fire_game_state_changed(lua_State *L, int fromState, int toState) {
         // Protected call
         if (lua_pcall(L, 1, 0, 0) != LUA_OK) {
             const char *err = lua_tostring(L, -1);
-            log_message("[Events] GameStateChanged handler error (id=%llu): %s",
+            LOG_EVENTS_ERROR("GameStateChanged handler error (id=%llu): %s",
                        h->handler_id, err ? err : "unknown");
             lua_pop(L, 1);
         }
@@ -410,7 +410,7 @@ static int lua_event_subscribe(lua_State *L) {
 
     // Log subscription (not for Tick - too noisy)
     if (event != EVENT_TICK) {
-        log_message("[Events] Subscribed to %s (id=%llu, priority=%d, once=%d)",
+        LOG_EVENTS_DEBUG("Subscribed to %s (id=%llu, priority=%d, once=%d)",
                    g_event_names[event], handler_id, priority, once);
     }
 
@@ -445,7 +445,7 @@ static int lua_event_unsubscribe(lua_State *L) {
                 (DeferredUnsubscribe){event, handler_id};
             lua_pushboolean(L, 1);  // Will be removed
         } else {
-            log_message("[Events] Deferred unsubscribe queue full");
+            LOG_EVENTS_WARN("Deferred unsubscribe queue full");
             lua_pushboolean(L, 0);
         }
         return 1;
@@ -455,7 +455,7 @@ static int lua_event_unsubscribe(lua_State *L) {
     int found = remove_handler_by_id(L, event, handler_id);
 
     if (found && event != EVENT_TICK) {
-        log_message("[Events] Unsubscribed from %s (id=%llu)",
+        LOG_EVENTS_DEBUG("Unsubscribed from %s (id=%llu)",
                    g_event_names[event], handler_id);
     }
 
@@ -548,5 +548,5 @@ void lua_events_register(lua_State *L, int ext_table_index) {
     lua_pushcfunction(L, lua_on_next_tick);
     lua_setfield(L, ext_table_index, "OnNextTick");
 
-    log_message("[Events] Ext.Events namespace registered with %d event types", EVENT_MAX);
+    LOG_EVENTS_INFO("Ext.Events namespace registered with %d event types", EVENT_MAX);
 }

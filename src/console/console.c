@@ -56,7 +56,7 @@ static void multiline_buffer_append(const char *text) {
         s_multiline_len += text_len;
         s_multiline_buffer[s_multiline_len] = '\0';
     } else {
-        log_message("[Console] Warning: Multi-line buffer overflow, truncating");
+        LOG_CONSOLE_WARN("Multi-line buffer overflow, truncating");
     }
 }
 
@@ -102,7 +102,7 @@ int console_register_command(lua_State *L) {
     s_commands[s_command_count].lua_callback_ref = ref;
     s_command_count++;
 
-    log_message("[Console] Registered command: !%s", name);
+    LOG_CONSOLE_INFO("Registered command: !%s", name);
     return 0;
 }
 
@@ -137,7 +137,7 @@ static int dispatch_console_command(lua_State *L, const char *line) {
             // Call the function
             if (lua_pcall(L, argc, 0, 0) != LUA_OK) {
                 const char *err = lua_tostring(L, -1);
-                log_message("[Console] Command error: %s", err ? err : "(unknown)");
+                LOG_CONSOLE_ERROR("Command error: %s", err ? err : "(unknown)");
                 lua_pop(L, 1);
             }
             return 1;
@@ -146,27 +146,27 @@ static int dispatch_console_command(lua_State *L, const char *line) {
 
     // Built-in !help command
     if (strcmp(cmd_name, "help") == 0) {
-        log_message("[Console] Available commands:");
-        log_message("  !help - Show this help");
-        log_message("  !events - Show event handler counts");
+        LOG_CONSOLE_INFO("Available commands:");
+        LOG_CONSOLE_INFO("  !help - Show this help");
+        LOG_CONSOLE_INFO("  !events - Show event handler counts");
         for (int i = 0; i < s_command_count; i++) {
-            log_message("  !%s", s_commands[i].name);
+            LOG_CONSOLE_INFO("  !%s", s_commands[i].name);
         }
         return 1;
     }
 
     // Built-in !events command - show handler counts for all events
     if (strcmp(cmd_name, "events") == 0) {
-        log_message("[Events] Handler counts:");
+        LOG_EVENTS_INFO("Handler counts:");
         for (int e = 0; e < EVENT_MAX; e++) {
             int count = events_get_handler_count(e);
             const char *name = events_get_name(e);
-            log_message("  %s: %d handler(s)", name, count);
+            LOG_EVENTS_INFO("  %s: %d handler(s)", name, count);
         }
         return 1;
     }
 
-    log_message("[Console] Unknown command: !%s (try !help)", cmd_name);
+    LOG_CONSOLE_WARN("Unknown command: !%s (try !help)", cmd_name);
     return 0;
 }
 
@@ -195,8 +195,8 @@ void console_init(void) {
 
     multiline_buffer_clear();
     s_initialized = 1;
-    log_message("[Console] Command file: %s", s_command_file);
-    log_message("[Console] Multi-line mode: Use --[[ to start, ]]-- to end and execute");
+    LOG_CONSOLE_INFO("Command file: %s", s_command_file);
+    LOG_CONSOLE_DEBUG("Multi-line mode: Use --[[ to start, ]]-- to end and execute");
 }
 
 const char *console_get_command_file(void) {
@@ -212,7 +212,7 @@ void console_poll(lua_State *L) {
     FILE *f = fopen(s_command_file, "r");
     if (!f) return;
 
-    log_message("[Console] Processing commands from %s", s_command_file);
+    LOG_CONSOLE_DEBUG("Processing commands from %s", s_command_file);
 
     char line[4096];
     int cmd_count = 0;
@@ -236,11 +236,11 @@ void console_poll(lua_State *L) {
         // Check for multi-line start delimiter
         if (strcmp(trimmed, "--[[") == 0) {
             if (s_multiline_mode) {
-                log_message("[Console] Warning: Already in multi-line mode, resetting");
+                LOG_CONSOLE_WARN("Already in multi-line mode, resetting");
             }
             s_multiline_mode = 1;
             multiline_buffer_clear();
-            log_message("[Console] Entering multi-line mode...");
+            LOG_CONSOLE_DEBUG("Entering multi-line mode...");
             continue;
         }
 
@@ -248,12 +248,12 @@ void console_poll(lua_State *L) {
         if (s_multiline_mode && strcmp(trimmed, "]]--") == 0) {
             s_multiline_mode = 0;
             cmd_count++;
-            log_message("[Console] Executing multi-line block (%zu bytes)", s_multiline_len);
+            LOG_CONSOLE_DEBUG("Executing multi-line block (%zu bytes)", s_multiline_len);
 
             int result = luaL_dostring(L, s_multiline_buffer);
             if (result != LUA_OK) {
                 const char *err = lua_tostring(L, -1);
-                log_message("[Console] Error: %s", err ? err : "(unknown)");
+                LOG_CONSOLE_ERROR("Error: %s", err ? err : "(unknown)");
                 lua_pop(L, 1);
             }
             multiline_buffer_clear();
@@ -270,19 +270,19 @@ void console_poll(lua_State *L) {
         // Check for console command (! prefix)
         if (line[0] == '!') {
             cmd_count++;
-            log_message("[Console] ! %s", line + 1);
+            LOG_CONSOLE_DEBUG("! %s", line + 1);
             dispatch_console_command(L, line);
             continue;
         }
 
         // Normal single-line execution
         cmd_count++;
-        log_message("[Console] > %s", line);
+        LOG_CONSOLE_DEBUG("> %s", line);
 
         int result = luaL_dostring(L, line);
         if (result != LUA_OK) {
             const char *err = lua_tostring(L, -1);
-            log_message("[Console] Error: %s", err ? err : "(unknown)");
+            LOG_CONSOLE_ERROR("Error: %s", err ? err : "(unknown)");
             lua_pop(L, 1);
         }
     }
@@ -292,12 +292,12 @@ void console_poll(lua_State *L) {
 
     // Reset multi-line mode if file ended without closing delimiter
     if (s_multiline_mode) {
-        log_message("[Console] Warning: Multi-line block not closed, resetting");
+        LOG_CONSOLE_WARN("Multi-line block not closed, resetting");
         s_multiline_mode = 0;
         multiline_buffer_clear();
     }
 
     if (cmd_count > 0) {
-        log_message("[Console] Executed %d command(s)", cmd_count);
+        LOG_CONSOLE_DEBUG("Executed %d command(s)", cmd_count);
     }
 }

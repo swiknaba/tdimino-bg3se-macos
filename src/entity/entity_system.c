@@ -147,10 +147,8 @@ static GetComponentFn g_GetClassesComponent = NULL;
 // TryGetSingleton Function Pointer
 // ============================================================================
 
-// Raw function type - do NOT call directly, use call_try_get_singleton_with_x8()
-// from arm64_call.h module
-typedef void (*TryGetSingletonRawFn)(void *entityWorld);
-static TryGetSingletonRawFn g_TryGetUuidMappingSingleton = NULL;
+// Function type from arm64_call.h - use call_try_get_singleton_with_x8() to invoke
+static TryGetSingletonFn g_TryGetUuidMappingSingleton = NULL;
 
 // Cached pointer to the UUID mapping component
 static void *g_UuidMappingComponent = NULL;
@@ -597,7 +595,7 @@ EntityHandle entity_get_by_guid(const char *guid_str) {
         // Use wrapper that properly sets x8 to the result buffer address
         log_entity("Calling TryGetSingleton with x8 ABI wrapper...");
         g_UuidMappingComponent = call_try_get_singleton_with_x8(
-            (void*)g_TryGetUuidMappingSingleton, g_EntityWorld);
+            g_TryGetUuidMappingSingleton, g_EntityWorld);
         if (g_UuidMappingComponent) {
             log_entity("Got UuidToHandleMappingComponent: %p", g_UuidMappingComponent);
         } else {
@@ -857,7 +855,7 @@ int entity_system_init(void *main_binary_base) {
 
     // Set up function pointers for component accessors and singleton getters
     // These don't need hooks - we just need to know where to call
-    g_TryGetUuidMappingSingleton = (TryGetSingletonRawFn)(OFFSET_TRY_GET_UUID_MAPPING_SINGLETON - ghidra_base + actual_base);
+    g_TryGetUuidMappingSingleton = (TryGetSingletonFn)(OFFSET_TRY_GET_UUID_MAPPING_SINGLETON - ghidra_base + actual_base);
 
     // ls:: components - all DISABLED until addresses are verified via Ghidra
     // When offset is 0, pointer stays NULL (safe)
