@@ -39,14 +39,15 @@ This document tracks the development roadmap for achieving feature parity with W
 | `Ext.Entity` | ✅ Full | ⚠️ Basic access | **40%** | 2 |
 | `Ext.Stats` | ✅ Full | ✅ Read complete (`stat.Damage` → "1d8") | **90%** | 3 |
 | `Ext.Events` | ✅ Full | ⚠️ 3 events only | **10%** | 2.5 |
-| `Ext.Timer` | ✅ Full | ❌ Not impl | **0%** | 2.3 |
+| `Ext.Timer` | ✅ Full | ✅ Complete | **100%** | 2.3 |
+| `Ext.Debug` | ✅ Full | ✅ Complete | **100%** | 2.3 |
 | `Ext.Vars` | ✅ Full | ❌ Not impl | **0%** | 2.6 |
 | `Ext.Net` | ✅ Full | ❌ Not impl | **0%** | 6 |
 | `Ext.UI` | ✅ Full | ❌ Not impl | **0%** | 8 |
 | `Ext.Math` | ✅ Full | ❌ Not impl | **0%** | 7.5 |
 | `Ext.Input` | ✅ Full | ❌ Not impl | **0%** | 9 |
 | `Ext.Level` | ✅ Full | ❌ Not impl | **0%** | 9 |
-| Console/REPL | ✅ Full | ❌ Not impl | **0%** | 5 |
+| Console/REPL | ✅ Full | ✅ File-based + commands | **80%** | 5 |
 | PersistentVars | ✅ Full | ❌ Not impl | **0%** | 2.4 |
 | Client Lua State | ✅ Full | ❌ Not impl | **0%** | 2.7 |
 
@@ -183,35 +184,39 @@ buffer + (componentSize * EntryIndex) → Component*
 | ls::PhysicsComponent | 1947 |
 
 ### 2.3 Timer API
-**Status:** ❌ Not Started
+**Status:** ✅ Complete (v0.11.0)
 
-Scheduling API for delayed and periodic callbacks. Essential for mods that need timed actions.
+Scheduling API for delayed and periodic callbacks.
 
-**Target API (from Windows BG3SE):**
+**Implemented API:**
 ```lua
 -- One-shot timer (delay in milliseconds)
-Ext.Timer.WaitFor(1000, function()
+local handle = Ext.Timer.WaitFor(1000, function(h)
     Ext.Print("1 second later!")
 end)
 
--- Repeating timer
-local timerId = Ext.Timer.RegisterTimer(500, function()
-    Ext.Print("Every 500ms")
-end)
+-- Repeating timer (third arg = repeat interval)
+local handle = Ext.Timer.WaitFor(1000, function(h)
+    Ext.Print("Every 1 second")
+end, 1000)
 
--- Cancel a timer
-Ext.Timer.Cancel(timerId)
+-- Timer control
+Ext.Timer.Cancel(handle)   -- Cancel timer
+Ext.Timer.Pause(handle)    -- Pause timer
+Ext.Timer.Resume(handle)   -- Resume paused timer
+Ext.Timer.IsPaused(handle) -- Check if paused
+
+-- Utility
+local ms = Ext.Timer.MonotonicTime()  -- High-resolution clock
 ```
 
-**Implementation approach:**
-- Hook game's main loop or frame callback
-- Maintain timer queue with callbacks and deadlines
-- Check elapsed time each frame, dispatch ready callbacks
-- Handle timer cancellation and cleanup
-
-**Windows BG3SE reference:**
-- `BG3Extender/Lua/Libs/Timer.inl` - Timer registration and dispatch
-- Uses game's internal timing rather than system timers
+**Implementation:**
+- Fixed-size timer pool (256 timers max)
+- Min-heap priority queue for efficient scheduling
+- Callbacks stored via `luaL_ref` to prevent GC
+- Polled from `COsiris::Event` hook
+- 1-based handles (0 = error sentinel)
+- Input validation: delay >= 0, finite, <= 24 hours
 
 ### 2.4 PersistentVars (Savegame Persistence)
 **Status:** ❌ Not Started - **CRITICAL**
@@ -491,28 +496,43 @@ end)
 ## Phase 5: In-Game Console
 
 ### 5.1 Debug Console
-**Status:** ❌ Not Started
+**Status:** ✅ Complete (v0.11.0) - File-based implementation
 
-Real-time Lua REPL accessible during gameplay.
+File-based Lua console for rapid iteration without game restarts.
 
-**Features (from API.md):**
-- Toggle with hotkey (e.g., ~)
-- Command history
-- `client` / `server` context switching
-- `reset` command to reload Lua VM
-- Multiline mode (`--[[ ... ]]--`)
-- Direct Lua execution
-- Output scrollback
-- Variable inspection
+**Implemented Features:**
+- ✅ Single-line Lua execution
+- ✅ Multi-line mode (`--[[` ... `]]--`)
+- ✅ Console commands (`!command arg1 arg2`)
+- ✅ Comments (`#` prefix outside multi-line)
+- ✅ File polling from Osiris event hook
 
-**Implementation approach:**
-- Terminal-based console (macOS doesn't have overlay)
-- Or redirect to external terminal via socket
-- Sandboxed Lua environment
-- Pretty-printing for tables/entities
+**Usage:**
+```bash
+# Single line
+echo 'Ext.Print("hello")' > ~/Library/Application\ Support/BG3SE/commands.txt
+
+# Multi-line
+cat > ~/Library/Application\ Support/BG3SE/commands.txt << 'EOF'
+--[[
+for i = 1, 10 do
+    Ext.Print(i)
+end
+]]--
+EOF
+
+# Console command
+echo '!probe 0x12345678 256' > ~/Library/Application\ Support/BG3SE/commands.txt
+```
+
+**Not implemented (Windows-specific):**
+- In-game overlay (macOS uses file-based approach)
+- Hotkey toggle
+- Command history (use shell history instead)
+- Client/server context switching
 
 ### 5.2 Custom Console Commands
-**Status:** ❌ Not Started
+**Status:** ✅ Complete (v0.11.0)
 
 ```lua
 Ext.RegisterConsoleCommand("test", function(cmd, a1, a2, ...)
@@ -521,13 +541,40 @@ end)
 -- Usage: !test arg1 arg2
 ```
 
-### 5.3 Debug Tools
-**Status:** ❌ Not Started
+**Built-in Commands:**
+- `!help` - List available commands
+- `!probe <addr> [range]` - Probe memory structure
+- `!dumpstat <name>` - Dump stat object details
+- `!findstr <pattern>` - Search memory for string
+- `!hexdump <addr> [size]` - Hex dump memory
+- `!types` - List registered types
 
-- `Ext.DumpExport(object)` - Serialize to string
+### 5.3 Debug Tools (Ext.Debug)
+**Status:** ✅ Complete (v0.11.0)
+
+**Memory Introspection:**
+```lua
+-- Safe memory reading (returns nil on bad address)
+Ext.Debug.ReadPtr(addr)         -- Read pointer
+Ext.Debug.ReadU32(addr)         -- Read uint32
+Ext.Debug.ReadU64(addr)         -- Read uint64
+Ext.Debug.ReadI32(addr)         -- Read int32
+Ext.Debug.ReadFloat(addr)       -- Read float
+Ext.Debug.ReadString(addr, max) -- Read C string
+
+-- Bulk offset discovery
+Ext.Debug.ProbeStruct(base, start, end, stride)
+-- Returns: { [offset] = { ptr=..., u32=..., i32=..., float=... } }
+
+-- Pattern finding
+Ext.Debug.FindArrayPattern(base, range)
+
+-- Hex dump
+Ext.Debug.HexDump(addr, size)
+```
+
+**Not implemented:**
 - Entity inspector (click to examine)
-- Position display
-- Event logger toggle
 - Performance profiler
 
 ---
@@ -868,8 +915,8 @@ Ext.Mod.GetModInfo(guid)
 | ID | Feature | Effort | Status |
 |----|---------|--------|--------|
 | B1 | Client Lua State | High | ❌ Not Started |
-| B2 | Timer API | Low | ❌ Not Started |
-| B3 | Console/REPL | Medium | ❌ Not Started |
+| B2 | Timer API | Low | ✅ Complete |
+| B3 | Console/REPL | Medium | ✅ Complete (file-based) |
 | B4 | GetAllComponents | Low | ❌ Not Started |
 | B5 | Stats Create/Sync | Medium | ❌ Not Started |
 | B6 | Userdata Lifetime Scoping | Medium | ❌ Not Started |
@@ -880,7 +927,8 @@ Ext.Mod.GetModInfo(guid)
 |----|---------|--------|--------|
 | C1 | Ext.Math Library | Medium | ❌ Not Started |
 | C2 | Enum/Bitfield Objects | Medium | ❌ Not Started |
-| C3 | Console Commands | Low | ❌ Not Started |
+| C3 | Console Commands | Low | ✅ Complete |
+| C6 | Ext.Debug APIs | Low | ✅ Complete |
 | C4 | Mod Variables | Medium | ❌ Not Started |
 | C5 | More Component Types | High | 🔄 Ongoing |
 
@@ -901,7 +949,7 @@ Ext.Mod.GetModInfo(guid)
 
 | Version | Date | Highlights |
 |---------|------|------------|
-| v0.11.0 | 2025-12-05 | Ext.Stats API complete - Property read working (`stat.Damage` → "1d8"), RPGSTATS_OFFSET_FIXEDSTRINGS=0x348 |
+| v0.11.0 | 2025-12-05 | Ext.Timer API, Enhanced Debug Console, Ext.Debug APIs, Ext.Stats property read |
 | v0.10.6 | 2025-12-03 | Fixed Osiris function name caching - OsiFunctionDef->Signature->Name two-level indirection |
 | v0.10.4 | 2025-12-02 | TypeId<T>::m_TypeIndex discovery, ComponentTypeToIndex enumeration, Lua bindings for runtime discovery |
 | v0.10.3 | 2025-12-01 | Data structure traversal for GetComponent (TryGet + HashMap), template calls don't work on macOS |

@@ -30,6 +30,8 @@ Script Extender mods now load and execute on macOS with real game data. Lua scri
 | TypeId Discovery | ✅ Complete | 11 component indices discovered at SessionLoaded |
 | Component Access | 🔄 In Progress | Data structure traversal implemented, testing with discovered indices |
 | Stats API | ✅ Complete | 15,774 stats accessible, property read working (`stat.Damage` → "1d8") |
+| Timer API | ✅ Complete | WaitFor, Cancel, Pause, Resume, IsPaused, MonotonicTime |
+| Debug Console | ✅ Complete | Multi-line support, console commands, memory introspection |
 
 ### Verified Working (Dec 5, 2025)
 
@@ -68,6 +70,9 @@ Script Extender mods now load and execute on macOS with real game data. Lua scri
 - ✅ **Ext.Stats.GetAll() returns 15,774 stat names** - Full string names, not indices
 - ✅ **Ext.Stats.Get(name) retrieves stats by name** - Property access via `__index`
 - ✅ **Stats property read working** - `stat.Damage` returns "1d8" for WPN_Longsword
+- ✅ **Timer API complete** - Ext.Timer.WaitFor(), Cancel(), Pause(), Resume()
+- ✅ **Enhanced debug console** - Multi-line blocks, console commands (!probe, !dumpstat, etc.)
+- ✅ **Memory introspection APIs** - Ext.Debug.ReadPtr/U32/Float, ProbeStruct, HexDump
 
 ## Compatibility
 
@@ -144,20 +149,40 @@ BG3SE-macOS includes a file-based Lua console for rapid iteration without game r
 tail -f ~/Library/Application\ Support/BG3SE/bg3se.log
 
 # Terminal 2: Send Lua commands
-echo 'Ext.Print("Hello from console")' >> ~/Library/Application\ Support/BG3SE/commands.txt
+echo 'Ext.Print("Hello from console")' > ~/Library/Application\ Support/BG3SE/commands.txt
 
 # Memory inspection example
-echo 'local base = Ext.Memory.GetModuleBase("Baldur"); Ext.Print("Game: " .. string.format("0x%x", base))' >> ~/Library/Application\ Support/BG3SE/commands.txt
+echo 'local base = Ext.Memory.GetModuleBase("Baldur"); Ext.Print("Game: " .. string.format("0x%x", base))' > ~/Library/Application\ Support/BG3SE/commands.txt
 ```
 
 **Console Features:**
-- Commands are executed line-by-line (single-line Lua only)
-- Lines starting with `#` are comments (skipped)
-- Empty lines are skipped
+- **Single-line mode:** Each line executed as Lua
+- **Multi-line mode:** Use `--[[` to start, `]]--` to end and execute
+- **Console commands:** Lines starting with `!` dispatch to registered handlers
+- Lines starting with `#` are comments (skipped outside multi-line blocks)
 - File is deleted after processing
 - Output appears in the log with `[Console]` and `[Lua]` prefixes
 
-**Important:** Each line is executed independently via `luaL_dostring()`. Multi-line constructs (loops, functions) must be written on a single line or defined in a mod's Lua file.
+**Multi-line Example:**
+```bash
+cat > ~/Library/Application\ Support/BG3SE/commands.txt << 'EOF'
+--[[
+local stat = Ext.Stats.Get("WPN_Longsword")
+for k,v in pairs(stat) do
+    Ext.Print(k .. " = " .. tostring(v))
+end
+]]--
+EOF
+```
+
+**Built-in Console Commands:**
+```bash
+echo '!help' > ~/Library/Application\ Support/BG3SE/commands.txt     # List commands
+echo '!probe 0x12345678 256' > ...                                    # Probe memory
+echo '!dumpstat WPN_Longsword' > ...                                  # Dump stat object
+echo '!hexdump 0x12345678 64' > ...                                   # Hex dump memory
+echo '!types' > ...                                                   # List registered types
+```
 
 ### Verify
 
@@ -344,6 +369,31 @@ This was discovered through Ghidra analysis of `TryGetSingleton` which saves x8 
 | `Ext.Events.GameStateChanged` | ❌ Not impl | Game state transitions |
 | `Ext.Events.StatsLoaded` | ❌ Not impl | After stats loaded |
 | `Ext.Events.Tick` | ❌ Not impl | Every game loop |
+
+### Ext.Timer Namespace (v0.11.0)
+
+| API | Status | Description |
+|-----|--------|-------------|
+| `Ext.Timer.WaitFor(delay, callback, [repeat])` | ✅ Working | Create timer (delay in ms) |
+| `Ext.Timer.Cancel(handle)` | ✅ Working | Cancel a timer |
+| `Ext.Timer.Pause(handle)` | ✅ Working | Pause a timer |
+| `Ext.Timer.Resume(handle)` | ✅ Working | Resume a paused timer |
+| `Ext.Timer.IsPaused(handle)` | ✅ Working | Check if timer is paused |
+| `Ext.Timer.MonotonicTime()` | ✅ Working | Get monotonic clock (ms) |
+
+### Ext.Debug Namespace (v0.11.0)
+
+| API | Status | Description |
+|-----|--------|-------------|
+| `Ext.Debug.ReadPtr(addr)` | ✅ Working | Read pointer (safe) |
+| `Ext.Debug.ReadU32(addr)` | ✅ Working | Read uint32 |
+| `Ext.Debug.ReadI32(addr)` | ✅ Working | Read int32 |
+| `Ext.Debug.ReadU64(addr)` | ✅ Working | Read uint64 |
+| `Ext.Debug.ReadFloat(addr)` | ✅ Working | Read float |
+| `Ext.Debug.ReadString(addr, max)` | ✅ Working | Read C string |
+| `Ext.Debug.ProbeStruct(base, start, end, stride)` | ✅ Working | Bulk offset discovery |
+| `Ext.Debug.HexDump(addr, size)` | ✅ Working | Hex dump memory |
+| `Ext.Debug.FindArrayPattern(base, range)` | ✅ Working | Find array patterns |
 
 ### Global Functions
 
@@ -565,9 +615,7 @@ See [GitHub Issues](https://github.com/tdimino/bg3se-macos/issues) for detailed 
 
 ### High Priority
 
-- **[#14 - Timer API](https://github.com/tdimino/bg3se-macos/issues/14)** - Delayed/repeating callbacks
 - **[#15 - Client Lua State](https://github.com/tdimino/bg3se-macos/issues/15)** - Dual client/server Lua states
-- **[#18 - Enhanced Debug Console](https://github.com/tdimino/bg3se-macos/issues/18)** - Multi-line support, memory introspection APIs
 
 ### Future Phases
 
@@ -579,6 +627,8 @@ See [GitHub Issues](https://github.com/tdimino/bg3se-macos/issues) for detailed 
 
 ### Completed
 
+- ✅ **[#14 - Timer API](https://github.com/tdimino/bg3se-macos/issues/14)** - WaitFor, Cancel, Pause, Resume, IsPaused, MonotonicTime (v0.11.0)
+- ✅ **[#18 - Enhanced Debug Console](https://github.com/tdimino/bg3se-macos/issues/18)** - Multi-line support, console commands, Ext.Debug APIs (v0.11.0)
 - ✅ **[#3 - Ext.Stats API](https://github.com/tdimino/bg3se-macos/issues/3)** - Property read complete, `stat.Damage` returns "1d8" (v0.11.0)
 - ✅ **[#10 - Osiris Function Name Caching](https://github.com/tdimino/bg3se-macos/issues/10)** - Fixed funcDef->Signature->Name indirection (v0.10.6)
 - ✅ **[#2 - Component Discovery](https://github.com/tdimino/bg3se-macos/issues/2)** - TypeId discovery with deferred retry (v0.10.5)
