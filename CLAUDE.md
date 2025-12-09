@@ -39,30 +39,26 @@ date && tail -f "/Users/tomdimino/Library/Application Support/BG3SE/bg3se.log"
 echo 'Ext.Print("test")' > "/Users/tomdimino/Library/Application Support/BG3SE/commands.txt"
 ```
 
-## Codebase Search (osgrep)
+## Semantic Search (osgrep)
 
-> **Priority:** Use OSGrep for all semantic search in this repo or BG3SE. Invoke `osgrep-reference` skill for CLI options. Invoke `bg3se-macos-ghidra` skill for Ghidra workflows, ARM64 patterns, and troubleshooting.
-
-**Semantic search** - use natural language queries, not just keywords:
+**IMPORTANT**: You must `cd` into the project directory before running osgrep commands.
+osgrep uses per-project `.osgrep/` indexes, so it only searches the repo you're currently in.
 
 ```bash
-# Search this project (bg3se-macos, indexed)
-osgrep "how does event dispatch work"
-osgrep "where are stats properties resolved"
-osgrep "ARM64 indirect return pattern"
+# Search this project
+cd /Users/tomdimino/Desktop/Programming/bg3se-macos
+osgrep "your query"
 
-# Search Windows BG3SE reference (indexed)
-osgrep "entity manager" -p /Users/tomdimino/Desktop/Programming/bg3se
-osgrep "how does Lua component binding work" -p /Users/tomdimino/Desktop/Programming/bg3se
-osgrep "stats property resolution flow" -p /Users/tomdimino/Desktop/Programming/bg3se
+# Search Windows BG3SE reference
+cd /Users/tomdimino/Desktop/Programming/bg3se
+osgrep "your query"
 ```
 
-**Indexed repositories:**
+**Why use osgrep over grep?** Token-efficient (relevant snippets vs exhaustive output), semantic understanding (finds by concept, not literal strings), better for architectural questions ("How does X work?").
 
-- `/Users/tomdimino/Desktop/Programming/bg3se-macos` (this project)
-- `/Users/tomdimino/Desktop/Programming/bg3se` (Windows reference implementation)
+**Use for**: How does X work? Where is Y implemented? Find all places that do Z.
 
-**Tips:** Ask complete questions rather than keywords. osgrep understands context and returns relevant code snippets with surrounding lines.
+Run `osgrep index --reset` if the index is stale. Use `osgrep-reference` skill for CLI reference. Use `bg3se-macos-ghidra` skill for Ghidra workflows and ARM64 patterns.
 
 ## Ghidra Analysis
 
@@ -90,6 +86,12 @@ osgrep "stats property resolution flow" -p /Users/tomdimino/Desktop/Programming/
 - Prefix public functions with module name (`stats_get_string()`)
 - Extract from main.c when code exceeds ~100 lines with isolated state
 - Use `log_message()` for consistent logging
+
+## Testing Workflow
+
+- **You run console commands** - User doesn't manually run console commands during testing. You execute them via `echo 'command' | nc -U /tmp/bg3se.sock` or the console client.
+- User launches/reloads the game; you handle Lua console interaction
+- Check logs after running commands to see results
 
 ## Key Offsets (verified via Ghidra)
 
