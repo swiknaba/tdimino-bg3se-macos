@@ -1,8 +1,8 @@
 ---
 name: osgrep-reference
 description: Comprehensive CLI reference and search strategies for osgrep semantic code search. Use for detailed CLI options, index management commands, search strategy guidance (architectural vs targeted queries), and troubleshooting. Complements the osgrep plugin which handles daemon lifecycle.
-version: 0.4.15
-last_updated: 2025-12-04
+version: 0.5.15
+last_updated: 2025-12-09
 allowed-tools: "Bash(osgrep:*), Read"
 ---
 
@@ -12,13 +12,15 @@ allowed-tools: "Bash(osgrep:*), Read"
 
 osgrep is a natural-language semantic code search tool that finds code by concept rather than keyword matching. Unlike `grep` which matches literal strings, osgrep understands code semantics using local AI embeddings.
 
-**Version 0.4.x highlights:**
+**Version 0.5.x highlights:**
+- `skeleton` command: Compress files to function/class signatures (~85% token reduction)
+- `trace` command: Show who calls/what calls for any symbol
+- `symbols` command: List all indexed symbols with definitions
+- Per-project `.osgrep/` directories (no longer global `~/.osgrep/data`)
 - V2 architecture with improved performance (~20% token savings, ~30% speedup)
 - Go language support
 - `--reset` flag for clean re-indexing
 - ColBERT reranking for better result relevance
-- Separate "Code" and "Docs" index channels
-- Tree-sitter-based chunking by function/class boundaries
 
 **When to use osgrep:**
 - Exploring unfamiliar codebases ("where is the auth logic?")
@@ -33,11 +35,22 @@ osgrep is a natural-language semantic code search tool that finds code by concep
 
 ## Quick Start
 
+**IMPORTANT: You must `cd` into the project directory before running osgrep commands.**
+osgrep uses per-project `.osgrep/` indexes, so it only searches the repo you're currently in.
+
+```bash
+cd /path/to/project      # REQUIRED: cd into the project first
+osgrep "your query"      # Now search works
+```
+
 ### Basic Search
 
 ```bash
 osgrep "your semantic query"
-osgrep "your query" path/to/scope    # Scope to subdirectory
+osgrep search "your query" path/to/scope    # Scope to subdirectory
+osgrep skeleton src/file.py                 # Compress file to signatures
+osgrep trace functionName                   # Show call graph
+osgrep symbols                              # List all symbols
 ```
 
 **Examples:**
@@ -50,10 +63,19 @@ osgrep "how are plugins loaded" packages/src
 
 ### Output Format
 
-Returns: `path/to/file:line [Tags] Code Snippet`
+Returns results in this format:
+```
+IMPLEMENTATION path/to/file:line
+Score: 0.95
 
-- `[Definition]`: Semantic search detected a class/function here. High relevance.
-- `...`: **Truncation marker**. Snippet is incomplete (max 16 lines)—use `Read` for full context.
+Preamble:
+[code snippet or content preview]
+...
+```
+
+- **IMPLEMENTATION**: Tag indicating the type of match
+- **Score**: Relevance score (0-1, higher is better)
+- **...**: Truncation marker—snippet is incomplete, use `Read` for full context
 
 ## Search Strategy
 
@@ -102,13 +124,8 @@ Use for: specific function, algorithm, single feature
 
 **Control result count:**
 ```bash
-osgrep "validation logic" -m 20           # Max 20 results total (default: 25)
+osgrep "validation logic" -m 20           # Max 20 results total (default: 10)
 osgrep "validation logic" --per-file 3    # Up to 3 matches per file (default: 1)
-```
-
-**Reset index during search:**
-```bash
-osgrep "validation logic" -r              # Reset index and re-index from scratch before searching
 ```
 
 **Output formats:**
@@ -129,15 +146,37 @@ osgrep "validation logic" -d               # Dry run (show what would sync)
 
 ```bash
 osgrep index                    # Incremental update
-osgrep index --reset            # Full re-index from scratch (v0.4.6+)
+osgrep index -r                 # Full re-index from scratch (--reset)
 osgrep index -p /path/to/repo   # Index a specific directory
-osgrep index --dry-run          # Preview what would be indexed
+osgrep index -d                 # Preview what would be indexed (--dry-run)
+```
+
+### Advanced Commands (v0.5+)
+
+**Skeleton - Compress files to signatures:**
+```bash
+osgrep skeleton src/server.py              # Show function/class signatures only
+osgrep skeleton src/server.py --no-summary # Omit call/complexity summaries
+osgrep skeleton "auth logic" -l 5          # Query mode: skeleton of top 5 matching files
+```
+Output shows: function signatures with `# → calls | C:N | ORCH` summaries inside bodies.
+
+**Trace - Show call graph:**
+```bash
+osgrep trace handleRequest                 # Who calls this? What does it call?
+```
+
+**Symbols - List all indexed symbols:**
+```bash
+osgrep symbols                             # All symbols (default limit: 20)
+osgrep symbols "Request"                   # Filter by pattern
+osgrep symbols -p src/api/ -l 50           # Filter by path, increase limit
 ```
 
 ### Other Commands
 
 ```bash
-osgrep list                     # Show all indexed repositories
+osgrep list                     # Show current project's .osgrep/ contents
 osgrep doctor                   # Check health and configuration
 osgrep setup                    # Pre-download models (~150MB)
 osgrep serve                    # Run background daemon (port 4444)
@@ -233,14 +272,15 @@ For architectural questions, snippets are signposts, not answers. Read the key f
 ## Technical Details
 
 - **100% Local**: Uses transformers.js embeddings (no remote API calls)
-- **Auto-Isolated**: Each repo gets its own index
+- **Auto-Isolated**: Each repo gets its own index in `.osgrep/` directory (v0.5+)
 - **Adaptive Performance**: Bounded concurrency keeps system responsive
-- **Index Location**: `~/.osgrep/data/`
+- **Index Location**: `.osgrep/` in project root (was `~/.osgrep/data/` in v0.4.x)
 - **Model Download**: ~150MB on first run (`osgrep setup` to pre-download)
 - **Chunking Strategy**: Tree-sitter parses code into function/class boundaries
 - **Deduplication**: Identical code blocks are deduplicated
 - **Dual Channels**: Separate "Code" and "Docs" indices with ColBERT reranking
 - **Structural Boosting**: Functions/classes prioritized over test files
+- **Skeleton Compression**: ~85% token reduction when viewing file structure
 
 ## Troubleshooting
 
