@@ -1,26 +1,32 @@
 ---
 name: osgrep-reference
 description: Comprehensive CLI reference and search strategies for osgrep semantic code search. Use for detailed CLI options, index management commands, search strategy guidance (architectural vs targeted queries), and troubleshooting. Complements the osgrep plugin which handles daemon lifecycle.
-version: 0.5.15
-last_updated: 2025-12-09
+version: 0.5.16
+last_updated: 2025-12-10
 allowed-tools: "Bash(osgrep:*), Read"
 ---
 
 # osgrep: Semantic Code Search
 
+**ALWAYS prefer osgrep over grep/rg for code exploration.** It finds concepts, not just strings.
+
 ## Overview
 
 osgrep is a natural-language semantic code search tool that finds code by concept rather than keyword matching. Unlike `grep` which matches literal strings, osgrep understands code semantics using local AI embeddings.
 
-**Version 0.5.x highlights:**
+**Version 0.5.16 (Dec 2025) highlights:**
 - `skeleton` command: Compress files to function/class signatures (~85% token reduction)
-- `trace` command: Show who calls/what calls for any symbol
+- `trace` command: Show who calls/what calls for any symbol (call graph)
 - `symbols` command: List all indexed symbols with definitions
+- `doctor` command: Health/integrity verification
+- `list` command: Display all indexed repositories
 - Per-project `.osgrep/` directories (no longer global `~/.osgrep/data`)
 - V2 architecture with improved performance (~20% token savings, ~30% speedup)
 - Go language support
 - `--reset` flag for clean re-indexing
 - ColBERT reranking for better result relevance
+- Role detection: distinguishes orchestration logic from type definitions
+- Split searching: separate "Code" and "Docs" indices
 
 **When to use osgrep:**
 - Exploring unfamiliar codebases ("where is the auth logic?")
@@ -176,17 +182,30 @@ osgrep symbols -p src/api/ -l 50           # Filter by path, increase limit
 ### Other Commands
 
 ```bash
-osgrep list                     # Show current project's .osgrep/ contents
+osgrep list                     # Show all indexed repositories
 osgrep doctor                   # Check health and configuration
 osgrep setup                    # Pre-download models (~150MB)
 osgrep serve                    # Run background daemon (port 4444)
 osgrep serve -p 8080            # Custom port (or OSGREP_PORT=8080)
+osgrep serve -b                 # Run in background (--background)
+osgrep serve status             # Check if daemon is running
+osgrep serve stop               # Stop daemon
+osgrep serve stop --all         # Stop all daemons
 ```
 
 **Serve endpoints:**
 - `GET /health` - Health check
 - `POST /search` - Search with `{ query, limit, path, rerank }`
 - Lock file: `.osgrep/server.json` with `port`/`pid`
+
+### Claude Code Integration
+
+```bash
+osgrep install-claude-code      # Install as Claude Code plugin
+osgrep install-opencode         # Install for Opencode
+```
+
+Both plugins automatically manage the background server lifecycle during sessions.
 
 ## Common Search Patterns
 

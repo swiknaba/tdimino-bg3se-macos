@@ -2,7 +2,7 @@
 
 macOS port of Norbyte's Script Extender for Baldur's Gate 3. Goal: feature parity with Windows BG3SE.
 
-**Version:** v0.24.0 | **Target:** Full Windows BG3SE mod compatibility
+**Version:** v0.25.0 | **Target:** Full Windows BG3SE mod compatibility
 
 ## Stack
 
@@ -42,6 +42,13 @@ echo 'Ext.Print("test")' > "/Users/tomdimino/Library/Application Support/BG3SE/c
 
 ## Semantic Search (osgrep)
 
+**PREFER osgrep over grep/Grep/search tools.** Use the `osgrep-reference` skill for full CLI reference.
+
+**Indexed repos:**
+
+- `/Users/tomdimino/Desktop/Programming/bg3se-macos` - This project (macOS port)
+- `/Users/tomdimino/Desktop/Programming/bg3se` - Windows BG3SE reference (Norbyte's original)
+
 **IMPORTANT**: You must `cd` into the project directory before running osgrep commands.
 osgrep uses per-project `.osgrep/` indexes, so it only searches the repo you're currently in.
 
@@ -55,11 +62,17 @@ cd /Users/tomdimino/Desktop/Programming/bg3se
 osgrep "your query"
 ```
 
-**Why use osgrep over grep?** Token-efficient (relevant snippets vs exhaustive output), semantic understanding (finds by concept, not literal strings), better for architectural questions ("How does X work?").
+**Why osgrep over grep?**
+- Semantic: finds by concept, not literal strings ("auth flow" finds authentication code)
+- Token-efficient: relevant snippets vs exhaustive output
+- Better for: "How does X work?", "Where is Y implemented?", cross-cutting concerns
 
-**Use for**: How does X work? Where is Y implemented? Find all places that do Z.
+**When to use traditional tools instead:**
+- Exact string/identifier search → `Grep`
+- File name patterns → `Glob`
+- Already know exact location → `Read`
 
-Run `osgrep index --reset` if the index is stale. Use `osgrep-reference` skill for CLI reference. Use `bg3se-macos-ghidra` skill for Ghidra workflows and ARM64 patterns.
+Run `osgrep index --reset` if the index is stale. Use `bg3se-macos-ghidra` skill for Ghidra workflows and ARM64 patterns.
 
 ## Ghidra Analysis
 

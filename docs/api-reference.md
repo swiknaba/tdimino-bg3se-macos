@@ -152,10 +152,38 @@ Access to the RPGStats system (weapons, armor, spells, etc.).
 |-----|--------|-------------|
 | `Ext.Stats.Get(name)` | ✅ | Get StatsObject by name |
 | `Ext.Stats.GetAll(type?)` | ✅ | Get all stat names, optionally by type |
-| `Ext.Stats.Create(name, type, template?)` | ✅ | Create new stat object |
-| `Ext.Stats.Sync(name)` | ⚠️ | Sync stat changes (framework exists) |
+| `Ext.Stats.Create(name, type, template?)` | ✅ | Create new stat object at runtime |
+| `Ext.Stats.Sync(name)` | ⚠️ | Mark stat as synced (prototype manager sync pending) |
 | `Ext.Stats.IsReady()` | ✅ | Check if stats system ready |
 | `Ext.Stats.DumpTypes()` | ✅ | Print all stat types to log |
+
+### Ext.Stats.Create
+
+Creates a new stat object at runtime. The stat is stored in a shadow registry and accessible via `Ext.Stats.Get()`.
+
+**Parameters:**
+- `name` (string) - Unique name for the new stat
+- `type` (string) - Stat type: "Weapon", "Armor", "SpellData", "StatusData", "PassiveData", etc.
+- `template` (string, optional) - Existing stat to copy properties from
+
+**Returns:** StatsObject or nil (if name exists, type invalid, or system not ready)
+
+**Example:**
+```lua
+-- Create a new weapon from scratch
+local sword = Ext.Stats.Create("MyMod_CustomSword", "Weapon")
+sword.Damage = "2d8"
+sword.DamageType = "Slashing"
+
+-- Create based on existing stat
+local betterSword = Ext.Stats.Create("MyMod_BetterSword", "Weapon", "WPN_Longsword")
+betterSword.Damage = "3d8"  -- Override template value
+
+-- Call Sync when done modifying
+Ext.Stats.Sync("MyMod_CustomSword")
+```
+
+**Note:** Created stats exist in memory and support property read/write. Prototype manager sync (for game to use stats in spawning/casting) is pending implementation.
 
 ### StatsObject Properties
 

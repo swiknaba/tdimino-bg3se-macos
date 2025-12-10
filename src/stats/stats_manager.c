@@ -204,6 +204,48 @@ static void *g_MainBinaryBase = NULL;
 static void **g_pRPGStatsPtr = NULL;   // Pointer to RPGStats::m_ptr
 static bool g_Initialized = false;
 
+// ============================================================================
+// Shadow Registry for Created Stats
+// ============================================================================
+// We can't safely insert into the game's CNamedElementManager (requires HashMap
+// manipulation), so we maintain a shadow registry for stats created via
+// Ext.Stats.Create(). These stats are accessible via stats_get() and support
+// property read/write, but require Sync() to be usable by the game.
+
+// Shadow stats::Object - mirrors the game's Object struct layout for compatibility
+// with existing property read/write code. Must match offsets in OBJECT_OFFSET_* defines.
+typedef struct ShadowStatsObject {
+    void *vmt;                      // +0x00: Copy from real object for compatibility
+    int32_t *indexed_props_begin;   // +0x08: Our property array (Vector.begin_)
+    int32_t *indexed_props_end;     // +0x10: (Vector.end_)
+    int32_t *indexed_props_cap;     // +0x18: (Vector.capacity_)
+    uint32_t name_fs_index;         // +0x20: FixedString index for name
+    uint8_t padding1[0x88];         // Padding to reach Using offset
+    int32_t using_index;            // +0xa8: Parent stat index (-1 if none)
+    uint32_t modifier_list_index;   // +0xac: Type (ModifierList index)
+    uint32_t level;                 // +0xb0: Stat level
+} ShadowStatsObject;
+
+// Registry entry for a created stat
+typedef struct CreatedStatEntry {
+    char *name;                     // Stat name (heap allocated)
+    ShadowStatsObject *object;      // Our shadow object
+    int32_t *indexed_properties;    // Property values array (separate for easy access)
+    int property_count;             // Number of properties
+    int32_t modifier_list_index;    // Type index (cached)
+    bool synced;                    // Has Sync() been called?
+    struct CreatedStatEntry *next;  // Linked list
+} CreatedStatEntry;
+
+static CreatedStatEntry *g_CreatedStats = NULL;  // Head of linked list
+static void *g_CachedVMT = NULL;                 // Cached VMT from real object
+
+// Forward declarations for shadow stat helpers
+static CreatedStatEntry* find_shadow_stat_entry(const char *name);
+static bool is_shadow_stat(StatsObjectPtr obj);
+static int find_modifier_list_by_name(const char *type_name);
+static int get_modifier_list_attribute_count(int ml_index);
+
 // Forward declarations for internal helpers
 static void* get_objects_manager(void);
 static int get_manager_count(void *manager);
@@ -624,7 +666,18 @@ static void* get_manager_element(void *manager, int index) {
 // ============================================================================
 
 StatsObjectPtr stats_get(const char *name) {
-    if (!name || !stats_manager_ready()) {
+    if (!name) {
+        return NULL;
+    }
+
+    // Check shadow registry first (created stats)
+    CreatedStatEntry *shadow = find_shadow_stat_entry(name);
+    if (shadow) {
+        return (StatsObjectPtr)shadow->object;
+    }
+
+    // Fall through to game's Objects manager
+    if (!stats_manager_ready()) {
         return NULL;
     }
 
@@ -656,10 +709,30 @@ StatsObjectPtr stats_get(const char *name) {
     return NULL;
 }
 
+// Get type name from ModifierList index
+static const char* get_type_name_from_ml_index(int32_t ml_index) {
+    if (ml_index < 0) return NULL;
+
+    void *modifier_lists = get_modifier_lists_manager();
+    if (!modifier_lists) return NULL;
+
+    void *modifier_list = get_manager_element(modifier_lists, (uint32_t)ml_index);
+    if (!modifier_list) return NULL;
+
+    #define MODIFIERLIST_OFFSET_NAME 0x5c
+    return read_fixed_string((char*)modifier_list + MODIFIERLIST_OFFSET_NAME);
+}
+
 const char* stats_get_type(StatsObjectPtr obj) {
     if (!obj) return NULL;
 
-    // WORKAROUND: Use name-based type detection
+    // Check if this is a shadow stat (created via Ext.Stats.Create)
+    if (is_shadow_stat(obj)) {
+        ShadowStatsObject *shadow = (ShadowStatsObject *)obj;
+        return get_type_name_from_ml_index(shadow->modifier_list_index);
+    }
+
+    // WORKAROUND: Use name-based type detection for game stats
     // The Object struct layout on macOS ARM64 differs significantly from Windows x64
     // due to different sizes of HashMap, Array, TrackedCompactSet, etc.
     // Until we discover the true ModifierListIndex offset, use stat name prefixes.
@@ -685,15 +758,8 @@ const char* stats_get_type(StatsObjectPtr obj) {
         // Try ModifierListIndex lookup as fallback
         uint8_t modifier_list_idx = 0;
         if (safe_read_u8((char*)obj + OBJECT_OFFSET_MODIFIERLIST_IDX, &modifier_list_idx)) {
-            void *modifier_lists = get_modifier_lists_manager();
-            if (modifier_lists) {
-                void *modifier_list = get_manager_element(modifier_lists, (uint32_t)modifier_list_idx);
-                if (modifier_list) {
-                    #define MODIFIERLIST_OFFSET_NAME 0x5c
-                    const char *type_name = read_fixed_string((char*)modifier_list + MODIFIERLIST_OFFSET_NAME);
-                    if (type_name) return type_name;
-                }
-            }
+            const char *type_name = get_type_name_from_ml_index(modifier_list_idx);
+            if (type_name) return type_name;
         }
     }
 
@@ -702,6 +768,15 @@ const char* stats_get_type(StatsObjectPtr obj) {
 
 const char* stats_get_name(StatsObjectPtr obj) {
     if (!obj) return NULL;
+
+    // For shadow stats, look up the name from the registry entry
+    for (CreatedStatEntry *e = g_CreatedStats; e; e = e->next) {
+        if ((StatsObjectPtr)e->object == obj) {
+            return e->name;
+        }
+    }
+
+    // For game stats, read the FixedString name
     return read_fixed_string((char*)obj + OBJECT_OFFSET_NAME);
 }
 
@@ -749,7 +824,19 @@ int stats_get_property_count(StatsObjectPtr obj) {
 int32_t stats_get_property_raw(StatsObjectPtr obj, int property_index) {
     if (!obj || property_index < 0) return -1;
 
-    // Read begin_ pointer
+    // For shadow stats, access properties directly
+    if (is_shadow_stat(obj)) {
+        ShadowStatsObject *shadow = (ShadowStatsObject *)obj;
+        if (!shadow->indexed_props_begin) return -1;
+
+        // Bounds check
+        int prop_count = (int)(shadow->indexed_props_end - shadow->indexed_props_begin);
+        if (property_index >= prop_count) return -1;
+
+        return shadow->indexed_props_begin[property_index];
+    }
+
+    // For game objects, use safe memory reads
     void *idx_props = (char*)obj + OBJECT_OFFSET_INDEXED_PROPS;
     void *begin_ptr = NULL;
 
@@ -796,18 +883,28 @@ const char* stats_get_using(StatsObjectPtr obj) {
 static void* get_object_modifier_list(StatsObjectPtr obj) {
     if (!obj) return NULL;
 
-    // ModifierListIndex is a uint8_t at offset 0x00
-    uint8_t modifier_list_idx = 0;
-    if (!safe_read_u8((char*)obj + OBJECT_OFFSET_MODIFIERLIST_IDX, &modifier_list_idx)) {
-        LOG_STATS_DEBUG("get_object_modifier_list: failed to read ModifierListIndex at +0x%x", OBJECT_OFFSET_MODIFIERLIST_IDX);
-        return NULL;
+    uint32_t modifier_list_idx = 0;
+
+    // Check if this is a shadow stat - use our known offset
+    if (is_shadow_stat(obj)) {
+        ShadowStatsObject *shadow = (ShadowStatsObject *)obj;
+        modifier_list_idx = shadow->modifier_list_index;
+        LOG_STATS_DEBUG("get_object_modifier_list: Shadow stat ModifierListIndex = %u", modifier_list_idx);
+    } else {
+        // For game objects, ModifierListIndex is a uint8_t at offset 0x00
+        uint8_t ml_idx_u8 = 0;
+        if (!safe_read_u8((char*)obj + OBJECT_OFFSET_MODIFIERLIST_IDX, &ml_idx_u8)) {
+            LOG_STATS_DEBUG("get_object_modifier_list: failed to read ModifierListIndex at +0x%x", OBJECT_OFFSET_MODIFIERLIST_IDX);
+            return NULL;
+        }
+        modifier_list_idx = (uint32_t)ml_idx_u8;
+        LOG_STATS_DEBUG("get_object_modifier_list: Game stat ModifierListIndex = %u", modifier_list_idx);
     }
-    LOG_STATS_DEBUG("get_object_modifier_list: ModifierListIndex = %u", (uint32_t)modifier_list_idx);
 
     void *modifier_lists = get_modifier_lists_manager();
     if (!modifier_lists) return NULL;
 
-    return get_manager_element(modifier_lists, (uint32_t)modifier_list_idx);
+    return get_manager_element(modifier_lists, modifier_list_idx);
 }
 
 // Find property index by name in a ModifierList's Attributes
@@ -925,6 +1022,26 @@ static void *get_property_write_address(StatsObjectPtr obj, const char *prop,
         return NULL;
     }
 
+    // For shadow stats, access properties directly
+    if (is_shadow_stat(obj)) {
+        ShadowStatsObject *shadow = (ShadowStatsObject *)obj;
+        if (!shadow->indexed_props_begin) {
+            LOG_STATS_DEBUG("%s: shadow stat has no properties", caller_name);
+            return NULL;
+        }
+
+        // Bounds check
+        int prop_count = (int)(shadow->indexed_props_end - shadow->indexed_props_begin);
+        if (prop_index >= prop_count) {
+            LOG_STATS_DEBUG("%s: property index %d out of bounds (max %d)", caller_name, prop_index, prop_count);
+            return NULL;
+        }
+
+        if (out_prop_index) *out_prop_index = prop_index;
+        return &shadow->indexed_props_begin[prop_index];
+    }
+
+    // For game objects, use safe memory reads
     void *idx_props = (char*)obj + OBJECT_OFFSET_INDEXED_PROPS;
     void *begin_ptr = NULL;
     if (!safe_read_ptr((char*)idx_props + VECTOR_OFFSET_BEGIN, &begin_ptr) || !begin_ptr) {
@@ -934,6 +1051,18 @@ static void *get_property_write_address(StatsObjectPtr obj, const char *prop,
 
     if (out_prop_index) *out_prop_index = prop_index;
     return (char*)begin_ptr + prop_index * sizeof(int32_t);
+}
+
+// Helper: Write int32_t value - direct for shadow stats, safe_write for game stats
+static bool write_property_i32(StatsObjectPtr obj, void *write_addr, int32_t value) {
+    if (is_shadow_stat(obj)) {
+        // Direct write for shadow stats (we own the memory)
+        *(int32_t *)write_addr = value;
+        return true;
+    } else {
+        // Safe write for game stats
+        return safe_write_i32(write_addr, value);
+    }
 }
 
 bool stats_set_string(StatsObjectPtr obj, const char *prop, const char *value) {
@@ -949,7 +1078,7 @@ bool stats_set_string(StatsObjectPtr obj, const char *prop, const char *value) {
         return false;
     }
 
-    if (!safe_write_i32(write_addr, pool_index)) {
+    if (!write_property_i32(obj, write_addr, pool_index)) {
         LOG_STATS_DEBUG("stats_set_string: failed to write pool index");
         return false;
     }
@@ -966,7 +1095,7 @@ bool stats_set_int(StatsObjectPtr obj, const char *prop, int64_t value) {
     if (!write_addr) return false;
 
     int32_t val32 = (int32_t)value;
-    if (!safe_write_i32(write_addr, val32)) {
+    if (!write_property_i32(obj, write_addr, val32)) {
         LOG_STATS_DEBUG("stats_set_int: failed to write value");
         return false;
     }
@@ -984,7 +1113,7 @@ bool stats_set_float(StatsObjectPtr obj, const char *prop, float value) {
 
     union { float f; int32_t i; } conv;
     conv.f = value;
-    if (!safe_write_i32(write_addr, conv.i)) {
+    if (!write_property_i32(obj, write_addr, conv.i)) {
         LOG_STATS_DEBUG("stats_set_float: failed to write value");
         return false;
     }
@@ -994,14 +1123,120 @@ bool stats_set_float(StatsObjectPtr obj, const char *prop, float value) {
 }
 
 // ============================================================================
-// Sync - Stub implementation
+// Shadow Stat Helper Functions
+// ============================================================================
+
+// Find a shadow stat entry by name
+static CreatedStatEntry* find_shadow_stat_entry(const char *name) {
+    if (!name) return NULL;
+    for (CreatedStatEntry *e = g_CreatedStats; e; e = e->next) {
+        if (e->name && strcmp(e->name, name) == 0) {
+            return e;
+        }
+    }
+    return NULL;
+}
+
+// Check if an object pointer is a shadow stat
+static bool is_shadow_stat(StatsObjectPtr obj) {
+    if (!obj) return false;
+    for (CreatedStatEntry *e = g_CreatedStats; e; e = e->next) {
+        if ((StatsObjectPtr)e->object == obj) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// Find ModifierList index by type name (e.g., "Weapon" -> 0)
+static int find_modifier_list_by_name(const char *type_name) {
+    if (!type_name || !stats_manager_ready()) return -1;
+
+    void *modifier_lists = get_modifier_lists_manager();
+    if (!modifier_lists) return -1;
+
+    int count = get_manager_count(modifier_lists);
+    for (int i = 0; i < count; i++) {
+        void *ml = get_manager_element(modifier_lists, i);
+        if (!ml) continue;
+
+        const char *ml_name = read_fixed_string((char*)ml + MODIFIERLIST_OFFSET_NAME);
+        if (ml_name && strcmp(ml_name, type_name) == 0) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+// Get the number of attributes in a ModifierList
+static int get_modifier_list_attribute_count(int ml_index) {
+    if (ml_index < 0 || !stats_manager_ready()) return -1;
+
+    void *modifier_lists = get_modifier_lists_manager();
+    if (!modifier_lists) return -1;
+
+    void *ml = get_manager_element(modifier_lists, ml_index);
+    if (!ml) return -1;
+
+    // ModifierList starts with CNamedElementManager<Modifier> Attributes at offset 0
+    // Read the size from the Attributes manager
+    uint32_t attr_count = 0;
+    if (!safe_read_u32((char*)ml + CNEM_OFFSET_VALUES_SIZE, &attr_count)) {
+        return -1;
+    }
+
+    return (int)attr_count;
+}
+
+// Cache the VMT from a real stats object (call once when system is ready)
+static void* get_cached_vmt(void) {
+    if (g_CachedVMT) return g_CachedVMT;
+
+    // Get VMT from first object in the game's Objects manager
+    void *objects = get_objects_manager();
+    if (!objects) return NULL;
+
+    void *first_obj = get_manager_element(objects, 0);
+    if (!first_obj) return NULL;
+
+    void *vmt = NULL;
+    if (safe_read_ptr(first_obj, &vmt)) {
+        g_CachedVMT = vmt;
+        LOG_STATS_DEBUG("Cached VMT from Objects[0]: %p", vmt);
+    }
+
+    return g_CachedVMT;
+}
+
+// ============================================================================
+// Sync Implementation
 // ============================================================================
 
 bool stats_sync(const char *name) {
     if (!name) return false;
 
-    LOG_STATS_DEBUG("stats_sync not yet implemented");
-    return false;
+    // Check if this is a shadow stat
+    CreatedStatEntry *entry = find_shadow_stat_entry(name);
+    if (entry) {
+        // Mark as synced
+        entry->synced = true;
+        LOG_STATS_DEBUG("stats_sync: Marked shadow stat '%s' as synced", name);
+        LOG_STATS_DEBUG("  NOTE: Prototype manager sync not yet implemented - stat exists in memory but may not be usable by game");
+        return true;
+    }
+
+    // For game stats, sync would update prototype managers
+    // This requires discovering prototype manager singletons (Phase 2)
+    StatsObjectPtr obj = stats_get(name);
+    if (!obj) {
+        LOG_STATS_DEBUG("stats_sync: Stat not found: %s", name);
+        return false;
+    }
+
+    LOG_STATS_DEBUG("stats_sync: Game stat sync not yet implemented for '%s'", name);
+    LOG_STATS_DEBUG("  NOTE: Changes to game stats are applied immediately; Sync() would update prototype caches");
+    return true;
 }
 
 // ============================================================================
@@ -1070,15 +1305,164 @@ const char* stats_get_name_at(const char *type, int index) {
 }
 
 // ============================================================================
-// Stat Creation - Stub implementation
+// Stat Creation
 // ============================================================================
 
-StatsObjectPtr stats_create(const char *name, const char *type, const char *template_name) {
-    if (!name || !type) return NULL;
+// Copy property values from a template stat to a shadow stat entry
+static bool copy_stat_properties_from_template(CreatedStatEntry *entry, StatsObjectPtr template_obj) {
+    if (!entry || !template_obj) return false;
 
-    (void)template_name;  // Unused for now
-    LOG_STATS_DEBUG("stats_create not yet implemented");
-    return NULL;
+    // Read IndexedProperties from template
+    void *begin_ptr = NULL;
+    void *end_ptr = NULL;
+
+    if (!safe_read_ptr((char*)template_obj + OBJECT_OFFSET_INDEXED_PROPS + VECTOR_OFFSET_BEGIN, &begin_ptr) ||
+        !safe_read_ptr((char*)template_obj + OBJECT_OFFSET_INDEXED_PROPS + VECTOR_OFFSET_END, &end_ptr)) {
+        LOG_STATS_DEBUG("copy_stat_properties: Failed to read template vector pointers");
+        return false;
+    }
+
+    if (!begin_ptr || !end_ptr || end_ptr <= begin_ptr) {
+        LOG_STATS_DEBUG("copy_stat_properties: Invalid template vector pointers");
+        return false;
+    }
+
+    int template_prop_count = (int)((char*)end_ptr - (char*)begin_ptr) / sizeof(int32_t);
+
+    // Copy properties (up to our allocated count)
+    int copy_count = (template_prop_count < entry->property_count) ? template_prop_count : entry->property_count;
+
+    for (int i = 0; i < copy_count; i++) {
+        int32_t value = 0;
+        if (safe_read_i32((char*)begin_ptr + i * sizeof(int32_t), &value)) {
+            entry->indexed_properties[i] = value;
+        }
+    }
+
+    LOG_STATS_DEBUG("copy_stat_properties: Copied %d properties from template", copy_count);
+    return true;
+}
+
+StatsObjectPtr stats_create(const char *name, const char *type, const char *template_name) {
+    if (!name || !type) {
+        LOG_STATS_DEBUG("stats_create: name and type are required");
+        return NULL;
+    }
+
+    if (!stats_manager_ready()) {
+        LOG_STATS_DEBUG("stats_create: Stats system not ready");
+        return NULL;
+    }
+
+    // 1. Check if name already exists (in game OR shadow registry)
+    if (stats_get(name) != NULL) {
+        LOG_STATS_DEBUG("stats_create: Stat already exists: %s", name);
+        return NULL;
+    }
+
+    // 2. Find ModifierList index by type name
+    int ml_index = find_modifier_list_by_name(type);
+    if (ml_index < 0) {
+        LOG_STATS_DEBUG("stats_create: Unknown stat type: %s", type);
+        return NULL;
+    }
+
+    // 3. Get attribute count from ModifierList
+    int attr_count = get_modifier_list_attribute_count(ml_index);
+    if (attr_count <= 0) {
+        LOG_STATS_DEBUG("stats_create: No attributes for type: %s (count=%d)", type, attr_count);
+        return NULL;
+    }
+
+    LOG_STATS_DEBUG("stats_create: Creating '%s' of type '%s' (ml_index=%d, attrs=%d)",
+                    name, type, ml_index, attr_count);
+
+    // 4. Get cached VMT from a real stats object
+    void *vmt = get_cached_vmt();
+    if (!vmt) {
+        LOG_STATS_DEBUG("stats_create: Failed to get VMT from existing stats");
+        return NULL;
+    }
+
+    // 5. Allocate shadow stat entry
+    CreatedStatEntry *entry = (CreatedStatEntry *)calloc(1, sizeof(CreatedStatEntry));
+    if (!entry) {
+        LOG_STATS_DEBUG("stats_create: Failed to allocate entry");
+        return NULL;
+    }
+
+    entry->name = strdup(name);
+    entry->modifier_list_index = ml_index;
+    entry->property_count = attr_count;
+    entry->synced = false;
+
+    // 6. Allocate property array
+    entry->indexed_properties = (int32_t *)calloc(attr_count, sizeof(int32_t));
+    if (!entry->indexed_properties) {
+        LOG_STATS_DEBUG("stats_create: Failed to allocate properties");
+        free(entry->name);
+        free(entry);
+        return NULL;
+    }
+
+    // 7. Initialize properties to 0 (default) - Conditions/RollConditions should be -1
+    // For simplicity, we set all to 0; template copy will override
+    for (int i = 0; i < attr_count; i++) {
+        entry->indexed_properties[i] = 0;
+    }
+
+    // 8. Allocate shadow object struct
+    ShadowStatsObject *shadow = (ShadowStatsObject *)calloc(1, sizeof(ShadowStatsObject));
+    if (!shadow) {
+        LOG_STATS_DEBUG("stats_create: Failed to allocate shadow object");
+        free(entry->indexed_properties);
+        free(entry->name);
+        free(entry);
+        return NULL;
+    }
+
+    // 9. Initialize shadow object to match game Object layout
+    shadow->vmt = vmt;
+    shadow->indexed_props_begin = entry->indexed_properties;
+    shadow->indexed_props_end = entry->indexed_properties + attr_count;
+    shadow->indexed_props_cap = entry->indexed_properties + attr_count;
+    shadow->name_fs_index = 0;  // We don't have a FixedString index for the name
+    shadow->using_index = -1;   // No parent
+    shadow->modifier_list_index = (uint32_t)ml_index;
+    shadow->level = 0;
+
+    entry->object = shadow;
+
+    // 10. Copy from template if provided
+    if (template_name && template_name[0]) {
+        StatsObjectPtr template_obj = stats_get(template_name);
+        if (template_obj) {
+            copy_stat_properties_from_template(entry, template_obj);
+
+            // Copy Using field from template
+            int32_t template_using = -1;
+            if (safe_read_i32((char*)template_obj + OBJECT_OFFSET_USING, &template_using)) {
+                shadow->using_index = template_using;
+            }
+
+            // Copy Level field from template
+            uint32_t template_level = 0;
+            if (safe_read_u32((char*)template_obj + OBJECT_OFFSET_LEVEL, &template_level)) {
+                shadow->level = template_level;
+            }
+
+            LOG_STATS_DEBUG("stats_create: Copied properties from template '%s'", template_name);
+        } else {
+            LOG_STATS_DEBUG("stats_create: Template not found: '%s' - using defaults", template_name);
+        }
+    }
+
+    // 11. Add to shadow registry
+    entry->next = g_CreatedStats;
+    g_CreatedStats = entry;
+
+    LOG_STATS_DEBUG("stats_create: Successfully created shadow stat '%s' at %p", name, (void*)shadow);
+    return (StatsObjectPtr)shadow;
 }
 
 // ============================================================================

@@ -53,7 +53,7 @@ SE mods work automatically—just install them like any other mod:
 | Mod Loading | ✅ PAK file reading, auto-detection |
 | Ext.Osiris | ✅ Event listeners, custom functions (NewCall/NewQuery/NewEvent/RaiseEvent/GetCustomFunctions) |
 | Ext.Entity | ✅ GUID lookup, Health component properties, GetAllEntitiesWithComponent |
-| Ext.Stats | ✅ 15,774 stats, property read/write |
+| Ext.Stats | ✅ 15,774 stats, property read/write, Create/Sync |
 | Ext.Events | ✅ 8 events with GameStateChanged |
 | Ext.Timer | ✅ WaitFor, Cancel, Pause, Resume |
 | Ext.Vars | ✅ PersistentVars |

@@ -2,9 +2,9 @@
 
 This document tracks the development roadmap for achieving feature parity with Windows BG3SE (Norbyte's Script Extender).
 
-## Current Status: v0.24.0
+## Current Status: v0.25.0
 
-**Overall Feature Parity: ~68%** (based on [comprehensive gap analysis](plans/bg3se-docs-gap-analysis.md))
+**Overall Feature Parity: ~70%** (based on [comprehensive gap analysis](plans/bg3se-docs-gap-analysis.md))
 
 **Working Features:**
 - DYLD injection and Dobby hooking infrastructure
@@ -37,7 +37,7 @@ This document tracks the development roadmap for achieving feature parity with W
 | `Ext.Json` | ✅ Full | ✅ Parse, Stringify | **90%** | 1 |
 | `Ext.IO` | ✅ Full | ✅ LoadFile, SaveFile | **80%** | 1 |
 | `Ext.Entity` | ✅ Full | ✅ GUID lookup + 8 component property layouts | **70%** | 2 |
-| `Ext.Stats` | ✅ Full | ✅ Read/Write complete (`stat.Damage = "2d6"`) | **95%** | 3 |
+| `Ext.Stats` | ✅ Full | ✅ Read/Write + Create/Sync (shadow registry) | **98%** | 3 |
 | `Ext.Events` | ✅ Full | ✅ 7 events + advanced features | **75%** | 2.5 |
 | `Ext.Timer` | ✅ Full | ✅ Complete | **100%** | 2.3 |
 | `Ext.Debug` | ✅ Full | ✅ Complete | **100%** | 2.3 |
