@@ -380,6 +380,48 @@ for _, guid in ipairs(entities) do
 end
 ```
 
+### Mod Variables (Global Per-Mod)
+
+Store global mod data not attached to any specific entity. Ideal for settings, counters, and mod state.
+
+| API | Status | Description |
+|-----|--------|-------------|
+| `Ext.Vars.RegisterModVariable(uuid, name, opts)` | ✅ | Register a mod variable prototype |
+| `Ext.Vars.GetModVariables(uuid)` | ✅ | Get mod variable proxy |
+| `Ext.Vars.SyncModVariables()` | ✅ | Force save mod variables |
+| `Ext.Vars.DirtyModVariables([uuid], [key])` | ✅ | Mark variables as dirty |
+
+**Storage Location:** `~/Library/Application Support/BG3SE/modvars.json`
+
+**Example:**
+```lua
+-- Get mod variables proxy (auto-creates if needed)
+local mv = Ext.Vars.GetModVariables("my-mod-uuid")
+
+-- Set values (table-like access)
+mv.Counter = 42
+mv.Settings = { volume = 0.8, difficulty = "Hard" }
+mv.Active = true
+
+-- Read values
+Ext.Print("Counter: " .. mv.Counter)
+Ext.Print("Volume: " .. mv.Settings.volume)
+
+-- Iterate all variables
+for key, value in pairs(mv) do
+    Ext.Print(key .. " = " .. tostring(value))
+end
+
+-- Optional: explicit registration with options
+Ext.Vars.RegisterModVariable("my-mod-uuid", "Settings", {
+    Server = true,
+    Persistent = true
+})
+
+-- Force save
+Ext.Vars.SyncModVariables()
+```
+
 ---
 
 ## Ext.Timer

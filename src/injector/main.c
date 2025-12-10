@@ -668,6 +668,9 @@ static void register_ext_api(lua_State *L) {
     lua_getfield(L, -1, "Vars");  // Get Ext.Vars table
     if (lua_istable(L, -1)) {
         uvar_register_lua(L, -1);
+        // Load persisted variables
+        uvar_load_all(L);
+        mvar_load_all(L);
     }
     lua_pop(L, 1);  // Pop Ext.Vars
 

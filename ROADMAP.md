@@ -2,7 +2,7 @@
 
 This document tracks the development roadmap for achieving feature parity with Windows BG3SE (Norbyte's Script Extender).
 
-## Current Status: v0.25.0
+## Current Status: v0.28.0
 
 **Overall Feature Parity: ~70%** (based on [comprehensive gap analysis](plans/bg3se-docs-gap-analysis.md))
 
@@ -41,7 +41,7 @@ This document tracks the development roadmap for achieving feature parity with W
 | `Ext.Events` | ✅ Full | ✅ 7 events + advanced features | **75%** | 2.5 |
 | `Ext.Timer` | ✅ Full | ✅ Complete | **100%** | 2.3 |
 | `Ext.Debug` | ✅ Full | ✅ Complete | **100%** | 2.3 |
-| `Ext.Vars` | ✅ Full | ⚠️ PersistentVars only | **25%** | 2.6 |
+| `Ext.Vars` | ✅ Full | ✅ User + Mod Variables | **85%** | 2.6 |
 | `Ext.Net` | ✅ Full | ❌ Not impl | **0%** | 6 |
 | `Ext.UI` | ✅ Full | ❌ Not impl | **0%** | 8 |
 | `Ext.Math` | ✅ Full | ✅ Complete | **95%** | 7.5 |
@@ -393,11 +393,11 @@ end)
 - GameStateChanged fires on initial load and save reloads
 
 ### 2.6 User & Mod Variables
-**Status:** ✅ Complete (v0.27.0) - User variables working, mod variables pending
+**Status:** ✅ Complete (v0.28.0) - User variables + Mod variables working
 
 From API.md: "v10 adds support for attaching custom properties to entities."
 
-**Implemented API:**
+**User Variables (entity-attached):**
 ```lua
 -- Registration (in BootstrapServer/Client.lua)
 Ext.Vars.RegisterUserVariable("MyMod_CustomHP", {
@@ -417,11 +417,36 @@ Ext.Vars.SyncUserVariables()
 local entities = Ext.Vars.GetEntitiesWithVariable("MyMod_CustomHP")
 ```
 
-**Storage:** `~/Library/Application Support/BG3SE/uservars.json`
+**Mod Variables (global per-mod, v0.28.0):**
+```lua
+-- Registration (optional - auto-registered on first use)
+Ext.Vars.RegisterModVariable("mod-uuid", "Settings", {
+    Server = true,
+    Persistent = true
+})
+
+-- Get mod variable proxy
+local mv = Ext.Vars.GetModVariables("mod-uuid")
+
+-- Read/write (table-like access)
+mv.Counter = 42
+mv.Settings = { volume = 0.8, difficulty = "Hard" }
+_P(mv.Counter)  -- 42
+
+-- Iteration
+for key, value in pairs(mv) do
+    _P(key, "=", value)
+end
+
+-- Manual sync
+Ext.Vars.SyncModVariables()
+```
+
+**Storage:**
+- User vars: `~/Library/Application Support/BG3SE/uservars.json`
+- Mod vars: `~/Library/Application Support/BG3SE/modvars.json`
 
 **Not Yet Implemented:**
-- `Ext.Vars.RegisterModVariable()` - Mod-level variables (global, not entity-attached)
-- `Ext.Vars.GetModVariables()` - Get mod variable storage
 - Client/server sync (requires NetChannel API)
 
 ### 2.7 Client Lua State

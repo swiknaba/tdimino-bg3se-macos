@@ -24,6 +24,7 @@
 #define UVAR_MAX_PROTOTYPES 256
 #define UVAR_MAX_KEY_LENGTH 128
 #define UVAR_MAX_ENTITIES 4096
+#define UVAR_MAX_MODS 64
 #define UVAR_GUID_LENGTH 64
 
 // ============================================================================
@@ -91,6 +92,19 @@ typedef struct {
     UserVariable *vars;             // Array of variables (indexed by prototype index)
     int var_count;
 } EntityVariables;
+
+// ============================================================================
+// Mod Variables (global per-mod storage)
+// ============================================================================
+
+typedef struct {
+    char uuid[UVAR_GUID_LENGTH];    // Module UUID
+    UserVariablePrototype *prototypes;  // Mod-specific prototypes
+    int prototype_count;
+    UserVariable *vars;             // Array of variables
+    int var_count;
+    bool dirty;
+} ModVariables;
 
 // ============================================================================
 // Public API
@@ -174,6 +188,57 @@ void uvar_load_all(lua_State *L);
  * Flush dirty variables (called on tick).
  */
 void uvar_flush(lua_State *L);
+
+// ============================================================================
+// Mod Variables API
+// ============================================================================
+
+/**
+ * Register a mod variable prototype.
+ * Returns prototype index on success, -1 on failure.
+ */
+int mvar_register_prototype(const char *mod_uuid, const char *key, uint32_t flags);
+
+/**
+ * Get or create mod variables storage for a module UUID.
+ */
+ModVariables* mvar_get_or_create_mod(const char *mod_uuid);
+
+/**
+ * Get mod variables storage (read-only).
+ * Returns NULL if mod has no variables.
+ */
+ModVariables* mvar_get_mod(const char *mod_uuid);
+
+/**
+ * Set a mod variable value.
+ */
+void mvar_set(lua_State *L, const char *mod_uuid, const char *key, int value_index);
+
+/**
+ * Get a mod variable value, push to Lua stack.
+ */
+int mvar_get(lua_State *L, const char *mod_uuid, const char *key);
+
+/**
+ * Mark mod variables as dirty.
+ */
+void mvar_mark_dirty(const char *mod_uuid, const char *key);
+
+/**
+ * Save all mod variables.
+ */
+void mvar_save_all(lua_State *L);
+
+/**
+ * Load all mod variables.
+ */
+void mvar_load_all(lua_State *L);
+
+/**
+ * Push mod variables proxy for GetModVariables().
+ */
+void mvar_push_mod_proxy(lua_State *L, const char *mod_uuid);
 
 // ============================================================================
 // Lua Registration
