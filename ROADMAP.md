@@ -4,7 +4,7 @@ This document tracks the development roadmap for achieving feature parity with W
 
 ## Current Status: v0.29.0
 
-**Overall Feature Parity: ~78%** (based on [comprehensive gap analysis](plans/bg3se-docs-gap-analysis.md))
+**Overall Feature Parity: ~50%** (based on comprehensive API function count analysis)
 
 **Working Features:**
 - DYLD injection and Dobby hooking infrastructure
@@ -33,23 +33,32 @@ This document tracks the development roadmap for achieving feature parity with W
 | Namespace | Windows BG3SE | bg3se-macos | Parity | Phase |
 |-----------|---------------|-------------|--------|-------|
 | `Osi.*` | ✅ Full | ✅ Dynamic metatable | **95%** | 1 |
-| `Ext.Osiris` | ✅ Full | ✅ RegisterListener + NewCall/NewQuery/NewEvent/RaiseEvent/GetCustomFunctions | **98%** | 1 |
-| `Ext.Json` | ✅ Full | ✅ Parse, Stringify | **90%** | 1 |
-| `Ext.IO` | ✅ Full | ✅ LoadFile, SaveFile | **80%** | 1 |
-| `Ext.Entity` | ✅ Full | ✅ GUID lookup + 8 component property layouts | **70%** | 2 |
-| `Ext.Stats` | ✅ Full | ✅ Read/Write + Create/Sync (shadow registry) | **98%** | 3 |
-| `Ext.Events` | ✅ Full | ✅ 7 events + advanced features | **75%** | 2.5 |
-| `Ext.Timer` | ✅ Full | ✅ Complete | **100%** | 2.3 |
-| `Ext.Debug` | ✅ Full | ✅ Complete | **100%** | 2.3 |
-| `Ext.Vars` | ✅ Full | ✅ User + Mod Variables | **85%** | 2.6 |
+| `Ext.Osiris` | ✅ Full | ✅ RegisterListener + NewCall/NewQuery/NewEvent/RaiseEvent/GetCustomFunctions | **100%** | 1 |
+| `Ext.Json` | ✅ Full (2) | ✅ Parse, Stringify | **100%** | 1 |
+| `Ext.IO` | ✅ Full (4) | ✅ LoadFile, SaveFile | **50%** | 1 |
+| `Ext.Entity` | ✅ Full (26) | ⚠️ Get, components, enumeration (15) | **58%** | 2 |
+| `Ext.Stats` | ✅ Full (52) | ⚠️ Get, GetAll, Create, property read/write (15) | **29%** | 3 |
+| `Ext.Events` | ✅ Full (~30) | ⚠️ 7 events + Subscribe/Unsubscribe | **25%** | 2.5 |
+| `Ext.Timer` | ✅ Full (13) | ⚠️ WaitFor, Cancel, Pause, Resume, IsPaused, MonotonicTime (6) | **46%** | 2.3 |
+| `Ext.Debug` | ✅ Full (8) | ✅ Memory introspection (11 macOS-specific) | **100%** | 2.3 |
+| `Ext.Vars` | ✅ Full (8) | ✅ User + Mod Variables (12) | **100%** | 2.6 |
+| `Ext.Types` | ✅ Full (15) | ⚠️ GetAllTypes, GetObjectType, GetTypeInfo, Validate (4) | **27%** | 7 |
+| `Ext.Enums` | ✅ Full | ✅ 14 enum/bitfield types | **100%** | 7 |
+| `Ext.Math` | ✅ Full (59) | ✅ 35 functions | **59%** | 7.5 |
+| `Ext.Input` | ✅ Full | ✅ CGEventTap capture, hotkeys (8 macOS-specific) | **100%** | 9 |
 | `Ext.Net` | ✅ Full | ❌ Not impl | **0%** | 6 |
-| `Ext.UI` | ✅ Full | ❌ Not impl | **0%** | 8 |
-| `Ext.Math` | ✅ Full | ✅ Complete | **95%** | 7.5 |
-| `Ext.Input` | ✅ Full | ✅ CGEventTap capture, hotkeys | **85%** | 9 |
-| `Ext.Level` | ✅ Full | ❌ Not impl | **0%** | 9 |
+| `Ext.UI` | ✅ Full (9) | ❌ Not impl | **0%** | 8 |
+| `Ext.IMGUI` | ✅ Full (7+) | ❌ Not impl | **0%** | 8 |
+| `Ext.Level` | ✅ Full (21) | ❌ Not impl | **0%** | 9 |
+| `Ext.Audio` | ✅ Full (17) | ❌ Not impl | **0%** | 10 |
+| `Ext.Localization` | ✅ Full (2) | ❌ Not impl | **0%** | 10 |
+| `Ext.StaticData` | ✅ Full (5) | ❌ Not impl | **0%** | 10 |
+| `Ext.Resource` | ✅ Full (2) | ❌ Not impl | **0%** | 10 |
+| `Ext.Template` | ✅ Full (9) | ❌ Not impl | **0%** | 10 |
 | Console/REPL | ✅ Full | ✅ Socket + file + in-game overlay | **95%** | 5 |
 | PersistentVars | ✅ Full | ✅ File-based | **90%** | 2.4 |
 | Client Lua State | ✅ Full | ❌ Not impl | **0%** | 2.7 |
+| Debugger | ✅ Full | ❌ Not impl | **0%** | 11 |
 
 ---
 
@@ -1045,6 +1054,61 @@ Ext.Mod.GetModInfo(guid)
 
 ---
 
+## Phase 10: Data Access & Audio
+
+### 10.1 Ext.StaticData API
+**Status:** ❌ Not Started - [Issue #40](https://github.com/tdimino/bg3se-macos/issues/40)
+
+Access to 200+ static game resource types.
+
+```lua
+local resource = Ext.StaticData.Get(guid, resourceType)
+local resources = Ext.StaticData.GetAll(resourceType)
+```
+
+Resource types: Background, Feat, Spell, Origin, Progression, Race, ClassDescription, etc.
+
+### 10.2 Ext.Resource & Ext.Template API
+**Status:** ❌ Not Started - [Issue #41](https://github.com/tdimino/bg3se-macos/issues/41)
+
+```lua
+-- Template access
+local templates = Ext.Template.GetAllLocalCacheTemplates()
+local template = Ext.Template.Get(templateGuid)
+
+-- Resource access
+local exists = Ext.Resource.Exists(path)
+local resource = Ext.Resource.Load(path, resourceType)
+```
+
+### 10.3 Ext.Localization API
+**Status:** ❌ Not Started - [Issue #39](https://github.com/tdimino/bg3se-macos/issues/39)
+
+```lua
+local text = Ext.Localization.Get(handle)
+local lang = Ext.Localization.GetLanguage()
+```
+
+### 10.4 Ext.Audio API
+**Status:** ❌ Not Started - [Issue #38](https://github.com/tdimino/bg3se-macos/issues/38)
+
+```lua
+local soundId = Ext.Audio.PlaySound(eventName, position, entity)
+Ext.Audio.PlayMusic(trackName)
+Ext.Audio.SetMasterVolume(volume)
+```
+
+---
+
+## Phase 11: Developer Tools
+
+### 11.1 VS Code Debugger
+**Status:** ❌ Not Started - [Issue #42](https://github.com/tdimino/bg3se-macos/issues/42)
+
+Full debugging experience with breakpoints, stepping, and variable inspection.
+
+---
+
 ## Technical Debt & Infrastructure
 
 ### Pattern Scanning Improvements
@@ -1110,14 +1174,18 @@ Ext.Mod.GetModInfo(guid)
 
 ### Priority D: Nice-to-Have
 
-| ID | Feature | Effort | Status |
-|----|---------|--------|--------|
-| D1 | Noesis UI | High | ❌ Not Started |
-| D2 | IMGUI | High | ❌ Not Started |
-| D3 | Input Injection | Medium | ❌ Not Started |
-| D4 | Physics Queries | Medium | ❌ Not Started |
-| D5 | Virtual Textures | Medium | ❌ Not Started |
-| D6 | Debugger Support | High | ❌ Not Started |
+| ID | Feature | Effort | Status | Issue |
+|----|---------|--------|--------|-------|
+| D1 | Noesis UI (Ext.UI) | High | ❌ Not Started | [#35](https://github.com/tdimino/bg3se-macos/issues/35) |
+| D2 | IMGUI Debug Overlay | High | ❌ Not Started | [#36](https://github.com/tdimino/bg3se-macos/issues/36) |
+| D3 | Physics/Raycasting (Ext.Level) | High | ❌ Not Started | [#37](https://github.com/tdimino/bg3se-macos/issues/37) |
+| D4 | Audio (Ext.Audio) | Medium | ❌ Not Started | [#38](https://github.com/tdimino/bg3se-macos/issues/38) |
+| D5 | Localization (Ext.Localization) | Low | ❌ Not Started | [#39](https://github.com/tdimino/bg3se-macos/issues/39) |
+| D6 | Static Data (Ext.StaticData) | Medium | ❌ Not Started | [#40](https://github.com/tdimino/bg3se-macos/issues/40) |
+| D7 | Resource/Template Management | Medium | ❌ Not Started | [#41](https://github.com/tdimino/bg3se-macos/issues/41) |
+| D8 | VS Code Debugger | High | ❌ Not Started | [#42](https://github.com/tdimino/bg3se-macos/issues/42) |
+| D9 | Input Injection | Medium | ❌ Not Started | - |
+| D10 | Virtual Textures | Medium | ❌ Not Started | - |
 
 ---
 
