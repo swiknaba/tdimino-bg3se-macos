@@ -1094,7 +1094,7 @@ Ext.Mod.GetModInfo(guid)
 | B2 | Timer API | Low | ✅ Complete |
 | B3 | Console/REPL | Medium | ✅ Complete (socket + file + in-game overlay) |
 | B4 | GetAllComponents | Low | ✅ Complete |
-| B5 | Stats Create/Sync | Medium | ❌ Not Started |
+| B5 | Stats Create/Sync | Medium | ⚠️ Partial (v0.25.0) - Create works, prototype sync pending |
 | B6 | Userdata Lifetime Scoping | Medium | ✅ Complete (v0.29.0) |
 
 ### Priority C: Medium Impact (Developer Experience)
@@ -1105,7 +1105,7 @@ Ext.Mod.GetModInfo(guid)
 | C2 | Enum/Bitfield Objects | Medium | ✅ Complete (v0.26.0) |
 | C3 | Console Commands | Low | ✅ Complete |
 | C6 | Ext.Debug APIs | Low | ✅ Complete |
-| C4 | Mod Variables | Medium | ❌ Not Started |
+| C4 | Mod Variables | Medium | ✅ Complete (v0.28.0) |
 | C5 | More Component Types | High | 🔄 Ongoing |
 
 ### Priority D: Nice-to-Have

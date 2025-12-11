@@ -444,3 +444,124 @@ Ext.Print(stat.Damage)  -- Output: "1d8"
 - `BG3Extender/GameDefinitions/Stats/Common.h` - Object, ModifierList structs
 - `BG3Extender/Lua/Libs/Stats.inl` - Lua bindings
 - `BG3Extender/GameDefinitions/Symbols.h` - gRPGStats declaration
+
+---
+
+## Prototype Managers (for Stats Sync)
+
+### Overview
+
+For created stats to be usable by the game (spawning items, casting spells, applying statuses), they must be registered with the appropriate **Prototype Manager**. This is what `Ext.Stats.Sync()` does in Windows BG3SE.
+
+### Architecture (from Windows BG3SE)
+
+```
+RPGStats::SyncWithPrototypeManager(Object* object)
+    ├── SpellData     → SpellPrototypeManager::SyncStat()
+    ├── StatusData    → StatusPrototypeManager::SyncStat()
+    ├── PassiveData   → PassivePrototypeManager::SyncStat()
+    └── InterruptData → InterruptPrototypeManager::SyncStat()
+```
+
+Each prototype manager:
+1. Has a singleton instance (double-pointer global)
+2. Contains a `HashMap<FixedString, *Prototype>` for prototype lookup
+3. Has an `Init` function that parses stat properties into the prototype struct
+
+### Required Components (per prototype type)
+
+| Component | Windows Symbol | Purpose |
+|-----------|----------------|---------|
+| Singleton | `eoc__SpellPrototypeManager` | Double-pointer to manager instance |
+| Init Function | `eoc__SpellPrototype__Init` | Parses Object into Prototype |
+| Prototype Struct | `SpellPrototype` | ~300+ bytes, type-specific layout |
+
+### SpellPrototype Structure (Windows x64, partial)
+
+```c
+struct SpellPrototype {
+    int StatsObjectIndex;           // +0x00
+    SpellType SpellTypeId;          // +0x04
+    FixedString SpellId;            // +0x08
+    uint8_t SpellSchool;            // +0x10
+    SpellFlags SpellFlags;          // +0x14
+    // ... ~100+ more fields
+    Array<ActionResourceCost> UseCosts;
+    Array<FixedString> ContainerSpells;
+    // Total: ~300-400 bytes
+};
+```
+
+### macOS Findings (Dec 2025)
+
+**Ghidra script:** `find_prototype_managers.py`
+
+**Discovered symbols:**
+| Function | Address | Notes |
+|----------|---------|-------|
+| `GetPassivePrototype` | `0x102655c14` | Retrieves passive by name |
+| `GetPassivePrototypes` | `0x102014284` | Bulk retrieval |
+| `__GLOBAL__sub_I_PassivePrototype.cpp` | `0x106691108` | Static initializer |
+
+**Symbol patterns found:**
+- Functions referencing `SpellPrototypeManager` in lambdas/closures
+- Functions referencing `StatusPrototypeManager` in lambdas/closures
+- Character creation using `Selector<PassivePrototype>`
+
+**Not found:**
+- Direct singleton pointer symbols (not exported)
+- Init function symbols (likely inlined or mangled differently)
+
+### Implementation Approach
+
+To complete `Ext.Stats.Sync()`:
+
+1. **Find Singleton Pointers**
+   - Trace XREFs from functions using managers
+   - Look for global pointer loads in register setup
+   - Pattern scan for manager VMT addresses
+
+2. **Find Init Functions**
+   - Decompile `SyncStat` equivalents
+   - Find functions taking `(Prototype*, FixedString const&)`
+   - Match against property string accesses
+
+3. **Understand ARM64 Layouts**
+   - Prototype structs likely differ from Windows
+   - Need to verify field offsets via runtime probing
+   - May need to allocate via game allocator
+
+4. **Implementation Steps**
+   ```c
+   bool sync_spell_prototype(StatsObjectPtr obj) {
+       // 1. Get SpellPrototypeManager singleton
+       void **mgr_ptr = get_spell_prototype_manager();
+       if (!mgr_ptr || !*mgr_ptr) return false;
+
+       // 2. Get or create prototype in manager's HashMap
+       SpellPrototype *proto = find_or_create_prototype(*mgr_ptr, obj->Name);
+
+       // 3. Call Init function to parse properties
+       spell_prototype_init(proto, obj->Name);
+
+       return true;
+   }
+   ```
+
+### Current State (v0.29.0)
+
+- `Ext.Stats.Create()` - Works, creates stats in shadow registry
+- `Ext.Stats.Sync()` - Marks as synced, but NO prototype manager integration
+- Created stats accessible via `Ext.Stats.Get()` but NOT usable by game
+
+### Effort Estimate
+
+**Medium-High effort:**
+- 4 prototype managers to integrate (Spell, Status, Passive, Interrupt)
+- Each requires: singleton discovery + Init function + struct layout
+- ARM64-specific challenges (struct packing, calling conventions)
+- May require game allocator for new prototypes
+
+### Related Issue
+
+See [GitHub Issue #32](https://github.com/tdimino/bg3se-macos/issues/32) (Stats Sync - Full Prototype Manager Integration)
