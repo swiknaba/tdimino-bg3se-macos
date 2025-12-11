@@ -52,11 +52,13 @@ Output: `build/lib/libbg3se.dylib`
 ### Steam Setup (Apple Silicon - Recommended)
 
 1. Open Steam and go to BG3's Properties
-2. Set launch options:
+2. Set launch options (replace with your actual path):
 ```
-/path/to/bg3se-macos/scripts/bg3w.sh %command%
+/Users/yourname/bg3se-macos/scripts/bg3w.sh %command%
 ```
 3. Launch BG3 via Steam normally
+
+> **Note:** The script automatically finds `libbg3se.dylib` relative to its location. You can clone the repo anywhere—just use the full path to `bg3w.sh` in Steam.
 
 See `scripts/*.example` files for reference wrapper scripts.
 
@@ -76,7 +78,7 @@ SE mods work automatically—just install them like any other mod:
 Check `~/Library/Application Support/BG3SE/bg3se.log` for injection and mod loading logs:
 
 ```
-=== BG3SE-macOS v0.19.0 initialized ===
+=== BG3SE-macOS v0.30.0 initialized ===
 Running in process: Baldur's Gate 3 (PID: XXXXX)
 Architecture: ARM64 (Apple Silicon)
 Dobby inline hooking: enabled
