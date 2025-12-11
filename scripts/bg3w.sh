@@ -1,13 +1,19 @@
 #!/bin/bash
 # BG3SE-macOS Steam Launch Script
-# Steam launch options: /Users/tomdimino/Desktop/Programming/bg3se-macos/scripts/bg3w.sh %command%
+# Steam launch options: /path/to/bg3se-macos/scripts/bg3w.sh %command%
 #
 # Steam passes the .app bundle path, but we need to run the actual executable
 # inside Contents/MacOS/ for DYLD_INSERT_LIBRARIES to work.
 
+# Get script directory (works even when called via symlink or absolute path)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+
 # Debug output
 echo "=== BG3W Launch Script ===" >> /tmp/bg3w_debug.log
 echo "Date: $(date)" >> /tmp/bg3w_debug.log
+echo "Script dir: $SCRIPT_DIR" >> /tmp/bg3w_debug.log
+echo "Project root: $PROJECT_ROOT" >> /tmp/bg3w_debug.log
 echo "Args: $@" >> /tmp/bg3w_debug.log
 
 # Get the first argument (should be the .app bundle path)
@@ -29,9 +35,16 @@ if [[ ! -f "$EXEC_PATH" ]]; then
     exit 1
 fi
 
-DYLIB="/Users/tomdimino/Desktop/Programming/bg3se-macos/build/lib/libbg3se.dylib"
+# Find dylib relative to script location
+DYLIB="${PROJECT_ROOT}/build/lib/libbg3se.dylib"
 
-echo "DYLIB exists: $(ls -la $DYLIB 2>&1)" >> /tmp/bg3w_debug.log
+if [[ ! -f "$DYLIB" ]]; then
+    echo "ERROR: libbg3se.dylib not found at: $DYLIB" >> /tmp/bg3w_debug.log
+    echo "ERROR: Build it first with: cd build && cmake .. && cmake --build ." >> /tmp/bg3w_debug.log
+    exit 1
+fi
+
+echo "DYLIB: $DYLIB" >> /tmp/bg3w_debug.log
 echo "Forcing ARM64 architecture with inline DYLD_INSERT_LIBRARIES" >> /tmp/bg3w_debug.log
 echo "===========================" >> /tmp/bg3w_debug.log
 
