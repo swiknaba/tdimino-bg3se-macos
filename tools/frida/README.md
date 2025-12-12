@@ -49,6 +49,63 @@ frida -U -n "Baldur's Gate 3" -l capture_singletons.js
 frida -U -n "Baldur's Gate 3" -l capture_physics.js
 ```
 
+### stalker_refmap_hash.js
+
+**NEW** - Instruction-level tracing to discover RefMap hash function (Issue #32):
+- Uses Frida Stalker for instruction-level code tracing
+- Captures arithmetic/bitwise operations during hash computation
+- Helps complete Stats Sync for NEW spell prototypes
+
+```bash
+frida -U -n "Baldur's Gate 3" -l stalker_refmap_hash.js
+```
+
+**Interactive RPC exports:**
+```javascript
+// Start tracing GetSpellPrototype calls
+rpc.exports.traceRefMap()
+
+// Dump RefMap structure at address
+rpc.exports.readRefMapAt("0x600003c90960")
+
+// Search for FixedString in RefMap (linear scan)
+rpc.exports.findSpellInRefMap("0x600003c90960", 512753744)
+```
+
+### itrace_complex_flows.js
+
+**NEW** - Enhanced instruction tracing for complex code paths:
+- TraceBuffer for efficient capture up to 5000 instructions
+- Color-coded output by instruction type (arithmetic, bitwise, memory, control flow)
+- Export traces to JSON for offline analysis
+- Memory watchpoint support
+
+```bash
+frida -U -n "Baldur's Gate 3" -l itrace_complex_flows.js
+```
+
+**Interactive RPC exports:**
+```javascript
+// Trace any function by address
+rpc.exports.trace("0x101f72754", "SpellPrototype::Init")
+
+// Pre-configured traces
+rpc.exports.traceSpellInit()    // SpellPrototype::Init
+rpc.exports.traceRefMap()       // RefMap::GetOrAdd
+
+// Manage trace data
+rpc.exports.getTrace()          // Get JSON
+rpc.exports.saveTrace('/tmp/trace.json')
+rpc.exports.getSummary()        // Instruction counts
+rpc.exports.clearTrace()
+
+// Configure options
+rpc.exports.configure({ maxInstructions: 10000, filterArithmetic: false })
+
+// Memory watchpoints
+rpc.exports.watch("0x600003c90960", 64, "RefMap header")
+```
+
 ### discover_components.js
 
 Main discovery script that:

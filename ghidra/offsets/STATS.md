@@ -563,35 +563,43 @@ The SpellPrototypeManager uses a `DEPRECATED_RefMapImpl` with this layout:
 
 ### RefMap Hash Function Discovery (Dec 12, 2025)
 
-**CRITICAL FINDING: Hash function is NON-TRIVIAL**
+**✅ SOLVED: BG3 uses XXH3 (XXHash 3)**
 
-The RefMap does NOT use simple `key % capacity` hashing:
+Via GhidraMCP decompilation, discovered BG3 uses the **XXH3_64bits** hash algorithm - an open standard by Cyan4973.
 
-| Spell | FixedString Key | Expected Bucket | Actual Bucket |
-|-------|-----------------|-----------------|---------------|
-| `Projectile_FireBolt` | 512753744 | 7508 (`key % 12289`) | **11798** |
-| `Target_DEN_Entangle_Staff` | (first entry) | - | 1 |
+**Functions found in binary:**
+| Function | Address | Purpose |
+|----------|---------|---------|
+| `XXH_INLINE_XXH3_64bits` | `0x000386d4` | Main entry point |
+| `XXH3_len_129to240_64b` | `0x00038f00` | Medium-length inputs |
+| `XXH3_hashLong_64b_default` | `0x0003910c` | Long inputs (>240 bytes) |
 
-**Attempted hash functions that FAILED:**
-- `key % capacity` - standard modulo
-- `(key ^ (key >> 16)) % capacity` - XOR folding
-- `((key * 0x9E3779B9) >> 16) % capacity` - golden ratio multiply
-- `((key >> 16) ^ (key & 0xFFFF)) % capacity` - high/low XOR
-- Byte swap variations
+**Key constants from decompilation:**
+- `0xc73ab174c5ecd5a2` - XOR mixing constant
+- `0x9fb21c651e98df25` - multiply constant (-0x604de39ae16720db)
+- `0x9e3779b1` - golden ratio constant
 
-**Solution: Linear Search**
-
-Since the hash function is proprietary/complex, we use linear search through the keys array:
+**For FixedString (4 bytes), uses short-input path:**
 ```c
-for (int32_t i = 0; i < capacity; i++) {
-    uint32_t stored_key = keys_array[i];
-    if (stored_key == fs_key) {
-        return values_array[i];  // Found!
-    }
-}
+// From XXH_INLINE_XXH3_64bits, param_2 < 9 && param_2 > 3 path:
+uVar21 = CONCAT44(*param_1, *(param_1 + (param_2 - 4))) ^ 0xc73ab174c5ecd5a2;
+uVar21 = ((uVar21 >> 0xf | uVar21 << 0x31) ^ (uVar21 >> 0x28 | uVar21 << 0x18) ^ uVar21) * 0x9fb21c651e98df25;
+uVar21 = (param_2 + (uVar21 >> 0x23) ^ uVar21) * 0x9fb21c651e98df25;
+return uVar21 ^ uVar21 >> 0x1c;
 ```
 
-This is fast enough for ~5000 spell prototypes (sub-millisecond).
+**Implementation for RefMap bucket calculation:**
+```c
+#include "xxhash.h"  // Standard xxHash library (BSD license)
+
+uint64_t hash = XXH3_64bits(&fs_key, sizeof(uint32_t));
+uint32_t bucket = hash % capacity;
+```
+
+**Why simple modulo failed earlier:**
+We were computing `fs_key % capacity` directly, but the actual computation is `XXH3_64bits(&fs_key, 4) % capacity`. The XXH3 algorithm mixes the bytes significantly before the modulo.
+
+**Previous workaround (still valid for lookup):** Linear search through keys array works for ~5000 entries in sub-millisecond time.
 
 **Insertion pattern:** In C++ STL-like maps, `operator[]` returns a reference and **inserts if key not found**. So calling the manager's operator[] with a new spell name will create a new entry.
 

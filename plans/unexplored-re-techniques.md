@@ -11,10 +11,10 @@ Techniques discovered via Exa MCP research (2025-12-12) that we haven't yet empl
 | Technique | Tool | Issue Impact | Effort | Status |
 |-----------|------|--------------|--------|--------|
 | GhidraMCP integration | MCP server | All issues | 2h setup | ✅ COMPLETE |
-| Frida Stalker | Frida | #32 (hash function) | 1h | NOT STARTED |
+| Frida Stalker | Frida | #32 (hash function) | 1h | ⚠️ CRASHES BG3 |
 | frida-itrace | Frida | Complex flows | 2h | NOT STARTED |
 | Parallel Ghidra | Bash/Scripts | Init discovery | 1h | NOT STARTED |
-| pyghidra-mcp | MCP server | Multi-binary | 3h | NOT STARTED |
+| pyghidra-mcp | MCP server | Multi-binary | 3h | ✅ INSTALLED |
 
 ---
 
@@ -90,43 +90,160 @@ Or use the CLI: `claude mcp add ghidra --command python --args /path/to/bridge_m
 
 **Impact:** Query decompilation directly during conversation - no context switching.
 
+### ⚠️ Connection Stability (Dec 12, 2025)
+
+**Root Causes of Connection Drops:**
+
+1. **GUI Dialog Blocking** - If Ghidra shows ANY error dialog (via `Msg.showError`), the HTTP server HANGS waiting for user to close it. Watch for popups!
+
+2. **Default Timeout Too Short** - The Python bridge uses 5-second read timeout, which is insufficient for large binary operations (BG3 is 500MB+)
+
+3. **Memory Pressure** - Analyzing large binaries can exhaust Ghidra's heap, causing the server to become unresponsive
+
+4. **CodeBrowser Window Closed** - Server ONLY runs when CodeBrowser is open with plugin enabled
+
+**Stability Best Practices:**
+
+```bash
+# 1. Increase Ghidra heap for large binaries
+# Edit ~/ghidra/support/launch.properties:
+MAXMEM=8G  # (default is often 2G or 4G)
+
+# 2. Test server responsiveness before queries
+curl -s http://localhost:8080/sse | head -1
+
+# 3. Keep Ghidra console visible to catch error dialogs
+```
+
+**Preventing Drops During Session:**
+- Keep Ghidra window visible (not minimized) to catch any dialogs
+- Don't switch to other Ghidra tools (stay in CodeBrowser)
+- For very large queries, consider using headless pyghidra-mcp instead
+
+**Alternative: pyghidra-mcp (Headless) - ✅ INSTALLED**
+
+For more stable operation with large binaries, we now have [pyghidra-mcp](https://github.com/clearbluejar/pyghidra-mcp):
+- Runs headless (no GUI dialogs to block)
+- Supports multi-binary analysis
+- Better suited for automation
+
+**Full Installation Guide (Dec 12, 2025):**
+
+**Prerequisites:**
+- Ghidra **11.3+** (PyGhidra module not included in earlier versions)
+- Java 17+ (OpenJDK via Homebrew works)
+- Python 3.10+ with uv package manager
+
+**Step 1: Upgrade Ghidra to 11.3+ (if needed)**
+```bash
+# Check current version
+cat ~/ghidra/Ghidra/application.properties | grep version
+
+# If < 11.3, upgrade:
+cd ~/Downloads
+curl -LO https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_11.3.2_build/ghidra_11.3.2_PUBLIC_20250415.zip
+
+# Backup old installation
+mv ~/ghidra ~/ghidra-11.2.1-backup
+
+# Extract new version
+unzip ghidra_11.3.2_PUBLIC_20250415.zip -d ~/
+mv ~/ghidra_11.3.2_PUBLIC ~/ghidra
+
+# Copy extensions from backup (e.g., GhidraMCP)
+cp -r ~/ghidra-11.2.1-backup/Ghidra/Extensions/GhidraMCP ~/ghidra/Ghidra/Extensions/
+```
+
+**Step 2: Verify PyGhidra exists**
+```bash
+ls ~/ghidra/Ghidra/Features/PyGhidra/lib/PyGhidra.jar
+# Should show the JAR file
+```
+
+**Step 3: Install pyghidra-mcp**
+```bash
+uvx pyghidra-mcp --version  # v0.1.12
+```
+
+**Step 4: Configure Claude Code MCP** (`.mcp.json`)
+```json
+{
+  "mcpServers": {
+    "pyghidra-mcp": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": ["pyghidra-mcp", "-t", "stdio"],
+      "env": {
+        "GHIDRA_INSTALL_DIR": "/Users/tomdimino/ghidra",
+        "JAVA_HOME": "/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home"
+      }
+    }
+  }
+}
+```
+
+**Common Issues:**
+| Error | Solution |
+|-------|----------|
+| `PyGhidra.jar does not exist` | Upgrade Ghidra to 11.3+ |
+| `Unable to locate a Java Runtime` | Set `JAVA_HOME` in .mcp.json env |
+| `--project-path` bug | Known issue in v0.1.12, use binary path instead |
+
+**Usage with BG3 Binary:**
+```bash
+# Start headless server with BG3 binary (first run will analyze - takes time!)
+export GHIDRA_INSTALL_DIR="$HOME/ghidra"
+uvx pyghidra-mcp -t stdio "/Users/tomdimino/Library/Application Support/Steam/steamapps/common/Baldurs Gate 3/Baldur's Gate 3.app/Contents/MacOS/Baldur's Gate 3"
+
+# Or use HTTP transport for direct queries:
+uvx pyghidra-mcp -t streamable-http -p 8000 "/path/to/binary"
+# Then query: curl http://localhost:8000/mcp
+```
+
+**Note:** First analysis of 500MB BG3 binary will take 30-60+ minutes. Results are cached in `pyghidra_mcp_projects/`.
+
 ---
 
-## 2. Frida Stalker (HIGH IMPACT for #32)
+## 2. Frida Stalker (⚠️ CRASHES BG3 - USE INTERCEPTOR INSTEAD)
 
 **What it is:** Instruction-level code tracing in Frida. Can trace every instruction through a function.
 
 **Use case:** Discover RefMap hash function algorithm by tracing execution when we look up a known key.
 
-**Implementation:**
+### ⚠️ CRITICAL LESSON LEARNED (Dec 12, 2025)
+
+**Stalker.follow() crashes BG3.** The Stalker API recompiles every instruction the traced thread executes. For a 1GB game binary like BG3, this causes:
+
+1. **Massive memory overhead** - JIT buffer exhaustion
+2. **Code recompilation lag** - game expects tight timing
+3. **Thread timing violations** - leads to crash
+
+**Solution:** Use `Interceptor.attach()` only (lightweight hooks, no recompilation).
+
+**Working script:** `tools/frida/trace_refmap_light.js` - Interceptor-only, no Stalker.
+
+**Deprecated script:** `tools/frida/stalker_refmap_hash.js` - Kept for reference, DO NOT USE.
+
+### Safe Approach (Interceptor-only)
+
 ```javascript
-// tools/frida/stalker_refmap_hash.js
-const BASE = Process.findModuleByName("Baldur's Gate 3").base;
-const REFMAP_FIND = BASE.add(0x...);  // RefMap::Find or operator[]
+// tools/frida/trace_refmap_light.js
+const REFMAP_GET_OR_ADD = BASE.add(0x1011bbc5c - 0x100000000);
 
-Stalker.follow(Process.getCurrentThreadId(), {
-    events: { call: true, ret: true },
-
-    onReceive: function(events) {
-        const parsed = Stalker.parse(events);
-        for (const event of parsed) {
-            if (event[0] === 'call') {
-                console.log(`CALL ${event[1]} -> ${event[2]}`);
-            }
-        }
-    }
-});
-
-// Trigger a RefMap lookup
-Interceptor.attach(REFMAP_FIND, {
+// Hook specific function - much lighter than Stalker
+Interceptor.attach(REFMAP_GET_OR_ADD, {
     onEnter: function(args) {
-        console.log("RefMap lookup with key:", args[1]);
-        // Stalker will trace the hash calculation
+        const fsValue = args[1].readU32();
+        const capacity = this.context.x0.add(0x10).readU32();
+        console.log(`Key: ${fsValue}, Simple mod: ${fsValue % capacity}`);
+    },
+    onLeave: function(retval) {
+        console.log(`Result slot: ${retval}`);
     }
 });
 ```
 
-**Expected output:** Sequence of instructions that compute hash from FixedString index.
+**For hash algorithm discovery:** Use GhidraMCP to decompile `DEPRECATED_RefMapImpl::GetOrAdd` at `0x1011bbc5c` instead of runtime tracing.
 
 ---
 
@@ -215,9 +332,10 @@ echo "All analyses complete"
 
 ## Blocking Issues Mapping
 
-### Issue #32 (Stats Sync) - 90% Complete
+### Issue #32 (Stats Sync) - 95% Complete
 **Remaining:** RefMap insertion for NEW spells
-**Best technique:** Frida Stalker to discover hash function, then implement in C
+**Hash function:** ✅ DISCOVERED - BG3 uses XXH3 (XXHash 3) - standard library available
+**Next step:** Implement `XXH3_64bits(&fs_key, 4) % capacity` in C, add xxhash dependency
 
 ### Issue #37 (Ext.Level/Physics) - 0%
 **Blocking:** PhysicsScene singleton capture
@@ -231,8 +349,10 @@ echo "All analyses complete"
 
 ## Next Actions
 
-1. [ ] Create `tools/frida/stalker_refmap_hash.js`
-2. [ ] Run Frida Stalker during SpellPrototypeManager lookup
-3. [ ] Document discovered hash algorithm
-4. [ ] Implement hash function in C for RefMap insertion
+1. [x] ~~Create `tools/frida/stalker_refmap_hash.js`~~ - Created but crashes BG3
+2. [x] ~~Run Frida Stalker during SpellPrototypeManager lookup~~ - Stalker too heavy
+3. [x] **Document discovered hash algorithm** - ✅ XXH3 discovered via GhidraMCP! (see STATS.md)
+4. [ ] Implement XXH3 hash function in C for RefMap insertion
 5. [ ] Test creating new spell with full prototype sync
+6. [ ] Run `capture_physics.js` for PhysicsScene singleton (when BG3 running)
+7. [ ] Search for Wwise/Audio functions in main binary via GhidraMCP

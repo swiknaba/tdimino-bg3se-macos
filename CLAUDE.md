@@ -44,6 +44,8 @@ cd /Users/tomdimino/Desktop/Programming/bg3se && osgrep "query"        # Windows
 
 Use `bg3se-macos-ghidra` skill for Ghidra workflows and ARM64 patterns.
 
+**GhidraMCP installed:** When Ghidra is running with BG3 binary loaded and plugin enabled, Claude has direct access to decompilation via MCP tools. See `plans/unexplored-re-techniques.md` for setup.
+
 ## Current API Status
 
 - **Osi.*** - Dynamic metatable (40+ functions)

@@ -19,7 +19,7 @@ var capturedPhysicsScene = null;
 function main() {
     console.log("\n=== PhysicsScene Capture (Issue #37) ===\n");
 
-    const base = Module.getBaseAddress(MODULE_NAME);
+    const base = Module.findBaseAddress(MODULE_NAME);
     if (!base) {
         console.log("[-] Could not find module. Is the game running?");
         return;

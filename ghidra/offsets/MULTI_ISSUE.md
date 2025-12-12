@@ -115,6 +115,26 @@
 | `_PhysicsCalcMakeInvisibileOrReprio` | `10083c6cc` | `+0x83c6cc` |
 | `PxGetPhysicsBinaryMetaData` | `10087c274` | `+0x87c274` |
 
+### GhidraMCP Session Findings (Dec 12, 2025)
+
+**Direct function searches on main BG3 binary (500MB):**
+
+| Function | Address | Purpose |
+|----------|---------|---------|
+| `PxGetPhysics` | `0x10087fe9c` | PhysX singleton accessor |
+| `ecl::LinkClothAndSkinnedObjects` | `0x1030eb1e4` | Cloth physics linkage |
+| `ls::PhysicsScene` constructor | (multiple refs) | Physics scene initialization |
+
+### AiGrid Functions (from GhidraMCP)
+
+| Function | Address | Purpose |
+|----------|---------|---------|
+| `eoc::AiGrid::RemoveObject` | `0x10117beec` | Remove entity from AI grid |
+| `eoc::AiGrid::IsColliding` | `0x101163874` | Collision check for pathfinding |
+| `eoc::AiGrid` constructor | `0x10116fd20` | Takes `PhysicsSceneBase*` parameter |
+
+**Key insight:** AiGrid constructor takes `PhysicsSceneBase*` as 4th parameter, confirming tight coupling between navigation and physics systems.
+
 ---
 
 ## Issue #38: Audio (Wwise)
