@@ -214,3 +214,81 @@ When completing a feature or ending a session, update these files:
 - `agent_docs/architecture.md` - New modules or structural changes
 - `src/entity/component_offsets.h` - Component property layouts (self-documenting)
 - `src/entity/component_typeid.c` - TypeId addresses with game version comments
+
+## Component Generation Tools
+
+Tools for accelerating component implementation (reaching Windows BG3SE parity).
+
+### TypeId Extraction (`tools/extract_typeids.py`)
+
+Extracts all component TypeId addresses from the macOS BG3 binary:
+
+```bash
+# Generate header with all TypeId addresses
+python3 tools/extract_typeids.py > src/entity/generated_typeids.h
+
+# Output includes:
+# - 1,999 total component TypeIds
+# - Categorized by namespace (eoc, esv, ecl, ls)
+# - Ready-to-use C #define macros
+```
+
+### Component Stub Generator (`tools/generate_component_stubs.py`)
+
+Generates C stubs from Windows BG3SE headers:
+
+```bash
+# List all eoc:: components
+python3 tools/generate_component_stubs.py --namespace eoc --list
+
+# Generate stubs for high-priority components
+python3 tools/generate_component_stubs.py --high-priority > stubs.c
+
+# Generate all components in a namespace
+python3 tools/generate_component_stubs.py --namespace eoc > eoc_stubs.c
+```
+
+**Output includes:**
+- Field names and types from Windows headers
+- Estimated offsets (MUST be verified for ARM64)
+- Registry entries for `g_AllComponentLayouts`
+
+### Adding a New Component (Workflow)
+
+1. **Find TypeId address:**
+   ```bash
+   nm -gU "/path/to/BG3" 2>/dev/null | c++filt | grep "TypeId.*YourComponent.*ComponentTypeIdContext"
+   ```
+
+2. **Generate stub from Windows header:**
+   ```bash
+   python3 tools/generate_component_stubs.py --namespace eoc --list | grep YourComponent
+   ```
+
+3. **Verify ARM64 offsets** (choose one method):
+   - **Ghidra:** Analyze accessor functions for the component
+   - **Runtime probing:** Use `Ext.Debug.ProbeStruct()` on a live entity
+   - **Pattern matching:** Compare with similar verified components
+
+4. **Add to codebase:**
+   - `src/entity/component_typeid.c` - Add TypeIdEntry
+   - `src/entity/component_offsets.h` - Add property definitions and registry entry
+
+5. **Build and test:**
+   ```bash
+   cd build && cmake --build .
+   # In game console:
+   local e = Ext.Entity.Get("GUID"); _D(e.YourComponent)
+   ```
+
+### Component Coverage Statistics
+
+| Namespace | Available | Implemented | Coverage |
+|-----------|-----------|-------------|----------|
+| eoc::     | 701       | ~30         | ~4%      |
+| esv::     | 596       | 0           | 0%       |
+| ecl::     | 429       | 2           | <1%      |
+| ls::      | 233       | 4           | ~2%      |
+| **Total** | **1,999** | **36**      | **~1.8%**|
+
+**High-priority target:** 100-150 eoc:: components (~5-7% coverage) to support most mods.

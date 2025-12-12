@@ -6,6 +6,7 @@
 
 #include "lua_stats.h"
 #include "../stats/stats_manager.h"
+#include "../stats/prototype_managers.h"
 #include "../strings/fixed_string.h"
 #include "../lifetime/lifetime.h"
 #include "logging.h"
@@ -620,6 +621,64 @@ static const luaL_Reg stats_object_methods[] = {
     {NULL, NULL}
 };
 
+// ============================================================================
+// Prototype Manager Debug Functions
+// ============================================================================
+
+// Ext.Stats.DumpPrototypeManagers() - Debug: dump prototype manager status
+static int lua_stats_dump_prototype_managers(lua_State *L) {
+    (void)L;
+    prototype_managers_dump_status();
+    return 0;
+}
+
+// Ext.Stats.ProbePrototypeManager(name) - Debug: probe a prototype manager
+static int lua_stats_probe_prototype_manager(lua_State *L) {
+    const char *name = luaL_checkstring(L, 1);
+    prototype_managers_probe(name);
+    return 0;
+}
+
+// Ext.Stats.GetPrototypeManagerPtrs() -> table - Debug: get raw manager pointers
+static int lua_stats_get_prototype_manager_ptrs(lua_State *L) {
+    lua_newtable(L);
+
+    void *passive = get_passive_prototype_manager();
+    if (passive) {
+        lua_pushinteger(L, (lua_Integer)(uintptr_t)passive);
+        lua_setfield(L, -2, "Passive");
+    }
+
+    void *boost = get_boost_prototype_manager();
+    if (boost) {
+        lua_pushinteger(L, (lua_Integer)(uintptr_t)boost);
+        lua_setfield(L, -2, "Boost");
+    }
+
+    void *interrupt = get_interrupt_prototype_manager();
+    if (interrupt) {
+        lua_pushinteger(L, (lua_Integer)(uintptr_t)interrupt);
+        lua_setfield(L, -2, "Interrupt");
+    }
+
+    void *spell = get_spell_prototype_manager();
+    if (spell) {
+        lua_pushinteger(L, (lua_Integer)(uintptr_t)spell);
+        lua_setfield(L, -2, "Spell");
+    }
+
+    void *status = get_status_prototype_manager();
+    if (status) {
+        lua_pushinteger(L, (lua_Integer)(uintptr_t)status);
+        lua_setfield(L, -2, "Status");
+    }
+
+    lua_pushboolean(L, prototype_managers_ready());
+    lua_setfield(L, -2, "Ready");
+
+    return 1;
+}
+
 static const luaL_Reg stats_functions[] = {
     {"Get", lua_stats_get},
     {"GetAll", lua_stats_getall},
@@ -636,6 +695,9 @@ static const luaL_Reg stats_functions[] = {
     {"GetFixedStringByIndex", lua_stats_get_fixedstring_by_index},  // Debug: direct FixedStrings[index] access
     {"GetFixedStringStatus", lua_stats_get_fixedstring_status},
     {"ProbeFixedStrings", lua_stats_probe_fixedstrings},  // Debug: probe for FixedStrings offset
+    {"DumpPrototypeManagers", lua_stats_dump_prototype_managers},  // Debug: prototype manager status
+    {"ProbePrototypeManager", lua_stats_probe_prototype_manager},  // Debug: probe a manager
+    {"GetPrototypeManagerPtrs", lua_stats_get_prototype_manager_ptrs},  // Debug: raw manager pointers
     {NULL, NULL}
 };
 

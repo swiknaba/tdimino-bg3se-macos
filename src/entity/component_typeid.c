@@ -98,6 +98,14 @@ static const TypeIdEntry g_KnownTypeIds[] = {
     { "eoc::inventory::IsOwnedComponent",  0x108903ca8, 0, false },
     { "eoc::EquipableComponent",           0x1089078f8, 0, false },
 
+    // =====================================================================
+    // Phase 2 Batch 5 Components (Issue #33) - Spell and boost components
+    // =====================================================================
+    { "eoc::spell::ContainerComponent",               0x108906ce0, 0, false },
+    { "eoc::concentration::ConcentrationComponent",   0x108907450, 0, false },
+    { "eoc::BoostsContainerComponent",                0x108910000, 0, false },
+    { "eoc::DisplayNameComponent",                    0x10890ce20, 0, false },
+
     // Sentinel
     { NULL, 0, 0, false }
 };

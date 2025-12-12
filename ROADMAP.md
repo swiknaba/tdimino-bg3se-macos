@@ -2,9 +2,9 @@
 
 This document tracks the development roadmap for achieving feature parity with Windows BG3SE (Norbyte's Script Extender).
 
-## Current Status: v0.31.0
+## Current Status: v0.32.0
 
-**Overall Feature Parity: ~53%** (based on comprehensive API function count analysis)
+**Overall Feature Parity: ~54%** (based on comprehensive API function count analysis)
 
 **Working Features:**
 - DYLD injection and Dobby hooking infrastructure
@@ -260,6 +260,10 @@ buffer + (componentSize * EntryIndex) → Component*
 | InventoryMember | Inventory (EntityHandle), EquipmentSlot |
 | InventoryIsOwned | Owner (EntityHandle) |
 | Equipable | EquipmentTypeID (GUID), Slot |
+| SpellContainer | SpellCount |
+| Concentration | Caster (EntityHandle), TargetCount, SpellPrototype |
+| BoostsContainer | BoostTypeCount |
+| DisplayName | NameHandle, TitleHandle |
 
 Features:
 - [x] `entity.Health.Hp` - Direct property access via `__index`
@@ -1199,7 +1203,7 @@ Full debugging experience with breakpoints, stepping, and variable inspection.
 | B2 | Timer API | Low | ✅ Complete |
 | B3 | Console/REPL | Medium | ✅ Complete (socket + file + in-game overlay) |
 | B4 | GetAllComponents | Low | ✅ Complete |
-| B5 | Stats Create/Sync | Medium | ⚠️ Partial (v0.25.0) - Create works, prototype sync pending |
+| B5 | Stats Create/Sync | Medium | ⚠️ Partial (v0.32.0) - Create works, prototype managers connected (Passive/Boost) |
 | B6 | Userdata Lifetime Scoping | Medium | ✅ Complete (v0.29.0) |
 
 ### Priority C: Medium Impact (Developer Experience)
@@ -1232,39 +1236,111 @@ Full debugging experience with breakpoints, stepping, and variable inspection.
 
 ## Version History
 
+See **[docs/CHANGELOG.md](docs/CHANGELOG.md)** for detailed version history with:
+- Version, date, and parity percentage
+- Category tags (Core, Entity, Stats, Events, etc.)
+- Related GitHub issues
+- Added/Changed/Fixed sections per release
+
+**Recent Releases:**
+
 | Version | Date | Highlights |
 |---------|------|------------|
-| v0.31.0 | 2025-12-11 | Entity Relationship Traversal - Ext.Entity.GetByHandle(), 32 component layouts (was 28), added InventoryOwner, InventoryMember, InventoryIsOwned, Equipable with EntityHandle support for character→inventory→item traversal (Issue #33) |
-| v0.30.1 | 2025-12-11 | Component Property Layouts Expansion - 28 components (was 19), added Background, God, Value, TurnBased, SpellBook, StatusContainer, ActionResources, Weapon, InventoryContainer (Issue #33) |
-| v0.30.0 | 2025-12-11 | Ext.Events Expansion - 10 events (was 8), DoConsoleCommand and LuaConsoleInput with Prevent pattern, combat/status events documented via Osiris (Issue #34) |
-| v0.29.0 | 2025-12-10 | Userdata Lifetime Scoping - Entities, Components, and StatsObjects now validate lifetime on every access, preventing stale object use (Issue #28) |
-| v0.28.0 | 2025-12-10 | Mod Variables - Ext.Vars.GetModVariables() for global per-mod data storage with persistence |
-| v0.27.0 | 2025-12-10 | User Variables - entity.Vars for attaching custom data to entities with persistence (Issue #13) |
-| v0.26.0 | 2025-12-10 | Ext.Enums - Type-safe enum/bitfield userdata with 14 types (DamageType, AbilityId, SkillId, StatusType, SurfaceType, etc.), flexible comparison, bitwise operations (Issue #29) |
-| v0.25.0 | 2025-12-10 | Ext.Stats.Create and Sync (Issue #27) |
-| v0.24.0 | 2025-12-10 | Expanded component property access - 8 component layouts (Health, BaseHp, Armor, Stats, BaseStats, Transform, Level, Data) with data-driven property definitions |
-| v0.23.0 | 2025-12-10 | Health component property access - entity.Health.Hp/MaxHp/TemporaryHp working via data structure traversal + hash fix; Ext.Osiris.RaiseEvent() and GetCustomFunctions() for custom event dispatch |
-| v0.22.0 | 2025-12-09 | Custom Osiris function registration - Ext.Osiris.NewCall/NewQuery/NewEvent for Lua-defined Osiris functions |
-| v0.21.0 | 2025-12-09 | GetAllEntitiesWithComponent/CountEntitiesWithComponent - entity enumeration by component type |
-| v0.20.0 | 2025-12-08 | Structured logging system - 14 modules, 4 log levels, timestamps, consistent formatting |
-| v0.19.0 | 2025-12-06 | In-game console overlay with Tanit symbol, Ctrl+` toggle, command history |
-| v0.18.0 | 2025-12-06 | Stats property write - `stat.Damage = "2d6"` modifies stats at runtime |
-| v0.17.0 | 2025-12-06 | Ext.Math library - vec3/vec4/mat3/mat4 operations, transforms, decomposition |
-| v0.16.0 | 2025-12-06 | Ext.Input API - CGEventTap keyboard capture, hotkey registration, key injection |
-| v0.15.0 | 2025-12-06 | Socket console with Unix domain socket, readline client, real-time bidirectional I/O |
-| v0.14.0 | 2025-12-06 | GameStateChanged event, game state tracking module, event-based state inference for macOS |
-| v0.13.0 | 2025-12-06 | Ext.Events expansion (Tick, StatsLoaded, ModuleLoadStarted), priority/Once/handler IDs, Ext.OnNextTick |
-| v0.12.0 | 2025-12-06 | PersistentVars (file-based savegame persistence), Ext.Vars.SyncPersistentVars() |
-| v0.11.0 | 2025-12-05 | Ext.Timer API, Enhanced Debug Console, Ext.Debug APIs, Ext.Stats property read |
-| v0.10.6 | 2025-12-03 | Fixed Osiris function name caching - OsiFunctionDef->Signature->Name two-level indirection |
-| v0.10.4 | 2025-12-02 | TypeId<T>::m_TypeIndex discovery, ComponentTypeToIndex enumeration, Lua bindings for runtime discovery |
-| v0.10.3 | 2025-12-01 | Data structure traversal for GetComponent (TryGet + HashMap), template calls don't work on macOS |
-| v0.10.2 | 2025-12-01 | GUID byte order fix, template-based GetComponent attempt, entity lookup working |
-| v0.10.1 | 2025-11-29 | Function type detection - proper Query/Call/Event dispatch, 40+ pre-populated functions |
-| v0.10.0 | 2025-11-29 | Entity System complete - EntityWorld capture, GUID lookup, Ext.Entity API |
-| v0.9.9 | 2025-11-28 | Dynamic Osi.* metatable, lazy function lookup |
-| v0.9.5 | 2025-11-28 | Stable event observation, MRC mod support |
-| v0.9.0 | 2025-11-27 | Initial Lua runtime, basic Ext.* API |
+| v0.32.0 | 2025-12-12 | Prototype Managers - Passive/Boost singletons found, Sync() integration |
+| v0.31.0 | 2025-12-11 | Entity Relationships - GetByHandle(), 36 components |
+| v0.30.0 | 2025-12-11 | Events Expansion - 10 events, Prevent pattern |
+| v0.29.0 | 2025-12-10 | Lifetime Scoping - Stale userdata prevention |
+| v0.26.0 | 2025-12-10 | Ext.Enums - 14 enum/bitfield types |
+
+---
+
+## Acceleration Strategies
+
+### Component Parity Tools
+
+We've built automation tools to accelerate reaching Windows BG3SE component parity:
+
+| Tool | Purpose | Location |
+|------|---------|----------|
+| `tools/extract_typeids.py` | Extract all 1,999 component TypeId addresses from macOS binary | Generates C headers |
+| `tools/generate_component_stubs.py` | Parse Windows headers → generate C stubs | Field names + types |
+
+**Coverage Statistics:**
+
+| Namespace | Available | Implemented | Priority |
+|-----------|-----------|-------------|----------|
+| `eoc::` | 701 | ~30 | High (mod-relevant) |
+| `esv::` | 596 | 0 | Medium (server) |
+| `ecl::` | 429 | 2 | Low (client) |
+| `ls::` | 233 | 4 | Medium (base) |
+| **Total** | **1,999** | **36** | ~1.8% |
+
+**Workflow for Adding Components:**
+1. `python3 tools/extract_typeids.py | grep ComponentName` → Get TypeId address
+2. `python3 tools/generate_component_stubs.py --list | grep ComponentName` → Get field list
+3. Verify ARM64 offsets via Ghidra or `Ext.Debug.ProbeStruct()`
+4. Add to `component_typeid.c` and `component_offsets.h`
+
+### Issue Acceleration Matrix (Dec 2025 Deep Audit)
+
+| Issue | Feature | Acceleration | Key Technique |
+|-------|---------|--------------|---------------|
+| **#33 Components** | Component Layouts | **80%** | Existing tools: `extract_typeids.py` + `generate_component_stubs.py` |
+| **#39 Localization** | Ext.Localization | **75%** | Simple string table lookup, minimal API surface |
+| **#36 IMGUI** | Ext.IMGUI | **70%** | Official ImGui Metal backend exists |
+| **#40 StaticData** | Ext.StaticData | **70%** | Symbol `eoc__gGuidResourceManager` is exported |
+| **#41 Resource** | Ext.Resource/Template | **65%** | Same pattern as StaticData |
+| **#42 Debugger** | VS Code Debugger | **60%** | DAP protocol has reference implementations |
+| **#15 Client State** | Client Lua State | **50%** | Mirror server pattern, hook game state |
+| **#37 Level** | Ext.Level (Physics) | **50%** | Find physics engine, port LevelLib.inl |
+| **#38 Audio** | Ext.Audio | **45%** | Wwise SDK has documented API |
+| **#32 Stats Sync** | Prototype Managers | **40%** | Frida for singleton discovery, Ghidra findings exist |
+| **#6 NetChannel** | NetChannel API | **30%** | Network stack analysis needed, but Lua wrappers portable |
+| **#35 Ext.UI** | Noesis UI | **25%** | Deep game UI integration required |
+
+### Prioritized Implementation Order
+
+**Tier 1: High Acceleration (70-80%) - Do First**
+1. **#33 Components** - Tools ready, incremental progress
+2. **#39 Localization** - Quick win, small API
+3. **#36 IMGUI** - Official Metal backend
+4. **#40 StaticData** - Exported symbol access
+
+**Tier 2: Medium Acceleration (40-60%) - Second Priority**
+5. **#42 Debugger** - DAP reference implementations
+6. **#15 Client State** - Mirror server pattern
+7. **#32 Stats Sync** - Ghidra findings available
+
+**Tier 3: Lower Acceleration (25-30%) - Complex**
+8. **#6 NetChannel** - Requires extensive network RE
+9. **#35 Ext.UI** - Deep Noesis integration
+
+### Patterns from Windows BG3SE
+
+**Key discoveries from `EntitySystemHelpers.h`:**
+- `PerComponentData` struct tracks ComponentIndex, ReplicationIndex, Size, Properties
+- `ECSComponentDataMap` provides name→index and index→data mappings
+- `GenericPropertyMap` binds component structs to Lua properties
+- `BindPropertyMap(ExtComponentType, PropertyMap*)` registers component bindings
+
+**Key pattern from `StaticData.inl`:**
+- Template-based `GuidResourceBankHelper<T>` wraps resource banks
+- `FOR_EACH_GUID_RESOURCE_TYPE()` macro iterates all resource types
+- `GetGuidResource`, `GetAllGuidResources`, `CreateGuidResource` API
+
+### Ghidra Automation Opportunities
+
+**Scripts to create:**
+1. `find_all_component_typeids.py` - Bulk discovery of TypeId addresses
+2. `analyze_component_sizes.py` - Detect component struct sizes from allocations
+3. `find_resource_managers.py` - Locate `GuidResourceBank` singletons
+
+**Research queries (osgrep on Windows BG3SE):**
+```bash
+osgrep "how are component properties registered"
+osgrep "entity system initialization"
+osgrep "prototype manager sync"
+```
 
 ---
 

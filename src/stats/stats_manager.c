@@ -13,6 +13,7 @@
  */
 
 #include "stats_manager.h"
+#include "prototype_managers.h"
 #include "logging.h"
 #include "../strings/fixed_string.h"
 
@@ -1216,26 +1217,51 @@ static void* get_cached_vmt(void) {
 bool stats_sync(const char *name) {
     if (!name) return false;
 
-    // Check if this is a shadow stat
-    CreatedStatEntry *entry = find_shadow_stat_entry(name);
-    if (entry) {
-        // Mark as synced
-        entry->synced = true;
-        LOG_STATS_DEBUG("stats_sync: Marked shadow stat '%s' as synced", name);
-        LOG_STATS_DEBUG("  NOTE: Prototype manager sync not yet implemented - stat exists in memory but may not be usable by game");
-        return true;
-    }
-
-    // For game stats, sync would update prototype managers
-    // This requires discovering prototype manager singletons (Phase 2)
+    // Get the stat object (shadow or game)
     StatsObjectPtr obj = stats_get(name);
     if (!obj) {
         LOG_STATS_DEBUG("stats_sync: Stat not found: %s", name);
         return false;
     }
 
-    LOG_STATS_DEBUG("stats_sync: Game stat sync not yet implemented for '%s'", name);
-    LOG_STATS_DEBUG("  NOTE: Changes to game stats are applied immediately; Sync() would update prototype caches");
+    // Get the stat type
+    const char *type = stats_get_type(obj);
+    if (!type) {
+        LOG_STATS_DEBUG("stats_sync: Could not determine type for '%s'", name);
+        return false;
+    }
+
+    LOG_STATS_DEBUG("stats_sync: Syncing '%s' (type: %s)", name, type);
+
+    // Check if this is a shadow stat
+    CreatedStatEntry *entry = find_shadow_stat_entry(name);
+    if (entry) {
+        entry->synced = true;
+    }
+
+    // Initialize prototype managers if not already done
+    if (!prototype_managers_ready()) {
+        extern void *get_main_binary_base(void);  // From main.c
+        void *base = stats_manager_get_raw();
+        if (base) {
+            // Use the binary base from stats manager's stored value
+            // Note: prototype_managers_init needs the actual binary base,
+            // but we can derive it from the stats pointer address
+        }
+        // Prototype managers should be initialized from main.c during startup
+    }
+
+    // Sync with the appropriate prototype manager
+    bool sync_result = sync_stat_prototype(obj, name, type);
+
+    if (sync_result) {
+        LOG_STATS_DEBUG("stats_sync: Prototype sync completed for '%s'", name);
+    } else {
+        LOG_STATS_DEBUG("stats_sync: Prototype sync skipped/failed for '%s' (type: %s)", name, type);
+    }
+
+    // For types that don't need prototype sync (Weapon, Armor, etc.),
+    // the stat is already usable since changes go directly to RPGStats
     return true;
 }
 

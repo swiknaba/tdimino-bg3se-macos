@@ -686,6 +686,93 @@ static const ComponentLayoutDef g_EquipableComponent_Layout = {
 };
 
 // ============================================================================
+// SpellContainerComponent (eoc::spell::ContainerComponent)
+// From: BG3Extender/GameDefinitions/Components/Spell.h:117-122
+// Note: Contains Array<SpellMeta>, exposed as count for now
+// ============================================================================
+
+static const ComponentPropertyDef g_SpellContainerComponent_Properties[] = {
+    // Array<SpellMeta> Spells at 0x00
+    // SpellMeta is a complex struct, so we just expose the count
+    { "SpellCount", 0x08, FIELD_TYPE_UINT32, 0, true },  // Array.size field
+};
+
+static const ComponentLayoutDef g_SpellContainerComponent_Layout = {
+    .componentName = "eoc::spell::ContainerComponent",
+    .shortName = "SpellContainer",
+    .componentTypeIndex = 0,
+    .componentSize = 0x10,
+    .properties = g_SpellContainerComponent_Properties,
+    .propertyCount = sizeof(g_SpellContainerComponent_Properties) / sizeof(g_SpellContainerComponent_Properties[0]),
+};
+
+// ============================================================================
+// ConcentrationComponent (eoc::concentration::ConcentrationComponent)
+// From: BG3Extender/GameDefinitions/Components/Data.h:413-420
+// ============================================================================
+
+static const ComponentPropertyDef g_ConcentrationComponent_Properties[] = {
+    { "Caster",      0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },  // EntityHandle
+    // Array<ConcentrationTarget> Targets at 0x08 (complex, expose count only)
+    { "TargetCount", 0x10, FIELD_TYPE_UINT32, 0, true },  // Array.size field
+    // SpellId at 0x18 is complex (FixedString + padding + enum + 2x Guid = ~0x30 bytes)
+    // Just expose the spell prototype FixedString
+    { "SpellPrototype", 0x18, FIELD_TYPE_FIXEDSTRING, 0, true },
+};
+
+static const ComponentLayoutDef g_ConcentrationComponent_Layout = {
+    .componentName = "eoc::concentration::ConcentrationComponent",
+    .shortName = "Concentration",
+    .componentTypeIndex = 0,
+    .componentSize = 0x50,  // Estimate based on SpellId size
+    .properties = g_ConcentrationComponent_Properties,
+    .propertyCount = sizeof(g_ConcentrationComponent_Properties) / sizeof(g_ConcentrationComponent_Properties[0]),
+};
+
+// ============================================================================
+// BoostsContainerComponent (eoc::BoostsContainerComponent)
+// From: BG3Extender/GameDefinitions/Components/Boosts.h:24-29
+// Note: Contains Array<BoostEntry>, exposed as count
+// ============================================================================
+
+static const ComponentPropertyDef g_BoostsContainerComponent_Properties[] = {
+    // Array<BoostEntry> Boosts at 0x00
+    // BoostEntry has Type (enum) + Array<EntityHandle>
+    { "BoostTypeCount", 0x08, FIELD_TYPE_UINT32, 0, true },  // Array.size field
+};
+
+static const ComponentLayoutDef g_BoostsContainerComponent_Layout = {
+    .componentName = "eoc::BoostsContainerComponent",
+    .shortName = "BoostsContainer",
+    .componentTypeIndex = 0,
+    .componentSize = 0x10,
+    .properties = g_BoostsContainerComponent_Properties,
+    .propertyCount = sizeof(g_BoostsContainerComponent_Properties) / sizeof(g_BoostsContainerComponent_Properties[0]),
+};
+
+// ============================================================================
+// DisplayNameComponent (eoc::DisplayNameComponent)
+// From: BG3Extender/GameDefinitions/Components/Visual.h:64-70
+// Note: Contains two TranslatedStrings (complex - handle + version = ~16 bytes each)
+// ============================================================================
+
+static const ComponentPropertyDef g_DisplayNameComponent_Properties[] = {
+    // TranslatedString Name at 0x00 (Handle + Version = ~16 bytes)
+    { "NameHandle",   0x00, FIELD_TYPE_FIXEDSTRING, 0, true },  // TranslatedString.Handle
+    // TranslatedString Title at 0x10
+    { "TitleHandle",  0x10, FIELD_TYPE_FIXEDSTRING, 0, true },  // TranslatedString.Handle
+};
+
+static const ComponentLayoutDef g_DisplayNameComponent_Layout = {
+    .componentName = "eoc::DisplayNameComponent",
+    .shortName = "DisplayName",
+    .componentTypeIndex = 0,
+    .componentSize = 0x20,
+    .properties = g_DisplayNameComponent_Properties,
+    .propertyCount = sizeof(g_DisplayNameComponent_Properties) / sizeof(g_DisplayNameComponent_Properties[0]),
+};
+
+// ============================================================================
 // All Component Layouts (for bulk registration)
 // ============================================================================
 
@@ -726,6 +813,11 @@ static const ComponentLayoutDef* g_AllComponentLayouts[] = {
     &g_InventoryMemberComponent_Layout,
     &g_InventoryIsOwnedComponent_Layout,
     &g_EquipableComponent_Layout,
+    // Phase 2 batch 5 (Issue #33) - Spell and boost components
+    &g_SpellContainerComponent_Layout,
+    &g_ConcentrationComponent_Layout,
+    &g_BoostsContainerComponent_Layout,
+    &g_DisplayNameComponent_Layout,
     NULL  // Sentinel
 };
 

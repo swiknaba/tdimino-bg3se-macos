@@ -2,7 +2,7 @@
 
 macOS port of Norbyte's Script Extender for Baldur's Gate 3. Goal: feature parity with Windows BG3SE.
 
-**Version:** v0.31.0 | **Parity:** ~53% | **Target:** Full Windows BG3SE mod compatibility
+**Version:** v0.32.0 | **Parity:** ~54% | **Target:** Full Windows BG3SE mod compatibility
 
 ## Stack
 
@@ -17,6 +17,7 @@ macOS port of Norbyte's Script Extender for Baldur's Gate 3. Goal: feature parit
 - `src/osiris/custom_functions.c` - Custom Osiris function registry
 - `src/console/console.c` - Socket server + file-based console
 - `src/stats/stats_manager.c` - RPGStats system (stat property access)
+- `src/stats/prototype_managers.c` - Prototype manager singletons for Sync()
 - `src/entity/` - Entity Component System (GUID lookup, components)
 - `src/lifetime/` - Userdata lifetime scoping (prevents stale object access)
 - `tools/bg3se-console.c` - Standalone readline console client
@@ -89,8 +90,8 @@ Run `osgrep index --reset` if the index is stale. Use `bg3se-macos-ghidra` skill
 
 - **Osi.*** - Dynamic metatable with lazy lookup (40+ functions seeded)
 - **Ext.Osiris** - RegisterListener, NewCall/NewQuery/NewEvent for custom Osiris functions
-- **Ext.Entity** - GUID lookup working for all entity types including characters (template GUIDs like `S_PLA_*_<uuid>` supported), 32 component property layouts (Health, Stats, Transform, Experience, Race, Background, God, Value, TurnBased, SpellBook, StatusContainer, ActionResources, Weapon, InventoryContainer, InventoryOwner, InventoryMember, Equipable, etc.), GetAllEntitiesWithComponent/CountEntitiesWithComponent
-- **Ext.Stats** - Property read working (`stat.Damage` returns "1d8")
+- **Ext.Entity** - GUID lookup working for all entity types including characters (template GUIDs like `S_PLA_*_<uuid>` supported), 36 component property layouts (Health, Stats, Transform, Experience, Race, Background, God, Value, TurnBased, SpellBook, StatusContainer, ActionResources, Weapon, InventoryContainer, InventoryOwner, InventoryMember, Equipable, SpellContainer, Concentration, BoostsContainer, DisplayName, etc.), GetAllEntitiesWithComponent/CountEntitiesWithComponent, GetByHandle
+- **Ext.Stats** - Property read/write, Create/Sync with prototype managers (PassivePrototypeManager, BoostPrototypeManager found)
 - **Ext.Memory** - Read, Search, GetModuleBase for debugging
 - **Ext.Events** - 10 events (SessionLoading/Loaded, ResetCompleted, Tick, StatsLoaded, ModuleLoadStarted, GameStateChanged, KeyInput, DoConsoleCommand, LuaConsoleInput) with priority ordering, Once flag, handler IDs, Prevent pattern
 - **Ext.Vars** - PersistentVars, User Variables (entity.Vars), Mod Variables (GetModVariables)
@@ -113,6 +114,21 @@ Run `osgrep index --reset` if the index is stale. Use `bg3se-macos-ghidra` skill
 
 - `RPGSTATS_OFFSET_FIXEDSTRINGS = 0x348` - Stats string pool
 - `LEGACY_IsInCombat` at `0x10124f92c` - EntityWorld capture hook
+- `PassivePrototypeManager` at `0x108aeccd8` - Passive prototype singleton
+- `BoostPrototypeManager` at `0x108991528` - Boost prototype singleton
+
+## Component Parity Tools
+
+```bash
+# Extract all 1,999 TypeId addresses from macOS binary
+python3 tools/extract_typeids.py > generated_typeids.h
+
+# Generate C stubs from Windows headers (29 high-priority components)
+python3 tools/generate_component_stubs.py --high-priority
+
+# List available components by namespace
+python3 tools/generate_component_stubs.py --namespace eoc --list
+```
 
 ## Detailed Guides
 
@@ -120,4 +136,5 @@ Run `osgrep index --reset` if the index is stale. Use `bg3se-macos-ghidra` skill
 @agent_docs/development.md
 @agent_docs/ghidra.md
 @agent_docs/reference.md
+@agent_docs/acceleration.md
 @ghidra/offsets/STATS.md

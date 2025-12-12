@@ -65,6 +65,7 @@ extern "C" {
 
 // Stats system
 #include "stats_manager.h"
+#include "prototype_managers.h"
 
 // Mod loader
 #include "mod_loader.h"
@@ -2557,6 +2558,14 @@ static void install_hooks(void) {
                     LOG_STATS_INFO("Stats system initialized and ready");
                 } else {
                     LOG_STATS_INFO("Stats system initialized (will be ready after game loads)");
+                }
+
+                // Initialize prototype managers (for Ext.Stats.Sync)
+                prototype_managers_init(binary_base);
+                if (prototype_managers_ready()) {
+                    LOG_STATS_INFO("Prototype managers initialized");
+                } else {
+                    LOG_STATS_INFO("Prototype managers initialized (singletons resolve at runtime)");
                 }
 
                 // Initialize localization system
