@@ -6,7 +6,8 @@
       "args": [
         "pyghidra-mcp",
         "-t",
-        "stdio"
+        "stdio",
+        "/Applications/Baldur's Gate 3.app/Contents/MacOS/Baldur's Gate 3"
       ],
       "env": {
         "GHIDRA_INSTALL_DIR": "/Users/tomdimino/ghidra",
