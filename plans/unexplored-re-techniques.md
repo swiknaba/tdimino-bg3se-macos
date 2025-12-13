@@ -166,13 +166,21 @@ uvx pyghidra-mcp --version  # v0.1.12
 ```
 
 **Step 4: Configure Claude Code MCP** (`.mcp.json`)
+
+First, create a thinned ARM64 binary (see "CRITICAL: BG3 Binary is Universal" below).
+
 ```json
 {
   "mcpServers": {
     "pyghidra-mcp": {
       "type": "stdio",
       "command": "uvx",
-      "args": ["pyghidra-mcp", "-t", "stdio"],
+      "args": [
+        "pyghidra-mcp",
+        "-t",
+        "stdio",
+        "/Users/tomdimino/ghidra_projects/BG3_arm64_current.thin"
+      ],
       "env": {
         "GHIDRA_INSTALL_DIR": "/Users/tomdimino/ghidra",
         "JAVA_HOME": "/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home"
@@ -182,21 +190,51 @@ uvx pyghidra-mcp --version  # v0.1.12
 }
 ```
 
+**Or add via CLI:**
+```bash
+claude mcp add --transport stdio pyghidra-mcp \
+  --env GHIDRA_INSTALL_DIR=/Users/tomdimino/ghidra \
+  --env JAVA_HOME=/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home \
+  -- uvx pyghidra-mcp -t stdio /Users/tomdimino/ghidra_projects/BG3_arm64_current.thin
+```
+
 **Common Issues:**
 | Error | Solution |
 |-------|----------|
 | `PyGhidra.jar does not exist` | Upgrade Ghidra to 11.3+ |
 | `Unable to locate a Java Runtime` | Set `JAVA_HOME` in .mcp.json env |
 | `--project-path` bug | Known issue in v0.1.12, use binary path instead |
+| `No load spec found` | BG3 is a universal (fat) binary - must thin first! |
+| `Path does not exist` | Check Steam path vs /Applications path |
+
+**⚠️ CRITICAL: BG3 Binary is Universal (Dec 12, 2025)**
+
+The BG3 binary from Steam is a **universal binary** (fat binary with both x86_64 + arm64). PyGhidra/Ghidra **cannot import universal binaries directly**. You must extract the ARM64 slice first:
+
+```bash
+# Check if binary is universal (will show "2 architectures")
+file "/path/to/Baldur's Gate 3"
+
+# Extract ARM64 slice using lipo
+lipo -thin arm64 \
+  "/Users/tomdimino/Library/Application Support/Steam/steamapps/common/Baldurs Gate 3/Baldur's Gate 3.app/Contents/MacOS/Baldur's Gate 3" \
+  -output ~/ghidra_projects/BG3_arm64_current.thin
+
+# Verify it's a single-architecture binary
+file ~/ghidra_projects/BG3_arm64_current.thin
+# Should show: "Mach-O 64-bit executable arm64" (NOT "universal binary")
+```
 
 **Usage with BG3 Binary:**
 ```bash
-# Start headless server with BG3 binary (first run will analyze - takes time!)
-export GHIDRA_INSTALL_DIR="$HOME/ghidra"
-uvx pyghidra-mcp -t stdio "/Users/tomdimino/Library/Application Support/Steam/steamapps/common/Baldurs Gate 3/Baldur's Gate 3.app/Contents/MacOS/Baldur's Gate 3"
+# WRONG: Universal binary will fail with "No load spec found"
+uvx pyghidra-mcp -t stdio "/path/to/Baldur's Gate 3.app/.../Baldur's Gate 3"
+
+# CORRECT: Use thinned ARM64 binary
+uvx pyghidra-mcp -t stdio ~/ghidra_projects/BG3_arm64_current.thin
 
 # Or use HTTP transport for direct queries:
-uvx pyghidra-mcp -t streamable-http -p 8000 "/path/to/binary"
+uvx pyghidra-mcp -t streamable-http -p 8000 ~/ghidra_projects/BG3_arm64_current.thin
 # Then query: curl http://localhost:8000/mcp
 ```
 
