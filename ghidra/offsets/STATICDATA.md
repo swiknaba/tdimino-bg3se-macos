@@ -255,11 +255,91 @@ Ext.StaticData.Get("Feat", guid) -- Single feat by GUID
 Ext.StaticData.GetCount("Feat")  -- Number of feats
 ```
 
+### TypeContext Name-Based Capture (Dec 14, 2025 - WORKING)
+
+**Key Discovery:** TypeInfo.type_name is a raw C string pointer (not FixedString index).
+
+Successfully captured 7 managers via TypeContext traversal:
+
+| Manager | TypeContext Name | Runtime Address |
+|---------|------------------|-----------------|
+| Feat | `eoc::FeatManager` | `0x10d82fd00` |
+| FeatDescription | `eoc::FeatDescriptionManager` | `0x10d7d0918` |
+| Race | `eoc::RaceManager` | `0x10d83e380` |
+| Origin | `eoc::OriginManager` | `0x10d83a988` |
+| God | `eoc::GodManager` | `0x10d83a958` |
+| Background | `eoc::BackgroundManager` | `0x10d83a968` |
+| Progression | `eoc::ProgressionManager` | `0x10d845e88` |
+
+**Not yet found:** Class, ActionResource (may have different TypeContext names)
+
+### FeatManager Structure - RESOLVED (Dec 14, 2025)
+
+**CRITICAL DISCOVERY:** TypeContext and hook-based capture return DIFFERENT structures!
+
+| Capture Method | Count Offset | Array Offset | Notes |
+|----------------|--------------|--------------|-------|
+| TypeContext    | +0x00        | +0x80        | Metadata/registration structure |
+| GetFeats hook (x1) | **+0x7C**  | +0x80        | Real FeatManager instance |
+
+**Solution:** FeatManager must be captured via GetFeats hook, NOT TypeContext.
+TypeContext capture is now disabled for FeatManager in `staticdata_manager.c`.
+
+**Ghidra decompilation of GetFeats @ `0x101b752b4`:**
+
+```c
+void eoc::FeatManager::GetFeats(void) {
+    DynamicArray<eoc::Feat_const*> *in_x0;  // Output array
+    long in_x1;                              // FeatManager*
+
+    // Count at +0x7C, Array at +0x80
+    iVar2 = *(int *)(in_x1 + 0x7c);         // Count
+    lVar4 = *(long *)(in_x1 + 0x80);        // Array pointer
+
+    // Each feat is 0x128 bytes
+    lVar5 = (long)iVar2 * 0x128;
+    // ... iteration logic
+}
+```
+
+### Previous Investigation (Obsolete)
+
+The FeatManager uses `HashMap<Guid, Feat>` internally (from Windows BG3SE).
+
+**Runtime probe findings (Dec 14, 2025) - NOTE: These were from TypeContext capture:**
+
+| Offset | Value | Notes |
+|--------|-------|-------|
+| +0x00 | 37 | Count (in TypeContext metadata) |
+| +0x80 | `0x10d82fb60` | Points backwards (self-referential?) |
+| +0x88 | `0x600000e74660` | Heap ptr (but points to type name string) |
+| +0x90 | 37 | Same count as +0x00 |
+
+**These findings reflect the TypeContext metadata structure, NOT the real FeatManager.**
+
+**Windows BG3SE `GuidResource` base class:**
+
+```c
+struct GuidResource {
+    void* VMT;              // +0x00
+    Guid ResourceUUID;      // +0x08 (16 bytes)
+};
+
+// Manager inherits from GuidResourceBankBase
+// Resources stored in: HashMap<Guid, T> Resources
+```
+
+**Next Steps for structure discovery:**
+
+1. Use Ghidra to decompile `FeatManager::GetObjectByKey`
+2. Trace HashMap access patterns to find Resources offset
+3. Verify with runtime probing once offsets are known
+
 ### Next Steps
 
-1. **Verify GetAllFeats hook** - Restart game, trigger respec, check if FeatManager captured
-2. **Identify manager type names** - Read FixedString values from name_ptr to match managers
-3. **Probe FeatManager structure** - Verify +0x7C count and +0x80 array offsets at runtime
+1. ~~Verify GetAllFeats hook~~ - Hook didn't trigger; TypeContext capture works instead
+2. ~~Identify manager type names~~ - DONE: Raw C strings, matched 7 managers
+3. **Find HashMap offsets** - Ghidra analysis needed for `Resources` HashMap location
 
 ## Version History
 
@@ -267,3 +347,4 @@ Ext.StaticData.GetCount("Feat")  -- Number of feats
 |---------|------|-------|
 | Initial | Dec 2025 | FeatManager discovery via Ghidra MCP |
 | v0.32.5 | Dec 14, 2025 | TypeContext traversal working, GetAllFeats hook added |
+| v0.32.5+ | Dec 14, 2025 | TypeContext name-based capture working, 7 managers captured |

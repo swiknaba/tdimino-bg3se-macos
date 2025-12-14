@@ -2,6 +2,22 @@
 
 Research and tools for reaching Windows BG3SE parity faster.
 
+## Philosophy: Port-the-Pattern
+
+**Treat Windows BG3SE as spec + reference implementation.** The biggest multiplier is recognizing that Windows BG3SE achieves breadth via a small number of reusable "primitive engines":
+
+| Primitive | Windows Implementation | macOS Approach |
+|-----------|------------------------|----------------|
+| **ECS Mapping** | `EntitySystemHelpersBase` + `GenericPropertyMap` | TypeId-based traversal (no monolithic dispatcher) |
+| **Guid Resource Banks** | `GuidResourceBankHelper<T>` template | TypeContext traversal + hook-based capture |
+| **Networking** | `Ext.Net.*` + `NetChannel.lua` | Minimal C bridge + port Lua wrappers |
+
+**Key insight:** Port the *API contract* and *data model* (platform-independent), replace only the *mechanism* (ARM64/macOS-specific).
+
+**Intentional divergence:** On macOS ARM64, templates are often inlined with no stable dispatcher function. Use traversal-based approaches rather than searching for a single "GetRawComponent" anchor.
+
+---
+
 ## Component Parity (Issue #33)
 
 ### Statistics

@@ -14,6 +14,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
+#include <time.h>
+#include <dlfcn.h>
+#include <mach-o/dyld.h>
+
+// Session start time (set once at init)
+static time_t g_session_start_time = 0;
 
 // ============================================================================
 // Helper: Parse address from Lua (integer or hex string)
@@ -444,10 +450,222 @@ int lua_debug_hex_dump(lua_State *L) {
 }
 
 // ============================================================================
+// Time and Session Utilities
+// ============================================================================
+
+/**
+ * Ext.Debug.Time() - Get current time as HH:MM:SS string
+ * Helps correlate console commands with log output
+ */
+int lua_debug_time(lua_State *L) {
+    time_t now = time(NULL);
+    struct tm *tm_info = localtime(&now);
+
+    char buffer[32];
+    strftime(buffer, sizeof(buffer), "%H:%M:%S", tm_info);
+
+    lua_pushstring(L, buffer);
+    return 1;
+}
+
+/**
+ * Ext.Debug.Timestamp() - Get current Unix timestamp (seconds)
+ */
+int lua_debug_timestamp(lua_State *L) {
+    lua_pushinteger(L, (lua_Integer)time(NULL));
+    return 1;
+}
+
+/**
+ * Ext.Debug.SessionStart() - Get session start time as HH:MM:SS
+ */
+int lua_debug_session_start(lua_State *L) {
+    if (g_session_start_time == 0) {
+        g_session_start_time = time(NULL);
+    }
+
+    struct tm *tm_info = localtime(&g_session_start_time);
+    char buffer[32];
+    strftime(buffer, sizeof(buffer), "%H:%M:%S", tm_info);
+
+    lua_pushstring(L, buffer);
+    return 1;
+}
+
+/**
+ * Ext.Debug.SessionAge() - Get seconds since session started
+ */
+int lua_debug_session_age(lua_State *L) {
+    if (g_session_start_time == 0) {
+        g_session_start_time = time(NULL);
+    }
+
+    lua_pushinteger(L, (lua_Integer)(time(NULL) - g_session_start_time));
+    return 1;
+}
+
+// ============================================================================
+// Pointer Validation and Classification
+// ============================================================================
+
+/**
+ * Ext.Debug.IsValidPointer(addr) - Check if pointer looks valid
+ * Returns true if the address is in a readable memory region
+ */
+int lua_debug_is_valid_pointer(lua_State *L) {
+    uintptr_t addr = parse_address(L, 1);
+
+    if (addr == 0) {
+        lua_pushboolean(L, 0);
+        return 1;
+    }
+
+    // Quick range check - valid pointers on macOS are typically:
+    // - Above 0x100000000 (4GB, ASLR base)
+    // - Below 0x800000000000 (high limit)
+    if (addr < 0x100000000ULL || addr > 0x800000000000ULL) {
+        lua_pushboolean(L, 0);
+        return 1;
+    }
+
+    // Try to read a single byte to verify
+    uint8_t test = 0;
+    bool readable = safe_memory_read((mach_vm_address_t)addr, &test, 1);
+
+    lua_pushboolean(L, readable ? 1 : 0);
+    return 1;
+}
+
+/* Pointer type classification - currently using inline strings in ClassifyPointer */
+
+/**
+ * Ext.Debug.ClassifyPointer(addr) - Classify what a pointer likely points to
+ * Returns: { type = "heap"|"code"|"string"|etc, readable = bool, info = string }
+ */
+int lua_debug_classify_pointer(lua_State *L) {
+    uintptr_t addr = parse_address(L, 1);
+
+    lua_newtable(L);
+
+    // Null check
+    if (addr == 0) {
+        lua_pushstring(L, "null");
+        lua_setfield(L, -2, "type");
+        lua_pushboolean(L, 0);
+        lua_setfield(L, -2, "readable");
+        return 1;
+    }
+
+    // Small integer check (likely not a pointer)
+    if (addr < 0x10000) {
+        lua_pushstring(L, "small_int");
+        lua_setfield(L, -2, "type");
+        lua_pushboolean(L, 0);
+        lua_setfield(L, -2, "readable");
+        lua_pushinteger(L, (lua_Integer)addr);
+        lua_setfield(L, -2, "value");
+        return 1;
+    }
+
+    // Check if readable
+    uint8_t test_bytes[16];
+    bool readable = safe_memory_read((mach_vm_address_t)addr, test_bytes, sizeof(test_bytes));
+
+    lua_pushboolean(L, readable ? 1 : 0);
+    lua_setfield(L, -2, "readable");
+
+    if (!readable) {
+        lua_pushstring(L, "invalid");
+        lua_setfield(L, -2, "type");
+        return 1;
+    }
+
+    // Check for string (mostly printable ASCII)
+    int printable = 0;
+    int total = 0;
+    for (int i = 0; i < 16 && test_bytes[i] != 0; i++) {
+        total++;
+        if (test_bytes[i] >= 32 && test_bytes[i] < 127) {
+            printable++;
+        }
+    }
+    if (total >= 4 && printable * 100 / total >= 80) {
+        lua_pushstring(L, "string");
+        lua_setfield(L, -2, "type");
+
+        // Read and include the string preview
+        char preview[64];
+        if (safe_memory_read_string((mach_vm_address_t)addr, preview, sizeof(preview) - 1)) {
+            preview[sizeof(preview) - 1] = '\0';
+            lua_pushstring(L, preview);
+            lua_setfield(L, -2, "preview");
+        }
+        return 1;
+    }
+
+    // Check for vtable pattern (first 8 bytes point to code-like address)
+    void *first_ptr = NULL;
+    if (safe_memory_read_pointer((mach_vm_address_t)addr, &first_ptr)) {
+        uintptr_t fp = (uintptr_t)first_ptr;
+        // Code typically in 0x100000000 - 0x108000000 range for main binary
+        if (fp >= 0x100000000ULL && fp < 0x110000000ULL) {
+            // Could be vtable - check if the pointer points to more pointers
+            void *second_ptr = NULL;
+            if (safe_memory_read_pointer((mach_vm_address_t)(addr + 8), &second_ptr)) {
+                uintptr_t sp = (uintptr_t)second_ptr;
+                if (sp >= 0x100000000ULL && sp < 0x110000000ULL) {
+                    lua_pushstring(L, "vtable");
+                    lua_setfield(L, -2, "type");
+                    return 1;
+                }
+            }
+        }
+    }
+
+    // Classify by address range
+    if (addr >= 0x100000000ULL && addr < 0x110000000ULL) {
+        lua_pushstring(L, "data");  // Main binary data section
+        lua_setfield(L, -2, "type");
+    } else if (addr >= 0x600000000000ULL && addr < 0x700000000000ULL) {
+        lua_pushstring(L, "heap");  // Typical heap range
+        lua_setfield(L, -2, "type");
+    } else if (addr >= 0x700000000000ULL) {
+        lua_pushstring(L, "stack");  // Stack area
+        lua_setfield(L, -2, "type");
+    } else {
+        lua_pushstring(L, "heap");  // Default to heap for other ranges
+        lua_setfield(L, -2, "type");
+    }
+
+    return 1;
+}
+
+/**
+ * Ext.Debug.PrintTime(msg) - Print message with timestamp prefix
+ * Shortcut for: Ext.Print("[" .. Ext.Debug.Time() .. "] " .. msg)
+ */
+int lua_debug_print_time(lua_State *L) {
+    const char *msg = luaL_checkstring(L, 1);
+
+    time_t now = time(NULL);
+    struct tm *tm_info = localtime(&now);
+    char time_buf[32];
+    strftime(time_buf, sizeof(time_buf), "%H:%M:%S", tm_info);
+
+    log_message("[%s] %s", time_buf, msg);
+
+    return 0;
+}
+
+// ============================================================================
 // Registration
 // ============================================================================
 
 void lua_ext_register_debug(lua_State *L, int ext_table_index) {
+    // Initialize session start time
+    if (g_session_start_time == 0) {
+        g_session_start_time = time(NULL);
+    }
     // Convert negative index to absolute since we'll be pushing onto stack
     if (ext_table_index < 0) {
         ext_table_index = lua_gettop(L) + ext_table_index + 1;
@@ -490,8 +708,32 @@ void lua_ext_register_debug(lua_State *L, int ext_table_index) {
     lua_pushcfunction(L, lua_debug_hex_dump);
     lua_setfield(L, -2, "HexDump");
 
+    // Time and session utilities
+    lua_pushcfunction(L, lua_debug_time);
+    lua_setfield(L, -2, "Time");
+
+    lua_pushcfunction(L, lua_debug_timestamp);
+    lua_setfield(L, -2, "Timestamp");
+
+    lua_pushcfunction(L, lua_debug_session_start);
+    lua_setfield(L, -2, "SessionStart");
+
+    lua_pushcfunction(L, lua_debug_session_age);
+    lua_setfield(L, -2, "SessionAge");
+
+    lua_pushcfunction(L, lua_debug_print_time);
+    lua_setfield(L, -2, "PrintTime");
+
+    // Pointer validation and classification
+    lua_pushcfunction(L, lua_debug_is_valid_pointer);
+    lua_setfield(L, -2, "IsValidPointer");
+
+    lua_pushcfunction(L, lua_debug_classify_pointer);
+    lua_setfield(L, -2, "ClassifyPointer");
+
     // Set Ext.Debug = table
     lua_setfield(L, ext_table_index, "Debug");
 
-    LOG_LUA_INFO("Registered Ext.Debug namespace");
+    LOG_LUA_INFO("Registered Ext.Debug namespace (session started at %s)",
+                 ctime(&g_session_start_time));
 }

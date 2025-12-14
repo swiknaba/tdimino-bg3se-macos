@@ -112,6 +112,65 @@ int lua_debug_probe_fixedstring_array(lua_State *L);
 int lua_debug_hex_dump(lua_State *L);
 
 // ============================================================================
+// Time and Session Utilities (Ext.Debug.*)
+// ============================================================================
+
+/**
+ * Ext.Debug.Time() - Get current time as HH:MM:SS string
+ * Useful for correlating console commands with log output.
+ * @return Time string like "14:35:22"
+ */
+int lua_debug_time(lua_State *L);
+
+/**
+ * Ext.Debug.Timestamp() - Get current Unix timestamp
+ * @return Unix timestamp (seconds since epoch)
+ */
+int lua_debug_timestamp(lua_State *L);
+
+/**
+ * Ext.Debug.SessionStart() - Get session start time as HH:MM:SS
+ * @return Time string when BG3SE was initialized
+ */
+int lua_debug_session_start(lua_State *L);
+
+/**
+ * Ext.Debug.SessionAge() - Get seconds since session started
+ * @return Number of seconds since BG3SE was initialized
+ */
+int lua_debug_session_age(lua_State *L);
+
+/**
+ * Ext.Debug.PrintTime(msg) - Print message with timestamp prefix
+ * Shortcut for Ext.Print("[HH:MM:SS] " .. msg)
+ * @param msg Message to print
+ */
+int lua_debug_print_time(lua_State *L);
+
+// ============================================================================
+// Pointer Validation and Classification (Ext.Debug.*)
+// ============================================================================
+
+/**
+ * Ext.Debug.IsValidPointer(addr) - Check if pointer is readable
+ * @param addr Address to check
+ * @return true if the address can be read, false otherwise
+ */
+int lua_debug_is_valid_pointer(lua_State *L);
+
+/**
+ * Ext.Debug.ClassifyPointer(addr) - Classify what a pointer likely points to
+ * Helps identify pointer types during reverse engineering.
+ * @param addr Address to classify
+ * @return Table with fields:
+ *   - type: "null"|"small_int"|"invalid"|"string"|"vtable"|"heap"|"data"|"stack"
+ *   - readable: boolean
+ *   - preview: string (if type is "string")
+ *   - value: integer (if type is "small_int")
+ */
+int lua_debug_classify_pointer(lua_State *L);
+
+// ============================================================================
 // Registration
 // ============================================================================
 

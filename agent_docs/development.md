@@ -143,6 +143,18 @@ Ext.Debug.FindArrayPattern(base, range)
 
 -- Hex dump
 Ext.Debug.HexDump(addr, size)
+
+-- Time utilities (correlate console with logs)
+Ext.Debug.Time()                -- Current time "HH:MM:SS"
+Ext.Debug.Timestamp()           -- Unix timestamp (seconds)
+Ext.Debug.SessionStart()        -- Session start time "HH:MM:SS"
+Ext.Debug.SessionAge()          -- Seconds since session started
+Ext.Debug.PrintTime(msg)        -- Print with timestamp prefix
+
+-- Pointer validation (prevent invalid derefs)
+Ext.Debug.IsValidPointer(addr)  -- Returns true if readable
+Ext.Debug.ClassifyPointer(addr) -- Returns { type, readable, preview? }
+-- Types: "null", "small_int", "invalid", "string", "vtable", "heap", "data", "stack"
 ```
 
 **Console Syntax:**

@@ -23,9 +23,10 @@
 // ImmutableDataHeadmaster m_State pointer address (for TypeContext traversal)
 #define OFFSET_MSTATE_PTR             0x083c4a68  // PTR_m_State - pointer to m_State
 
-// FeatManager structure offsets
+// FeatManager structure offsets (from GetFeats decompilation @ 0x101b752b4)
+// When captured via GetFeats hook (x1 parameter), use these offsets:
 #define FEATMANAGER_OFFSET_COUNT      0x7C   // int32_t count
-#define FEATMANAGER_OFFSET_ARRAY      0x80   // Feat* array
+#define FEATMANAGER_OFFSET_ARRAY      0x80   // Feat* array pointer
 
 // Feat structure
 #define FEAT_SIZE                     0x128  // 296 bytes per feat
@@ -120,8 +121,17 @@ static int capture_managers_via_typecontext(void) {
             // type_name is a raw C string (verified via runtime probing)
             const char* name = (const char*)typeinfo->type_name;
 
+            // Log first 20 entries and any containing "Feat" or "Manager"
+            if (count < 20 || strstr(name, "Feat") || strstr(name, "Manager")) {
+                log_message("[StaticData] TypeInfo[%d]: %s @ %p", count, name, typeinfo->manager_ptr);
+            }
+
             // Try to match against known manager names
             for (int i = 0; i < STATICDATA_COUNT; i++) {
+                // Skip FeatManager - it must be captured via GetFeats hook
+                // (TypeContext gives us metadata, not the real manager with correct offsets)
+                if (i == STATICDATA_FEAT) continue;
+
                 // Only capture if not already captured
                 if (!g_staticdata.managers[i] && strcmp(name, s_manager_type_names[i]) == 0) {
                     g_staticdata.managers[i] = typeinfo->manager_ptr;
@@ -195,12 +205,23 @@ static void hook_FeatGetFeats(void* out, void* feat_manager) {
     // Capture FeatManager pointer
     if (feat_manager && !g_staticdata.managers[STATICDATA_FEAT]) {
         g_staticdata.managers[STATICDATA_FEAT] = feat_manager;
-        log_message("[StaticData] Captured FeatManager: %p", feat_manager);
+        log_message("[StaticData] Captured FeatManager via GetFeats hook: %p", feat_manager);
 
-        // Log structure info
+        // Log structure info using GetFeats-verified offsets (0x7C, 0x80)
         int32_t count = *(int32_t*)((uint8_t*)feat_manager + FEATMANAGER_OFFSET_COUNT);
         void* array = *(void**)((uint8_t*)feat_manager + FEATMANAGER_OFFSET_ARRAY);
-        log_message("[StaticData] FeatManager: count=%d, array=%p", count, array);
+        log_message("[StaticData] FeatManager structure: count@+0x7C=%d, array@+0x80=%p", count, array);
+
+        // Verify by reading first feat entry
+        if (array && count > 0) {
+            uint8_t* first_feat = (uint8_t*)array;
+            log_message("[StaticData] First feat at %p, first 16 bytes: %02X%02X%02X%02X %02X%02X%02X%02X %02X%02X%02X%02X %02X%02X%02X%02X",
+                first_feat,
+                first_feat[0], first_feat[1], first_feat[2], first_feat[3],
+                first_feat[4], first_feat[5], first_feat[6], first_feat[7],
+                first_feat[8], first_feat[9], first_feat[10], first_feat[11],
+                first_feat[12], first_feat[13], first_feat[14], first_feat[15]);
+        }
     }
 
     // Call original
