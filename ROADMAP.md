@@ -2,9 +2,9 @@
 
 This document tracks the development roadmap for achieving feature parity with Windows BG3SE (Norbyte's Script Extender).
 
-## Current Status: v0.32.7
+## Current Status: v0.32.8
 
-**Overall Feature Parity: ~60%** (based on comprehensive API function count analysis)
+**Overall Feature Parity: ~65%** (based on comprehensive API function count analysis)
 
 **Working Features:**
 - DYLD injection and Dobby hooking infrastructure
@@ -180,7 +180,7 @@ end
 - [x] Component accessors via GetComponent template addresses
 
 ### 2.2 Component Access & Property System
-**Status:** ✅ Complete (v0.24.0+) - 52 component property layouts working
+**Status:** ✅ Complete (v0.32.8) - 157 component property layouts working (109 tag components)
 
 **Key Discovery (Dec 2025):** macOS ARM64 has NO `GetRawComponent` dispatcher like Windows. Template functions are **completely inlined** - calling template addresses directly returns NULL.
 
@@ -1279,6 +1279,7 @@ See **[docs/CHANGELOG.md](docs/CHANGELOG.md)** for detailed version history with
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| v0.32.8 | 2025-12-15 | **Massive Tag Component Expansion** - 105 new tag components, 157 total, ~65% parity (#33) |
 | v0.32.7 | 2025-12-14 | **Component Batch Expansion** - 11 new components (2 combat + 9 tag), 52 total, ~60% parity (#33) |
 | v0.32.6 | 2025-12-14 | **Component Expansion** - 5 new components (Death, ThreatRange, InventoryWeight, IsInCombat), 41 total (#33) |
 | v0.32.5 | 2025-12-14 | Ext.StaticData API - Feat type with hook-based capture (#40) |
@@ -1309,11 +1310,11 @@ We've built automation tools to accelerate reaching Windows BG3SE component pari
 
 | Namespace | Available | Implemented | Priority |
 |-----------|-----------|-------------|----------|
-| `eoc::` | 701 | ~46 | High (mod-relevant) |
-| `esv::` | 596 | 0 | Medium (server) |
-| `ecl::` | 429 | 2 | Low (client) |
-| `ls::` | 233 | 4 | Medium (base) |
-| **Total** | **1,999** | **52** | ~2.6% |
+| `eoc::` | 701 | ~94 | High (mod-relevant) |
+| `esv::` | 596 | ~28 | Medium (server) |
+| `ecl::` | 429 | ~4 | Low (client) |
+| `ls::` | 233 | ~31 | Medium (base) |
+| **Total** | **1,999** | **157** | ~7.9% |
 
 **Workflow for Adding Components:**
 1. `python3 tools/extract_typeids.py | grep ComponentName` → Get TypeId address

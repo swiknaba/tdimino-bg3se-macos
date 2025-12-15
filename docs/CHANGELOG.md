@@ -13,6 +13,51 @@ Each entry includes:
 
 ---
 
+## [v0.32.8] - 2025-12-15
+
+**Parity:** ~65% | **Category:** Entity Components | **Issues:** #33
+
+### Added
+- **105 new tag component layouts** - Expanded from 52 to 157 components (201% increase!)
+- **Automated tag component generation** - `tools/generate_tag_components.py` for batch TypeId extraction
+
+**Client Components (ecl::) - 4 components:**
+- Camera state tracking (CameraInSelectorMode, CameraSpellTracking)
+- Animation flags (DummyIsCopyingFullPose, DummyLoaded)
+
+**Common Components (eoc::) - 69 components:**
+- Gameplay state: Player, SimpleCharacter, IsCharacter, IsInTurnBasedMode, IsInFTB, OffStage, PickingState
+- Combat indicators: CombatDelayedFanfare, RollInProgress, Ambushing
+- Progression: CanLevelUp, FTBPaused
+- Environmental: IsFalling, GravityDisabled, CampPresence
+- Healing: HealBlock, HealMaxIncoming, HealMaxOutgoing
+- Inventory flags: CanBeWielded, CanBeInInventory, CannotBePickpocketed, CannotBeTakenOut, etc.
+- Item properties: IsGold, IsDoor, IsItem, ItemInUse, NewInInventory, ItemCanMove, etc.
+- Template flags: ClimbOn, Ladder, WalkOn, InteractionDisabled, IsStoryItem
+- Tadpole states: Tadpoled, HalfIllithid, FullIllithid
+- Character markers: Avatar, HasExclamationDialog, Trader
+- Visibility: CanSeeThrough, CanShootThrough, CanWalkThrough
+
+**Server Components (esv::) - 28 components:**
+- Combat: ServerCanStartCombat, ServerFleeBlocked, ServerCombatLeaveRequest
+- Visibility: ServerIsLightBlocker, ServerIsVisionBlocker, ServerDarknessActive
+- Inventory: ServerInventoryIsReplicatedWith, ReadyToBeAddedToInventory
+- Status: ServerStatusActive, ServerStatusAddedFromSaveLoad, ServerStatusAura
+- Misc: ServerHotbarOrder, EscortHasStragglers, ServerDeathContinue
+
+**Low-level Components (ls::) - 13 components:**
+- Engine flags: IsGlobal, SavegameComponent, NetComponent
+- Visual: VisualLoaded, AlwaysUpdateEffect, AnimationUpdate
+- Level lifecycle: LevelIsOwner, LevelPrepareUnloadBusy, LevelUnloadBusy, LevelInstanceUnloading
+- Pause: PauseComponent, PauseExcluded
+
+### Technical
+- **Tag components are zero-field** - Presence on entity IS the data (boolean flags)
+- **No reverse engineering needed** - componentSize=0, properties=NULL
+- **157 total components** - Massive jump from 52 (~8% parity for components)
+
+---
+
 ## [v0.32.7] - 2025-12-14
 
 **Parity:** ~60% | **Category:** Entity Components | **Issues:** #33
