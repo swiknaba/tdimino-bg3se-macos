@@ -44,7 +44,7 @@ SE mods work automatically—just install them like any other mod:
 
 ## Status
 
-**Version:** v0.32.4 | **Feature Parity:** ~57%
+**Version:** v0.32.7 | **Feature Parity:** ~60%
 
 | Feature | Status |
 |---------|--------|
@@ -52,7 +52,7 @@ SE mods work automatically—just install them like any other mod:
 | Lua Runtime | ✅ Lua 5.4 with Ext API |
 | Mod Loading | ✅ PAK file reading, auto-detection |
 | Ext.Osiris | ✅ Event listeners, custom functions (NewCall/NewQuery/NewEvent/RaiseEvent/GetCustomFunctions) |
-| Ext.Entity | ✅ GUID lookup, 36 component layouts, GetAllEntitiesWithComponent, GetByHandle |
+| Ext.Entity | ✅ GUID lookup, 52 component layouts, GetAllEntitiesWithComponent, GetByHandle |
 | Ext.Stats | ✅ 15,774 stats, property read/write, **Sync complete (created + existing stats)** |
 | Ext.Events | ✅ 10 events with Prevent pattern |
 | Ext.Timer | ✅ WaitFor, Cancel, Pause, Resume |
@@ -78,6 +78,8 @@ See [ROADMAP.md](ROADMAP.md) for detailed progress.
 | **[docs/contributor-workflow.md](docs/contributor-workflow.md)** | End-to-end guide: research, Ghidra, implementation |
 | **[docs/reverse-engineering.md](docs/reverse-engineering.md)** | Ghidra workflows, offset discovery |
 | **[docs/troubleshooting.md](docs/troubleshooting.md)** | Common issues and solutions |
+| **[docs/arm64/](docs/arm64/)** | ARM64 hooking patterns, prevention strategies |
+| **[docs/solutions/](docs/solutions/)** | Documented problem solutions |
 
 ## Live Console
 

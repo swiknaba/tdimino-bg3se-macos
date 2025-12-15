@@ -106,6 +106,34 @@ static const TypeIdEntry g_KnownTypeIds[] = {
     { "eoc::BoostsContainerComponent",                0x108910000, 0, false },
     { "eoc::DisplayNameComponent",                    0x10890ce20, 0, false },
 
+    // =====================================================================
+    // Phase 2 Batch 6 Components (Issue #33) - Simple components
+    // =====================================================================
+    { "eoc::death::StateComponent",                   0x1088f7a60, 0, false },
+    { "eoc::death::DeathTypeComponent",               0x1089027c0, 0, false },
+    { "eoc::inventory::WeightComponent",              0x1088f76d8, 0, false },
+    { "eoc::combat::ThreatRangeComponent",            0x10890b6e8, 0, false },
+    { "eoc::combat::IsInCombatComponent",             0x108912fd0, 0, false },
+
+    // =====================================================================
+    // Phase 2 Batch 7 Components (Issue #33) - Combat components
+    // =====================================================================
+    { "eoc::combat::ParticipantComponent",            0x10890e9b8, 0, false },
+    { "eoc::combat::StateComponent",                  0x10890ea38, 0, false },
+
+    // =====================================================================
+    // Phase 2 Batch 8 Components (Issue #33) - Tag components
+    // =====================================================================
+    { "eoc::tag::AvatarComponent",                    0x1089157a0, 0, false },
+    { "eoc::tag::TraderComponent",                    0x1088fe310, 0, false },
+    { "eoc::exp::CanLevelUpComponent",                0x1088f9ed8, 0, false },
+    { "eoc::item::IsGoldComponent",                   0x1088f87f0, 0, false },
+    { "eoc::item::ItemComponent",                     0x108914cb0, 0, false },
+    { "eoc::item::DoorComponent",                     0x1088f8c68, 0, false },
+    { "eoc::falling::IsFallingComponent",             0x108912fa0, 0, false },
+    { "eoc::IsInTurnBasedModeComponent",              0x10890e088, 0, false },
+    { "eoc::GravityDisabledComponent",                0x1088f8b48, 0, false },
+
     // Sentinel
     { NULL, 0, 0, false }
 };

@@ -2,9 +2,9 @@
 
 This document tracks the development roadmap for achieving feature parity with Windows BG3SE (Norbyte's Script Extender).
 
-## Current Status: v0.32.4
+## Current Status: v0.32.7
 
-**Overall Feature Parity: ~57%** (based on comprehensive API function count analysis)
+**Overall Feature Parity: ~60%** (based on comprehensive API function count analysis)
 
 **Working Features:**
 - DYLD injection and Dobby hooking infrastructure
@@ -51,8 +51,8 @@ This document tracks the development roadmap for achieving feature parity with W
 | `Ext.IMGUI` | ✅ Full (7+) | ❌ Not impl | **0%** | 8 |
 | `Ext.Level` | ✅ Full (21) | ❌ Not impl | **0%** | 9 |
 | `Ext.Audio` | ✅ Full (17) | ❌ Not impl | **0%** | 10 |
-| `Ext.Localization` | ✅ Full (2) | ❌ Not impl | **0%** | 10 |
-| `Ext.StaticData` | ✅ Full (5) | 🔶 Feat type | **20%** | 10 |
+| `Ext.Localization` | ✅ Full (2) | ⚠️ GetLanguage + safe stubs (1/2) | **50%** | 10 |
+| `Ext.StaticData` | ✅ Full (5) | 🔶 Metadata only (blocked #44) | **20%** | 10 |
 | `Ext.Resource` | ✅ Full (2) | ❌ Not impl | **0%** | 10 |
 | `Ext.Template` | ✅ Full (9) | ❌ Not impl | **0%** | 10 |
 | Console/REPL | ✅ Full | ✅ Socket + file + in-game overlay | **95%** | 5 |
@@ -180,7 +180,7 @@ end
 - [x] Component accessors via GetComponent template addresses
 
 ### 2.2 Component Access & Property System
-**Status:** ✅ Complete (v0.24.0+) - 32 component property layouts working
+**Status:** ✅ Complete (v0.24.0+) - 52 component property layouts working
 
 **Key Discovery (Dec 2025):** macOS ARM64 has NO `GetRawComponent` dispatcher like Windows. Template functions are **completely inlined** - calling template addresses directly returns NULL.
 
@@ -1102,7 +1102,7 @@ Ext.Mod.GetModInfo(guid)
 ## Phase 10: Data Access & Audio
 
 ### 10.1 Ext.StaticData API
-**Status:** 🔶 In Progress - [Issue #40](https://github.com/tdimino/bg3se-macos/issues/40)
+**Status:** 🔶 ~20% Complete - [Issue #40](https://github.com/tdimino/bg3se-macos/issues/40) (Blocked by [#44](https://github.com/tdimino/bg3se-macos/issues/44))
 
 Access to static game resource types (Feats, Races, Backgrounds, Origins, Gods, Classes).
 
@@ -1125,12 +1125,26 @@ Ext.StaticData.DumpEntries("Feat", 10)
 ```
 
 **Implementation Notes:**
-- Uses hook-based capture (FeatManager::GetFeats at 0x101b752b4)
-- Managers captured lazily when game accesses them
-- Current types: Feat (others pending discovery via Ghidra)
-- FeatManager structure: +0x7C count, +0x80 array, 0x128 bytes per feat
+- API surface implemented and stable (GetCount, GetAll, Get, IsReady, GetTypes)
+- TypeContext capture returns metadata counts (37 feats registered)
+- **Key Finding (Dec 2025):** TypeContext gives registration metadata, NOT actual manager data
+- Real FeatManager is at Environment+0x130 with count at +0x7C, array at +0x80
+- **CRITICAL:** FeatManager is session-scoped (only exists during character creation/respec)
+- See: `ghidra/offsets/STATICDATA.md`, `docs/solutions/reverse-engineering/staticdata-featmanager-discovery.md`
 
-Resource types: Feat (✅), Race (🔶), Background (🔶), Origin (🔶), God (🔶), ClassDescription (🔶)
+**What Works:**
+- ✅ API functions exist and don't crash
+- ✅ TypeContext traversal captures 7 manager types
+- ✅ Metadata counts available (Feat: 37, Race, Origin, etc.)
+
+**What's Missing (Blocked by [#44](https://github.com/tdimino/bg3se-macos/issues/44)):**
+- ❌ Full feat data (names, GUIDs, descriptions) - requires FeatManager::GetFeats hook
+- ❌ Hook-based capture during character creation/respec sessions
+- ❌ Dobby hooks corrupt ARM64 PC-relative instructions (ADRP+LDR patterns)
+
+**Blocker:** ARM64-safe inline hooking infrastructure ([Issue #44](https://github.com/tdimino/bg3se-macos/issues/44)) is required before FeatManager::GetFeats can be hooked reliably.
+
+Resource types: Feat (🔶 metadata only), Race (🔶), Background (🔶), Origin (🔶), God (🔶), ClassDescription (🔶)
 
 ### 10.2 Ext.Resource & Ext.Template API
 **Status:** ❌ Not Started - [Issue #41](https://github.com/tdimino/bg3se-macos/issues/41)
@@ -1245,7 +1259,7 @@ Full debugging experience with breakpoints, stepping, and variable inspection.
 | D3 | Physics/Raycasting (Ext.Level) | High | ❌ Not Started | [#37](https://github.com/tdimino/bg3se-macos/issues/37) |
 | D4 | Audio (Ext.Audio) | Medium | ❌ Not Started | [#38](https://github.com/tdimino/bg3se-macos/issues/38) |
 | D5 | Localization (Ext.Localization) | Low | ❌ Not Started | [#39](https://github.com/tdimino/bg3se-macos/issues/39) |
-| D6 | Static Data (Ext.StaticData) | Medium | 🔶 In Progress (Feat type) | [#40](https://github.com/tdimino/bg3se-macos/issues/40) |
+| D6 | Static Data (Ext.StaticData) | Medium | 🔶 Blocked by #44 | [#40](https://github.com/tdimino/bg3se-macos/issues/40) |
 | D7 | Resource/Template Management | Medium | ❌ Not Started | [#41](https://github.com/tdimino/bg3se-macos/issues/41) |
 | D8 | VS Code Debugger | High | ❌ Not Started | [#42](https://github.com/tdimino/bg3se-macos/issues/42) |
 | D9 | Input Injection | Medium | ❌ Not Started | - |
@@ -1265,12 +1279,15 @@ See **[docs/CHANGELOG.md](docs/CHANGELOG.md)** for detailed version history with
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| v0.32.7 | 2025-12-14 | **Component Batch Expansion** - 11 new components (2 combat + 9 tag), 52 total, ~60% parity (#33) |
+| v0.32.6 | 2025-12-14 | **Component Expansion** - 5 new components (Death, ThreatRange, InventoryWeight, IsInCombat), 41 total (#33) |
+| v0.32.5 | 2025-12-14 | Ext.StaticData API - Feat type with hook-based capture (#40) |
 | v0.32.4 | 2025-12-13 | **Stats Sync Complete** - Shadow stats + game stats, RefMap insertion, prototype managers (#32) |
 | v0.32.3 | 2025-12-12 | Testing Infrastructure - !test suite, Debug.* helpers, Frida scripts (#8) |
 | v0.32.2 | 2025-12-12 | Stats Sync Complete - ARM64 const& fix, RefMap linear search, Sync working (#32) |
 | v0.32.1 | 2025-12-12 | Stats Sync - SpellPrototype::Init, RefMap lookup, existing spell sync (#32) |
 | v0.32.0 | 2025-12-12 | Prototype Managers - All 5 singletons discovered, Sync() integration |
-| v0.31.0 | 2025-12-11 | Entity Relationships - GetByHandle(), 36 components |
+| v0.31.0 | 2025-12-11 | Entity Relationships - GetByHandle() |
 | v0.30.0 | 2025-12-11 | Events Expansion - 10 events, Prevent pattern |
 | v0.29.0 | 2025-12-10 | Lifetime Scoping - Stale userdata prevention |
 | v0.26.0 | 2025-12-10 | Ext.Enums - 14 enum/bitfield types |
@@ -1292,11 +1309,11 @@ We've built automation tools to accelerate reaching Windows BG3SE component pari
 
 | Namespace | Available | Implemented | Priority |
 |-----------|-----------|-------------|----------|
-| `eoc::` | 701 | ~30 | High (mod-relevant) |
+| `eoc::` | 701 | ~46 | High (mod-relevant) |
 | `esv::` | 596 | 0 | Medium (server) |
 | `ecl::` | 429 | 2 | Low (client) |
 | `ls::` | 233 | 4 | Medium (base) |
-| **Total** | **1,999** | **36** | ~1.8% |
+| **Total** | **1,999** | **52** | ~2.6% |
 
 **Workflow for Adding Components:**
 1. `python3 tools/extract_typeids.py | grep ComponentName` → Get TypeId address
@@ -1306,37 +1323,67 @@ We've built automation tools to accelerate reaching Windows BG3SE component pari
 
 ### Issue Acceleration Matrix (Dec 2025 Deep Audit)
 
-| Issue | Feature | Acceleration | Key Technique |
-|-------|---------|--------------|---------------|
-| **#33 Components** | Component Layouts | **80%** | Existing tools: `extract_typeids.py` + `generate_component_stubs.py` |
-| **#39 Localization** | Ext.Localization | **75%** | Simple string table lookup, minimal API surface |
-| **#36 IMGUI** | Ext.IMGUI | **70%** | Official ImGui Metal backend exists |
-| **#40 StaticData** | Ext.StaticData | **70%** | Symbol `eoc__gGuidResourceManager` is exported |
-| **#41 Resource** | Ext.Resource/Template | **65%** | Same pattern as StaticData |
-| **#42 Debugger** | VS Code Debugger | **60%** | DAP protocol has reference implementations |
-| **#15 Client State** | Client Lua State | **50%** | Mirror server pattern, hook game state |
-| **#37 Level** | Ext.Level (Physics) | **50%** | Find physics engine, port LevelLib.inl |
-| **#38 Audio** | Ext.Audio | **45%** | Wwise SDK has documented API |
-| ~~#32 Stats Sync~~ | ~~Prototype Managers~~ | ✅ DONE | Shadow stats + game stats sync complete |
-| **#6 NetChannel** | NetChannel API | **30%** | Network stack analysis needed, but Lua wrappers portable |
-| **#35 Ext.UI** | Noesis UI | **25%** | Deep game UI integration required |
+| Issue | Feature | Acceleration | Key Technique | Blocker |
+|-------|---------|--------------|---------------|---------|
+| **#33 Components** | Component Layouts | **80%** | Existing tools: `extract_typeids.py` + `generate_component_stubs.py` | None |
+| **#39 Localization** | Ext.Localization | **75%** | Simple string table lookup, minimal API surface | None |
+| **#36 IMGUI** | Ext.IMGUI | **70%** | Official ImGui Metal backend exists | None |
+| **#41 Resource** | Ext.Resource/Template | **65%** | Same pattern as StaticData | None |
+| **#42 Debugger** | VS Code Debugger | **60%** | DAP protocol has reference implementations | None |
+| **#15 Client State** | Client Lua State | **50%** | Mirror server pattern, hook game state | None |
+| **#37 Level** | Ext.Level (Physics) | **50%** | Find physics engine, port LevelLib.inl | None |
+| **#38 Audio** | Ext.Audio | **45%** | Wwise SDK has documented API | None |
+| ~~#32 Stats Sync~~ | ~~Prototype Managers~~ | ✅ DONE | Shadow stats + game stats sync complete | None |
+| **#6 NetChannel** | NetChannel API | **30%** | Network stack analysis needed, but Lua wrappers portable | None |
+| **#35 Ext.UI** | Noesis UI | **25%** | Deep game UI integration required | None |
+| **#40 StaticData** | Ext.StaticData | ~~70%~~ **20%** | Hook-based capture, session-scoped managers | **#44** |
+
+### ARM64 Hooking Limitations (Dec 2025)
+
+**Issue #44** - [ARM64-Safe Inline Hooking Infrastructure](https://github.com/tdimino/bg3se-macos/issues/44)
+
+Dobby's inline hooking corrupts ARM64 PC-relative instructions (ADRP+LDR patterns). This blocks features requiring function hooks that use these patterns:
+
+| Affected Feature | Hook Required | Impact |
+|------------------|---------------|--------|
+| **Ext.StaticData** (Issue #40) | `FeatManager::GetFeats` | Full feat data inaccessible |
+| Potential future hooks | Any function with ADRP+LDR | Case-by-case evaluation needed |
+
+**Root Cause:** ARM64's ADRP instruction encodes PC-relative offsets. When Dobby moves instructions to a trampoline, the PC value changes, causing the offset calculation to point to wrong addresses.
+
+**Workarounds Available:**
+- Frida Interceptor (works but creates tool conflicts)
+- Direct memory reads (no hook required, but misses dynamic data)
+- TypeContext traversal (gets metadata only)
+
+**Permanent Solution:** Custom ARM64-aware hooking that detects and rewrites ADRP+LDR patterns.
 
 ### Prioritized Implementation Order
 
-**Tier 1: High Acceleration (70-80%) - Do First**
-1. **#33 Components** - Tools ready, incremental progress
-2. **#39 Localization** - Quick win, small API
-3. **#36 IMGUI** - Official Metal backend
-4. **#40 StaticData** - Exported symbol access
+**Tier 1: High Acceleration (70-80%) - Do First (Unblocked)**
+1. **#39 Localization** - Quick win (~2 hours), small API, 75% acceleration
+2. **#33 Components** - Tools ready, incremental progress, 80% acceleration
+3. **#36 IMGUI** - Official Metal backend, 70% acceleration
+4. **#41 Resource/Template** - Same pattern as StaticData, 65% acceleration
 
 **Tier 2: Medium Acceleration (40-60%) - Second Priority**
-5. **#42 Debugger** - DAP reference implementations
+5. **#42 Debugger** - DAP reference implementations available
 6. **#15 Client State** - Mirror server pattern
-7. **#32 Stats Sync** - Ghidra findings available
 
-**Tier 3: Lower Acceleration (25-30%) - Complex**
-8. **#6 NetChannel** - Requires extensive network RE
-9. **#35 Ext.UI** - Deep Noesis integration
+**Tier 3: Infrastructure (Unblocks Other Features)**
+7. **#44 ARM64 Hooking** - Unblocks #40 (StaticData), may unblock future features
+
+**Tier 4: Lower Acceleration (25-30%) - Complex/Blocked**
+8. **#40 StaticData** - BLOCKED by #44 (ARM64 hooking)
+9. **#6 NetChannel** - Requires extensive network RE
+10. **#35 Ext.UI** - Deep Noesis integration
+
+**Recommended Next Issue: #39 (Localization)**
+- Estimated time: ~2 hours
+- No blockers
+- High acceleration (75%)
+- Simple string table lookup pattern
+- Minimal API surface (2 functions: Get, GetLanguage)
 
 ### Patterns from Windows BG3SE
 

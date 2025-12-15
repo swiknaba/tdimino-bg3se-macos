@@ -13,6 +13,36 @@ Each entry includes:
 
 ---
 
+## [v0.32.7] - 2025-12-14
+
+**Parity:** ~60% | **Category:** Entity Components | **Issues:** #33
+
+### Added
+- **11 new component layouts** - Expanded from 41 to 52 components (batch acceleration)
+
+**Combat Components:**
+- `CombatParticipant` - CombatHandle, CombatGroupId, InitiativeRoll, Flags, AiHint
+- `CombatState` - MyGuid (HashMaps skipped)
+
+**Tag Components (presence = data):**
+- `Avatar`, `Trader`, `CanLevelUp`, `IsGold`, `IsItem`, `IsDoor`, `IsFalling`, `IsInTurnBasedMode`, `GravityDisabled`
+
+### Technical
+- **Batch acceleration** - Tag components require no offset verification
+- **52 total components** - Exceeds 50-component goal from Issue #33
+
+---
+
+## [v0.32.6] - 2025-12-14
+
+**Parity:** ~58% | **Category:** Entity Components | **Issues:** #33
+
+### Added
+- **5 new component layouts** - Expanded from 36 to 41 components
+  - `DeathState`, `DeathType`, `InventoryWeight`, `ThreatRange`, `IsInCombat`
+
+---
+
 ## [v0.32.5] - 2025-12-14
 
 **Parity:** ~57% | **Category:** Static Data, Debug API | **Issues:** #40

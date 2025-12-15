@@ -6,6 +6,7 @@
 
 #include "staticdata_manager.h"
 #include "../core/logging.h"
+#include "../core/safe_memory.h"
 #include <dobby.h>
 #include <string.h>
 #include <stdio.h>
@@ -24,11 +25,20 @@
 #define OFFSET_MSTATE_PTR             0x083c4a68  // PTR_m_State - pointer to m_State
 
 // FeatManager structure offsets
-// NOTE: TypeContext gives us a metadata structure, not the real FeatManager.
-// Real FeatManager (from GetFeats) has count at +0x7C, but TypeContext has count at +0x00.
-// Using TypeContext layout since hooks are disabled:
-#define FEATMANAGER_OFFSET_COUNT      0x00   // int32_t count (TypeContext metadata)
-#define FEATMANAGER_OFFSET_ARRAY      0x80   // Feat* array pointer
+// NOTE: TypeContext gives us a METADATA structure, not the real FeatManager.
+// We need to probe the metadata to find a pointer to the real FeatManager.
+//
+// TypeContext metadata structure:
+//   +0x00: int32_t count (metadata count, e.g., 37)
+//   +0x08-0x78: unknown (probe to find real manager pointer)
+//
+// Real FeatManager structure (from GetFeats hook):
+//   +0x7C: int32_t count
+//   +0x80: Feat* array
+//
+#define FEATMANAGER_REAL_COUNT_OFFSET    0x7C   // Real FeatManager count offset
+#define FEATMANAGER_REAL_ARRAY_OFFSET    0x80   // Real FeatManager array offset
+#define FEATMANAGER_META_COUNT_OFFSET    0x00   // TypeContext metadata count offset
 
 // Feat structure
 #define FEAT_SIZE                     0x128  // 296 bytes per feat
@@ -70,8 +80,11 @@ static struct {
     bool initialized;
     void* main_binary_base;
 
-    // Captured manager pointers
+    // Captured manager pointers (from TypeContext - metadata structures)
     void* managers[STATICDATA_COUNT];
+
+    // Real manager pointers (probed from metadata or captured via hooks)
+    void* real_managers[STATICDATA_COUNT];
 
     // Original function pointers (for hooks)
     void* orig_feat_getfeats;
@@ -92,19 +105,121 @@ typedef struct TypeInfo {
     struct TypeInfo* next;    // +0x18: Next TypeInfo in list
 } TypeInfo;
 
+// ============================================================================
+// Real Manager Discovery (Probing)
+// ============================================================================
+
+/**
+ * Check if a pointer looks like a valid FeatManager.
+ * Valid FeatManager has:
+ *   - count at +0x7C: reasonable value (1-1000)
+ *   - array at +0x80: non-null pointer to heap
+ * Uses safe memory reads to prevent crashes.
+ */
+static bool looks_like_real_feat_manager(void* ptr) {
+    if (!ptr) return false;
+
+    // Safely read count at +0x7C
+    int32_t count = 0;
+    if (!safe_memory_read_i32((mach_vm_address_t)ptr + FEATMANAGER_REAL_COUNT_OFFSET, &count)) {
+        return false;  // Memory not readable
+    }
+
+    // Count should be reasonable (37 feats expected, allow some margin)
+    if (count <= 0 || count > 1000) return false;
+
+    // Safely read array pointer at +0x80
+    void* array = NULL;
+    if (!safe_memory_read_pointer((mach_vm_address_t)ptr + FEATMANAGER_REAL_ARRAY_OFFSET, &array)) {
+        return false;  // Memory not readable
+    }
+
+    // Array pointer should be non-null and look like a heap address
+    if (!array) return false;
+    uintptr_t arr_addr = (uintptr_t)array;
+
+    // Heap addresses on macOS are typically > 0x600000000000
+    // But code pointers are ~0x100000000
+    // Allow anything that's not obviously wrong
+    if (arr_addr < 0x100000000ULL) return false;
+
+    return true;
+}
+
+/**
+ * Try to find the real FeatManager by probing the TypeContext metadata structure.
+ * The metadata might contain a pointer to the real manager.
+ * Uses safe memory reads to prevent crashes.
+ */
+static void* probe_for_real_feat_manager(void* metadata) {
+    if (!metadata) return NULL;
+
+    log_message("[StaticData] Probing metadata %p for real FeatManager...", metadata);
+
+    // First check: is the metadata itself the real manager?
+    if (looks_like_real_feat_manager(metadata)) {
+        int32_t count = 0;
+        safe_memory_read_i32((mach_vm_address_t)metadata + FEATMANAGER_REAL_COUNT_OFFSET, &count);
+        log_message("[StaticData] Metadata IS the real FeatManager (count@+0x7C=%d)", count);
+        return metadata;
+    }
+
+    // Safely read metadata count at +0x00 (should be 37 for feats)
+    int32_t meta_count = 0;
+    if (safe_memory_read_i32((mach_vm_address_t)metadata + FEATMANAGER_META_COUNT_OFFSET, &meta_count)) {
+        log_message("[StaticData] Metadata count@+0x00=%d", meta_count);
+    } else {
+        log_message("[StaticData] Could not read metadata count at +0x00");
+    }
+
+    // Probe for pointers at various offsets that could point to real manager
+    // Common offsets: +0x08, +0x10, +0x18, +0x20, +0x28, +0x30, etc.
+    int offsets_to_probe[] = {0x08, 0x10, 0x18, 0x20, 0x28, 0x30, 0x38, 0x40,
+                              0x48, 0x50, 0x58, 0x60, 0x68, 0x70, 0x78};
+    int num_offsets = sizeof(offsets_to_probe) / sizeof(offsets_to_probe[0]);
+
+    for (int i = 0; i < num_offsets; i++) {
+        int offset = offsets_to_probe[i];
+        void* candidate = NULL;
+
+        // Safely read the candidate pointer
+        if (!safe_memory_read_pointer((mach_vm_address_t)metadata + offset, &candidate)) {
+            continue;  // Memory not readable at this offset
+        }
+
+        if (candidate && looks_like_real_feat_manager(candidate)) {
+            int32_t count = 0;
+            void* array = NULL;
+            safe_memory_read_i32((mach_vm_address_t)candidate + FEATMANAGER_REAL_COUNT_OFFSET, &count);
+            safe_memory_read_pointer((mach_vm_address_t)candidate + FEATMANAGER_REAL_ARRAY_OFFSET, &array);
+            log_message("[StaticData] FOUND real FeatManager at metadata+0x%02X: %p (count=%d, array=%p)",
+                        offset, candidate, count, array);
+            return candidate;
+        }
+    }
+
+    log_message("[StaticData] Could not find real FeatManager from metadata");
+    return NULL;
+}
+
 /**
  * Capture all known managers by traversing the ImmutableDataHeadmaster TypeContext.
  * The type_name field is a raw C string pointer (verified at runtime).
  * Returns number of managers captured.
+ * Uses safe memory reads to prevent crashes.
  */
 static int capture_managers_via_typecontext(void) {
     if (!g_staticdata.main_binary_base) {
         return 0;
     }
 
-    // Get pointer to m_State
-    void** ptr_mstate = (void**)((uint8_t*)g_staticdata.main_binary_base + OFFSET_MSTATE_PTR);
-    void* m_state = *ptr_mstate;
+    // Safely get pointer to m_State
+    void* m_state = NULL;
+    mach_vm_address_t ptr_mstate_addr = (mach_vm_address_t)g_staticdata.main_binary_base + OFFSET_MSTATE_PTR;
+    if (!safe_memory_read_pointer(ptr_mstate_addr, &m_state)) {
+        log_message("[StaticData] Could not read m_State pointer at %p", (void*)ptr_mstate_addr);
+        return 0;
+    }
     if (!m_state) {
         log_message("[StaticData] m_State is NULL - TypeContext not available yet");
         return 0;
@@ -112,35 +227,61 @@ static int capture_managers_via_typecontext(void) {
 
     log_message("[StaticData] TypeContext traversal: m_State at %p", m_state);
 
-    // TypeInfo head is at m_State + 8
-    TypeInfo* typeinfo = *(TypeInfo**)((uint8_t*)m_state + 8);
+    // Safely read TypeInfo head at m_State + 8
+    TypeInfo* typeinfo = NULL;
+    if (!safe_memory_read_pointer((mach_vm_address_t)m_state + 8, (void**)&typeinfo)) {
+        log_message("[StaticData] Could not read TypeInfo head pointer");
+        return 0;
+    }
 
     int captured = 0;
     int count = 0;
     while (typeinfo && count < 200) {  // Safety limit (100+ managers exist)
+        // Safely read TypeInfo fields
+        void* manager_ptr = NULL;
+        void* type_name_ptr = NULL;
+        TypeInfo* next_ptr = NULL;
+
+        if (!safe_memory_read_pointer((mach_vm_address_t)&typeinfo->manager_ptr, &manager_ptr) ||
+            !safe_memory_read_pointer((mach_vm_address_t)&typeinfo->type_name, &type_name_ptr) ||
+            !safe_memory_read_pointer((mach_vm_address_t)&typeinfo->next, (void**)&next_ptr)) {
+            log_message("[StaticData] Could not read TypeInfo fields at %p, stopping traversal", typeinfo);
+            break;
+        }
+
         // Check if this TypeInfo has a valid manager and name
-        if (typeinfo->manager_ptr && typeinfo->type_name) {
-            // type_name is a raw C string (verified via runtime probing)
-            const char* name = (const char*)typeinfo->type_name;
+        if (manager_ptr && type_name_ptr) {
+            // Safely read type name string (up to 128 chars)
+            char name[128] = {0};
+            if (safe_memory_read_string((mach_vm_address_t)type_name_ptr, name, sizeof(name))) {
+                // Log first 20 entries and any containing "Feat" or "Manager"
+                if (count < 20 || strstr(name, "Feat") || strstr(name, "Manager")) {
+                    log_message("[StaticData] TypeInfo[%d]: %s @ %p", count, name, manager_ptr);
+                }
 
-            // Log first 20 entries and any containing "Feat" or "Manager"
-            if (count < 20 || strstr(name, "Feat") || strstr(name, "Manager")) {
-                log_message("[StaticData] TypeInfo[%d]: %s @ %p", count, name, typeinfo->manager_ptr);
-            }
+                // Try to match against known manager names
+                for (int i = 0; i < STATICDATA_COUNT; i++) {
+                    // Only capture if not already captured
+                    if (!g_staticdata.managers[i] && strcmp(name, s_manager_type_names[i]) == 0) {
+                        g_staticdata.managers[i] = manager_ptr;
+                        log_message("[StaticData] Captured %s metadata: %p", s_type_names[i], manager_ptr);
 
-            // Try to match against known manager names
-            for (int i = 0; i < STATICDATA_COUNT; i++) {
-                // Only capture if not already captured
-                if (!g_staticdata.managers[i] && strcmp(name, s_manager_type_names[i]) == 0) {
-                    g_staticdata.managers[i] = typeinfo->manager_ptr;
-                    log_message("[StaticData] Captured %s: %p", s_type_names[i], typeinfo->manager_ptr);
-                    captured++;
-                    break;
+                        // For FeatManager, probe to find the real manager
+                        if (i == STATICDATA_FEAT) {
+                            void* real_mgr = probe_for_real_feat_manager(manager_ptr);
+                            if (real_mgr) {
+                                g_staticdata.real_managers[i] = real_mgr;
+                            }
+                        }
+
+                        captured++;
+                        break;
+                    }
                 }
             }
         }
 
-        typeinfo = typeinfo->next;
+        typeinfo = next_ptr;
         count++;
     }
 
@@ -206,8 +347,8 @@ static void hook_FeatGetFeats(void* out, void* feat_manager) {
         log_message("[StaticData] Captured FeatManager via GetFeats hook: %p", feat_manager);
 
         // Log structure info using GetFeats-verified offsets (0x7C, 0x80)
-        int32_t count = *(int32_t*)((uint8_t*)feat_manager + FEATMANAGER_OFFSET_COUNT);
-        void* array = *(void**)((uint8_t*)feat_manager + FEATMANAGER_OFFSET_ARRAY);
+        int32_t count = *(int32_t*)((uint8_t*)feat_manager + FEATMANAGER_REAL_COUNT_OFFSET);
+        void* array = *(void**)((uint8_t*)feat_manager + FEATMANAGER_REAL_ARRAY_OFFSET);
         log_message("[StaticData] FeatManager structure: count@+0x7C=%d, array@+0x80=%p", count, array);
 
         // Verify by reading first feat entry
@@ -247,8 +388,8 @@ static void hook_GetAllFeats(void* environment) {
             log_message("[StaticData] Captured FeatManager from env+0x130: %p", feat_manager);
 
             // Log structure info
-            int32_t count = *(int32_t*)((uint8_t*)feat_manager + FEATMANAGER_OFFSET_COUNT);
-            void* array = *(void**)((uint8_t*)feat_manager + FEATMANAGER_OFFSET_ARRAY);
+            int32_t count = *(int32_t*)((uint8_t*)feat_manager + FEATMANAGER_REAL_COUNT_OFFSET);
+            void* array = *(void**)((uint8_t*)feat_manager + FEATMANAGER_REAL_ARRAY_OFFSET);
             log_message("[StaticData] FeatManager: count=%d, array=%p", count, array);
         }
     }
@@ -354,21 +495,51 @@ bool staticdata_capture_manager(StaticDataType type) {
 // Data Access - FeatManager specific
 // ============================================================================
 
+/**
+ * Get the effective FeatManager pointer and determine which offsets to use.
+ * Prefers real_managers (has real data) over managers (metadata only).
+ */
+static void* get_effective_feat_manager(bool* is_real) {
+    // Prefer real manager if available
+    if (g_staticdata.real_managers[STATICDATA_FEAT]) {
+        if (is_real) *is_real = true;
+        return g_staticdata.real_managers[STATICDATA_FEAT];
+    }
+
+    // Fall back to metadata
+    if (g_staticdata.managers[STATICDATA_FEAT]) {
+        if (is_real) *is_real = false;
+        return g_staticdata.managers[STATICDATA_FEAT];
+    }
+
+    return NULL;
+}
+
 static int feat_get_count(void) {
-    void* mgr = g_staticdata.managers[STATICDATA_FEAT];
+    bool is_real = false;
+    void* mgr = get_effective_feat_manager(&is_real);
     if (!mgr) return -1;
 
-    return *(int32_t*)((uint8_t*)mgr + FEATMANAGER_OFFSET_COUNT);
+    // Use correct offset based on manager type
+    int offset = is_real ? FEATMANAGER_REAL_COUNT_OFFSET : FEATMANAGER_META_COUNT_OFFSET;
+    return *(int32_t*)((uint8_t*)mgr + offset);
 }
 
 static void* feat_get_by_index(int index) {
-    void* mgr = g_staticdata.managers[STATICDATA_FEAT];
+    bool is_real = false;
+    void* mgr = get_effective_feat_manager(&is_real);
     if (!mgr) return NULL;
 
-    int32_t count = *(int32_t*)((uint8_t*)mgr + FEATMANAGER_OFFSET_COUNT);
+    // Can only get entries from real manager (metadata has no array)
+    if (!is_real) {
+        log_message("[StaticData] Cannot get feat by index - only metadata captured, not real manager");
+        return NULL;
+    }
+
+    int32_t count = *(int32_t*)((uint8_t*)mgr + FEATMANAGER_REAL_COUNT_OFFSET);
     if (index < 0 || index >= count) return NULL;
 
-    void* array = *(void**)((uint8_t*)mgr + FEATMANAGER_OFFSET_ARRAY);
+    void* array = *(void**)((uint8_t*)mgr + FEATMANAGER_REAL_ARRAY_OFFSET);
     if (!array) return NULL;
 
     // Each feat is FEAT_SIZE bytes
@@ -376,18 +547,26 @@ static void* feat_get_by_index(int index) {
 }
 
 static void* feat_get_by_guid(const StaticDataGuid* guid) {
-    void* mgr = g_staticdata.managers[STATICDATA_FEAT];
+    bool is_real = false;
+    void* mgr = get_effective_feat_manager(&is_real);
     if (!mgr || !guid) return NULL;
 
-    int32_t count = *(int32_t*)((uint8_t*)mgr + FEATMANAGER_OFFSET_COUNT);
-    void* array = *(void**)((uint8_t*)mgr + FEATMANAGER_OFFSET_ARRAY);
+    // Can only search from real manager
+    if (!is_real) {
+        log_message("[StaticData] Cannot get feat by GUID - only metadata captured");
+        return NULL;
+    }
+
+    int32_t count = *(int32_t*)((uint8_t*)mgr + FEATMANAGER_REAL_COUNT_OFFSET);
+    void* array = *(void**)((uint8_t*)mgr + FEATMANAGER_REAL_ARRAY_OFFSET);
     if (!array) return NULL;
 
     // Linear search through feats comparing GUIDs
-    // GUID is assumed to be at offset 0 of each feat
+    // GUID is at offset +0x08 in each feat (after VMT pointer)
     for (int i = 0; i < count; i++) {
         void* entry = (uint8_t*)array + (i * FEAT_SIZE);
-        if (memcmp(entry, guid, sizeof(StaticDataGuid)) == 0) {
+        // GUID starts at +0x08 (after 8-byte VMT/header)
+        if (memcmp((uint8_t*)entry + 0x08, guid, sizeof(StaticDataGuid)) == 0) {
             return entry;
         }
     }
@@ -472,8 +651,19 @@ StaticDataPtr staticdata_get_by_guid_string(StaticDataType type, const char* gui
 bool staticdata_get_guid(StaticDataType type, StaticDataPtr entry, StaticDataGuid* out_guid) {
     if (!entry || !out_guid) return false;
 
-    // GUID is assumed to be at offset 0 of entry
-    memcpy(out_guid, entry, sizeof(StaticDataGuid));
+    // GUID is at +0x08 in the Feat structure (after 8-byte VMT header)
+    // Different static data types may have different layouts
+    int guid_offset = 0x08;  // Default: after VMT
+    switch (type) {
+        case STATICDATA_FEAT:
+            guid_offset = 0x08;  // Verified via Ghidra
+            break;
+        default:
+            guid_offset = 0x08;  // TODO: Verify for other types
+            break;
+    }
+
+    memcpy(out_guid, (uint8_t*)entry + guid_offset, sizeof(StaticDataGuid));
     return true;
 }
 
@@ -525,10 +715,18 @@ void staticdata_dump_status(void) {
     log_message("  Base: %p", g_staticdata.main_binary_base);
 
     for (int i = 0; i < STATICDATA_COUNT; i++) {
-        void* mgr = g_staticdata.managers[i];
-        if (mgr) {
-            log_message("  %s: %p (count=%d)",
-                        s_type_names[i], mgr, staticdata_get_count(i));
+        void* meta = g_staticdata.managers[i];
+        void* real = g_staticdata.real_managers[i];
+
+        if (real) {
+            int32_t count = *(int32_t*)((uint8_t*)real + FEATMANAGER_REAL_COUNT_OFFSET);
+            void* array = *(void**)((uint8_t*)real + FEATMANAGER_REAL_ARRAY_OFFSET);
+            log_message("  %s: REAL %p (count=%d, array=%p) [metadata=%p]",
+                        s_type_names[i], real, count, array, meta);
+        } else if (meta) {
+            int32_t meta_count = *(int32_t*)((uint8_t*)meta + FEATMANAGER_META_COUNT_OFFSET);
+            log_message("  %s: METADATA ONLY %p (meta_count=%d) - NO REAL DATA",
+                        s_type_names[i], meta, meta_count);
         } else {
             log_message("  %s: not captured", s_type_names[i]);
         }

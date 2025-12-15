@@ -341,6 +341,91 @@ struct GuidResource {
 2. ~~Identify manager type names~~ - DONE: Raw C strings, matched 7 managers
 3. **Find HashMap offsets** - Ghidra analysis needed for `Resources` HashMap location
 
+## Critical Discovery: FeatManager is Session-Scoped (Dec 14, 2025)
+
+### FeatManager is NOT a Global Singleton
+
+Through detailed Ghidra analysis, the real FeatManager is NOT accessible via a global pointer.
+It exists only within the context of an active character creation/respec session.
+
+### Complete Access Chain
+
+```
+ecl::character_creation::System::GetActiveSessionView
+    └─> EntityWorld ECS queries → SessionView components
+        └─> SessionView + 0x40 → EntityWorld* + 0x7b0 → Environment*
+
+ecl::character_creation::DefinitionView::GetAvailableFeatsForProgression (0x10339fab4)
+    └─> DefinitionView + 0x80 → ManagerContainer* (from Environment chain)
+        └─> ManagerContainer + 0x130 → FeatManager*
+            └─> FeatManager + 0x7C → count (int32)
+            └─> FeatManager + 0x80 → feat_array (Feat*)
+```
+
+### Key Offsets for Environment Chain
+
+| Object | Offset | Contents |
+|--------|--------|----------|
+| SessionView | +0x00 | EntityWorld* |
+| SessionView | +0x08-0x38 | Various ECS components |
+| SessionView | +0x40 | Environment* (via EntityWorld+0x7b0) |
+| DefinitionView | +0x80 | ManagerContainer* |
+| ManagerContainer | +0x78 | Lookup interface vtable |
+| ManagerContainer | +0xC0 | ProgressionManager lookup |
+| ManagerContainer | +0x130 | **FeatManager*** |
+
+### Function Addresses for Hooking
+
+| Function | Address | Purpose |
+|----------|---------|---------|
+| `FeatManager::GetFeats` | `0x101b752b4` | x0=output, x1=FeatManager* |
+| `GetAllFeats` | `0x10120b3e8` | Called by progression functions |
+| `GetAvailableFeatsForProgression` | `0x10339fab4` | Loads FeatManager from ManagerContainer |
+| `GetActiveSessionView` | `0x1033cde8c` | Gets current CC session |
+
+### Why TypeContext Capture Fails
+
+The TypeContext (`ImmutableDataHeadmaster`) provides **metadata/registration structures**,
+not the actual runtime manager instances. The metadata has:
+- Count at offset +0x00 (metadata count, not feat count)
+- Self-referential pointers
+- No actual feat data
+
+The **real FeatManager** (with feats at +0x7C count, +0x80 array) is only available
+through the Environment chain during active character creation/respec sessions.
+
+### Solution: Hook-Based Capture During Session
+
+```c
+// Hook FeatManager::GetFeats at 0x101b752b4
+// x1 = FeatManager* when function is called
+static void* g_real_feat_manager = NULL;
+
+void hook_getfeats(void* output, void* feat_manager) {
+    g_real_feat_manager = feat_manager;  // Capture during session
+    return original(output, feat_manager);
+}
+```
+
+**When hook triggers:** Only during character creation or respec at Withers.
+
+### Frida Script for Capture (Without BG3SE)
+
+```javascript
+// tools/frida/capture_featmanager_live.js
+const getFeatsAddr = Module.findBaseAddress("Baldur's Gate 3").add(0x01b752b4);
+Interceptor.attach(getFeatsAddr, {
+    onEnter: function(args) {
+        // x1 = FeatManager*
+        var featMgr = args[1];
+        console.log("[+] FeatManager: " + featMgr);
+        // Read count at +0x7C
+        var count = featMgr.add(0x7C).readU32();
+        console.log("[+] Feat count: " + count);
+    }
+});
+```
+
 ## Version History
 
 | Version | Date | Notes |
@@ -348,3 +433,4 @@ struct GuidResource {
 | Initial | Dec 2025 | FeatManager discovery via Ghidra MCP |
 | v0.32.5 | Dec 14, 2025 | TypeContext traversal working, GetAllFeats hook added |
 | v0.32.5+ | Dec 14, 2025 | TypeContext name-based capture working, 7 managers captured |
+| v0.32.5+ | Dec 14, 2025 | **CRITICAL**: FeatManager is session-scoped, not global singleton |

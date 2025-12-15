@@ -773,6 +773,219 @@ static const ComponentLayoutDef g_DisplayNameComponent_Layout = {
 };
 
 // ============================================================================
+// Phase 2 Batch 6 - Simple Components (Issue #33)
+// Quick wins - single-field or simple struct components
+// ============================================================================
+
+// DeathStateComponent (eoc::death::StateComponent)
+// From: BG3Extender/GameDefinitions/Components/Death.h:60-65
+static const ComponentPropertyDef g_DeathStateComponent_Properties[] = {
+    { "State", 0x00, FIELD_TYPE_UINT32, 0, true },  // Death state enum
+};
+
+static const ComponentLayoutDef g_DeathStateComponent_Layout = {
+    .componentName = "eoc::death::StateComponent",
+    .shortName = "DeathState",
+    .componentTypeIndex = 0,
+    .componentSize = 0x04,
+    .properties = g_DeathStateComponent_Properties,
+    .propertyCount = sizeof(g_DeathStateComponent_Properties) / sizeof(g_DeathStateComponent_Properties[0]),
+};
+
+// DeathTypeComponent (eoc::death::DeathTypeComponent)
+// From: BG3Extender/GameDefinitions/Components/Death.h:67-72
+static const ComponentPropertyDef g_DeathTypeComponent_Properties[] = {
+    { "DeathType", 0x00, FIELD_TYPE_UINT8, 0, true },  // Death type enum
+};
+
+static const ComponentLayoutDef g_DeathTypeComponent_Layout = {
+    .componentName = "eoc::death::DeathTypeComponent",
+    .shortName = "DeathType",
+    .componentTypeIndex = 0,
+    .componentSize = 0x01,
+    .properties = g_DeathTypeComponent_Properties,
+    .propertyCount = sizeof(g_DeathTypeComponent_Properties) / sizeof(g_DeathTypeComponent_Properties[0]),
+};
+
+// InventoryWeightComponent (eoc::inventory::WeightComponent)
+// From: BG3Extender/GameDefinitions/Components/Inventory.h:93-98
+static const ComponentPropertyDef g_InventoryWeightComponent_Properties[] = {
+    { "Weight", 0x00, FIELD_TYPE_INT32, 0, true },  // Total inventory weight
+};
+
+static const ComponentLayoutDef g_InventoryWeightComponent_Layout = {
+    .componentName = "eoc::inventory::WeightComponent",
+    .shortName = "InventoryWeight",
+    .componentTypeIndex = 0,
+    .componentSize = 0x04,
+    .properties = g_InventoryWeightComponent_Properties,
+    .propertyCount = sizeof(g_InventoryWeightComponent_Properties) / sizeof(g_InventoryWeightComponent_Properties[0]),
+};
+
+// ThreatRangeComponent (eoc::combat::ThreatRangeComponent)
+// From: BG3Extender/GameDefinitions/Components/Combat.h:115-122
+static const ComponentPropertyDef g_ThreatRangeComponent_Properties[] = {
+    { "Range",        0x00, FIELD_TYPE_FLOAT, 0, true },  // Threat range
+    { "TargetCeiling", 0x04, FIELD_TYPE_FLOAT, 0, true }, // Target ceiling
+    { "TargetFloor",   0x08, FIELD_TYPE_FLOAT, 0, true }, // Target floor
+};
+
+static const ComponentLayoutDef g_ThreatRangeComponent_Layout = {
+    .componentName = "eoc::combat::ThreatRangeComponent",
+    .shortName = "ThreatRange",
+    .componentTypeIndex = 0,
+    .componentSize = 0x0C,
+    .properties = g_ThreatRangeComponent_Properties,
+    .propertyCount = sizeof(g_ThreatRangeComponent_Properties) / sizeof(g_ThreatRangeComponent_Properties[0]),
+};
+
+// IsInCombatComponent (eoc::combat::IsInCombatComponent)
+// From: BG3Extender/GameDefinitions/Components/Combat.h:8
+// Tag component - no fields, presence indicates entity is in combat
+static const ComponentLayoutDef g_IsInCombatComponent_Layout = {
+    .componentName = "eoc::combat::IsInCombatComponent",
+    .shortName = "IsInCombat",
+    .componentTypeIndex = 0,
+    .componentSize = 0x00,  // Tag component - no size
+    .properties = NULL,     // No properties
+    .propertyCount = 0,
+};
+
+// ============================================================================
+// Phase 2 Batch 7 - Combat Components (Issue #33)
+// ============================================================================
+
+// CombatParticipantComponent (eoc::combat::ParticipantComponent)
+// From: BG3Extender/GameDefinitions/Components/Combat.h:18-27
+static const ComponentPropertyDef g_CombatParticipantComponent_Properties[] = {
+    { "CombatHandle",   0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },  // EntityHandle
+    { "CombatGroupId",  0x08, FIELD_TYPE_FIXEDSTRING,   0, true },  // FixedString
+    { "InitiativeRoll", 0x0C, FIELD_TYPE_INT32,         0, true },  // int
+    { "Flags",          0x10, FIELD_TYPE_UINT32,        0, true },  // CombatParticipantFlags
+    { "AiHint",         0x18, FIELD_TYPE_GUID,          0, true },  // Guid (aligned to 8)
+};
+
+static const ComponentLayoutDef g_CombatParticipantComponent_Layout = {
+    .componentName = "eoc::combat::ParticipantComponent",
+    .shortName = "CombatParticipant",
+    .componentTypeIndex = 0,
+    .componentSize = 0x28,
+    .properties = g_CombatParticipantComponent_Properties,
+    .propertyCount = sizeof(g_CombatParticipantComponent_Properties) / sizeof(g_CombatParticipantComponent_Properties[0]),
+};
+
+// CombatStateComponent (eoc::combat::StateComponent)
+// From: BG3Extender/GameDefinitions/Components/Combat.h:37-52
+// NOTE: Only exposing simple leading fields, skipping HashMaps/Arrays
+static const ComponentPropertyDef g_CombatStateComponent_Properties[] = {
+    { "MyGuid", 0x00, FIELD_TYPE_GUID, 0, true },  // Guid (16 bytes)
+};
+
+static const ComponentLayoutDef g_CombatStateComponent_Layout = {
+    .componentName = "eoc::combat::StateComponent",
+    .shortName = "CombatState",
+    .componentTypeIndex = 0,
+    .componentSize = 0xD8,  // Full size but only exposing safe fields
+    .properties = g_CombatStateComponent_Properties,
+    .propertyCount = sizeof(g_CombatStateComponent_Properties) / sizeof(g_CombatStateComponent_Properties[0]),
+};
+
+// ============================================================================
+// Phase 2 Batch 8 - Tag Components (Issue #33)
+// Tag components have no fields - their presence is the data
+// ============================================================================
+
+// AvatarComponent (eoc::tag::AvatarComponent)
+static const ComponentLayoutDef g_AvatarComponent_Layout = {
+    .componentName = "eoc::tag::AvatarComponent",
+    .shortName = "Avatar",
+    .componentTypeIndex = 0,
+    .componentSize = 0x00,
+    .properties = NULL,
+    .propertyCount = 0,
+};
+
+// TraderComponent (eoc::tag::TraderComponent)
+static const ComponentLayoutDef g_TraderComponent_Layout = {
+    .componentName = "eoc::tag::TraderComponent",
+    .shortName = "Trader",
+    .componentTypeIndex = 0,
+    .componentSize = 0x00,
+    .properties = NULL,
+    .propertyCount = 0,
+};
+
+// CanLevelUpComponent (eoc::exp::CanLevelUpComponent)
+static const ComponentLayoutDef g_CanLevelUpComponent_Layout = {
+    .componentName = "eoc::exp::CanLevelUpComponent",
+    .shortName = "CanLevelUp",
+    .componentTypeIndex = 0,
+    .componentSize = 0x00,
+    .properties = NULL,
+    .propertyCount = 0,
+};
+
+// IsGoldComponent (eoc::item::IsGoldComponent)
+static const ComponentLayoutDef g_IsGoldComponent_Layout = {
+    .componentName = "eoc::item::IsGoldComponent",
+    .shortName = "IsGold",
+    .componentTypeIndex = 0,
+    .componentSize = 0x00,
+    .properties = NULL,
+    .propertyCount = 0,
+};
+
+// ItemComponent (eoc::item::ItemComponent)
+static const ComponentLayoutDef g_ItemComponent_Layout = {
+    .componentName = "eoc::item::ItemComponent",
+    .shortName = "IsItem",
+    .componentTypeIndex = 0,
+    .componentSize = 0x00,
+    .properties = NULL,
+    .propertyCount = 0,
+};
+
+// DoorComponent (eoc::item::DoorComponent)
+static const ComponentLayoutDef g_DoorComponent_Layout = {
+    .componentName = "eoc::item::DoorComponent",
+    .shortName = "IsDoor",
+    .componentTypeIndex = 0,
+    .componentSize = 0x00,
+    .properties = NULL,
+    .propertyCount = 0,
+};
+
+// IsFallingComponent (eoc::falling::IsFallingComponent)
+static const ComponentLayoutDef g_IsFallingComponent_Layout = {
+    .componentName = "eoc::falling::IsFallingComponent",
+    .shortName = "IsFalling",
+    .componentTypeIndex = 0,
+    .componentSize = 0x00,
+    .properties = NULL,
+    .propertyCount = 0,
+};
+
+// IsInTurnBasedModeComponent (eoc::IsInTurnBasedModeComponent)
+static const ComponentLayoutDef g_IsInTurnBasedModeComponent_Layout = {
+    .componentName = "eoc::IsInTurnBasedModeComponent",
+    .shortName = "IsInTurnBasedMode",
+    .componentTypeIndex = 0,
+    .componentSize = 0x00,
+    .properties = NULL,
+    .propertyCount = 0,
+};
+
+// GravityDisabledComponent (eoc::GravityDisabledComponent)
+static const ComponentLayoutDef g_GravityDisabledComponent_Layout = {
+    .componentName = "eoc::GravityDisabledComponent",
+    .shortName = "GravityDisabled",
+    .componentTypeIndex = 0,
+    .componentSize = 0x00,
+    .properties = NULL,
+    .propertyCount = 0,
+};
+
+// ============================================================================
 // All Component Layouts (for bulk registration)
 // ============================================================================
 
@@ -818,6 +1031,25 @@ static const ComponentLayoutDef* g_AllComponentLayouts[] = {
     &g_ConcentrationComponent_Layout,
     &g_BoostsContainerComponent_Layout,
     &g_DisplayNameComponent_Layout,
+    // Phase 2 batch 6 (Issue #33) - Simple components
+    &g_DeathStateComponent_Layout,
+    &g_DeathTypeComponent_Layout,
+    &g_InventoryWeightComponent_Layout,
+    &g_ThreatRangeComponent_Layout,
+    &g_IsInCombatComponent_Layout,
+    // Phase 2 batch 7 (Issue #33) - Combat components
+    &g_CombatParticipantComponent_Layout,
+    &g_CombatStateComponent_Layout,
+    // Phase 2 batch 8 (Issue #33) - Tag components
+    &g_AvatarComponent_Layout,
+    &g_TraderComponent_Layout,
+    &g_CanLevelUpComponent_Layout,
+    &g_IsGoldComponent_Layout,
+    &g_ItemComponent_Layout,
+    &g_DoorComponent_Layout,
+    &g_IsFallingComponent_Layout,
+    &g_IsInTurnBasedModeComponent_Layout,
+    &g_GravityDisabledComponent_Layout,
     NULL  // Sentinel
 };
 
