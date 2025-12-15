@@ -29,7 +29,7 @@ Research and tools for reaching Windows BG3SE parity faster.
 | `esv::` namespace (server) | 596 |
 | `ecl::` namespace (client) | 429 |
 | `ls::` namespace (base) | 233 |
-| Currently implemented | 36 (~1.8%) |
+| Currently implemented | 52 (~2.6%) |
 
 ### Automation Tools
 
@@ -463,3 +463,186 @@ ImGui_ImplMetal_RenderDrawData(ImGui::GetDrawData(), commandBuffer, renderEncode
 4. **#33 Components** - Continue incremental component additions
 5. **Create Frida scripts** for runtime singleton discovery (Stats Sync, Client State)
 6. **Document NetChannel message format** - Long-term research task
+
+---
+
+## TypeId Discovery Acceleration (Dec 2025)
+
+Research into accelerating component coverage from 52 to 1,950+ TypeIds using algorithmic analysis of Windows BG3SE.
+
+### Key Discovery: `make_property_map.py`
+
+Windows BG3SE uses a **772-line Python script** (`BG3Extender/make_property_map.py`) to auto-generate all component bindings from C++ headers:
+
+```
+Source Code Flow:
+50+ header files → make_property_map.py → PropertyMaps.inl + ComponentTypes.inl
+```
+
+**Critical insight:** TypeIds are assigned via monotonically incrementing counter (`next_struct_id`) during sequential header parsing. Parsing the same sources in the same order **always produces identical IDs**.
+
+### Tag Components: Zero-Verification Batch
+
+**BREAKTHROUGH:** 115 components defined with `DEFINE_TAG_COMPONENT` require **NO offset verification** - they have zero fields.
+
+```cpp
+// Tag component = boolean flag, no fields
+DEFINE_TAG_COMPONENT(eoc::combat, IsInCombat, IsInCombat)
+DEFINE_TAG_COMPONENT(eoc::death, Dying, Dying)
+DEFINE_TAG_COMPONENT(eoc::inventory, IsContainer, IsContainer)
+// ... 115 total
+```
+
+**Impact:** 115 components can be added TODAY with zero RE work (52 → 167 components, ~8% coverage jump).
+
+### Current Coverage Statistics
+
+| Metric | Count |
+|--------|-------|
+| Target TypeIds | 1,950+ |
+| Currently extracted (macOS) | 701 |
+| Currently implemented | 52 |
+| Tag components (zero fields) | 115 |
+| Regular components (need offsets) | ~485+ |
+
+### Five Strategic Approaches
+
+#### Strategy 1: Header Parsing Algorithm (80% acceleration)
+
+Parse all `DEFINE_COMPONENT` and `DEFINE_TAG_COMPONENT` macros from Windows headers, cross-reference with macOS TypeId addresses via `nm`.
+
+**Execution:**
+```bash
+# 1. Extract all component definitions from Windows headers
+grep -r "DEFINE_TAG_COMPONENT\|DEFINE_COMPONENT" ~/bg3se/BG3Extender/GameDefinitions/Components/
+
+# 2. Cross-reference with macOS binary
+nm -gU "BG3" | c++filt | grep "TypeId.*ComponentName"
+
+# 3. Batch-add tag components (zero offset verification needed)
+```
+
+**Immediate yield:** 115 tag components → 167 total components
+
+#### Strategy 2: Prerequisite Issues (#44, #15)
+
+Complete ARM64 hooking infrastructure and client state to unlock runtime struct dumping:
+
+| Issue | Unlock |
+|-------|--------|
+| #44 ARM64 Hooking | Runtime component memory dumps |
+| #15 Client State | Access to `ecl::` namespace (429 additional TypeIds) |
+
+**Impact:** Enables Frida-based verification for ALL regular components.
+
+#### Strategy 3: Frida Runtime Dump Harness
+
+Hook `GetComponent<T>` variants to dump component memory during gameplay:
+
+```javascript
+// Frida script for component memory capture
+Interceptor.attach(Module.findExportByName(null, "GetComponent"), {
+    onLeave: function(retval) {
+        if (retval.isNull()) return;
+        console.log("Component ptr: " + retval);
+        console.log(hexdump(retval, { length: 256 }));
+    }
+});
+```
+
+**Workflow:**
+1. Trigger gameplay that uses target component
+2. Capture memory dump
+3. Correlate with Windows header field names
+4. Verify ARM64 alignment adjustments
+
+#### Strategy 4: LLM-Augmented RE Pipeline
+
+Use Claude + GhidraMCP for accelerated struct layout deduction:
+
+```
+Input: Windows header struct + Ghidra decompilation of accessor
+Output: ARM64-corrected field offsets
+
+Example prompt:
+"Given this Windows struct and this ARM64 decompilation of its accessor,
+deduce the ARM64 field offsets accounting for alignment differences."
+```
+
+**Token economics:**
+- ~500 tokens per component analysis
+- ~250k tokens for 500 components
+- ROI: Eliminates manual Ghidra analysis time
+
+#### Strategy 5: Fork `make_property_map.py`
+
+Maximum-effort port of Windows automation to emit macOS format:
+
+```python
+# Modifications needed:
+# 1. Change output format from C++ to C
+# 2. Add ARM64 offset estimation (stricter alignment)
+# 3. Mark fields requiring verification
+# 4. Generate component_offsets.h entries
+```
+
+**Output:** Bulk generation of ~485 regular component stubs with estimated offsets.
+
+### Recommended Execution Order
+
+| Phase | Action | Coverage |
+|-------|--------|----------|
+| 1 | Batch-add 115 tag components | 52 → 167 (~8.5%) |
+| 2 | Implement Frida dump harness | Enables verification |
+| 3 | Add high-priority combat/inventory components | 167 → 200 (~10%) |
+| 4 | LLM-assisted analysis for remaining | 200 → 400 (~20%) |
+| 5 | Fork make_property_map.py for bulk | 400+ (~20%+) |
+
+### Component Source Files (Windows BG3SE)
+
+Key header files in `BG3Extender/GameDefinitions/Components/`:
+
+| File | Component Types |
+|------|-----------------|
+| `CharacterCreation.h` | Character creation UI components |
+| `Combat.h` | Combat state, initiative, threat |
+| `Inventory.h` | Containers, items, stacks |
+| `Progression.h` | Levels, XP, feats, abilities |
+| `Projectile.h` | Projectile physics, effects |
+| `Roll.h` | Dice rolls, advantage/disadvantage |
+| `Sound.h` | Audio triggers, music state |
+| `SpellCast.h` | Spell state, targets, effects |
+| `Status.h` | Status effects, durations |
+
+### DEFINE_COMPONENT Pattern
+
+```cpp
+// Regular component with fields (needs ARM64 offset verification)
+DEFINE_COMPONENT(eoc::health, Health, HealthComponent)
+struct HealthComponent {
+    int32_t CurrentHP;      // +0x00
+    int32_t MaxHP;          // +0x04
+    int32_t TempHP;         // +0x08
+    // ... more fields
+};
+
+// Tag component (zero fields, presence-only)
+DEFINE_TAG_COMPONENT(eoc::combat, IsInCombat, IsInCombat)
+// No struct body - entity has this or doesn't
+```
+
+### Tools Reference
+
+| Tool | Location | Purpose |
+|------|----------|---------|
+| `extract_typeids.py` | `tools/` | Extract TypeId addresses from macOS binary |
+| `generate_component_stubs.py` | `tools/` | Generate C stubs from Windows headers |
+| `make_property_map.py` | Windows BG3SE | Original automation script (reference) |
+| Frida | External | Runtime memory instrumentation |
+| GhidraMCP | MCP server | On-demand decompilation |
+
+### Related Issues
+
+- **Issue #33** - Component Property Layouts Expansion (main tracking issue)
+- **Issue #44** - ARM64 Hooking Infrastructure
+- **Issue #15** - Client Lua State (unlocks ecl:: components)
