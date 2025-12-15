@@ -38,6 +38,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/stats
     ${CMAKE_SOURCE_DIR}/src/staticdata
     ${CMAKE_SOURCE_DIR}/src/strings
+    ${CMAKE_SOURCE_DIR}/src/template
     ${CMAKE_SOURCE_DIR}/src/timer
     ${CMAKE_SOURCE_DIR}/src/vars
     ${CMAKE_SOURCE_DIR}/src/lifetime
@@ -90,6 +91,8 @@ add_library(bg3se SHARED
     src/lua/lua_localization.c
     src/staticdata/staticdata_manager.c
     src/lua/lua_staticdata.c
+    src/template/template_manager.c
+    src/lua/lua_template.c
     lib/lz4/lz4.c
 )
 
@@ -171,9 +174,9 @@ add_custom_target(test-inject
     COMMENT "Testing injection..."
 )
 
-# Print info about the built dylib
+# Print info about the built dylib and auto-deploy to Steam
 add_custom_command(TARGET bg3se POST_BUILD
     COMMAND echo "Built: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libbg3se.dylib"
     COMMAND file ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libbg3se.dylib
-    COMMAND otool -L ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libbg3se.dylib | head -5
+    COMMAND ${CMAKE_SOURCE_DIR}/scripts/deploy.sh
 )

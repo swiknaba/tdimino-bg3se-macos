@@ -2,7 +2,7 @@
 
 This document tracks the development roadmap for achieving feature parity with Windows BG3SE (Norbyte's Script Extender).
 
-## Current Status: v0.32.8
+## Current Status: v0.32.9
 
 **Overall Feature Parity: ~66%** (based on comprehensive API function count analysis)
 
@@ -54,7 +54,7 @@ This document tracks the development roadmap for achieving feature parity with W
 | `Ext.Localization` | ✅ Full (2) | ⚠️ GetLanguage + safe stubs (1/2) | **50%** | 10 |
 | `Ext.StaticData` | ✅ Full (5) | ✅ GetAll, Get, LoadFridaCapture (Feat type working) | **60%** | 10 |
 | `Ext.Resource` | ✅ Full (2) | ❌ Not impl | **0%** | 10 |
-| `Ext.Template` | ✅ Full (9) | ❌ Not impl | **0%** | 10 |
+| `Ext.Template` | ✅ Full (9) | ⚠️ Frida capture + Lua API (5/9) | **50%** | 10 |
 | Console/REPL | ✅ Full | ✅ Socket + file + in-game overlay | **95%** | 5 |
 | PersistentVars | ✅ Full | ✅ File-based | **90%** | 2.4 |
 | Client Lua State | ✅ Full | ❌ Not impl | **0%** | 2.7 |
@@ -1260,7 +1260,7 @@ Full debugging experience with breakpoints, stepping, and variable inspection.
 | D4 | Audio (Ext.Audio) | Medium | ❌ Not Started | [#38](https://github.com/tdimino/bg3se-macos/issues/38) |
 | D5 | Localization (Ext.Localization) | Low | ❌ Not Started | [#39](https://github.com/tdimino/bg3se-macos/issues/39) |
 | D6 | Static Data (Ext.StaticData) | Medium | 🔶 Blocked by #44 | [#40](https://github.com/tdimino/bg3se-macos/issues/40) |
-| D7 | Resource/Template Management | Medium | ❌ Not Started | [#41](https://github.com/tdimino/bg3se-macos/issues/41) |
+| D7 | Resource/Template Management | Medium | 🔄 In Progress (Ext.Template) | [#41](https://github.com/tdimino/bg3se-macos/issues/41) |
 | D8 | VS Code Debugger | High | ❌ Not Started | [#42](https://github.com/tdimino/bg3se-macos/issues/42) |
 | D9 | Input Injection | Medium | ❌ Not Started | - |
 | D10 | Virtual Textures | Medium | ❌ Not Started | - |
@@ -1279,6 +1279,7 @@ See **[docs/CHANGELOG.md](docs/CHANGELOG.md)** for detailed version history with
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| v0.32.9 | 2025-12-15 | **Ext.Template API** - Template manager with Frida capture, OriginalTemplateComponent, 158 components (#41) |
 | v0.32.8 | 2025-12-15 | **Massive Tag Component Expansion** - 105 new tag components, 157 total, ~65% parity (#33) |
 | v0.32.7 | 2025-12-14 | **Component Batch Expansion** - 11 new components (2 combat + 9 tag), 52 total, ~60% parity (#33) |
 | v0.32.6 | 2025-12-14 | **Component Expansion** - 5 new components (Death, ThreatRange, InventoryWeight, IsInCombat), 41 total (#33) |

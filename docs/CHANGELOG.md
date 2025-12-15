@@ -13,6 +13,28 @@ Each entry includes:
 
 ---
 
+## [v0.32.9] - 2025-12-15
+
+**Parity:** ~66% | **Category:** Template System | **Issues:** #41
+
+### Added
+- **Ext.Template API** - Game object template access via Frida capture workflow
+  - `Ext.Template.Get(guid)` - Cascading template search
+  - `Ext.Template.GetRootTemplate(guid)` - GlobalTemplateBank lookup
+  - `Ext.Template.GetAllRootTemplates()` - List all root templates
+  - `Ext.Template.GetCount([managerType])` - Get template counts
+  - `Ext.Template.LoadFridaCapture()` - Load captured manager pointers
+- **OriginalTemplateComponent** - ECS component for template GUID tracking (158 total components)
+- **Template manager C implementation** - `src/template/template_manager.c` with Frida capture loading
+- **Frida discovery script** - `tools/frida/discover_template_managers.js` for runtime template capture
+
+### Technical
+- **Same pattern as StaticData** - Frida runtime capture when symbols aren't exported
+- **4-level template hierarchy** - GlobalTemplateBank → LocalTemplateManager → CacheTemplateManager → LocalCacheTemplates
+- **GameObjectTemplate struct** - VMT, Tags, FixedString IDs, Handle at discovered offsets
+
+---
+
 ## [v0.32.8] - 2025-12-15
 
 **Parity:** ~65% | **Category:** Entity Components | **Issues:** #33

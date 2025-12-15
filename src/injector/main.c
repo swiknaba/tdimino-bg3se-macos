@@ -112,6 +112,10 @@ extern "C" {
 #include "staticdata_manager.h"
 #include "lua_staticdata.h"
 
+// Template system
+#include "template_manager.h"
+#include "lua_template.h"
+
 // Enable hooks (set to 0 to disable for testing)
 #define ENABLE_HOOKS 1
 
@@ -694,6 +698,9 @@ static void register_ext_api(lua_State *L) {
 
     // Ext.StaticData namespace (immutable game data)
     lua_staticdata_register(L, -1);
+
+    // Ext.Template namespace (game object templates)
+    lua_template_register(L, -1);
 
     // Set Ext as global
     lua_setglobal(L, "Ext");
@@ -2578,6 +2585,10 @@ static void install_hooks(void) {
                 // Initialize static data manager (for Ext.StaticData)
                 staticdata_manager_init(binary_base);
                 LOG_CORE_INFO("StaticData manager initialized (managers captured via hooks)");
+
+                // Initialize template manager (for Ext.Template)
+                template_manager_init(binary_base);
+                LOG_CORE_INFO("Template manager initialized (capture via Frida)");
 
                 // Initialize localization system
                 localization_init(binary_base);
