@@ -7,6 +7,7 @@
 #include "staticdata_manager.h"
 #include "../core/logging.h"
 #include "../core/safe_memory.h"
+#include "../strings/fixed_string.h"
 #include <dobby.h>
 #include <string.h>
 #include <stdio.h>
@@ -40,8 +41,68 @@
 #define FEATMANAGER_REAL_ARRAY_OFFSET    0x80   // Real FeatManager array offset
 #define FEATMANAGER_META_COUNT_OFFSET    0x00   // TypeContext metadata count offset
 
+// Structure offsets (verified via Windows BG3SE GuidResources.h)
+// Base class GuidResource: VMT (8) + ResourceUUID (16) = 24 bytes (0x18)
+// Then type-specific fields follow
+
 // Feat structure
 #define FEAT_SIZE                     0x128  // 296 bytes per feat
+#define FEAT_OFFSET_NAME              0x18   // FixedString Name (after GuidResource base)
+
+// Race structure
+#define RACE_SIZE                     0x200  // Estimate - has many arrays
+#define RACE_OFFSET_NAME              0x18   // FixedString Name (same as Feat)
+
+// Origin structure
+// Has uint8_t AvailableInCharacterCreation at +0x18 before Name
+#define ORIGIN_SIZE                   0x180  // Estimate
+#define ORIGIN_OFFSET_NAME            0x1C   // FixedString Name (aligned after uint8_t)
+
+// Background structure - NO Name field, only DisplayName (TranslatedString)
+#define BACKGROUND_SIZE               0x80   // Estimate
+#define BACKGROUND_OFFSET_NAME        0      // No FixedString Name field!
+
+// God structure
+#define GOD_SIZE                      0x60   // Small structure
+#define GOD_OFFSET_NAME               0x18   // FixedString Name
+
+// ClassDescription structure
+// Has Guid ParentGuid (16 bytes) at +0x18 before Name
+#define CLASS_SIZE                    0x100  // Estimate
+#define CLASS_OFFSET_NAME             0x28   // FixedString Name (after ParentGuid)
+
+// ============================================================================
+// Manager Configuration (per-type structure info)
+// ============================================================================
+
+typedef struct {
+    int count_offset;    // Offset to count field in manager
+    int array_offset;    // Offset to array pointer in manager
+    int entry_size;      // Size of each entry
+    int name_offset;     // Offset to Name FixedString in entry (0 = no name)
+    const char* capture_file;  // Path to Frida capture file
+} ManagerConfig;
+
+static const ManagerConfig g_manager_configs[STATICDATA_COUNT] = {
+    // STATICDATA_FEAT
+    { 0x7C, 0x80, FEAT_SIZE, FEAT_OFFSET_NAME, "/tmp/bg3se_featmanager.txt" },
+    // STATICDATA_RACE
+    { 0x7C, 0x80, RACE_SIZE, RACE_OFFSET_NAME, "/tmp/bg3se_racemanager.txt" },
+    // STATICDATA_BACKGROUND
+    { 0x7C, 0x80, BACKGROUND_SIZE, 0, "/tmp/bg3se_backgroundmanager.txt" },  // No Name
+    // STATICDATA_ORIGIN
+    { 0x7C, 0x80, ORIGIN_SIZE, ORIGIN_OFFSET_NAME, "/tmp/bg3se_originmanager.txt" },
+    // STATICDATA_GOD
+    { 0x7C, 0x80, GOD_SIZE, GOD_OFFSET_NAME, "/tmp/bg3se_godmanager.txt" },
+    // STATICDATA_CLASS
+    { 0x7C, 0x80, CLASS_SIZE, CLASS_OFFSET_NAME, "/tmp/bg3se_classmanager.txt" },
+    // STATICDATA_PROGRESSION
+    { 0x7C, 0x80, 0x200, 0x18, "/tmp/bg3se_progressionmanager.txt" },
+    // STATICDATA_ACTIONRESOURCE
+    { 0x7C, 0x80, 0x80, 0x18, "/tmp/bg3se_actionresourcemanager.txt" },
+    // STATICDATA_FEATDESCRIPTION
+    { 0x7C, 0x80, 0x80, 0, "/tmp/bg3se_featdescmanager.txt" },  // Has TranslatedString, not FixedString
+};
 
 // ============================================================================
 // Type Name Table
@@ -594,35 +655,159 @@ static void* feat_get_by_guid(const StaticDataGuid* guid) {
 }
 
 // ============================================================================
-// Data Access - Generic
+// Data Access - Generic (config-based)
 // ============================================================================
 
-int staticdata_get_count(StaticDataType type) {
-    switch (type) {
-        case STATICDATA_FEAT:
-            return feat_get_count();
-        // TODO: Add other types as discovered
-        default:
-            return -1;
+/**
+ * Get effective manager pointer for a type.
+ * Prefers real_managers over metadata managers.
+ */
+static void* get_effective_manager(StaticDataType type, bool* is_real) {
+    if (type < 0 || type >= STATICDATA_COUNT) return NULL;
+
+    // Prefer real manager if available
+    if (g_staticdata.real_managers[type]) {
+        if (is_real) *is_real = true;
+        return g_staticdata.real_managers[type];
     }
+
+    // Fall back to metadata
+    if (g_staticdata.managers[type]) {
+        if (is_real) *is_real = false;
+        return g_staticdata.managers[type];
+    }
+
+    return NULL;
+}
+
+/**
+ * Generic count getter using config.
+ */
+static int generic_get_count(StaticDataType type) {
+    if (type < 0 || type >= STATICDATA_COUNT) return -1;
+
+    bool is_real = false;
+    void* mgr = get_effective_manager(type, &is_real);
+    if (!mgr) return -1;
+
+    const ManagerConfig* config = &g_manager_configs[type];
+    int offset = is_real ? config->count_offset : FEATMANAGER_META_COUNT_OFFSET;
+
+    int32_t count = 0;
+    if (!safe_memory_read_i32((mach_vm_address_t)mgr + offset, &count)) {
+        return -1;
+    }
+    return count;
+}
+
+/**
+ * Generic entry getter by index using config.
+ */
+static void* generic_get_by_index(StaticDataType type, int index) {
+    if (type < 0 || type >= STATICDATA_COUNT) return NULL;
+
+    bool is_real = false;
+    void* mgr = get_effective_manager(type, &is_real);
+    if (!mgr) return NULL;
+
+    // Can only get entries from real manager (metadata has no array)
+    if (!is_real) {
+        return NULL;
+    }
+
+    const ManagerConfig* config = &g_manager_configs[type];
+
+    // Read count
+    int32_t count = 0;
+    if (!safe_memory_read_i32((mach_vm_address_t)mgr + config->count_offset, &count)) {
+        return NULL;
+    }
+    if (index < 0 || index >= count) return NULL;
+
+    // Read array pointer
+    void* array = NULL;
+    if (!safe_memory_read_pointer((mach_vm_address_t)mgr + config->array_offset, &array)) {
+        return NULL;
+    }
+    if (!array) return NULL;
+
+    // Calculate entry address
+    void* entry = (uint8_t*)array + (index * config->entry_size);
+
+    // Verify the entry address is readable
+    int32_t test_read = 0;
+    if (!safe_memory_read_i32((mach_vm_address_t)entry, &test_read)) {
+        return NULL;
+    }
+
+    return entry;
+}
+
+/**
+ * Generic GUID lookup using config.
+ */
+static void* generic_get_by_guid(StaticDataType type, const StaticDataGuid* guid) {
+    if (type < 0 || type >= STATICDATA_COUNT || !guid) return NULL;
+
+    bool is_real = false;
+    void* mgr = get_effective_manager(type, &is_real);
+    if (!mgr || !is_real) return NULL;
+
+    const ManagerConfig* config = &g_manager_configs[type];
+
+    int32_t count = 0;
+    if (!safe_memory_read_i32((mach_vm_address_t)mgr + config->count_offset, &count)) {
+        return NULL;
+    }
+
+    void* array = NULL;
+    if (!safe_memory_read_pointer((mach_vm_address_t)mgr + config->array_offset, &array)) {
+        return NULL;
+    }
+    if (!array) return NULL;
+
+    // Linear search through entries comparing GUIDs
+    // GUID is at offset +0x08 in each entry (after VMT pointer)
+    for (int i = 0; i < count; i++) {
+        void* entry = (uint8_t*)array + (i * config->entry_size);
+
+        // Read and compare GUID at +0x08
+        uint8_t guid_bytes[16];
+        bool readable = true;
+        for (int j = 0; j < 16 && readable; j++) {
+            if (!safe_memory_read_u8((mach_vm_address_t)entry + 0x08 + j, &guid_bytes[j])) {
+                readable = false;
+            }
+        }
+
+        if (readable && memcmp(guid_bytes, guid, sizeof(StaticDataGuid)) == 0) {
+            return entry;
+        }
+    }
+
+    return NULL;
+}
+
+int staticdata_get_count(StaticDataType type) {
+    // Use feat-specific for backwards compatibility, generic for others
+    if (type == STATICDATA_FEAT) {
+        return feat_get_count();
+    }
+    return generic_get_count(type);
 }
 
 StaticDataPtr staticdata_get_by_index(StaticDataType type, int index) {
-    switch (type) {
-        case STATICDATA_FEAT:
-            return feat_get_by_index(index);
-        default:
-            return NULL;
+    if (type == STATICDATA_FEAT) {
+        return feat_get_by_index(index);
     }
+    return generic_get_by_index(type, index);
 }
 
 StaticDataPtr staticdata_get_by_guid(StaticDataType type, const StaticDataGuid* guid) {
-    switch (type) {
-        case STATICDATA_FEAT:
-            return feat_get_by_guid(guid);
-        default:
-            return NULL;
+    if (type == STATICDATA_FEAT) {
+        return feat_get_by_guid(guid);
     }
+    return generic_get_by_guid(type, guid);
 }
 
 // ============================================================================
@@ -718,11 +903,64 @@ bool staticdata_get_guid_string(StaticDataType type, StaticDataPtr entry, char* 
 }
 
 const char* staticdata_get_name(StaticDataType type, StaticDataPtr entry) {
-    // TODO: Discover name offset in each structure via runtime probing
-    // For now, return NULL - names may be FixedStrings that need resolution
-    (void)type;
-    (void)entry;
-    return NULL;
+    if (!entry) return NULL;
+
+    // Name offset depends on type - different layouts per GuidResource subclass
+    int name_offset = 0;
+
+    switch (type) {
+        case STATICDATA_FEAT:
+            name_offset = FEAT_OFFSET_NAME;  // 0x18
+            break;
+        case STATICDATA_RACE:
+            name_offset = RACE_OFFSET_NAME;  // 0x18
+            break;
+        case STATICDATA_ORIGIN:
+            name_offset = ORIGIN_OFFSET_NAME;  // 0x1C (after uint8_t)
+            break;
+        case STATICDATA_BACKGROUND:
+            // Background has no FixedString Name - only TranslatedString DisplayName
+            return NULL;
+        case STATICDATA_GOD:
+            name_offset = GOD_OFFSET_NAME;  // 0x18
+            break;
+        case STATICDATA_CLASS:
+            name_offset = CLASS_OFFSET_NAME;  // 0x28 (after ParentGuid)
+            break;
+        default:
+            name_offset = 0x18;  // Default assumption
+            break;
+    }
+
+    if (name_offset == 0) {
+        return NULL;  // Type has no Name field
+    }
+
+    // Read FixedString index safely
+    uint32_t fs_index = 0;
+    if (!safe_memory_read_u32((mach_vm_address_t)entry + name_offset, &fs_index)) {
+        log_message("[StaticData] Cannot read name FixedString at %p+0x%x", entry, name_offset);
+        return NULL;
+    }
+
+    // Check for null/invalid index
+    if (fs_index == 0 || fs_index == 0xFFFFFFFF) {
+        return NULL;
+    }
+
+    // Resolve via GlobalStringTable
+    const char* name = fixed_string_resolve(fs_index);
+    if (!name) {
+        // Log once per session for debugging
+        static int logged_failures = 0;
+        if (logged_failures < 5) {
+            log_message("[StaticData] Failed to resolve FixedString 0x%08X for %s entry at %p",
+                        fs_index, staticdata_type_name(type), entry);
+            logged_failures++;
+        }
+    }
+
+    return name;
 }
 
 const char* staticdata_get_display_name(StaticDataType type, StaticDataPtr entry) {
@@ -736,19 +974,20 @@ const char* staticdata_get_display_name(StaticDataType type, StaticDataPtr entry
 // File-Based Frida Capture Integration
 // ============================================================================
 
-#define FRIDA_CAPTURE_FILE "/tmp/bg3se_featmanager.txt"
-
 /**
- * Try to load captured FeatManager pointer from file.
- * The file should contain lines:
- *   Line 1: FeatManager pointer (hex)
+ * Generic capture loader for any manager type.
+ * File format:
+ *   Line 1: Manager pointer (hex)
  *   Line 2: Count
  *   Line 3: Array pointer (hex)
- *
- * Returns true if successfully loaded.
  */
-static bool load_captured_featmanager(void) {
-    FILE* f = fopen(FRIDA_CAPTURE_FILE, "r");
+static bool load_captured_manager(StaticDataType type) {
+    if (type < 0 || type >= STATICDATA_COUNT) return false;
+
+    const ManagerConfig* config = &g_manager_configs[type];
+    const char* capture_file = config->capture_file;
+
+    FILE* f = fopen(capture_file, "r");
     if (!f) {
         return false;
     }
@@ -763,49 +1002,55 @@ static bool load_captured_featmanager(void) {
     fclose(f);
 
     // Parse pointer addresses
-    void* feat_mgr = NULL;
+    void* mgr = NULL;
     int count = 0;
     void* array = NULL;
 
-    if (sscanf(line1, "%p", &feat_mgr) != 1 && sscanf(line1, "0x%lx", (unsigned long*)&feat_mgr) != 1) {
-        log_message("[StaticData] Failed to parse FeatManager pointer from capture file");
+    if (sscanf(line1, "%p", &mgr) != 1 && sscanf(line1, "0x%lx", (unsigned long*)&mgr) != 1) {
+        log_message("[StaticData] Failed to parse %s pointer from capture file", s_type_names[type]);
         return false;
     }
     count = atoi(line2);
     if (sscanf(line3, "%p", &array) != 1 && sscanf(line3, "0x%lx", (unsigned long*)&array) != 1) {
-        log_message("[StaticData] Failed to parse array pointer from capture file");
+        log_message("[StaticData] Failed to parse %s array pointer from capture file", s_type_names[type]);
         return false;
     }
 
     // Validate the captured data
-    if (!feat_mgr || count <= 0 || count > 1000 || !array) {
-        log_message("[StaticData] Invalid captured data: mgr=%p count=%d array=%p", feat_mgr, count, array);
+    if (!mgr || count <= 0 || count > 10000 || !array) {
+        log_message("[StaticData] Invalid %s captured data: mgr=%p count=%d array=%p",
+                    s_type_names[type], mgr, count, array);
         return false;
     }
 
-    // Verify the pointers are still valid
+    // Verify the pointers are still valid using type-specific offsets
     int32_t verify_count = 0;
     void* verify_array = NULL;
-    if (!safe_memory_read_i32((mach_vm_address_t)feat_mgr + FEATMANAGER_REAL_COUNT_OFFSET, &verify_count) ||
-        !safe_memory_read_pointer((mach_vm_address_t)feat_mgr + FEATMANAGER_REAL_ARRAY_OFFSET, &verify_array)) {
-        log_message("[StaticData] Captured FeatManager pointer no longer valid (game restarted?)");
+    if (!safe_memory_read_i32((mach_vm_address_t)mgr + config->count_offset, &verify_count) ||
+        !safe_memory_read_pointer((mach_vm_address_t)mgr + config->array_offset, &verify_array)) {
+        log_message("[StaticData] Captured %s pointer no longer valid (game restarted?)", s_type_names[type]);
         return false;
     }
 
     if (verify_count != count || verify_array != array) {
-        log_message("[StaticData] Captured FeatManager data mismatch (count=%d vs %d, array=%p vs %p)",
-                    verify_count, count, verify_array, array);
+        log_message("[StaticData] Captured %s data mismatch (count=%d vs %d, array=%p vs %p)",
+                    s_type_names[type], verify_count, count, verify_array, array);
         // Use the verified values instead
         count = verify_count;
         array = verify_array;
     }
 
     // Store as real manager
-    g_staticdata.real_managers[STATICDATA_FEAT] = feat_mgr;
-    log_message("[StaticData] Loaded REAL FeatManager from capture file: %p (count=%d, array=%p)",
-                feat_mgr, count, array);
+    g_staticdata.real_managers[type] = mgr;
+    log_message("[StaticData] Loaded REAL %s from capture file: %p (count=%d, array=%p)",
+                s_type_names[type], mgr, count, array);
 
     return true;
+}
+
+// Legacy wrapper for FeatManager
+static bool load_captured_featmanager(void) {
+    return load_captured_manager(STATICDATA_FEAT);
 }
 
 /**
@@ -813,15 +1058,47 @@ static bool load_captured_featmanager(void) {
  * Call this after running the Frida capture script.
  */
 bool staticdata_load_frida_capture(void) {
-    log_message("[StaticData] Attempting to load Frida capture from %s", FRIDA_CAPTURE_FILE);
+    const char* capture_file = g_manager_configs[STATICDATA_FEAT].capture_file;
+    log_message("[StaticData] Attempting to load Frida capture from %s", capture_file);
     return load_captured_featmanager();
+}
+
+/**
+ * Load captured manager pointers for a specific type.
+ */
+bool staticdata_load_frida_capture_type(StaticDataType type) {
+    if (type < 0 || type >= STATICDATA_COUNT) {
+        log_message("[StaticData] Invalid type %d for LoadFridaCapture", type);
+        return false;
+    }
+    const char* capture_file = g_manager_configs[type].capture_file;
+    log_message("[StaticData] Attempting to load %s capture from %s",
+                s_type_names[type], capture_file);
+    return load_captured_manager(type);
 }
 
 /**
  * Check if Frida capture is available (file exists and is recent).
  */
 bool staticdata_frida_capture_available(void) {
-    FILE* f = fopen(FRIDA_CAPTURE_FILE, "r");
+    const char* capture_file = g_manager_configs[STATICDATA_FEAT].capture_file;
+    FILE* f = fopen(capture_file, "r");
+    if (f) {
+        fclose(f);
+        return true;
+    }
+    return false;
+}
+
+/**
+ * Check if Frida capture is available for a specific type.
+ */
+bool staticdata_frida_capture_available_type(StaticDataType type) {
+    if (type < 0 || type >= STATICDATA_COUNT) {
+        return false;
+    }
+    const char* capture_file = g_manager_configs[type].capture_file;
+    FILE* f = fopen(capture_file, "r");
     if (f) {
         fclose(f);
         return true;

@@ -290,7 +290,7 @@ static int lua_staticdata_dumpfeatmemory(lua_State *L) {
 }
 
 // ============================================================================
-// Ext.StaticData.LoadFridaCapture()
+// Ext.StaticData.LoadFridaCapture([type])
 // ============================================================================
 
 /**
@@ -299,13 +299,28 @@ static int lua_staticdata_dumpfeatmemory(lua_State *L) {
  * Workflow:
  * 1. In terminal: frida -U -n "Baldur's Gate 3" -l tools/frida/capture_featmanager_live.js
  * 2. In game: Open respec or level-up and click on feats
- * 3. In console: Ext.StaticData.LoadFridaCapture()
+ * 3. In console: Ext.StaticData.LoadFridaCapture()  -- or LoadFridaCapture("Feat")
  * 4. Now GetAll("Feat") will return actual feat data
  *
+ * @param type Optional type name string (defaults to "Feat")
  * @return boolean true if capture loaded successfully
  */
 static int lua_staticdata_loadfridacapture(lua_State *L) {
-    bool success = staticdata_load_frida_capture();
+    bool success;
+
+    if (lua_gettop(L) == 0 || lua_isnil(L, 1)) {
+        // No argument - load Feat (backwards compatible)
+        success = staticdata_load_frida_capture();
+    } else {
+        // Type argument provided
+        const char* type_name = luaL_checkstring(L, 1);
+        int type = staticdata_type_from_name(type_name);
+        if (type < 0) {
+            return luaL_error(L, "Unknown static data type: %s", type_name);
+        }
+        success = staticdata_load_frida_capture_type((StaticDataType)type);
+    }
+
     lua_pushboolean(L, success);
     return 1;
 }
@@ -313,10 +328,26 @@ static int lua_staticdata_loadfridacapture(lua_State *L) {
 /**
  * Check if Frida capture is available.
  *
+ * @param type Optional type name string (defaults to "Feat")
  * @return boolean true if capture file exists
  */
 static int lua_staticdata_fridacaptureavailable(lua_State *L) {
-    bool available = staticdata_frida_capture_available();
+    bool available;
+
+    if (lua_gettop(L) == 0 || lua_isnil(L, 1)) {
+        // No argument - check Feat (backwards compatible)
+        available = staticdata_frida_capture_available();
+    } else {
+        // Type argument provided
+        const char* type_name = luaL_checkstring(L, 1);
+        int type = staticdata_type_from_name(type_name);
+        if (type < 0) {
+            lua_pushboolean(L, 0);
+            return 1;
+        }
+        available = staticdata_frida_capture_available_type((StaticDataType)type);
+    }
+
     lua_pushboolean(L, available);
     return 1;
 }

@@ -2,7 +2,7 @@
 
 This document tracks the development roadmap for achieving feature parity with Windows BG3SE (Norbyte's Script Extender).
 
-## Current Status: v0.32.9
+## Current Status: v0.33.0
 
 **Overall Feature Parity: ~66%** (based on comprehensive API function count analysis)
 
@@ -52,7 +52,7 @@ This document tracks the development roadmap for achieving feature parity with W
 | `Ext.Level` | ✅ Full (21) | ❌ Not impl | **0%** | 9 |
 | `Ext.Audio` | ✅ Full (17) | ❌ Not impl | **0%** | 10 |
 | `Ext.Localization` | ✅ Full (2) | ⚠️ GetLanguage + safe stubs (1/2) | **50%** | 10 |
-| `Ext.StaticData` | ✅ Full (5) | ✅ GetAll, Get, LoadFridaCapture (Feat type working) | **60%** | 10 |
+| `Ext.StaticData` | ✅ Full (5) | ✅ GetAll, Get, LoadFridaCapture + Name resolution | **70%** | 10 |
 | `Ext.Resource` | ✅ Full (2) | ❌ Not impl | **0%** | 10 |
 | `Ext.Template` | ✅ Full (9) | ⚠️ Frida capture + Lua API (5/9) | **50%** | 10 |
 | Console/REPL | ✅ Full | ✅ Socket + file + in-game overlay | **95%** | 5 |
@@ -1102,19 +1102,24 @@ Ext.Mod.GetModInfo(guid)
 ## Phase 10: Data Access & Audio
 
 ### 10.1 Ext.StaticData API
-**Status:** ✅ ~60% Complete - [Issue #40](https://github.com/tdimino/bg3se-macos/issues/40)
+**Status:** ✅ ~70% Complete - [Issue #40](https://github.com/tdimino/bg3se-macos/issues/40)
 
 Access to static game resource types (Feats, Races, Backgrounds, Origins, Gods, Classes).
 
 ```lua
 -- Frida capture workflow (required once per game session)
-Ext.StaticData.LoadFridaCapture()  -- Load captured manager pointers
+Ext.StaticData.LoadFridaCapture()        -- Load Feat manager (default)
+Ext.StaticData.LoadFridaCapture("Race")  -- Load specific type
 
--- Get all entries of a type
-local feats = Ext.StaticData.GetAll("Feat")  -- Returns 41 feats with GUIDs
+-- Get all entries of a type (includes Name field!)
+local feats = Ext.StaticData.GetAll("Feat")
+for _, f in ipairs(feats) do
+    print(f.Name, f.ResourceUUID)  -- "Alert", "f57bd72c-be64-4855-3a9e-7dbb657656e6"
+end
 
 -- Get by GUID
 local feat = Ext.StaticData.Get("Feat", "d215b9ad-9753-4d74-f98f-bf24ce1dd653")
+print(feat.Name)  -- "AbilityScoreIncrease"
 
 -- Get count
 local count = Ext.StaticData.GetCount("Feat")  -- Returns 41
@@ -1125,29 +1130,33 @@ Ext.StaticData.DumpFeatMemory()  -- Diagnostic memory dump
 ```
 
 **Implementation Notes:**
-- **Frida capture workflow** - Runtime capture of FeatManager pointer via Frida script
+- **Frida capture workflow** - Runtime capture of manager pointer via Frida script
+- **FixedString resolution** - Name field at +0x18 resolved via GlobalStringTable
+- **Generic config infrastructure** - Per-type offsets for Race, Origin, God, Class
 - Safe memory reads prevent crashes when captured pointers become stale
 - Offsets verified via Ghidra: count at +0x7C, array at +0x80, FEAT_SIZE=0x128
 
 **What Works (Dec 15, 2025):**
-- ✅ `GetAll("Feat")` returns 41 feats with valid GUIDs
+- ✅ `GetAll("Feat")` returns 41 feats with **Names and GUIDs**
 - ✅ `Get("Feat", guid)` retrieves single feat by GUID
-- ✅ `LoadFridaCapture()` loads manager pointers from Frida capture file
+- ✅ `LoadFridaCapture([type])` loads manager pointers (type-aware)
+- ✅ **FixedString Name resolution** - feat.Name returns actual names
 - ✅ Safe memory reads prevent crashes on stale pointers
-- ✅ `DumpFeatMemory()` diagnostic for debugging
+- ✅ Generic ManagerConfig infrastructure for all resource types
 
 **Workflow:**
 1. Run: `frida -p <PID> -l tools/frida/capture_featmanager_live.js`
 2. In-game: Navigate to feat selection (level-up/respec)
 3. In console: `Ext.StaticData.LoadFridaCapture()`
-4. Use `GetAll("Feat")` / `Get("Feat", guid)`
+4. Use `GetAll("Feat")` / `Get("Feat", guid)` - now includes Name!
 
 **Remaining Work:**
-- [ ] Extract feat names from structure (FixedString resolution)
-- [ ] Expand pattern to Race, Background, Origin, God, Class types
+- [x] Extract feat names from structure (FixedString resolution) ✅
+- [x] Generic config-based infrastructure for multiple types ✅
+- [ ] Frida capture scripts for Race, Origin, God, Class types
 - [ ] Auto-capture without Frida (requires ARM64-safe hooking)
 
-Resource types: Feat (✅ working), Race (🔶 pending), Background (🔶), Origin (🔶), God (🔶), ClassDescription (🔶)
+Resource types: Feat (✅ complete with names), Race (🔶 config ready), Background (🔶 no Name field), Origin (🔶), God (🔶), ClassDescription (🔶)
 
 ### 10.2 Ext.Resource & Ext.Template API
 **Status:** ❌ Not Started - [Issue #41](https://github.com/tdimino/bg3se-macos/issues/41)
@@ -1282,6 +1291,7 @@ See **[docs/CHANGELOG.md](docs/CHANGELOG.md)** for detailed version history with
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| v0.33.0 | 2025-12-15 | **StaticData Name Resolution** - FixedString names for feats, generic multi-type infrastructure (#40) |
 | v0.32.9 | 2025-12-15 | **Ext.Template API** - Template manager with Frida capture, OriginalTemplateComponent, 158 components (#41) |
 | v0.32.8 | 2025-12-15 | **Massive Tag Component Expansion** - 105 new tag components, 157 total, ~65% parity (#33) |
 | v0.32.7 | 2025-12-14 | **Component Batch Expansion** - 11 new components (2 combat + 9 tag), 52 total, ~60% parity (#33) |

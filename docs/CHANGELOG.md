@@ -13,6 +13,26 @@ Each entry includes:
 
 ---
 
+## [v0.33.0] - 2025-12-15
+
+**Parity:** ~66% | **Category:** StaticData | **Issues:** #40
+
+### Added
+- **FixedString Name resolution** - Feat entries now include actual names (e.g., "Alert", "Actor", "AbilityScoreIncrease")
+- **Type-specific capture loading** - `LoadFridaCapture("Race")`, `LoadFridaCapture("Origin")` etc.
+- **Generic ManagerConfig infrastructure** - Per-type offsets for all resource types (Race, Origin, God, Class, Background)
+
+### Changed
+- `Ext.StaticData.GetAll("Feat")` now returns Name field in addition to ResourceUUID
+- `LoadFridaCapture()` accepts optional type parameter (defaults to "Feat" for backwards compatibility)
+
+### Technical
+- **FixedString at offset +0x18** - Name field located after GuidResource base class (VMT + UUID = 24 bytes)
+- **ManagerConfig struct** - Stores count_offset, array_offset, entry_size, name_offset, capture_file per type
+- **Type-specific name offsets** - Race: +0x18, Origin: +0x1C, God: +0x18, Class: +0x28, Background: none (DisplayName only)
+
+---
+
 ## [v0.32.9] - 2025-12-15
 
 **Parity:** ~66% | **Category:** Template System | **Issues:** #41

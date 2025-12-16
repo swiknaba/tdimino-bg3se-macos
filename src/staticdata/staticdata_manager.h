@@ -226,11 +226,27 @@ const char* staticdata_get_display_name(StaticDataType type, StaticDataPtr entry
 bool staticdata_load_frida_capture(void);
 
 /**
- * Check if Frida capture is available (file exists).
+ * Load captured manager pointers for a specific type from Frida capture file.
+ *
+ * @param type Static data type to load
+ * @return true if capture file was loaded successfully
+ */
+bool staticdata_load_frida_capture_type(StaticDataType type);
+
+/**
+ * Check if Frida capture is available for Feat type (file exists).
  *
  * @return true if capture file exists
  */
 bool staticdata_frida_capture_available(void);
+
+/**
+ * Check if Frida capture is available for a specific type.
+ *
+ * @param type Static data type to check
+ * @return true if capture file exists
+ */
+bool staticdata_frida_capture_available_type(StaticDataType type);
 
 // ============================================================================
 // Debugging
