@@ -8,6 +8,7 @@
 #include "../core/logging.h"
 #include "../core/safe_memory.h"
 #include "../strings/fixed_string.h"
+#include "../hooks/arm64_hook.h"
 #include <dobby.h>
 #include <string.h>
 #include <stdio.h>
@@ -149,6 +150,9 @@ static struct {
 
     // Original function pointers (for hooks)
     void* orig_feat_getfeats;
+
+    // ARM64 safe hook handles
+    ARM64HookHandle* feat_getfeats_hook;
 } g_staticdata = {0};
 
 // ============================================================================
@@ -462,6 +466,56 @@ static void hook_GetAllFeats(void* environment) {
 }
 
 // ============================================================================
+// ARM64 Safe Hook Installation (Issue #44)
+// ============================================================================
+
+/**
+ * Install ARM64-safe hook for FeatManager::GetFeats.
+ * Uses skip-and-redirect strategy to avoid ADRP corruption.
+ * Returns true if hook was installed successfully.
+ */
+static bool install_feat_getfeats_safe_hook(void* main_binary_base) {
+    void* target = (uint8_t*)main_binary_base + OFFSET_FEAT_GETFEATS;
+
+    // First, analyze the prologue to understand the ADRP patterns
+    log_message("[StaticData] Analyzing FeatManager::GetFeats prologue at %p", target);
+    arm64_analyze_and_log(target, "FeatManager::GetFeats");
+
+    // Check if it has ADRP in prologue
+    if (arm64_has_prologue_adrp(target)) {
+        log_message("[StaticData] ADRP detected in prologue - using ARM64 safe hook");
+
+        // Get recommended hook offset
+        int safe_offset = arm64_get_recommended_hook_offset(target);
+        if (safe_offset < 0) {
+            log_message("[StaticData] WARNING: No safe hook point found, falling back to TypeContext");
+            return false;
+        }
+
+        log_message("[StaticData] Safe hook point at +%d (0x%x)", safe_offset, safe_offset);
+
+        // Install the safe hook
+        void* original = NULL;
+        g_staticdata.feat_getfeats_hook = arm64_safe_hook(target, (void*)hook_FeatGetFeats, &original);
+
+        if (g_staticdata.feat_getfeats_hook) {
+            g_orig_FeatGetFeats = (FeatGetFeats_t)original;
+            log_message("[StaticData] ARM64 safe hook installed successfully!");
+            log_message("[StaticData]   Original function trampoline: %p", original);
+            return true;
+        } else {
+            log_message("[StaticData] WARNING: ARM64 safe hook installation failed");
+            return false;
+        }
+    } else {
+        // No ADRP in prologue - can use standard Dobby hook
+        log_message("[StaticData] No ADRP in prologue - could use standard Dobby hook");
+        // For now, still use TypeContext to be safe
+        return false;
+    }
+}
+
+// ============================================================================
 // Initialization
 // ============================================================================
 
@@ -475,12 +529,15 @@ bool staticdata_manager_init(void *main_binary_base) {
     // Clear manager pointers
     memset(g_staticdata.managers, 0, sizeof(g_staticdata.managers));
 
-    // NOTE: GetFeats/GetAllFeats hooks DISABLED - they break feat selection UI
-    // The hook intercepts correctly but breaks the original function call.
-    // For now, use TypeContext capture for FeatManager instead.
-    // TODO: Debug why original function call fails after hook
+    // Try to install ARM64-safe hook for FeatManager::GetFeats
+    // This uses the skip-and-redirect strategy from Issue #44
+    bool hook_installed = install_feat_getfeats_safe_hook(main_binary_base);
 
-    log_message("[StaticData] GetFeats hooks DISABLED (broke feat UI) - using TypeContext only");
+    if (hook_installed) {
+        log_message("[StaticData] FeatManager hook: ARM64 safe hook active");
+    } else {
+        log_message("[StaticData] FeatManager hook: Using TypeContext capture (hook not installed)");
+    }
 
     g_staticdata.initialized = true;
     log_message("[StaticData] Static data manager initialized");

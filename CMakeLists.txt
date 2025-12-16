@@ -43,6 +43,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/vars
     ${CMAKE_SOURCE_DIR}/src/lifetime
     ${CMAKE_SOURCE_DIR}/src/localization
+    ${CMAKE_SOURCE_DIR}/src/hooks
 )
 
 add_library(bg3se SHARED
@@ -93,6 +94,8 @@ add_library(bg3se SHARED
     src/lua/lua_staticdata.c
     src/template/template_manager.c
     src/lua/lua_template.c
+    src/hooks/arm64_decode.c
+    src/hooks/arm64_hook.c
     lib/lz4/lz4.c
 )
 
