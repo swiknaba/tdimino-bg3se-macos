@@ -488,97 +488,149 @@ static NSColor* colorForLogLevel(const char* text) {
     [self updateModsList];
 }
 
-// Tab switching
-- (void)tabClicked:(BG3SETabButton *)sender {
-    if (_currentTab == sender.tabIndex) return;
+// Tab switching - with safety checks to prevent crashes
+- (void)tabClicked:(id)sender {
+    @try {
+        // Safety: verify sender is valid
+        if (!sender || ![sender isKindOfClass:[BG3SETabButton class]]) {
+            NSLog(@"[BG3SE Console] tabClicked: invalid sender");
+            return;
+        }
 
-    // Deselect old tab
-    _tabButtons[_currentTab].isSelected = NO;
+        BG3SETabButton *tabButton = (BG3SETabButton *)sender;
+        ConsoleTab newTab = tabButton.tabIndex;
 
-    // Select new tab
-    _currentTab = sender.tabIndex;
-    sender.isSelected = YES;
+        // Safety: bounds check
+        if (newTab < 0 || newTab >= TAB_COUNT) {
+            NSLog(@"[BG3SE Console] tabClicked: invalid tab index %d", (int)newTab);
+            return;
+        }
 
-    // Show/hide views based on tab
-    _scrollView.hidden = (_currentTab != TAB_CONSOLE);
-    _modsScrollView.hidden = (_currentTab != TAB_MODS);
-    _entitiesView.hidden = (_currentTab != TAB_ENTITIES);
-    _inputArea.hidden = (_currentTab != TAB_CONSOLE);
+        if (_currentTab == newTab) return;
 
-    if (_currentTab == TAB_MODS) {
-        [self updateModsList];
+        // Safety: verify array exists and indices are valid
+        if (!_tabButtons || _tabButtons.count == 0) {
+            NSLog(@"[BG3SE Console] tabClicked: tabButtons not initialized");
+            return;
+        }
+
+        if (_currentTab >= (ConsoleTab)_tabButtons.count || newTab >= (ConsoleTab)_tabButtons.count) {
+            NSLog(@"[BG3SE Console] tabClicked: index out of bounds");
+            return;
+        }
+
+        // Deselect old tab
+        _tabButtons[_currentTab].isSelected = NO;
+
+        // Select new tab
+        _currentTab = newTab;
+        tabButton.isSelected = YES;
+
+        // Defer view changes to next run loop iteration to avoid issues during event handling
+        dispatch_async(dispatch_get_main_queue(), ^{
+            @try {
+                // Show/hide views based on tab - with nil checks
+                if (self->_scrollView) self->_scrollView.hidden = (self->_currentTab != TAB_CONSOLE);
+                if (self->_modsScrollView) self->_modsScrollView.hidden = (self->_currentTab != TAB_MODS);
+                if (self->_entitiesView) self->_entitiesView.hidden = (self->_currentTab != TAB_ENTITIES);
+                if (self->_inputArea) self->_inputArea.hidden = (self->_currentTab != TAB_CONSOLE);
+
+                if (self->_currentTab == TAB_MODS && self->_modsContentView) {
+                    [self updateModsList];
+                }
+            } @catch (NSException *e) {
+                NSLog(@"[BG3SE Console] Exception updating views: %@", e);
+            }
+        });
+
+    } @catch (NSException *exception) {
+        NSLog(@"[BG3SE Console] Exception in tabClicked: %@ - %@", exception.name, exception.reason);
     }
 }
 
-// Update mods list display
+// Update mods list display - with safety checks
 - (void)updateModsList {
-    // Clear existing content
-    for (NSView *subview in [_modsContentView.subviews copy]) {
-        [subview removeFromSuperview];
-    }
+    @try {
+        // Safety: verify view exists
+        if (!_modsContentView) {
+            NSLog(@"[BG3SE Console] updateModsList: modsContentView is nil");
+            return;
+        }
 
-    // Placeholder mod data - in real implementation, this comes from the mod loader
-    NSArray *mods = @[
-        @{@"name": @"EntityTest", @"version": @"1.0", @"status": @"loaded", @"author": @"BG3SE"},
-        @{@"name": @"StaticDataTest", @"version": @"1.0", @"status": @"loaded", @"author": @"BG3SE"},
-        @{@"name": @"ExampleMod", @"version": @"0.5", @"status": @"error", @"author": @"Community"},
-    ];
+        // Clear existing content
+        for (NSView *subview in [_modsContentView.subviews copy]) {
+            [subview removeFromSuperview];
+        }
 
-    CGFloat rowHeight = 50;
-    CGFloat y = _modsContentView.bounds.size.height - rowHeight;
+        // Placeholder mod data - in real implementation, this comes from the mod loader
+        NSArray *mods = @[
+            @{@"name": @"EntityTest", @"version": @"1.0", @"status": @"loaded", @"author": @"BG3SE"},
+            @{@"name": @"StaticDataTest", @"version": @"1.0", @"status": @"loaded", @"author": @"BG3SE"},
+            @{@"name": @"ExampleMod", @"version": @"0.5", @"status": @"error", @"author": @"Community"},
+        ];
 
-    for (NSDictionary *mod in mods) {
-        NSView *row = [[NSView alloc] initWithFrame:NSMakeRect(0, y, _modsContentView.bounds.size.width, rowHeight)];
-        row.wantsLayer = YES;
-        row.layer.backgroundColor = [NSColor colorWithRed:0.12 green:0.12 blue:0.14 alpha:1.0].CGColor;
-        row.layer.cornerRadius = 4;
+        CGFloat rowHeight = 50;
+        CGFloat contentHeight = _modsContentView.bounds.size.height;
+        CGFloat contentWidth = _modsContentView.bounds.size.width;
+        if (contentHeight <= 0) contentHeight = 300; // Fallback
+        if (contentWidth <= 0) contentWidth = 700; // Fallback
+        CGFloat y = contentHeight - rowHeight;
 
-        // Mod name
-        NSTextField *nameLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(12, 26, 200, 18)];
-        nameLabel.stringValue = mod[@"name"];
-        nameLabel.font = [NSFont systemFontOfSize:14 weight:NSFontWeightMedium];
-        nameLabel.textColor = TEXT_COLOR;
-        nameLabel.backgroundColor = [NSColor clearColor];
-        nameLabel.bordered = NO;
-        nameLabel.editable = NO;
-        [row addSubview:nameLabel];
+        for (NSDictionary *mod in mods) {
+            NSView *row = [[NSView alloc] initWithFrame:NSMakeRect(0, y, contentWidth, rowHeight)];
+            row.wantsLayer = YES;
+            row.layer.backgroundColor = [NSColor colorWithRed:0.12 green:0.12 blue:0.14 alpha:1.0].CGColor;
+            row.layer.cornerRadius = 4;
 
-        // Version and author
-        NSTextField *infoLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(12, 8, 200, 14)];
-        infoLabel.stringValue = [NSString stringWithFormat:@"v%@ by %@", mod[@"version"], mod[@"author"]];
-        infoLabel.font = [NSFont systemFontOfSize:11];
-        infoLabel.textColor = [NSColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:1.0];
-        infoLabel.backgroundColor = [NSColor clearColor];
-        infoLabel.bordered = NO;
-        infoLabel.editable = NO;
-        [row addSubview:infoLabel];
+            // Mod name
+            NSTextField *nameLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(12, 26, 200, 18)];
+            nameLabel.stringValue = mod[@"name"];
+            nameLabel.font = [NSFont systemFontOfSize:14 weight:NSFontWeightMedium];
+            nameLabel.textColor = TEXT_COLOR;
+            nameLabel.backgroundColor = [NSColor clearColor];
+            nameLabel.bordered = NO;
+            nameLabel.editable = NO;
+            [row addSubview:nameLabel];
 
-        // Status badge
-        NSString *status = mod[@"status"];
-        NSColor *statusColor = [status isEqualToString:@"loaded"] ?
-            [NSColor colorWithRed:0.4 green:0.9 blue:0.5 alpha:1.0] :
-            [NSColor colorWithRed:1.0 green:0.4 blue:0.4 alpha:1.0];
+            // Version and author
+            NSTextField *infoLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(12, 8, 200, 14)];
+            infoLabel.stringValue = [NSString stringWithFormat:@"v%@ by %@", mod[@"version"], mod[@"author"]];
+            infoLabel.font = [NSFont systemFontOfSize:11];
+            infoLabel.textColor = [NSColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:1.0];
+            infoLabel.backgroundColor = [NSColor clearColor];
+            infoLabel.bordered = NO;
+            infoLabel.editable = NO;
+            [row addSubview:infoLabel];
 
-        NSTextField *statusLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(_modsContentView.bounds.size.width - 80, 16, 60, 18)];
-        statusLabel.stringValue = [status uppercaseString];
-        statusLabel.font = [NSFont systemFontOfSize:10 weight:NSFontWeightBold];
-        statusLabel.textColor = statusColor;
-        statusLabel.backgroundColor = [NSColor clearColor];
-        statusLabel.bordered = NO;
-        statusLabel.editable = NO;
-        statusLabel.alignment = NSTextAlignmentRight;
-        [row addSubview:statusLabel];
+            // Status badge
+            NSString *status = mod[@"status"];
+            NSColor *statusColor = [status isEqualToString:@"loaded"] ?
+                [NSColor colorWithRed:0.4 green:0.9 blue:0.5 alpha:1.0] :
+                [NSColor colorWithRed:1.0 green:0.4 blue:0.4 alpha:1.0];
 
-        [_modsContentView addSubview:row];
-        y -= (rowHeight + 6);
-    }
+            NSTextField *statusLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(contentWidth - 80, 16, 60, 18)];
+            statusLabel.stringValue = [status uppercaseString];
+            statusLabel.font = [NSFont systemFontOfSize:10 weight:NSFontWeightBold];
+            statusLabel.textColor = statusColor;
+            statusLabel.backgroundColor = [NSColor clearColor];
+            statusLabel.bordered = NO;
+            statusLabel.editable = NO;
+            statusLabel.alignment = NSTextAlignmentRight;
+            [row addSubview:statusLabel];
 
-    // Resize content view to fit all mods
-    CGFloat totalHeight = mods.count * (rowHeight + 6);
-    if (totalHeight > _modsContentView.bounds.size.height) {
-        NSRect frame = _modsContentView.frame;
-        frame.size.height = totalHeight;
-        _modsContentView.frame = frame;
+            [_modsContentView addSubview:row];
+            y -= (rowHeight + 6);
+        }
+
+        // Resize content view to fit all mods
+        CGFloat totalHeight = mods.count * (rowHeight + 6);
+        if (totalHeight > _modsContentView.bounds.size.height) {
+            NSRect frame = _modsContentView.frame;
+            frame.size.height = totalHeight;
+            _modsContentView.frame = frame;
+        }
+    } @catch (NSException *exception) {
+        NSLog(@"[BG3SE Console] Exception in updateModsList: %@ - %@", exception.name, exception.reason);
     }
 }
 
