@@ -139,8 +139,8 @@ typedef enum {
 - (instancetype)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        // Configure button type for proper click handling
-        [self setButtonType:NSButtonTypeMomentaryLight];
+        // Use NSButtonTypeMomentaryChange for custom drawn buttons
+        [self setButtonType:NSButtonTypeMomentaryChange];
         self.bordered = NO;
         self.wantsLayer = YES;
         self.layer.cornerRadius = frame.size.width / 2;
@@ -157,28 +157,6 @@ typedef enum {
         [self addTrackingArea:trackingArea];
     }
     return self;
-}
-
-// Override mouseDown to handle clicks directly (more reliable for custom buttons)
-- (void)mouseDown:(NSEvent *)event {
-    [self highlight:YES];
-}
-
-- (void)mouseUp:(NSEvent *)event {
-    [self highlight:NO];
-    // Check if mouse is still inside button
-    NSPoint location = [self convertPoint:[event locationInWindow] fromView:nil];
-    if (NSPointInRect(location, self.bounds)) {
-        // Perform action on main thread
-        if (self.target && self.action) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                #pragma clang diagnostic push
-                #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-                [self.target performSelector:self.action withObject:self];
-                #pragma clang diagnostic pop
-            });
-        }
-    }
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
@@ -233,8 +211,8 @@ typedef enum {
 - (instancetype)initWithFrame:(NSRect)frame title:(NSString *)title tabIndex:(ConsoleTab)idx {
     self = [super initWithFrame:frame];
     if (self) {
-        // Configure button type for proper click handling
-        [self setButtonType:NSButtonTypeMomentaryLight];
+        // Use NSButtonTypeMomentaryChange for custom drawn buttons
+        [self setButtonType:NSButtonTypeMomentaryChange];
         self.title = title;
         self.bordered = NO;
         self.wantsLayer = YES;
@@ -244,28 +222,6 @@ typedef enum {
         self.font = [NSFont systemFontOfSize:11 weight:NSFontWeightMedium];
     }
     return self;
-}
-
-// Override mouseDown to handle clicks directly (more reliable for custom buttons)
-- (void)mouseDown:(NSEvent *)event {
-    [self highlight:YES];
-}
-
-- (void)mouseUp:(NSEvent *)event {
-    [self highlight:NO];
-    // Check if mouse is still inside button
-    NSPoint location = [self convertPoint:[event locationInWindow] fromView:nil];
-    if (NSPointInRect(location, self.bounds)) {
-        // Perform action on main thread
-        if (self.target && self.action) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                #pragma clang diagnostic push
-                #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-                [self.target performSelector:self.action withObject:self];
-                #pragma clang diagnostic pop
-            });
-        }
-    }
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
