@@ -27,21 +27,36 @@ static bool s_initialized = false;
 #define TANIT_PRIMARY [NSColor colorWithRed:0.992 green:0.878 blue:0.278 alpha:1.0]    // #FDE047
 #define TANIT_SECONDARY [NSColor colorWithRed:0.984 green:0.749 blue:0.141 alpha:1.0]  // #FBBF24
 #define TANIT_GLOW [NSColor colorWithRed:0.984 green:0.749 blue:0.141 alpha:0.4]
-#define TEXT_COLOR [NSColor colorWithRed:0.92 green:0.92 blue:0.92 alpha:1.0]
+#define TEXT_COLOR [NSColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0]  // Pure white for legibility
+#define DIM_TEXT_COLOR [NSColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:1.0]  // Dimmer for brackets
 #define INPUT_BG_COLOR [NSColor colorWithRed:0.12 green:0.12 blue:0.14 alpha:1.0]
+#define CLOSE_BUTTON_COLOR [NSColor colorWithRed:0.6 green:0.6 blue:0.6 alpha:1.0]
+#define CLOSE_BUTTON_HOVER [NSColor colorWithRed:0.9 green:0.3 blue:0.3 alpha:1.0]
 
 // Dimensions
-#define OVERLAY_WIDTH 700
-#define OVERLAY_HEIGHT 400
+#define OVERLAY_WIDTH 800
+#define OVERLAY_HEIGHT 480
 #define TANIT_SIZE 36
 #define BORDER_WIDTH 2
-#define PADDING 12
+#define PADDING 16
+#define FONT_SIZE 13
+#define INPUT_HEIGHT 32
+#define TAB_HEIGHT 28
+#define TAB_WIDTH 80
+
+// Tab indices
+typedef enum {
+    TAB_CONSOLE = 0,
+    TAB_MODS = 1,
+    TAB_ENTITIES = 2,
+    TAB_COUNT = 3
+} ConsoleTab;
 
 // ============================================================================
-// Tanit Symbol View - Draws the Symbol of Tanit
+// Tanit Symbol View - Loads PNG from assets
 // ============================================================================
 
-@interface BG3SETanitView : NSView
+@interface BG3SETanitView : NSImageView
 @end
 
 @implementation BG3SETanitView
@@ -50,7 +65,11 @@ static bool s_initialized = false;
     self = [super initWithFrame:frame];
     if (self) {
         self.wantsLayer = YES;
-        self.layer.backgroundColor = [NSColor clearColor].CGColor;
+        self.imageScaling = NSImageScaleProportionallyUpOrDown;
+        self.imageAlignment = NSImageAlignCenter;
+
+        // Load the Tanit PNG from the dylib bundle or executable path
+        [self loadTanitImage];
 
         // Add subtle pulsing glow animation
         [self addGlowAnimation];
@@ -58,134 +77,234 @@ static bool s_initialized = false;
     return self;
 }
 
-- (void)addGlowAnimation {
-    // Create a glow layer behind the symbol
-    CALayer *glowLayer = [CALayer layer];
-    glowLayer.frame = CGRectInset(self.bounds, -4, -4);
-    glowLayer.cornerRadius = glowLayer.frame.size.width / 2;
-    glowLayer.backgroundColor = [NSColor clearColor].CGColor;
-
-    // Radial gradient glow effect
-    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
-    gradientLayer.type = kCAGradientLayerRadial;
-    gradientLayer.frame = glowLayer.bounds;
-    gradientLayer.colors = @[
-        (id)[NSColor colorWithRed:0.992 green:0.878 blue:0.278 alpha:0.5].CGColor,
-        (id)[NSColor colorWithRed:0.984 green:0.749 blue:0.141 alpha:0.2].CGColor,
-        (id)[NSColor clearColor].CGColor
+- (void)loadTanitImage {
+    // Try multiple paths to find the Tanit PNG
+    NSArray *searchPaths = @[
+        // Relative to executable
+        [[[NSBundle mainBundle] executablePath] stringByDeletingLastPathComponent],
+        // Development path
+        @"/Users/tomdimino/Desktop/Programming/bg3se-macos/assets",
+        // Alongside the dylib
+        @".",
     ];
-    gradientLayer.locations = @[@0.0, @0.5, @1.0];
-    gradientLayer.startPoint = CGPointMake(0.5, 0.5);
-    gradientLayer.endPoint = CGPointMake(1.0, 1.0);
 
-    [self.layer insertSublayer:gradientLayer atIndex:0];
+    for (NSString *basePath in searchPaths) {
+        NSString *imagePath = [basePath stringByAppendingPathComponent:@"tanit.png"];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:imagePath]) {
+            NSImage *image = [[NSImage alloc] initWithContentsOfFile:imagePath];
+            if (image) {
+                self.image = image;
+                return;
+            }
+        }
+    }
 
-    // Pulsing opacity animation
+    // Fallback: create a simple gold circle if PNG not found
+    NSImage *fallback = [[NSImage alloc] initWithSize:NSMakeSize(64, 64)];
+    [fallback lockFocus];
+    [[NSColor colorWithRed:0.992 green:0.878 blue:0.278 alpha:1.0] setFill];
+    [[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(8, 8, 48, 48)] fill];
+    [fallback unlockFocus];
+    self.image = fallback;
+}
+
+- (void)addGlowAnimation {
+    // Pulsing opacity animation for subtle glow effect
     CABasicAnimation *pulseAnim = [CABasicAnimation animationWithKeyPath:@"opacity"];
-    pulseAnim.fromValue = @0.6;
+    pulseAnim.fromValue = @0.85;
     pulseAnim.toValue = @1.0;
     pulseAnim.duration = 2.0;
     pulseAnim.autoreverses = YES;
     pulseAnim.repeatCount = HUGE_VALF;
     pulseAnim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    [gradientLayer addAnimation:pulseAnim forKey:@"pulse"];
+    [self.layer addAnimation:pulseAnim forKey:@"pulse"];
 }
 
 - (BOOL)isFlipped {
     return YES;
 }
 
-- (void)drawRect:(NSRect)dirtyRect {
-    [super drawRect:dirtyRect];
+@end
 
-    CGContextRef ctx = [[NSGraphicsContext currentContext] CGContext];
+// ============================================================================
+// Close Button - X button to close the console
+// ============================================================================
+
+@interface BG3SECloseButton : NSButton
+@property (nonatomic, assign) BOOL isHovered;
+@end
+
+@implementation BG3SECloseButton
+
+- (instancetype)initWithFrame:(NSRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.bordered = NO;
+        self.wantsLayer = YES;
+        self.layer.cornerRadius = frame.size.width / 2;
+        self.title = @"";
+        _isHovered = NO;
+
+        // Track mouse for hover effect
+        NSTrackingArea *trackingArea = [[NSTrackingArea alloc]
+            initWithRect:self.bounds
+            options:(NSTrackingMouseEnteredAndExited | NSTrackingActiveAlways)
+            owner:self
+            userInfo:nil];
+        [self addTrackingArea:trackingArea];
+    }
+    return self;
+}
+
+- (void)drawRect:(NSRect)dirtyRect {
     CGFloat w = self.bounds.size.width;
     CGFloat h = self.bounds.size.height;
-    CGFloat cx = w / 2;
 
-    // Scale factor for the symbol
-    CGFloat scale = w / 40.0;
+    // Background circle on hover
+    if (_isHovered) {
+        [[NSColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:0.8] setFill];
+        [[NSBezierPath bezierPathWithOvalInRect:self.bounds] fill];
+    }
 
-    // === Draw glow shadow first ===
-    CGContextSaveGState(ctx);
-    CGContextSetShadowWithColor(ctx, CGSizeMake(0, 0), 8.0,
-        [NSColor colorWithRed:0.984 green:0.749 blue:0.141 alpha:0.6].CGColor);
+    // Draw X
+    NSColor *xColor = _isHovered ? CLOSE_BUTTON_HOVER : CLOSE_BUTTON_COLOR;
+    [xColor setStroke];
 
-    // Set warm gold color matching Twilio-Aldea palette
-    CGContextSetRGBFillColor(ctx, 0.992, 0.878, 0.278, 1.0);  // #FDE047
-    CGContextSetRGBStrokeColor(ctx, 0.984, 0.749, 0.141, 1.0); // #FBBF24
-    CGContextSetLineWidth(ctx, 2.0);
+    NSBezierPath *path = [NSBezierPath bezierPath];
+    path.lineWidth = 2.0;
+    path.lineCapStyle = NSLineCapStyleRound;
 
-    // === Draw the Tanit Symbol ===
+    CGFloat inset = 6;
+    [path moveToPoint:NSMakePoint(inset, inset)];
+    [path lineToPoint:NSMakePoint(w - inset, h - inset)];
+    [path moveToPoint:NSMakePoint(w - inset, inset)];
+    [path lineToPoint:NSMakePoint(inset, h - inset)];
+    [path stroke];
+}
 
-    // 1. Circle (disc/sun) - top center
-    CGFloat circleRadius = 5 * scale;
-    CGFloat circleY = 8 * scale;
-    CGContextFillEllipseInRect(ctx, CGRectMake(cx - circleRadius, circleY - circleRadius,
-                                                circleRadius * 2, circleRadius * 2));
+- (void)mouseEntered:(NSEvent *)event {
+    _isHovered = YES;
+    [self setNeedsDisplay:YES];
+}
 
-    // 2. Crescent/horns - curved arms extending from sides of circle
-    CGFloat hornY = circleY;
-    CGFloat hornWidth = 8 * scale;
-    CGFloat hornHeight = 4 * scale;
-
-    // Left horn (crescent curve)
-    CGContextBeginPath(ctx);
-    CGContextMoveToPoint(ctx, cx - circleRadius - 1, hornY);
-    CGContextAddQuadCurveToPoint(ctx, cx - circleRadius - hornWidth, hornY - hornHeight,
-                                  cx - circleRadius - hornWidth * 1.5, hornY + hornHeight * 0.5);
-    CGContextStrokePath(ctx);
-
-    // Right horn (crescent curve)
-    CGContextBeginPath(ctx);
-    CGContextMoveToPoint(ctx, cx + circleRadius + 1, hornY);
-    CGContextAddQuadCurveToPoint(ctx, cx + circleRadius + hornWidth, hornY - hornHeight,
-                                  cx + circleRadius + hornWidth * 1.5, hornY + hornHeight * 0.5);
-    CGContextStrokePath(ctx);
-
-    // 3. Horizontal bar (arms) - below the circle
-    CGFloat barY = circleY + circleRadius + 3 * scale;
-    CGFloat barWidth = 14 * scale;
-    CGFloat barHeight = 2 * scale;
-    CGContextFillRect(ctx, CGRectMake(cx - barWidth, barY, barWidth * 2, barHeight));
-
-    // 4. Triangular body - below the bar
-    CGFloat triTop = barY + barHeight;
-    CGFloat triBottom = h - 2 * scale;
-    CGFloat triTopWidth = 6 * scale;
-    CGFloat triBottomWidth = 12 * scale;
-
-    CGContextBeginPath(ctx);
-    CGContextMoveToPoint(ctx, cx - triTopWidth, triTop);
-    CGContextAddLineToPoint(ctx, cx + triTopWidth, triTop);
-    CGContextAddLineToPoint(ctx, cx + triBottomWidth, triBottom);
-    CGContextAddLineToPoint(ctx, cx - triBottomWidth, triBottom);
-    CGContextClosePath(ctx);
-    CGContextFillPath(ctx);
-
-    // 5. Bottom horizontal bar
-    CGFloat bottomBarY = triBottom;
-    CGFloat bottomBarWidth = 16 * scale;
-    CGFloat bottomBarHeight = 2 * scale;
-    CGContextFillRect(ctx, CGRectMake(cx - bottomBarWidth, bottomBarY,
-                                       bottomBarWidth * 2, bottomBarHeight));
-
-    CGContextRestoreGState(ctx);
+- (void)mouseExited:(NSEvent *)event {
+    _isHovered = NO;
+    [self setNeedsDisplay:YES];
 }
 
 @end
 
 // ============================================================================
-// Console View - Input field + Output text area
+// Tab Button - Individual tab in the tab bar
+// ============================================================================
+
+@interface BG3SETabButton : NSButton
+@property (nonatomic, assign) BOOL isSelected;
+@property (nonatomic, assign) ConsoleTab tabIndex;
+@end
+
+@implementation BG3SETabButton
+
+- (instancetype)initWithFrame:(NSRect)frame title:(NSString *)title tabIndex:(ConsoleTab)idx {
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.title = title;
+        self.bordered = NO;
+        self.wantsLayer = YES;
+        _tabIndex = idx;
+        _isSelected = NO;
+        self.font = [NSFont systemFontOfSize:11 weight:NSFontWeightMedium];
+    }
+    return self;
+}
+
+- (void)drawRect:(NSRect)dirtyRect {
+    if (_isSelected) {
+        // Selected tab - gold underline
+        [[NSColor colorWithRed:0.15 green:0.15 blue:0.17 alpha:1.0] setFill];
+        NSRectFill(self.bounds);
+
+        // Gold underline
+        [TANIT_PRIMARY setFill];
+        NSRectFill(NSMakeRect(0, self.bounds.size.height - 2, self.bounds.size.width, 2));
+    }
+
+    // Draw title
+    NSColor *textColor = _isSelected ? TANIT_PRIMARY : [NSColor colorWithRed:0.6 green:0.6 blue:0.6 alpha:1.0];
+    NSDictionary *attrs = @{
+        NSFontAttributeName: self.font,
+        NSForegroundColorAttributeName: textColor
+    };
+    NSSize textSize = [self.title sizeWithAttributes:attrs];
+    CGFloat x = (self.bounds.size.width - textSize.width) / 2;
+    CGFloat y = (self.bounds.size.height - textSize.height) / 2;
+    [self.title drawAtPoint:NSMakePoint(x, y) withAttributes:attrs];
+}
+
+- (void)setIsSelected:(BOOL)isSelected {
+    _isSelected = isSelected;
+    [self setNeedsDisplay:YES];
+}
+
+@end
+
+// ============================================================================
+// Log Level Colors - For syntax highlighting in output
+// ============================================================================
+
+static NSColor* colorForLogLevel(const char* text) {
+    if (!text) return TEXT_COLOR;
+
+    // Error patterns
+    if (strstr(text, "[ERROR]") || strstr(text, "Error:") || strstr(text, "error:") ||
+        strstr(text, "FAILED") || strstr(text, "Exception")) {
+        return [NSColor colorWithRed:1.0 green:0.4 blue:0.4 alpha:1.0];  // Red
+    }
+    // Warning patterns
+    if (strstr(text, "[WARN]") || strstr(text, "Warning:") || strstr(text, "warning:")) {
+        return [NSColor colorWithRed:1.0 green:0.8 blue:0.3 alpha:1.0];  // Yellow/amber
+    }
+    // Success patterns
+    if (strstr(text, "[OK]") || strstr(text, "Success") || strstr(text, "Loaded") ||
+        strstr(text, "initialized") || strstr(text, "enabled")) {
+        return [NSColor colorWithRed:0.4 green:0.9 blue:0.5 alpha:1.0];  // Green
+    }
+    // Debug/trace patterns
+    if (strstr(text, "[DEBUG]") || strstr(text, "[TRACE]") || strstr(text, "-->")) {
+        return [NSColor colorWithRed:0.5 green:0.7 blue:0.9 alpha:1.0];  // Light blue
+    }
+    // Entity/test tags
+    if (strstr(text, "[EntityTest]") || strstr(text, "[StaticData]")) {
+        return [NSColor colorWithRed:0.7 green:0.6 blue:0.9 alpha:1.0];  // Purple
+    }
+
+    return TEXT_COLOR;
+}
+
+// ============================================================================
+// Console View - Input field + Output text area with tabs
 // ============================================================================
 
 @interface BG3SEConsoleView : NSView <NSTextFieldDelegate>
 @property (nonatomic, strong) NSScrollView *scrollView;
 @property (nonatomic, strong) NSTextView *outputView;
 @property (nonatomic, strong) NSTextField *inputField;
+@property (nonatomic, strong) NSTextField *promptLabel;
 @property (nonatomic, strong) BG3SETanitView *tanitView;
+@property (nonatomic, strong) BG3SECloseButton *closeButton;
 @property (nonatomic, strong) NSMutableArray<NSString *> *commandHistory;
 @property (nonatomic, assign) NSInteger historyIndex;
+// Tab system
+@property (nonatomic, strong) NSView *tabBar;
+@property (nonatomic, strong) NSMutableArray<BG3SETabButton *> *tabButtons;
+@property (nonatomic, assign) ConsoleTab currentTab;
+// Mods view
+@property (nonatomic, strong) NSScrollView *modsScrollView;
+@property (nonatomic, strong) NSView *modsContentView;
+// Entities view (placeholder)
+@property (nonatomic, strong) NSView *entitiesView;
+// Input area container (for hiding on non-console tabs)
+@property (nonatomic, strong) NSView *inputArea;
 @end
 
 @implementation BG3SEConsoleView
@@ -211,14 +330,17 @@ static bool s_initialized = false;
     CGFloat w = self.bounds.size.width;
     CGFloat h = self.bounds.size.height;
 
+    // ========== Header Area ==========
+
     // Tanit symbol in top-left corner
     _tanitView = [[BG3SETanitView alloc] initWithFrame:NSMakeRect(PADDING, PADDING, TANIT_SIZE, TANIT_SIZE)];
     [self addSubview:_tanitView];
 
-    // Title label next to Tanit
-    NSTextField *titleLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(PADDING + TANIT_SIZE + 8, PADDING + 8, 200, 20)];
+    // Title label next to Tanit - vertically centered with symbol
+    CGFloat titleY = PADDING + (TANIT_SIZE - 18) / 2;
+    NSTextField *titleLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(PADDING + TANIT_SIZE + 10, titleY, 200, 18)];
     titleLabel.stringValue = @"BG3SE Console";
-    titleLabel.font = [NSFont boldSystemFontOfSize:14];
+    titleLabel.font = [NSFont boldSystemFontOfSize:15];
     titleLabel.textColor = TANIT_PRIMARY;
     titleLabel.backgroundColor = [NSColor clearColor];
     titleLabel.bordered = NO;
@@ -226,42 +348,121 @@ static bool s_initialized = false;
     titleLabel.selectable = NO;
     [self addSubview:titleLabel];
 
-    // Output text view (scrollable)
-    CGFloat outputTop = PADDING + TANIT_SIZE + 8;
-    CGFloat outputHeight = h - outputTop - 40 - PADDING;
+    // Close button (X) in top-right corner
+    CGFloat closeButtonSize = 24;
+    _closeButton = [[BG3SECloseButton alloc] initWithFrame:NSMakeRect(w - PADDING - closeButtonSize, PADDING + (TANIT_SIZE - closeButtonSize) / 2, closeButtonSize, closeButtonSize)];
+    _closeButton.target = self;
+    _closeButton.action = @selector(closeButtonClicked:);
+    [self addSubview:_closeButton];
 
-    _scrollView = [[NSScrollView alloc] initWithFrame:NSMakeRect(PADDING, outputTop, w - PADDING * 2, outputHeight)];
+    // ========== Tab Bar ==========
+
+    CGFloat tabBarY = PADDING + TANIT_SIZE + 8;
+    _tabBar = [[NSView alloc] initWithFrame:NSMakeRect(PADDING, tabBarY, w - PADDING * 2, TAB_HEIGHT)];
+    _tabBar.wantsLayer = YES;
+    _tabBar.layer.backgroundColor = [NSColor colorWithRed:0.1 green:0.1 blue:0.12 alpha:1.0].CGColor;
+
+    _tabButtons = [NSMutableArray array];
+    NSArray *tabTitles = @[@"Console", @"Mods", @"Entities"];
+    for (int i = 0; i < TAB_COUNT; i++) {
+        BG3SETabButton *tab = [[BG3SETabButton alloc] initWithFrame:NSMakeRect(i * TAB_WIDTH, 0, TAB_WIDTH, TAB_HEIGHT)
+                                                               title:tabTitles[i]
+                                                            tabIndex:i];
+        tab.target = self;
+        tab.action = @selector(tabClicked:);
+        [_tabBar addSubview:tab];
+        [_tabButtons addObject:tab];
+    }
+    _currentTab = TAB_CONSOLE;
+    _tabButtons[TAB_CONSOLE].isSelected = YES;
+    [self addSubview:_tabBar];
+
+    // ========== Content Area (below tabs) ==========
+
+    CGFloat contentTop = tabBarY + TAB_HEIGHT + 8;
+    CGFloat inputAreaHeight = INPUT_HEIGHT + PADDING;
+    CGFloat contentHeight = h - contentTop - inputAreaHeight;
+
+    // --- Console Tab: Output view ---
+    _scrollView = [[NSScrollView alloc] initWithFrame:NSMakeRect(PADDING, contentTop, w - PADDING * 2, contentHeight)];
     _scrollView.hasVerticalScroller = YES;
     _scrollView.hasHorizontalScroller = NO;
     _scrollView.autohidesScrollers = YES;
     _scrollView.borderType = NSNoBorder;
     _scrollView.backgroundColor = [NSColor clearColor];
+    _scrollView.drawsBackground = NO;
 
-    _outputView = [[NSTextView alloc] initWithFrame:NSMakeRect(0, 0, w - PADDING * 2 - 15, outputHeight)];
+    _outputView = [[NSTextView alloc] initWithFrame:NSMakeRect(0, 0, w - PADDING * 2 - 15, contentHeight)];
     _outputView.backgroundColor = [NSColor clearColor];
+    _outputView.drawsBackground = NO;
     _outputView.textColor = TEXT_COLOR;
-    _outputView.font = [NSFont fontWithName:@"Menlo" size:12];
+    _outputView.font = [NSFont fontWithName:@"Menlo" size:FONT_SIZE];
     _outputView.editable = NO;
     _outputView.selectable = YES;
     _outputView.textContainerInset = NSMakeSize(4, 4);
+    [_outputView setAllowsUndo:NO];
+    [_outputView setRichText:YES];  // Enable rich text for colored output
+    [_outputView setImportsGraphics:NO];
     [_outputView setAutoresizingMask:NSViewWidthSizable];
 
     _scrollView.documentView = _outputView;
     [self addSubview:_scrollView];
 
-    // Prompt label
-    NSTextField *promptLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(PADDING, h - 32, 20, 24)];
-    promptLabel.stringValue = @">";
-    promptLabel.font = [NSFont fontWithName:@"Menlo-Bold" size:14];
-    promptLabel.textColor = TANIT_PRIMARY;
-    promptLabel.backgroundColor = [NSColor clearColor];
-    promptLabel.bordered = NO;
-    promptLabel.editable = NO;
-    [self addSubview:promptLabel];
+    // --- Mods Tab: Mods list view (initially hidden) ---
+    _modsScrollView = [[NSScrollView alloc] initWithFrame:NSMakeRect(PADDING, contentTop, w - PADDING * 2, contentHeight)];
+    _modsScrollView.hasVerticalScroller = YES;
+    _modsScrollView.hasHorizontalScroller = NO;
+    _modsScrollView.autohidesScrollers = YES;
+    _modsScrollView.borderType = NSNoBorder;
+    _modsScrollView.backgroundColor = [NSColor clearColor];
+    _modsScrollView.drawsBackground = NO;
+    _modsScrollView.hidden = YES;
+
+    _modsContentView = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, w - PADDING * 2 - 15, contentHeight)];
+    _modsContentView.wantsLayer = YES;
+    _modsScrollView.documentView = _modsContentView;
+    [self addSubview:_modsScrollView];
+
+    // --- Entities Tab: Placeholder (initially hidden) ---
+    _entitiesView = [[NSView alloc] initWithFrame:NSMakeRect(PADDING, contentTop, w - PADDING * 2, contentHeight)];
+    _entitiesView.wantsLayer = YES;
+    _entitiesView.hidden = YES;
+
+    // Placeholder label for entities
+    NSTextField *entitiesLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(20, contentHeight / 2, 300, 40)];
+    entitiesLabel.stringValue = @"Entity Browser\n(Coming Soon)";
+    entitiesLabel.font = [NSFont systemFontOfSize:16 weight:NSFontWeightLight];
+    entitiesLabel.textColor = [NSColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:1.0];
+    entitiesLabel.backgroundColor = [NSColor clearColor];
+    entitiesLabel.bordered = NO;
+    entitiesLabel.editable = NO;
+    entitiesLabel.alignment = NSTextAlignmentCenter;
+    [_entitiesView addSubview:entitiesLabel];
+    [self addSubview:_entitiesView];
+
+    // ========== Input Area (for Console tab) ==========
+
+    CGFloat inputY = h - PADDING - INPUT_HEIGHT;
+    _inputArea = [[NSView alloc] initWithFrame:NSMakeRect(0, inputY - 4, w, INPUT_HEIGHT + 8)];
+
+    CGFloat promptWidth = 20;
+
+    // Prompt label ">"
+    _promptLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(PADDING, 4, promptWidth, INPUT_HEIGHT)];
+    _promptLabel.stringValue = @">";
+    _promptLabel.font = [NSFont fontWithName:@"Menlo-Bold" size:FONT_SIZE];
+    _promptLabel.textColor = TANIT_PRIMARY;
+    _promptLabel.backgroundColor = [NSColor clearColor];
+    _promptLabel.bordered = NO;
+    _promptLabel.editable = NO;
+    _promptLabel.selectable = NO;
+    NSTextFieldCell *promptCell = _promptLabel.cell;
+    [promptCell setLineBreakMode:NSLineBreakByClipping];
+    [_inputArea addSubview:_promptLabel];
 
     // Input field
-    _inputField = [[NSTextField alloc] initWithFrame:NSMakeRect(PADDING + 20, h - 34, w - PADDING * 2 - 20, 26)];
-    _inputField.font = [NSFont fontWithName:@"Menlo" size:12];
+    _inputField = [[NSTextField alloc] initWithFrame:NSMakeRect(PADDING + promptWidth, 4, w - PADDING * 2 - promptWidth, INPUT_HEIGHT)];
+    _inputField.font = [NSFont fontWithName:@"Menlo" size:FONT_SIZE];
     _inputField.textColor = TEXT_COLOR;
     _inputField.backgroundColor = INPUT_BG_COLOR;
     _inputField.bordered = NO;
@@ -270,7 +471,113 @@ static bool s_initialized = false;
     _inputField.delegate = self;
     _inputField.wantsLayer = YES;
     _inputField.layer.cornerRadius = 4;
-    [self addSubview:_inputField];
+    _inputField.allowsEditingTextAttributes = NO;
+    [[_inputField cell] setUsesSingleLineMode:YES];
+    [[_inputField cell] setScrollable:YES];
+    [_inputArea addSubview:_inputField];
+
+    [self addSubview:_inputArea];
+
+    // Initialize mods list with placeholder data
+    [self updateModsList];
+}
+
+// Tab switching
+- (void)tabClicked:(BG3SETabButton *)sender {
+    if (_currentTab == sender.tabIndex) return;
+
+    // Deselect old tab
+    _tabButtons[_currentTab].isSelected = NO;
+
+    // Select new tab
+    _currentTab = sender.tabIndex;
+    sender.isSelected = YES;
+
+    // Show/hide views based on tab
+    _scrollView.hidden = (_currentTab != TAB_CONSOLE);
+    _modsScrollView.hidden = (_currentTab != TAB_MODS);
+    _entitiesView.hidden = (_currentTab != TAB_ENTITIES);
+    _inputArea.hidden = (_currentTab != TAB_CONSOLE);
+
+    if (_currentTab == TAB_MODS) {
+        [self updateModsList];
+    }
+}
+
+// Update mods list display
+- (void)updateModsList {
+    // Clear existing content
+    for (NSView *subview in [_modsContentView.subviews copy]) {
+        [subview removeFromSuperview];
+    }
+
+    // Placeholder mod data - in real implementation, this comes from the mod loader
+    NSArray *mods = @[
+        @{@"name": @"EntityTest", @"version": @"1.0", @"status": @"loaded", @"author": @"BG3SE"},
+        @{@"name": @"StaticDataTest", @"version": @"1.0", @"status": @"loaded", @"author": @"BG3SE"},
+        @{@"name": @"ExampleMod", @"version": @"0.5", @"status": @"error", @"author": @"Community"},
+    ];
+
+    CGFloat rowHeight = 50;
+    CGFloat y = _modsContentView.bounds.size.height - rowHeight;
+
+    for (NSDictionary *mod in mods) {
+        NSView *row = [[NSView alloc] initWithFrame:NSMakeRect(0, y, _modsContentView.bounds.size.width, rowHeight)];
+        row.wantsLayer = YES;
+        row.layer.backgroundColor = [NSColor colorWithRed:0.12 green:0.12 blue:0.14 alpha:1.0].CGColor;
+        row.layer.cornerRadius = 4;
+
+        // Mod name
+        NSTextField *nameLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(12, 26, 200, 18)];
+        nameLabel.stringValue = mod[@"name"];
+        nameLabel.font = [NSFont systemFontOfSize:14 weight:NSFontWeightMedium];
+        nameLabel.textColor = TEXT_COLOR;
+        nameLabel.backgroundColor = [NSColor clearColor];
+        nameLabel.bordered = NO;
+        nameLabel.editable = NO;
+        [row addSubview:nameLabel];
+
+        // Version and author
+        NSTextField *infoLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(12, 8, 200, 14)];
+        infoLabel.stringValue = [NSString stringWithFormat:@"v%@ by %@", mod[@"version"], mod[@"author"]];
+        infoLabel.font = [NSFont systemFontOfSize:11];
+        infoLabel.textColor = [NSColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:1.0];
+        infoLabel.backgroundColor = [NSColor clearColor];
+        infoLabel.bordered = NO;
+        infoLabel.editable = NO;
+        [row addSubview:infoLabel];
+
+        // Status badge
+        NSString *status = mod[@"status"];
+        NSColor *statusColor = [status isEqualToString:@"loaded"] ?
+            [NSColor colorWithRed:0.4 green:0.9 blue:0.5 alpha:1.0] :
+            [NSColor colorWithRed:1.0 green:0.4 blue:0.4 alpha:1.0];
+
+        NSTextField *statusLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(_modsContentView.bounds.size.width - 80, 16, 60, 18)];
+        statusLabel.stringValue = [status uppercaseString];
+        statusLabel.font = [NSFont systemFontOfSize:10 weight:NSFontWeightBold];
+        statusLabel.textColor = statusColor;
+        statusLabel.backgroundColor = [NSColor clearColor];
+        statusLabel.bordered = NO;
+        statusLabel.editable = NO;
+        statusLabel.alignment = NSTextAlignmentRight;
+        [row addSubview:statusLabel];
+
+        [_modsContentView addSubview:row];
+        y -= (rowHeight + 6);
+    }
+
+    // Resize content view to fit all mods
+    CGFloat totalHeight = mods.count * (rowHeight + 6);
+    if (totalHeight > _modsContentView.bounds.size.height) {
+        NSRect frame = _modsContentView.frame;
+        frame.size.height = totalHeight;
+        _modsContentView.frame = frame;
+    }
+}
+
+- (void)closeButtonClicked:(id)sender {
+    overlay_hide();
 }
 
 - (BOOL)isFlipped {
@@ -279,11 +586,14 @@ static bool s_initialized = false;
 
 - (void)appendOutput:(NSString *)text {
     dispatch_async(dispatch_get_main_queue(), ^{
+        // Determine color based on log level patterns
+        NSColor *textColor = colorForLogLevel([text UTF8String]);
+
         NSAttributedString *attrStr = [[NSAttributedString alloc]
             initWithString:[text stringByAppendingString:@"\n"]
             attributes:@{
-                NSForegroundColorAttributeName: TEXT_COLOR,
-                NSFontAttributeName: [NSFont fontWithName:@"Menlo" size:12]
+                NSForegroundColorAttributeName: textColor,
+                NSFontAttributeName: [NSFont fontWithName:@"Menlo" size:FONT_SIZE]
             }];
 
         [[self.outputView textStorage] appendAttributedString:attrStr];
@@ -327,7 +637,7 @@ static bool s_initialized = false;
     }
 }
 
-// Handle up/down arrows for history
+// Handle up/down arrows for history and Escape to close
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
     if (control == _inputField) {
         if (commandSelector == @selector(moveUp:)) {
@@ -346,6 +656,10 @@ static bool s_initialized = false;
                 _historyIndex = _commandHistory.count;
                 _inputField.stringValue = @"";
             }
+            return YES;
+        } else if (commandSelector == @selector(cancelOperation:)) {
+            // Escape key - hide overlay
+            overlay_hide();
             return YES;
         }
     }
