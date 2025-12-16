@@ -2,9 +2,9 @@
 
 This document tracks the development roadmap for achieving feature parity with Windows BG3SE (Norbyte's Script Extender).
 
-## Current Status: v0.33.0
+## Current Status: v0.34.0
 
-**Overall Feature Parity: ~66%** (based on comprehensive API function count analysis)
+**Overall Feature Parity: ~67%** (based on comprehensive API function count analysis)
 
 **Working Features:**
 - DYLD injection and Dobby hooking infrastructure
@@ -1291,6 +1291,7 @@ See **[docs/CHANGELOG.md](docs/CHANGELOG.md)** for detailed version history with
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| v0.34.0 | 2025-12-16 | **ARM64 Safe Hooking** - Complete infrastructure + discovery that FeatManager needs standard Dobby (#44, #40) |
 | v0.33.0 | 2025-12-15 | **StaticData Name Resolution** - FixedString names for feats, generic multi-type infrastructure (#40) |
 | v0.32.9 | 2025-12-15 | **Ext.Template API** - Template manager with Frida capture, OriginalTemplateComponent, 158 components (#41) |
 | v0.32.8 | 2025-12-15 | **Massive Tag Component Expansion** - 105 new tag components, 157 total, ~65% parity (#33) |
@@ -1351,27 +1352,34 @@ We've built automation tools to accelerate reaching Windows BG3SE component pari
 | ~~#32 Stats Sync~~ | ~~Prototype Managers~~ | ✅ DONE | Shadow stats + game stats sync complete | None |
 | **#6 NetChannel** | NetChannel API | **30%** | Network stack analysis needed, but Lua wrappers portable | None |
 | **#35 Ext.UI** | Noesis UI | **25%** | Deep game UI integration required | None |
-| **#40 StaticData** | Ext.StaticData | ~~70%~~ **20%** | Hook-based capture, session-scoped managers | **#44** |
+| **#40 StaticData** | Ext.StaticData | **75%** | Hook-based capture working, Dobby safe for FeatManager | None ✅ |
 
-### ARM64 Hooking Limitations (Dec 2025)
+### ARM64 Hooking Infrastructure (Dec 2025) ✅ RESOLVED
 
-**Issue #44** - [ARM64-Safe Inline Hooking Infrastructure](https://github.com/tdimino/bg3se-macos/issues/44)
+**Issue #44** - [ARM64-Safe Inline Hooking Infrastructure](https://github.com/tdimino/bg3se-macos/issues/44) - **COMPLETE**
 
-Dobby's inline hooking corrupts ARM64 PC-relative instructions (ADRP+LDR patterns). This blocks features requiring function hooks that use these patterns:
+Built complete ARM64-safe hooking infrastructure to handle functions with PC-relative instructions:
 
-| Affected Feature | Hook Required | Impact |
-|------------------|---------------|--------|
-| **Ext.StaticData** (Issue #40) | `FeatManager::GetFeats` | Full feat data inaccessible |
-| Potential future hooks | Any function with ADRP+LDR | Case-by-case evaluation needed |
+| Component | Purpose |
+|-----------|---------|
+| `arm64_decode.h/c` | Full instruction decoder (20+ types, ADRP/LDR/STP/branches) |
+| `arm64_hook.h/c` | Skip-and-redirect hooking API |
+| `arm64_analyze_prologue()` | Detects ADRP+LDR patterns in function prologues |
+| `tools/frida/analyze_prologue.js` | Runtime prologue analyzer for verification |
 
-**Root Cause:** ARM64's ADRP instruction encodes PC-relative offsets. When Dobby moves instructions to a trampoline, the PC value changes, causing the offset calculation to point to wrong addresses.
+**Key Discovery (Dec 16, 2025):** FeatManager::GetFeats has **NO ADRP+LDR patterns** - standard Dobby hooks work!
 
-**Workarounds Available:**
-- Frida Interceptor (works but creates tool conflicts)
-- Direct memory reads (no hook required, but misses dynamic data)
-- TypeContext traversal (gets metadata only)
+```
+FeatManager::GetFeats prologue @ 0x101b752b4:
++00: STP x22, x21, [sp, #-48]!   ← Standard frame setup
++04: STP x20, x19, [sp, #16]     ← No PC-relative instructions
++08: STP x29, x30, [sp, #32]     ← Safe for Dobby
++0C: ADD x29, sp, #32
+```
 
-**Permanent Solution:** Custom ARM64-aware hooking that detects and rewrites ADRP+LDR patterns.
+**Result:** Issue #40 (StaticData) is **unblocked** - FeatManager can use standard Dobby hooking.
+
+**Infrastructure Available For:** Future functions that DO have ADRP+LDR patterns will use the skip-and-redirect strategy automatically.
 
 ### Prioritized Implementation Order
 

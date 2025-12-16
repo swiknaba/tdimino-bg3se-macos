@@ -13,6 +13,35 @@ Each entry includes:
 
 ---
 
+## [v0.34.0] - 2025-12-16
+
+**Parity:** ~67% | **Category:** Hooks, StaticData | **Issues:** #44, #40
+
+### Added
+- **ARM64 Safe Hooking Infrastructure** - Complete skip-and-redirect hooking system for functions with ADRP+LDR prologues
+  - `arm64_decode.h/c` - Full ARM64 instruction decoder with 20+ instruction types
+  - `arm64_hook.h/c` - Safe hooking API: `arm64_safe_hook()`, `arm64_hook_at_offset()`, `arm64_unhook()`
+  - `arm64_analyze_prologue()` - Detects PC-relative instruction patterns
+  - Trampoline allocation within ±128MB for relative branches
+- **Frida prologue analyzer** - `tools/frida/analyze_prologue.js` for runtime verification
+- **ARM64_SAFE_HOOKING.md** - Comprehensive implementation documentation
+
+### Changed
+- **FeatManager::GetFeats now uses standard Dobby hook** - Frida analysis confirmed NO ADRP+LDR patterns in prologue
+- `staticdata_manager.c` - Falls through to Dobby when prologue is safe (no PC-relative instructions)
+
+### Fixed
+- **Issue #40 unblocked** - StaticData can now hook FeatManager without ARM64 corruption
+- Build errors: Added missing `#include <stddef.h>` and `#include <unistd.h>`
+
+### Technical
+- **Key Discovery**: FeatManager::GetFeats prologue is standard frame setup (STP x22,x21; STP x20,x19; STP x29,x30; ADD x29,sp,#32) - no ADRP patterns
+- **ARM64 ADRP encoding**: 21-bit immediate encodes ±4GB PC-relative page offset
+- **Skip-and-redirect strategy**: Hook AFTER safe instructions, let original prologue run in-place
+- **Trampoline structure**: [skipped prologue] + [overwritten insn] + [branch back to target+N]
+
+---
+
 ## [v0.33.0] - 2025-12-15
 
 **Parity:** ~66% | **Category:** StaticData | **Issues:** #40

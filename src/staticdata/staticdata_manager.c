@@ -508,10 +508,22 @@ static bool install_feat_getfeats_safe_hook(void* main_binary_base) {
             return false;
         }
     } else {
-        // No ADRP in prologue - can use standard Dobby hook
-        log_message("[StaticData] No ADRP in prologue - could use standard Dobby hook");
-        // For now, still use TypeContext to be safe
-        return false;
+        // No ADRP in prologue - safe to use standard Dobby hook!
+        log_message("[StaticData] No ADRP in prologue - installing standard Dobby hook");
+
+        void* original = NULL;
+        int result = DobbyHook(target, (void*)hook_FeatGetFeats, (void**)&original);
+
+        if (result == 0 && original) {
+            g_orig_FeatGetFeats = (FeatGetFeats_t)original;
+            g_staticdata.feat_getfeats_hook = target;
+            log_message("[StaticData] Dobby hook installed successfully!");
+            log_message("[StaticData]   Original function trampoline: %p", original);
+            return true;
+        } else {
+            log_message("[StaticData] WARNING: Dobby hook installation failed (result=%d)", result);
+            return false;
+        }
     }
 }
 
