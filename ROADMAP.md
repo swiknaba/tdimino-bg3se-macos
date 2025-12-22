@@ -2,9 +2,9 @@
 
 This document tracks the development roadmap for achieving feature parity with Windows BG3SE (Norbyte's Script Extender).
 
-## Current Status: v0.35.0
+## Current Status: v0.36.2
 
-**Overall Feature Parity: ~70%** (based on comprehensive API function count analysis)
+**Overall Feature Parity: ~73%** (based on comprehensive API function count analysis)
 
 **Working Features:**
 - DYLD injection and Dobby hooking infrastructure
@@ -53,8 +53,8 @@ This document tracks the development roadmap for achieving feature parity with W
 | `Ext.Audio` | ✅ Full (17) | ❌ Not impl | **0%** | 10 |
 | `Ext.Localization` | ✅ Full (2) | ⚠️ GetLanguage + safe stubs (1/2) | **50%** | 10 |
 | `Ext.StaticData` | ✅ Full (5) | ✅ GetAll, Get, **Auto-capture**, TriggerCapture, Name resolution | **85%** | 10 |
-| `Ext.Resource` | ✅ Full (2) | ❌ Not impl | **0%** | 10 |
-| `Ext.Template` | ✅ Full (9) | ⚠️ Frida capture + Lua API (5/9) | **50%** | 10 |
+| `Ext.Resource` | ✅ Full (2) | ✅ Get, GetAll, GetTypes, GetCount, IsReady (5) | **100%** | 10 |
+| `Ext.Template` | ✅ Full (9) | ✅ 14 functions, **auto-capture**, Cache/LocalCache iteration | **100%** | 10 |
 | Console/REPL | ✅ Full | ✅ Socket + file + in-game overlay | **95%** | 5 |
 | PersistentVars | ✅ Full | ✅ File-based | **90%** | 2.4 |
 | Client Lua State | ✅ Full | ❌ Not impl | **0%** | 2.7 |
@@ -1168,17 +1168,42 @@ Ext.StaticData.DumpFeatMemory()  -- Diagnostic memory dump
 Resource types: Feat (✅ complete with auto-capture), Race (🔶 config ready), Background (🔶 no Name field), Origin (🔶), God (🔶), ClassDescription (🔶)
 
 ### 10.2 Ext.Resource & Ext.Template API
-**Status:** ❌ Not Started - [Issue #41](https://github.com/tdimino/bg3se-macos/issues/41)
+**Status:** ✅ Complete - [Issue #41](https://github.com/tdimino/bg3se-macos/issues/41)
+
+**Ext.Resource: ✅ Complete (v0.36.2)** - Full API for non-GUID resources
 
 ```lua
--- Template access
-local templates = Ext.Template.GetAllLocalCacheTemplates()
-local template = Ext.Template.Get(templateGuid)
-
--- Resource access
-local exists = Ext.Resource.Exists(path)
-local resource = Ext.Resource.Load(path, resourceType)
+-- Resource access (34 types: Visual, Material, Texture, Dialog, etc.)
+Ext.Resource.IsReady()           -- true when ResourceManager available
+Ext.Resource.GetTypes()          -- Returns all 34 type names
+Ext.Resource.GetCount("Visual")  -- Returns count (10000+)
+Ext.Resource.GetAll("Dialog")    -- Returns all Dialog resources
+Ext.Resource.Get(id, "Material") -- Get specific resource by FixedString ID
 ```
+
+**Global pointer:** `ls::ResourceManager::m_ptr` at offset `0x08a8f070`
+- ResourceBank at manager `+0x28` (primary) and `+0x30` (secondary)
+- Hash table traversal for resource iteration
+
+**Ext.Template: ✅ Complete (v0.36.1)** - Full API with auto-capture
+
+```lua
+-- Template access (all working!)
+Ext.Template.IsReady()                    -- Check if initialized
+Ext.Template.GetCount("Cache")            -- 61 templates
+Ext.Template.GetCount("LocalCache")       -- 19 templates
+Ext.Template.GetAllCacheTemplates()       -- Iterate with GUIDs
+Ext.Template.GetAllLocalCacheTemplates()  -- Iterate with GUIDs
+Ext.Template.Get(guid)                    -- Cascading lookup
+Ext.Template.DumpStatus()                 -- Debug info
+```
+
+**Implementation:** Uses direct global pointer reads (no hooks needed) discovered via Ghidra:
+- `GlobalTemplateManager::m_ptr` at offset `0x08a88508`
+- `CacheTemplateManager::m_ptr` at offset `0x08a309a8`
+- `Level::s_CacheTemplateManager` at offset `0x08a735d8`
+
+Key discovery: Template GUID at +0x10 is a FixedString index, resolved via `fixed_string_resolve()`.
 
 ### 10.3 Ext.Localization API
 **Status:** ❌ Not Started - [Issue #39](https://github.com/tdimino/bg3se-macos/issues/39)
@@ -1281,7 +1306,7 @@ Full debugging experience with breakpoints, stepping, and variable inspection.
 | D4 | Audio (Ext.Audio) | Medium | ❌ Not Started | [#38](https://github.com/tdimino/bg3se-macos/issues/38) |
 | D5 | Localization (Ext.Localization) | Low | ❌ Not Started | [#39](https://github.com/tdimino/bg3se-macos/issues/39) |
 | D6 | Static Data (Ext.StaticData) | Medium | 🔶 Blocked by #44 | [#40](https://github.com/tdimino/bg3se-macos/issues/40) |
-| D7 | Resource/Template Management | Medium | 🔄 In Progress (Ext.Template) | [#41](https://github.com/tdimino/bg3se-macos/issues/41) |
+| D7 | Resource/Template Management | Medium | ✅ Complete (v0.36.2) | [#41](https://github.com/tdimino/bg3se-macos/issues/41) |
 | D8 | VS Code Debugger | High | ❌ Not Started | [#42](https://github.com/tdimino/bg3se-macos/issues/42) |
 | D9 | Input Injection | Medium | ❌ Not Started | - |
 | D10 | Virtual Textures | Medium | ❌ Not Started | - |
@@ -1300,6 +1325,7 @@ See **[docs/CHANGELOG.md](docs/CHANGELOG.md)** for detailed version history with
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| v0.36.1 | 2025-12-21 | **Template Auto-Capture** - Direct global pointer reads, no hooks needed (#41) |
 | v0.35.0 | 2025-12-20 | **Dynamic Array Components** - 6 array-enabled components with ArrayProxy (#33) |
 | v0.34.2 | 2025-12-20 | **Issue #40 Fix** - GetAll returns all entries (41 feats), fixed probe logic |
 | v0.34.1 | 2025-12-17 | **StaticData Auto-Capture** - Eliminates Frida requirement, TriggerCapture API (#40) |
@@ -1356,7 +1382,7 @@ We've built automation tools to accelerate reaching Windows BG3SE component pari
 | **#33 Components** | Component Layouts | **80%** | Existing tools: `extract_typeids.py` + `generate_component_stubs.py` | None |
 | **#39 Localization** | Ext.Localization | **75%** | Simple string table lookup, minimal API surface | None |
 | **#36 IMGUI** | Ext.IMGUI | **70%** | Official ImGui Metal backend exists | None |
-| **#41 Resource** | Ext.Resource/Template | **65%** | Same pattern as StaticData | None |
+| ~~#41 Resource~~ | ~~Ext.Resource/Template~~ | ✅ DONE | Both Ext.Resource + Ext.Template complete | None |
 | **#42 Debugger** | VS Code Debugger | **60%** | DAP protocol has reference implementations | None |
 | **#15 Client State** | Client Lua State | **50%** | Mirror server pattern, hook game state | None |
 | **#37 Level** | Ext.Level (Physics) | **50%** | Find physics engine, port LevelLib.inl | None |

@@ -116,6 +116,10 @@ extern "C" {
 #include "template_manager.h"
 #include "lua_template.h"
 
+// Resource system
+#include "resource_manager.h"
+#include "lua_resource.h"
+
 // Enable hooks (set to 0 to disable for testing)
 #define ENABLE_HOOKS 1
 
@@ -701,6 +705,9 @@ static void register_ext_api(lua_State *L) {
 
     // Ext.Template namespace (game object templates)
     lua_template_register(L, -1);
+
+    // Ext.Resource namespace (game resources)
+    lua_resource_register(L, -1);
 
     // Set Ext as global
     lua_setglobal(L, "Ext");
@@ -2589,6 +2596,10 @@ static void install_hooks(void) {
                 // Initialize template manager (for Ext.Template)
                 template_manager_init(binary_base);
                 LOG_CORE_INFO("Template manager initialized (capture via Frida)");
+
+                // Initialize resource manager (for Ext.Resource)
+                resource_manager_init(binary_base);
+                LOG_CORE_INFO("Resource manager initialized");
 
                 // Initialize localization system
                 localization_init(binary_base);

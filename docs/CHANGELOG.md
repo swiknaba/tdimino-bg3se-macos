@@ -13,6 +13,127 @@ Each entry includes:
 
 ---
 
+## [v0.36.2] - 2025-12-21
+
+**Parity:** ~73% | **Category:** Resource System | **Issues:** #41
+
+### Added
+- **Ext.Resource API** - Access to non-GUID game resources (Visual, Material, Texture, etc.)
+  - `Ext.Resource.IsReady()` - Returns true when ResourceManager is available
+  - `Ext.Resource.GetTypes()` - Returns all 34 resource type names
+  - `Ext.Resource.GetCount(type)` - Returns count for a resource type
+  - `Ext.Resource.GetAll(type)` - Returns all resources of a type
+  - `Ext.Resource.Get(id, type)` - Get specific resource by FixedString ID
+
+### Technical
+- **Global pointer offset:** `ls::ResourceManager::m_ptr` at `0x08a8f070`
+- **ResourceBank offsets:**
+  - Primary bank at ResourceManager `+0x28`
+  - Secondary bank at ResourceManager `+0x30`
+- **ResourceContainer structure:**
+  - Bank array at `+0x08` (indexed by type * 8)
+  - Bucket count at `+0x08` within each bank
+  - Bucket array at `+0x10`
+- **Hash table traversal** for resource iteration
+- **34 ResourceBankType values:** Visual, VisualSet, Animation, AnimationSet, Texture, Material, Physics, Effect, Script, Sound, Lighting, Atmosphere, AnimationBlueprint, MeshProxy, MaterialSet, BlendSpace, FCurve, Timeline, Dialog, VoiceBark, TileSet, IKRig, Skeleton, VirtualTexture, TerrainBrush, ColorList, CharacterVisual, MaterialPreset, SkinPreset, ClothCollider, DiffusionProfile, LightCookie, TimelineScene, SkeletonMirrorTable
+
+### Bug Fix
+- Fixed Lua stack index bug in `lua_resource_register()` - relative index must be converted to absolute before pushing new tables
+
+### Files Added
+- `src/resource/resource_manager.c` - Core resource manager implementation
+- `src/resource/resource_manager.h` - Header with ResourceBankType enum
+- `src/lua/lua_resource.c` - Lua bindings for Ext.Resource
+- `src/lua/lua_resource.h` - Header
+- `ghidra/offsets/RESOURCE.md` - Offset documentation
+
+---
+
+## [v0.36.1] - 2025-12-21
+
+**Parity:** ~72% | **Category:** Template System | **Issues:** #41
+
+### Added
+- **Template Auto-Capture** - Templates now captured automatically via direct global pointer reads (no hooks needed)
+  - `Ext.Template.IsReady()` - Returns true after lazy initialization
+  - `Ext.Template.GetCount("Cache")` - Returns 61 templates
+  - `Ext.Template.GetCount("LocalCache")` - Returns 19 templates
+  - `Ext.Template.GetAllCacheTemplates()` - Iterate all cached templates with GUIDs
+  - `Ext.Template.GetAllLocalCacheTemplates()` - Iterate local cache templates
+
+### Technical
+- **Global pointer offsets discovered via Ghidra:**
+  - `GlobalTemplateManager::m_ptr` at `0x08a88508`
+  - `CacheTemplateManager::m_ptr` at `0x08a309a8`
+  - `Level::s_CacheTemplateManager` at `0x08a735d8`
+- **CacheTemplateManagerBase structure:**
+  - Value array (template pointers) at offset `+0x80`
+  - Template count at offset `+0x98`
+- **GameObjectTemplate GUID** at offset `+0x10` is a FixedString index, resolved via `fixed_string_resolve()`
+- **Vtable validation** prevents crashes from invalid template pointers
+- **Lazy initialization** - Global pointers are NULL at startup, retry on first API access
+
+### Why Hooks Failed
+ARM64 ADRP instruction at offset +0xC in `GetTemplateRaw` leaves only 8 bytes of safe prologue space (need 16 for absolute branch). Solution: Read singleton pointers directly instead of hooking.
+
+### Files Modified
+- `src/template/template_manager.c` - Global pointer offsets, iteration, GUID fix
+- `src/lua/lua_template.c` - Simplified template-to-Lua conversion
+- `ghidra/offsets/TEMPLATE.md` - Comprehensive structure documentation
+
+---
+
+## [v0.36.0] - 2025-12-20
+
+**Parity:** ~72% | **Category:** Template System | **Issues:** #41
+
+### Added
+- **Ext.Template API Expansion** - Expanded from 12 to 14 functions with full property access
+  - `GetAllLocalCacheTemplates()` - Returns templates from LocalCacheTemplates manager
+  - `GetAllLocalTemplates()` - Returns templates from LocalTemplateManager
+
+- **Template Property Expansion** - Templates now expose 10 properties (up from 4)
+  | Property | Type | Description |
+  |----------|------|-------------|
+  | Guid | string | Template GUID |
+  | TemplateId | string | Resolved template ID |
+  | TemplateName | string | Resolved template name |
+  | ParentTemplateId | string | Resolved parent template ID |
+  | Type | string | Template type (Character, Item, etc.) |
+  | RawType | string | Raw type from virtual function |
+  | TemplateIdFs | integer | FixedString index for ID |
+  | TemplateNameFs | integer | FixedString index for name |
+  | ParentTemplateIdFs | integer | FixedString index for parent |
+  | Handle | integer | Runtime template handle |
+
+- **Template Type Detection** - `GetType()` now returns proper type names via virtual function call
+  - Supported types: Character, Item, Scenery, Surface, Projectile, Decal, Trigger, Prefab, Light
+  - Falls back to "Unknown" only for truly unrecognized types
+
+### Technical
+- Virtual function call for type detection: VMT[3] is GetType() on ARM64
+- FixedString resolution via `fixed_string_resolve()` for string properties
+- Safe memory reads with bounds checking for all property access
+- Added `template_get_type_string()` for raw type access via virtual call
+
+### Usage Example
+```lua
+-- Get a template with full properties
+local tmpl = Ext.Template.Get("your-template-guid")
+if tmpl then
+    _P("Template: " .. (tmpl.TemplateName or "unnamed"))
+    _P("Type: " .. tmpl.Type)
+    _P("Parent: " .. (tmpl.ParentTemplateId or "none"))
+end
+
+-- Enumerate all local cache templates
+for i, t in ipairs(Ext.Template.GetAllLocalCacheTemplates()) do
+    _P(i .. ": " .. t.Guid .. " (" .. t.Type .. ")")
+end
+```
+
+---
+
 ## [v0.35.0] - 2025-12-20
 
 **Parity:** ~70% | **Category:** Entity Components | **Issues:** #33

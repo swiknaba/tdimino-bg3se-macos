@@ -188,6 +188,15 @@ TemplateType template_get_type(GameObjectTemplate* tmpl);
 const char* template_type_to_string(TemplateType type);
 
 /**
+ * Get the raw template type string by calling the virtual GetType() function.
+ * This returns the actual type name from the game (e.g., "character", "item").
+ * @param out_buf Buffer for the type string
+ * @param buf_size Size of buffer
+ * @return Pointer to buffer on success, NULL on failure
+ */
+const char* template_get_type_string(GameObjectTemplate* tmpl, char* out_buf, size_t buf_size);
+
+/**
  * Get the template's FixedString ID (for Ext.Stats correlation).
  */
 uint32_t template_get_id_fs(GameObjectTemplate* tmpl);
@@ -196,6 +205,40 @@ uint32_t template_get_id_fs(GameObjectTemplate* tmpl);
  * Get the template's FixedString Name.
  */
 uint32_t template_get_name_fs(GameObjectTemplate* tmpl);
+
+/**
+ * Get the parent template's FixedString ID.
+ */
+uint32_t template_get_parent_template_id_fs(GameObjectTemplate* tmpl);
+
+/**
+ * Get the template's handle (for runtime lookup).
+ */
+uint32_t template_get_handle(GameObjectTemplate* tmpl);
+
+/**
+ * Get the template's ID as a resolved string.
+ * @param out_buf Buffer for string (recommended 64+ bytes)
+ * @param buf_size Size of buffer
+ * @return Pointer to buffer on success, NULL on failure
+ */
+const char* template_get_id_string(GameObjectTemplate* tmpl, char* out_buf, size_t buf_size);
+
+/**
+ * Get the template's name as a resolved string.
+ * @param out_buf Buffer for string (recommended 256+ bytes)
+ * @param buf_size Size of buffer
+ * @return Pointer to buffer on success, NULL on failure
+ */
+const char* template_get_template_name_string(GameObjectTemplate* tmpl, char* out_buf, size_t buf_size);
+
+/**
+ * Get the template's parent ID as a resolved string.
+ * @param out_buf Buffer for string (recommended 64+ bytes)
+ * @param buf_size Size of buffer
+ * @return Pointer to buffer on success, NULL on failure
+ */
+const char* template_get_parent_template_string(GameObjectTemplate* tmpl, char* out_buf, size_t buf_size);
 
 // ============================================================================
 // Frida Capture Integration
@@ -212,6 +255,19 @@ bool template_load_frida_capture(void);
  * Check if Frida capture file exists.
  */
 bool template_frida_capture_available(void);
+
+// ============================================================================
+// Auto-Capture Hooks
+// ============================================================================
+
+/**
+ * Install template manager hooks for auto-capture.
+ * Should be called after main binary base is known.
+ * Hooks GetTemplateRaw and CacheTemplate to capture manager pointers.
+ * @param main_binary_base Base address of the main BG3 binary
+ * @return true if at least one hook was installed
+ */
+bool template_install_hooks(void* main_binary_base);
 
 // ============================================================================
 // Debugging

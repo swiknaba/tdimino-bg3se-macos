@@ -8,6 +8,8 @@
 #include "template_manager.h"
 #include "../core/logging.h"
 #include "../core/safe_memory.h"
+#include "../strings/fixed_string.h"
+#include "../hooks/arm64_hook.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,19 +19,38 @@
 // Constants and Offsets
 // ============================================================================
 
-// Template manager structure offsets (ARM64, discovered via Frida/Ghidra)
-// These are placeholder values - need runtime verification!
-#define TEMPLATE_MAP_OFFSET          0x08    // Offset to templates HashMap in manager
-#define TEMPLATE_MAP_BUCKETS_OFFSET  0x00    // HashMap buckets
-#define TEMPLATE_MAP_SIZE_OFFSET     0x10    // HashMap size/count
-#define TEMPLATE_MAP_KEYS_OFFSET     0x28    // HashMap keys array
-#define TEMPLATE_MAP_VALUES_OFFSET   0x38    // HashMap values array
+// CacheTemplateManagerBase structure offsets (ARM64, discovered via Ghidra 2025-12-21)
+// From decompilation of CacheTemplateManagerBase::GetTemplate
+#define CACHE_MGR_BUCKET_PTR_OFFSET      0x50    // Hash bucket array pointer
+#define CACHE_MGR_BUCKET_COUNT_OFFSET    0x58    // Bucket count
+#define CACHE_MGR_NEXT_CHAIN_OFFSET      0x60    // Next chain array (for collision handling)
+#define CACHE_MGR_KEY_ARRAY_OFFSET       0x70    // Key array (TemplateHandle values)
+#define CACHE_MGR_VALUE_ARRAY_OFFSET     0x80    // Value array (GameObjectTemplate pointers!)
+#define CACHE_MGR_COUNT_OFFSET           0x98    // Template count (verified at runtime)
+
+// GameObjectTemplate structure offsets (ARM64, discovered via Ghidra 2025-12-21)
+#define TEMPLATE_VTABLE_OFFSET           0x00    // vtable pointer
+#define TEMPLATE_GUID_FS_OFFSET          0x10    // FixedString containing GUID
 
 // Frida capture file paths
 #define FRIDA_CAPTURE_DIR            "/tmp"
 #define FRIDA_CAPTURE_TEMPLATES      "/tmp/bg3se_templates.txt"
 #define FRIDA_CAPTURE_GLOBAL_BANK    "/tmp/bg3se_globalbank.txt"
 #define FRIDA_CAPTURE_CACHE_MGR      "/tmp/bg3se_cache_mgr.txt"
+
+// Hook offsets (ARM64, discovered via Ghidra 2025-12-20) - DISABLED due to ADRP constraints
+// GlobalTemplateManager::GetTemplateRaw(FixedString const&)
+#define OFFSET_GET_TEMPLATE_RAW      0x05f96304
+
+// CacheTemplateManagerBase::CacheTemplate(GameObjectTemplate*, FixedString&, FixedString&)
+#define OFFSET_CACHE_TEMPLATE        0x05d31ce4
+
+// Global singleton pointer offsets (discovered via Ghidra CacheTemplateIfNeeded analysis)
+// These can be read directly without hooking!
+#define OFFSET_GLOBAL_TEMPLATE_MANAGER_PTR  0x08a88508  // ls::GlobalTemplateManager::m_ptr
+#define OFFSET_CACHE_TEMPLATE_MANAGER_PTR   0x08a309a8  // CacheTemplateManager::m_ptr
+#define OFFSET_LEVEL_CACHE_MANAGER_PTR      0x08a735d8  // Level::s_CacheTemplateManager
+#define OFFSET_LEVEL_MANAGER_PTR            0x08a3be40  // LevelManager::m_ptr
 
 // ============================================================================
 // Type Name Tables
@@ -76,6 +97,179 @@ typedef struct {
 } TemplateManagerState;
 
 static TemplateManagerState g_template = {0};
+
+// ============================================================================
+// Hook Functions for Auto-Capture
+// ============================================================================
+
+#include <dobby.h>
+
+/**
+ * Hook for GlobalTemplateManager::GetTemplateRaw
+ * Signature: void* GetTemplateRaw(GlobalTemplateManager* this, FixedString const& fs_id)
+ * On ARM64: x0 = this (GlobalTemplateManager*), x1 = fs_id (passed by value as uint32_t)
+ */
+typedef void* (*GetTemplateRaw_t)(void* this_ptr, uint32_t fs_id);
+static GetTemplateRaw_t g_orig_GetTemplateRaw = NULL;
+
+static void* hook_GetTemplateRaw(void* global_template_mgr, uint32_t fs_id) {
+    // Capture GlobalTemplateManager on first call
+    if (global_template_mgr && !g_template.managers[TEMPLATE_MANAGER_GLOBAL_BANK]) {
+        g_template.managers[TEMPLATE_MANAGER_GLOBAL_BANK] = global_template_mgr;
+        log_message("[Template] *** AUTO-CAPTURE *** GlobalTemplateManager: %p", global_template_mgr);
+
+        // Mark as initialized
+        g_template.initialized = true;
+    }
+
+    // Call original function
+    if (g_orig_GetTemplateRaw) {
+        return g_orig_GetTemplateRaw(global_template_mgr, fs_id);
+    }
+    return NULL;
+}
+
+/**
+ * Hook for CacheTemplateManagerBase::CacheTemplate
+ * Signature: long CacheTemplate(CacheTemplateManagerBase* this, GameObjectTemplate*, FixedString&, FixedString&)
+ * On ARM64: x0 = this (CacheTemplateManagerBase*)
+ */
+typedef void* (*CacheTemplate_t)(void* this_ptr, void* tmpl, void* fs1, void* fs2);
+static CacheTemplate_t g_orig_CacheTemplate = NULL;
+
+static void* hook_CacheTemplate(void* cache_mgr, void* tmpl, void* fs1, void* fs2) {
+    // Capture CacheTemplateManager on first call
+    if (cache_mgr && !g_template.managers[TEMPLATE_MANAGER_CACHE]) {
+        g_template.managers[TEMPLATE_MANAGER_CACHE] = cache_mgr;
+        log_message("[Template] *** AUTO-CAPTURE *** CacheTemplateManager: %p", cache_mgr);
+    }
+
+    // Call original function
+    if (g_orig_CacheTemplate) {
+        return g_orig_CacheTemplate(cache_mgr, tmpl, fs1, fs2);
+    }
+    return NULL;
+}
+
+/**
+ * Install a single ARM64-safe hook with ADRP detection.
+ * Returns true if hook was installed successfully.
+ */
+static bool install_arm64_safe_hook(const char* name, void* target, void* hook_fn, void** orig_out) {
+    log_message("[Template] Analyzing %s prologue at %p", name, target);
+    arm64_analyze_and_log(target, name);
+
+    if (arm64_has_prologue_adrp(target)) {
+        log_message("[Template] ADRP detected in %s prologue - using ARM64 safe hook", name);
+
+        int safe_offset = arm64_get_recommended_hook_offset(target);
+        if (safe_offset < 0) {
+            log_message("[Template] WARNING: No safe hook point found for %s", name);
+            return false;
+        }
+
+        log_message("[Template] Safe hook point for %s at +%d (0x%x)", name, safe_offset, safe_offset);
+
+        void* original = NULL;
+        void* hook_addr = arm64_safe_hook(target, hook_fn, &original);
+
+        if (hook_addr && original) {
+            *orig_out = original;
+            log_message("[Template] ARM64 safe hook installed for %s!", name);
+            log_message("[Template]   Original function trampoline: %p", original);
+            return true;
+        } else {
+            log_message("[Template] WARNING: ARM64 safe hook failed for %s", name);
+            return false;
+        }
+    } else {
+        log_message("[Template] No ADRP in %s prologue - installing standard Dobby hook", name);
+
+        void* original = NULL;
+        int result = DobbyHook(target, hook_fn, (void**)&original);
+
+        if (result == 0 && original) {
+            *orig_out = original;
+            log_message("[Template] Dobby hook installed for %s at %p", name, target);
+            log_message("[Template]   Original function trampoline: %p", original);
+            return true;
+        } else {
+            log_message("[Template] WARNING: Dobby hook failed for %s (result=%d)", name, result);
+            return false;
+        }
+    }
+}
+
+/**
+ * Read template manager singletons from global pointers.
+ * This is called periodically to refresh manager pointers (they may be NULL early in startup).
+ * Returns true if at least one manager was captured.
+ */
+static bool template_read_global_pointers(void* main_binary_base) {
+    if (!main_binary_base) return false;
+
+    int captured = 0;
+
+    // Read GlobalTemplateManager::m_ptr
+    void** global_mgr_ptr = (void**)((uintptr_t)main_binary_base + OFFSET_GLOBAL_TEMPLATE_MANAGER_PTR);
+    void* global_mgr = *global_mgr_ptr;
+    if (global_mgr && !g_template.managers[TEMPLATE_MANAGER_GLOBAL_BANK]) {
+        g_template.managers[TEMPLATE_MANAGER_GLOBAL_BANK] = global_mgr;
+        log_message("[Template] Captured GlobalTemplateManager: %p (from global ptr)", global_mgr);
+        captured++;
+    }
+
+    // Read CacheTemplateManager::m_ptr
+    void** cache_mgr_ptr = (void**)((uintptr_t)main_binary_base + OFFSET_CACHE_TEMPLATE_MANAGER_PTR);
+    void* cache_mgr = *cache_mgr_ptr;
+    if (cache_mgr && !g_template.managers[TEMPLATE_MANAGER_CACHE]) {
+        g_template.managers[TEMPLATE_MANAGER_CACHE] = cache_mgr;
+        log_message("[Template] Captured CacheTemplateManager: %p (from global ptr)", cache_mgr);
+        captured++;
+    }
+
+    // Read Level::s_CacheTemplateManager (level-local cache)
+    void** level_cache_ptr = (void**)((uintptr_t)main_binary_base + OFFSET_LEVEL_CACHE_MANAGER_PTR);
+    void* level_cache = *level_cache_ptr;
+    if (level_cache && !g_template.managers[TEMPLATE_MANAGER_LOCAL_CACHE]) {
+        g_template.managers[TEMPLATE_MANAGER_LOCAL_CACHE] = level_cache;
+        log_message("[Template] Captured Level::CacheTemplateManager: %p (from global ptr)", level_cache);
+        captured++;
+    }
+
+    return captured > 0;
+}
+
+/**
+ * Install template manager hooks for auto-capture.
+ * Should be called after main binary base is known.
+ *
+ * NEW APPROACH: Instead of hooking (blocked by ARM64 ADRP constraints),
+ * we read the global singleton pointers directly from the binary.
+ */
+bool template_install_hooks(void* main_binary_base) {
+    if (!main_binary_base) {
+        log_message("[Template] Cannot capture: no binary base");
+        return false;
+    }
+
+    g_template.main_binary_base = main_binary_base;
+
+    log_message("[Template] Using global pointer read approach (no hooks needed)");
+    log_message("[Template]   GlobalTemplateManager::m_ptr at offset 0x%x", OFFSET_GLOBAL_TEMPLATE_MANAGER_PTR);
+    log_message("[Template]   CacheTemplateManager::m_ptr at offset 0x%x", OFFSET_CACHE_TEMPLATE_MANAGER_PTR);
+    log_message("[Template]   Level::s_CacheTemplateManager at offset 0x%x", OFFSET_LEVEL_CACHE_MANAGER_PTR);
+
+    // Try to read managers now (may be NULL if called early)
+    bool captured = template_read_global_pointers(main_binary_base);
+    if (captured) {
+        log_message("[Template] Initial capture successful!");
+    } else {
+        log_message("[Template] Managers not yet initialized, will retry on first access");
+    }
+
+    return true;  // Always "succeeds" - we'll retry on access
+}
 
 // ============================================================================
 // GUID Utilities
@@ -242,6 +436,16 @@ bool template_manager_init(void* main_binary_base) {
     memset(g_template.managers, 0, sizeof(g_template.managers));
     memset(g_template.template_counts, -1, sizeof(g_template.template_counts));
 
+    // Install auto-capture hooks
+    if (main_binary_base) {
+        bool hooks_ok = template_install_hooks(main_binary_base);
+        if (hooks_ok) {
+            log_message("[Template] Auto-capture hooks installed (waiting for game activity)");
+        } else {
+            log_message("[Template] Failed to install auto-capture hooks, falling back to Frida capture");
+        }
+    }
+
     g_template.initialized = true;
     log_message("[Template] Template manager initialized");
 
@@ -256,6 +460,13 @@ bool template_manager_ready(void) {
     // Check if any manager is captured
     for (int i = 0; i < TEMPLATE_MANAGER_COUNT; i++) {
         if (g_template.managers[i]) {
+            return true;
+        }
+    }
+
+    // Try to read global pointers (lazy initialization)
+    if (g_template.main_binary_base) {
+        if (template_read_global_pointers(g_template.main_binary_base)) {
             return true;
         }
     }
@@ -399,7 +610,19 @@ int template_get_count(TemplateManagerType mgr_type) {
         return -1;
     }
 
-    // TODO: Read count from manager structure once we know the offset
+    void* mgr = g_template.managers[mgr_type];
+
+    // CacheTemplateManager and LocalCacheTemplates use CacheTemplateManagerBase layout
+    if (mgr_type == TEMPLATE_MANAGER_CACHE || mgr_type == TEMPLATE_MANAGER_LOCAL_CACHE) {
+        // Read count from +0x98 offset (verified via Ghidra 2025-12-21)
+        uint32_t count = 0;
+        if (safe_memory_read((mach_vm_address_t)mgr + CACHE_MGR_COUNT_OFFSET,
+                             &count, sizeof(count))) {
+            return (int)count;
+        }
+    }
+
+    // GlobalTemplateBank uses different layout - use stored count for now
     return g_template.template_counts[mgr_type];
 }
 
@@ -415,7 +638,42 @@ GameObjectTemplate* template_get_by_index(TemplateManagerType mgr_type, int inde
         return NULL;
     }
 
-    // TODO: Implement index-based access from manager
+    void* mgr = g_template.managers[mgr_type];
+
+    // CacheTemplateManager and LocalCacheTemplates use CacheTemplateManagerBase layout
+    if (mgr_type == TEMPLATE_MANAGER_CACHE || mgr_type == TEMPLATE_MANAGER_LOCAL_CACHE) {
+        // Read the value array pointer from +0x80 offset
+        void* value_array = NULL;
+        if (!safe_memory_read((mach_vm_address_t)mgr + CACHE_MGR_VALUE_ARRAY_OFFSET,
+                              &value_array, sizeof(value_array))) {
+            return NULL;
+        }
+        if (!value_array) return NULL;
+
+        // Read template pointer at index * 8 (pointer size)
+        GameObjectTemplate* tmpl = NULL;
+        if (!safe_memory_read((mach_vm_address_t)value_array + index * sizeof(void*),
+                              &tmpl, sizeof(tmpl))) {
+            return NULL;
+        }
+
+        // Validate the template pointer by checking its vtable
+        if (tmpl) {
+            void* vtable = NULL;
+            if (!safe_memory_read((mach_vm_address_t)tmpl + TEMPLATE_VTABLE_OFFSET,
+                                  &vtable, sizeof(vtable))) {
+                return NULL;  // Can't read vtable - invalid pointer
+            }
+            // Vtable should be in a reasonable address range (code section)
+            if (!vtable || (uintptr_t)vtable < 0x100000000 || (uintptr_t)vtable > 0x200000000) {
+                return NULL;  // Invalid vtable - skip this entry
+            }
+        }
+
+        return tmpl;
+    }
+
+    // GlobalTemplateBank uses different layout - not implemented yet
     return NULL;
 }
 
@@ -446,25 +704,100 @@ int template_iterate(TemplateManagerType mgr_type, TemplateIterCallback callback
 bool template_get_guid_string(GameObjectTemplate* tmpl, char* out_buf, size_t buf_size) {
     if (!tmpl || !out_buf || buf_size < 37) return false;
 
-    // GUID is at the id_fs field, but we need to read the actual GUID bytes
-    // This may be elsewhere in the structure - need to discover via Frida
-    TemplateGuid guid;
-    if (!safe_memory_read((mach_vm_address_t)tmpl + 0x10,
-                          &guid, sizeof(guid))) {
+    // GUID is stored as a FixedString at offset +0x10 (discovered via runtime probing 2025-12-21)
+    // Read the FixedString index, then resolve it to get the actual GUID string
+    uint32_t fs_index = 0;
+    if (!safe_memory_read((mach_vm_address_t)tmpl + TEMPLATE_GUID_FS_OFFSET,
+                          &fs_index, sizeof(fs_index))) {
         return false;
     }
 
-    format_guid(&guid, out_buf, buf_size);
+    if (fs_index == 0) return false;
+
+    // Resolve the FixedString to get the actual string
+    const char* guid_str = fixed_string_resolve(fs_index);
+    if (!guid_str || !*guid_str) return false;
+
+    // Copy to output buffer
+    strncpy(out_buf, guid_str, buf_size - 1);
+    out_buf[buf_size - 1] = '\0';
     return true;
+}
+
+/**
+ * Call the virtual GetType() function on a template.
+ * On ARM64, this is at VMT offset 3 (destructor=0, GetName=1, DebugDump=2, GetType=3).
+ * Returns a FixedString* that we can resolve.
+ */
+static uint32_t template_call_get_type_vfunc(GameObjectTemplate* tmpl) {
+    if (!tmpl) return 0;
+
+    // Read VMT pointer from template
+    void* vmt = NULL;
+    if (!safe_memory_read((mach_vm_address_t)tmpl, &vmt, sizeof(void*))) {
+        return 0;
+    }
+    if (!vmt) return 0;
+
+    // Read GetType function pointer from VMT[3]
+    // VMT layout: [0]=destructor, [1]=GetName, [2]=DebugDump, [3]=GetType
+    void* get_type_fn = NULL;
+    if (!safe_memory_read((mach_vm_address_t)vmt + 3 * sizeof(void*), &get_type_fn, sizeof(void*))) {
+        return 0;
+    }
+    if (!get_type_fn) return 0;
+
+    // Call the virtual function
+    // FixedString* GetType() const - returns pointer to FixedString
+    // The return is likely a static FixedString, so we read the index from it
+    typedef void* (*GetTypeFn)(GameObjectTemplate*);
+    GetTypeFn fn = (GetTypeFn)get_type_fn;
+
+    // Call the function (may return pointer to FixedString)
+    void* result = fn(tmpl);
+    if (!result) return 0;
+
+    // Read the FixedString index from the returned pointer
+    uint32_t fs_index = 0;
+    if (safe_memory_read_u32((mach_vm_address_t)result, &fs_index)) {
+        return fs_index;
+    }
+
+    return 0;
 }
 
 TemplateType template_get_type(GameObjectTemplate* tmpl) {
     if (!tmpl) return TEMPLATE_TYPE_UNKNOWN;
 
-    // Type is typically determined by VMT
-    // TODO: Build VMT -> type mapping via runtime discovery
+    // Try calling the virtual GetType() function
+    uint32_t type_fs = template_call_get_type_vfunc(tmpl);
+    if (type_fs && type_fs != FS_NULL_INDEX) {
+        // Resolve the FixedString to get the type name
+        const char* type_str = fixed_string_resolve(type_fs);
+        if (type_str) {
+            // Map type string to enum
+            if (strcmp(type_str, "character") == 0 || strstr(type_str, "Character") != NULL) {
+                return TEMPLATE_TYPE_CHARACTER;
+            } else if (strcmp(type_str, "item") == 0 || strstr(type_str, "Item") != NULL) {
+                return TEMPLATE_TYPE_ITEM;
+            } else if (strcmp(type_str, "scenery") == 0 || strstr(type_str, "Scenery") != NULL) {
+                return TEMPLATE_TYPE_SCENERY;
+            } else if (strcmp(type_str, "surface") == 0 || strstr(type_str, "Surface") != NULL) {
+                return TEMPLATE_TYPE_SURFACE;
+            } else if (strcmp(type_str, "projectile") == 0 || strstr(type_str, "Projectile") != NULL) {
+                return TEMPLATE_TYPE_PROJECTILE;
+            } else if (strcmp(type_str, "decal") == 0 || strstr(type_str, "Decal") != NULL) {
+                return TEMPLATE_TYPE_DECAL;
+            } else if (strcmp(type_str, "trigger") == 0 || strstr(type_str, "Trigger") != NULL) {
+                return TEMPLATE_TYPE_TRIGGER;
+            } else if (strcmp(type_str, "prefab") == 0 || strstr(type_str, "Prefab") != NULL) {
+                return TEMPLATE_TYPE_PREFAB;
+            } else if (strcmp(type_str, "light") == 0 || strstr(type_str, "Light") != NULL) {
+                return TEMPLATE_TYPE_LIGHT;
+            }
+        }
+    }
 
-    // For now, return unknown
     return TEMPLATE_TYPE_UNKNOWN;
 }
 
@@ -473,6 +806,27 @@ const char* template_type_to_string(TemplateType type) {
         return "Unknown";
     }
     return s_template_type_names[type];
+}
+
+const char* template_get_type_string(GameObjectTemplate* tmpl, char* out_buf, size_t buf_size) {
+    if (!tmpl || !out_buf || buf_size == 0) return NULL;
+
+    // Try calling the virtual GetType() function
+    uint32_t type_fs = template_call_get_type_vfunc(tmpl);
+    if (type_fs && type_fs != FS_NULL_INDEX) {
+        const char* type_str = fixed_string_resolve(type_fs);
+        if (type_str) {
+            strncpy(out_buf, type_str, buf_size - 1);
+            out_buf[buf_size - 1] = '\0';
+            return out_buf;
+        }
+        // Fallback: return hex representation
+        snprintf(out_buf, buf_size, "FS:0x%x", type_fs);
+        return out_buf;
+    }
+
+    out_buf[0] = '\0';
+    return NULL;
 }
 
 uint32_t template_get_id_fs(GameObjectTemplate* tmpl) {
@@ -493,6 +847,87 @@ uint32_t template_get_name_fs(GameObjectTemplate* tmpl) {
         return fs;
     }
     return 0;
+}
+
+uint32_t template_get_parent_template_id_fs(GameObjectTemplate* tmpl) {
+    if (!tmpl) return 0;
+
+    uint32_t fs = 0;
+    if (safe_memory_read_u32((mach_vm_address_t)&tmpl->parent_template_id_fs, &fs)) {
+        return fs;
+    }
+    return 0;
+}
+
+uint32_t template_get_handle(GameObjectTemplate* tmpl) {
+    if (!tmpl) return 0;
+
+    uint32_t handle = 0;
+    if (safe_memory_read_u32((mach_vm_address_t)&tmpl->template_handle, &handle)) {
+        return handle;
+    }
+    return 0;
+}
+
+const char* template_get_id_string(GameObjectTemplate* tmpl, char* out_buf, size_t buf_size) {
+    if (!tmpl || !out_buf || buf_size == 0) return NULL;
+
+    uint32_t fs = template_get_id_fs(tmpl);
+    if (fs == 0 || fs == FS_NULL_INDEX) {
+        out_buf[0] = '\0';
+        return NULL;
+    }
+
+    const char* resolved = fixed_string_resolve(fs);
+    if (resolved) {
+        strncpy(out_buf, resolved, buf_size - 1);
+        out_buf[buf_size - 1] = '\0';
+        return out_buf;
+    }
+
+    // Fallback: return hex representation
+    snprintf(out_buf, buf_size, "FS:0x%x", fs);
+    return out_buf;
+}
+
+const char* template_get_template_name_string(GameObjectTemplate* tmpl, char* out_buf, size_t buf_size) {
+    if (!tmpl || !out_buf || buf_size == 0) return NULL;
+
+    uint32_t fs = template_get_name_fs(tmpl);
+    if (fs == 0 || fs == FS_NULL_INDEX) {
+        out_buf[0] = '\0';
+        return NULL;
+    }
+
+    const char* resolved = fixed_string_resolve(fs);
+    if (resolved) {
+        strncpy(out_buf, resolved, buf_size - 1);
+        out_buf[buf_size - 1] = '\0';
+        return out_buf;
+    }
+
+    snprintf(out_buf, buf_size, "FS:0x%x", fs);
+    return out_buf;
+}
+
+const char* template_get_parent_template_string(GameObjectTemplate* tmpl, char* out_buf, size_t buf_size) {
+    if (!tmpl || !out_buf || buf_size == 0) return NULL;
+
+    uint32_t fs = template_get_parent_template_id_fs(tmpl);
+    if (fs == 0 || fs == FS_NULL_INDEX) {
+        out_buf[0] = '\0';
+        return NULL;
+    }
+
+    const char* resolved = fixed_string_resolve(fs);
+    if (resolved) {
+        strncpy(out_buf, resolved, buf_size - 1);
+        out_buf[buf_size - 1] = '\0';
+        return out_buf;
+    }
+
+    snprintf(out_buf, buf_size, "FS:0x%x", fs);
+    return out_buf;
 }
 
 // ============================================================================

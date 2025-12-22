@@ -44,7 +44,7 @@ SE mods work automatically—just install them like any other mod:
 
 ## Status
 
-**Version:** v0.35.0 | **Feature Parity:** ~70%
+**Version:** v0.36.2 | **Feature Parity:** ~73%
 
 | Feature | Status |
 |---------|--------|
@@ -61,7 +61,8 @@ SE mods work automatically—just install them like any other mod:
 | Ext.Math | ✅ Vector/matrix operations |
 | Ext.Enums | ✅ 14 enum/bitfield types |
 | Ext.StaticData | ✅ **Auto-capture** (no Frida needed), Name resolution, TriggerCapture |
-| Ext.Template | ⚠️ Frida capture workflow (5/9 functions) |
+| Ext.Resource | ✅ Get, GetAll, GetTypes, GetCount (34 resource types) |
+| Ext.Template | ✅ **Auto-capture**, iteration (Cache/LocalCache), GUID resolution |
 | Lifetime Scoping | ✅ Prevents stale object access |
 | Debug Console | ✅ Socket + file + in-game overlay |
 | Testing | ✅ `!test` suite, Debug.* helpers, Frida scripts |
@@ -117,6 +118,9 @@ bg3se-macos/
 │   │   ├── lua_osiris.c/h      # Osi.* namespace bindings
 │   │   ├── lua_debug.c/h       # Ext.Debug memory introspection
 │   │   ├── lua_json.c/h        # JSON encode/decode
+│   │   ├── lua_resource.c/h    # Ext.Resource bindings
+│   │   ├── lua_template.c/h    # Ext.Template bindings
+│   │   ├── lua_staticdata.c/h  # Ext.StaticData bindings
 │   │   └── lua_persistentvars.c/h  # Ext.Vars persistence
 │   ├── entity/
 │   │   ├── entity_system.c/h   # Core ECS, Lua bindings
@@ -150,6 +154,12 @@ bg3se-macos/
 │   │   └── pak_reader.c/h      # LSPK v18 PAK file parsing
 │   ├── math/
 │   │   └── math_ext.c/h        # Ext.Math vector/matrix ops
+│   ├── resource/
+│   │   └── resource_manager.c/h  # Ext.Resource (34 resource types)
+│   ├── staticdata/
+│   │   └── staticdata_manager.c/h  # Ext.StaticData (Feats, etc.)
+│   ├── template/
+│   │   └── template_manager.c/h  # Ext.Template (auto-capture)
 │   └── hooks/
 │       └── osiris_hooks.c/h    # Osiris event interception
 │
@@ -162,6 +172,8 @@ bg3se-macos/
 │   └── offsets/                # Discovered offset documentation
 │       ├── STATS.md            # RPGStats, FixedStrings (0x348)
 │       ├── ENTITY_SYSTEM.md    # ECS architecture
+│       ├── RESOURCE.md         # ResourceManager (0x08a8f070)
+│       ├── TEMPLATE.md         # Template managers
 │       └── ...
 │
 ├── docs/                       # User-facing documentation

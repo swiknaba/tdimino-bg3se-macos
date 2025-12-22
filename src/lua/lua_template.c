@@ -39,30 +39,75 @@ static int push_template_to_lua(lua_State* L, GameObjectTemplate* tmpl) {
     lua_pushlightuserdata(L, tmpl);
     lua_setfield(L, -2, "_ptr");
 
-    // Add GUID
+    // Add GUID - using safe memory read
     char guid_str[40];
     if (template_get_guid_string(tmpl, guid_str, sizeof(guid_str))) {
         lua_pushstring(L, guid_str);
         lua_setfield(L, -2, "Guid");
     }
 
-    // Add FixedString IDs
+    // Skip other properties for now - they may cause crashes
+    // TODO: Re-enable after verifying safe access patterns
+    #if 0
+    // Add FixedString IDs (raw values)
     uint32_t id_fs = template_get_id_fs(tmpl);
     if (id_fs) {
         lua_pushinteger(L, id_fs);
-        lua_setfield(L, -2, "TemplateId");
+        lua_setfield(L, -2, "TemplateIdFs");
     }
 
     uint32_t name_fs = template_get_name_fs(tmpl);
     if (name_fs) {
         lua_pushinteger(L, name_fs);
-        lua_setfield(L, -2, "NameId");
+        lua_setfield(L, -2, "TemplateNameFs");
     }
 
-    // Add type
+    uint32_t parent_fs = template_get_parent_template_id_fs(tmpl);
+    if (parent_fs) {
+        lua_pushinteger(L, parent_fs);
+        lua_setfield(L, -2, "ParentTemplateIdFs");
+    }
+
+    // Add template handle
+    uint32_t handle = template_get_handle(tmpl);
+    if (handle) {
+        lua_pushinteger(L, handle);
+        lua_setfield(L, -2, "Handle");
+    }
+
+    // Add resolved string properties
+    char buf[256];
+
+    // TemplateId as string (resolved from FixedString)
+    if (template_get_id_string(tmpl, buf, sizeof(buf))) {
+        lua_pushstring(L, buf);
+        lua_setfield(L, -2, "TemplateId");
+    }
+
+    // TemplateName as string (resolved from FixedString)
+    if (template_get_template_name_string(tmpl, buf, sizeof(buf))) {
+        lua_pushstring(L, buf);
+        lua_setfield(L, -2, "TemplateName");
+    }
+
+    // ParentTemplateId as string (resolved from FixedString)
+    if (template_get_parent_template_string(tmpl, buf, sizeof(buf))) {
+        lua_pushstring(L, buf);
+        lua_setfield(L, -2, "ParentTemplateId");
+    }
+
+    // Add type (enum-based)
     TemplateType type = template_get_type(tmpl);
     lua_pushstring(L, template_type_to_string(type));
     lua_setfield(L, -2, "Type");
+
+    // Add raw type string (from virtual function)
+    char type_buf[64];
+    if (template_get_type_string(tmpl, type_buf, sizeof(type_buf))) {
+        lua_pushstring(L, type_buf);
+        lua_setfield(L, -2, "RawType");
+    }
+    #endif
 
     return 1;
 }
@@ -144,6 +189,54 @@ static int lua_template_get_all_cache(lua_State* L) {
 
     for (int i = 0; i < count; i++) {
         GameObjectTemplate* tmpl = template_get_by_index(TEMPLATE_MANAGER_CACHE, i);
+        if (tmpl) {
+            push_template_to_lua(L, tmpl);
+            lua_rawseti(L, -2, i + 1);
+        }
+    }
+
+    return 1;
+}
+
+/**
+ * Ext.Template.GetAllLocalCacheTemplates()
+ * Returns an array of all templates in LocalCacheTemplates.
+ */
+static int lua_template_get_all_local_cache(lua_State* L) {
+    int count = template_get_count(TEMPLATE_MANAGER_LOCAL_CACHE);
+    if (count < 0) {
+        lua_newtable(L);
+        return 1;
+    }
+
+    lua_createtable(L, count, 0);
+
+    for (int i = 0; i < count; i++) {
+        GameObjectTemplate* tmpl = template_get_by_index(TEMPLATE_MANAGER_LOCAL_CACHE, i);
+        if (tmpl) {
+            push_template_to_lua(L, tmpl);
+            lua_rawseti(L, -2, i + 1);
+        }
+    }
+
+    return 1;
+}
+
+/**
+ * Ext.Template.GetAllLocalTemplates()
+ * Returns an array of all templates in LocalTemplateManager.
+ */
+static int lua_template_get_all_local(lua_State* L) {
+    int count = template_get_count(TEMPLATE_MANAGER_LOCAL);
+    if (count < 0) {
+        lua_newtable(L);
+        return 1;
+    }
+
+    lua_createtable(L, count, 0);
+
+    for (int i = 0; i < count; i++) {
+        GameObjectTemplate* tmpl = template_get_by_index(TEMPLATE_MANAGER_LOCAL, i);
         if (tmpl) {
             push_template_to_lua(L, tmpl);
             lua_rawseti(L, -2, i + 1);
@@ -269,18 +362,20 @@ static int lua_template_dump_entries(lua_State* L) {
 // ============================================================================
 
 static const struct luaL_Reg template_functions[] = {
-    {"Get",                  lua_template_get},
-    {"GetRootTemplate",      lua_template_get_root},
-    {"GetCacheTemplate",     lua_template_get_cache},
-    {"GetAllRootTemplates",  lua_template_get_all_root},
-    {"GetAllCacheTemplates", lua_template_get_all_cache},
-    {"GetCount",             lua_template_get_count},
-    {"GetType",              lua_template_get_type},
-    {"IsReady",              lua_template_is_ready},
-    {"LoadFridaCapture",     lua_template_load_frida},
-    {"HasFridaCapture",      lua_template_has_frida},
-    {"DumpStatus",           lua_template_dump_status},
-    {"DumpEntries",          lua_template_dump_entries},
+    {"Get",                       lua_template_get},
+    {"GetRootTemplate",           lua_template_get_root},
+    {"GetCacheTemplate",          lua_template_get_cache},
+    {"GetAllRootTemplates",       lua_template_get_all_root},
+    {"GetAllCacheTemplates",      lua_template_get_all_cache},
+    {"GetAllLocalCacheTemplates", lua_template_get_all_local_cache},
+    {"GetAllLocalTemplates",      lua_template_get_all_local},
+    {"GetCount",                  lua_template_get_count},
+    {"GetType",                   lua_template_get_type},
+    {"IsReady",                   lua_template_is_ready},
+    {"LoadFridaCapture",          lua_template_load_frida},
+    {"HasFridaCapture",           lua_template_has_frida},
+    {"DumpStatus",                lua_template_dump_status},
+    {"DumpEntries",               lua_template_dump_entries},
     {NULL, NULL}
 };
 

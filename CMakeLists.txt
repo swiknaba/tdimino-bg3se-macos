@@ -36,6 +36,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/overlay
     ${CMAKE_SOURCE_DIR}/src/pak
     ${CMAKE_SOURCE_DIR}/src/stats
+    ${CMAKE_SOURCE_DIR}/src/resource
     ${CMAKE_SOURCE_DIR}/src/staticdata
     ${CMAKE_SOURCE_DIR}/src/strings
     ${CMAKE_SOURCE_DIR}/src/template
@@ -94,6 +95,8 @@ add_library(bg3se SHARED
     src/lua/lua_staticdata.c
     src/template/template_manager.c
     src/lua/lua_template.c
+    src/resource/resource_manager.c
+    src/lua/lua_resource.c
     src/hooks/arm64_decode.c
     src/hooks/arm64_hook.c
     lib/lz4/lz4.c
