@@ -58,6 +58,7 @@ extern "C" {
 
 // Lua modules
 #include "lua_ext.h"
+#include "lua_context.h"
 #include "lua_json.h"
 #include "lua_osiris.h"
 #include "lua_stats.h"
@@ -1578,9 +1579,12 @@ static void load_mod_scripts(lua_State *L) {
 
     LOG_LUA_INFO("Loading %d detected SE mod(s)...", se_count);
 
+    // Phase 1: Load all server bootstraps (in SERVER context)
+    LOG_LUA_INFO("=== Loading Server Bootstraps ===");
+    lua_context_set(LUA_CONTEXT_SERVER);
+
     for (int i = 0; i < se_count; i++) {
         const char *mod_name = mod_get_se_name(i);
-        LOG_LUA_INFO("Attempting to load SE mod: %s", mod_name);
 
         // Get ModTable name from Config.json (or fallback to mod_name)
         char *mod_table = get_mod_table_name(mod_name);
@@ -1590,18 +1594,27 @@ static void load_mod_scripts(lua_State *L) {
             free(mod_table);
         }
 
-        // Try to load server bootstrap (runs on both client and server in BG3)
+        // Load server bootstrap in SERVER context
         if (load_mod_bootstrap(L, mod_name, "Server") > 0) {
-            LOG_LUA_INFO("Successfully loaded server scripts for: %s", mod_name);
-        }
-
-        // Also try client bootstrap if it exists
-        if (load_mod_bootstrap(L, mod_name, "Client") > 0) {
-            LOG_LUA_INFO("Successfully loaded client scripts for: %s", mod_name);
+            LOG_LUA_INFO("Loaded BootstrapServer.lua for: %s (context=Server)", mod_name);
         }
     }
 
-    LOG_MOD_INFO("=== Mod Script Loading Complete ===");
+    // Phase 2: Load all client bootstraps (in CLIENT context)
+    LOG_LUA_INFO("=== Loading Client Bootstraps ===");
+    lua_context_set(LUA_CONTEXT_CLIENT);
+
+    for (int i = 0; i < se_count; i++) {
+        const char *mod_name = mod_get_se_name(i);
+
+        // Load client bootstrap in CLIENT context
+        if (load_mod_bootstrap(L, mod_name, "Client") > 0) {
+            LOG_LUA_INFO("Loaded BootstrapClient.lua for: %s (context=Client)", mod_name);
+        }
+    }
+
+    // Stay in CLIENT context after loading (we're on a client machine)
+    LOG_MOD_INFO("=== Mod Script Loading Complete (final context=Client) ===");
 }
 
 // ============================================================================
@@ -1641,6 +1654,9 @@ static void init_lua(void) {
 
     // Open standard libraries
     luaL_openlibs(L);
+
+    // Initialize context system (client/server tracking)
+    lua_context_init();
 
     // Initialize lifetime scoping system
     lifetime_lua_init(L);
@@ -1716,12 +1732,11 @@ static void init_lua(void) {
     }
     lua_pop(L, 1);  // pop Ext
 
-    // Run a test script
+    // Run a test script (context is NONE at init, before mod loading sets it)
     const char *test_script =
         "Ext.Print('BG3SE-macOS Lua runtime initialized!')\n"
         "Ext.Print('Version: ' .. Ext.GetVersion())\n"
-        "Ext.Print('IsClient: ' .. tostring(Ext.IsClient()))\n"
-        "Ext.Print('IsServer: ' .. tostring(Ext.IsServer()))\n"
+        "Ext.Print('Context: ' .. Ext.GetContext() .. ' (IsServer=' .. tostring(Ext.IsServer()) .. ', IsClient=' .. tostring(Ext.IsClient()) .. ')')\n"
         "-- Test JSON parsing\n"
         "local json = '{\"name\": \"test\", \"value\": 42, \"enabled\": true}'\n"
         "local parsed = Ext.Json.Parse(json)\n"

@@ -44,14 +44,14 @@ SE mods work automatically—just install them like any other mod:
 
 ## Status
 
-**Version:** v0.36.3 | **Feature Parity:** ~75%
+**Version:** v0.36.4 | **Feature Parity:** ~76%
 
 | Feature | Status |
 |---------|--------|
 | DYLD Injection | ✅ Complete |
 | Lua Runtime | ✅ Lua 5.4 with Ext API |
 | Mod Loading | ✅ PAK file reading, auto-detection |
-| Ext.Osiris | ✅ Event listeners, custom functions (NewCall/NewQuery/NewEvent/RaiseEvent/GetCustomFunctions) |
+| Ext.Osiris | ✅ Event listeners, custom functions (NewCall/NewQuery/NewEvent/RaiseEvent/GetCustomFunctions), **server context guards** |
 | Ext.Entity | ✅ GUID lookup, 158 components, **6 array-enabled** (Tags, Classes, Spells, Passives, Boosts) |
 | Ext.Stats | ✅ 15,774 stats, property read/write, **Sync complete (created + existing stats)** |
 | Ext.Events | ✅ 10 events with Prevent pattern |
@@ -64,6 +64,7 @@ SE mods work automatically—just install them like any other mod:
 | Ext.Resource | ✅ Get, GetAll, GetTypes, GetCount (34 resource types) |
 | Ext.Template | ✅ **Auto-capture**, iteration (Cache/LocalCache), GUID resolution |
 | Lifetime Scoping | ✅ Prevents stale object access |
+| Context System | ✅ **Server/Client context awareness**, Ext.IsServer/IsClient/GetContext, two-phase bootstrap |
 | Debug Console | ✅ Socket + file + in-game overlay |
 | Testing | ✅ `!test` suite, Debug.* helpers, Frida scripts |
 

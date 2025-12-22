@@ -2,7 +2,7 @@
 
 macOS port of Norbyte's Script Extender for Baldur's Gate 3. Goal: feature parity with Windows BG3SE.
 
-**Version:** v0.36.3 | **Parity:** ~75% | **Target:** Full Windows BG3SE mod compatibility
+**Version:** v0.36.4 | **Parity:** ~76% | **Target:** Full Windows BG3SE mod compatibility
 
 ## Stack
 
@@ -51,7 +51,8 @@ Use `bg3se-macos-ghidra` skill for Ghidra workflows and ARM64 patterns.
 ## Current API Status
 
 - **Osi.*** - Dynamic metatable (40+ functions)
-- **Ext.Osiris** - RegisterListener, NewCall/NewQuery/NewEvent
+- **Ext.Osiris** - RegisterListener, NewCall/NewQuery/NewEvent (server context guards)
+- **Context System** - Ext.IsServer/IsClient/GetContext, two-phase bootstrap (v0.36.4)
 - **Ext.Entity** - GUID lookup, 158 components, **6 array-enabled** (Tags, Classes, Spells, Passives, Boosts), GetByHandle
 - **Ext.Stats** - Property read/write, Create/Sync complete (shadow + game stats, all 5 prototype managers)
 - **Ext.Events** - 10 events with priority ordering, Once flag, Prevent pattern

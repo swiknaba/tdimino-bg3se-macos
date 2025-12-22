@@ -5,10 +5,35 @@
  */
 
 #include "lua_osiris.h"
+#include "lua_context.h"
 #include "custom_functions.h"
 #include "logging.h"
 
 #include <string.h>
+
+// ============================================================================
+// Context Guard Helpers
+// ============================================================================
+
+/**
+ * Check if current context allows Osiris operations.
+ * Osiris is server-side, so operations should be in SERVER context.
+ * Returns 1 if OK to proceed, 0 if context mismatch (logs warning).
+ */
+static int check_osiris_context(const char *operation) {
+    LuaContext ctx = lua_context_get();
+    if (ctx == LUA_CONTEXT_SERVER) {
+        return 1;  // OK - server context
+    }
+    if (ctx == LUA_CONTEXT_NONE) {
+        // During initialization, allow it but log
+        LOG_LUA_DEBUG("Osiris.%s called during initialization (context=None)", operation);
+        return 1;
+    }
+    // Client context - warn but allow for compatibility
+    LOG_LUA_DEBUG("Warning: Osiris.%s called in Client context (should be Server)", operation);
+    return 1;  // Allow for now, but logged
+}
 
 // ============================================================================
 // Internal State
@@ -22,6 +47,8 @@ static int osiris_listener_count = 0;
 // ============================================================================
 
 int lua_ext_osiris_registerlistener(lua_State *L) {
+    check_osiris_context("RegisterListener");
+
     const char *event = luaL_checkstring(L, 1);
     int arity = (int)luaL_checkinteger(L, 2);
     const char *timing = luaL_checkstring(L, 3);
@@ -57,6 +84,8 @@ int lua_ext_osiris_registerlistener(lua_State *L) {
 // ============================================================================
 
 int lua_ext_osiris_newcall(lua_State *L) {
+    check_osiris_context("NewCall");
+
     const char *name = luaL_checkstring(L, 1);
     const char *signature = luaL_checkstring(L, 2);
     luaL_checktype(L, 3, LUA_TFUNCTION);
@@ -79,6 +108,8 @@ int lua_ext_osiris_newcall(lua_State *L) {
 }
 
 int lua_ext_osiris_newquery(lua_State *L) {
+    check_osiris_context("NewQuery");
+
     const char *name = luaL_checkstring(L, 1);
     const char *signature = luaL_checkstring(L, 2);
     luaL_checktype(L, 3, LUA_TFUNCTION);
@@ -101,6 +132,8 @@ int lua_ext_osiris_newquery(lua_State *L) {
 }
 
 int lua_ext_osiris_newevent(lua_State *L) {
+    check_osiris_context("NewEvent");
+
     const char *name = luaL_checkstring(L, 1);
     const char *signature = luaL_checkstring(L, 2);
 
@@ -128,6 +161,8 @@ int lua_ext_osiris_newevent(lua_State *L) {
  *   -- Listeners registered via RegisterListener will receive the event
  */
 int lua_ext_osiris_raiseevent(lua_State *L) {
+    check_osiris_context("RaiseEvent");
+
     const char *eventName = luaL_checkstring(L, 1);
 
     // Find the custom event

@@ -2,9 +2,9 @@
 
 This document tracks the development roadmap for achieving feature parity with Windows BG3SE (Norbyte's Script Extender).
 
-## Current Status: v0.36.3
+## Current Status: v0.36.4
 
-**Overall Feature Parity: ~75%** (based on comprehensive API function count analysis)
+**Overall Feature Parity: ~76%** (based on comprehensive API function count analysis)
 
 **Working Features:**
 - DYLD injection and Dobby hooking infrastructure
@@ -57,7 +57,7 @@ This document tracks the development roadmap for achieving feature parity with W
 | `Ext.Template` | ✅ Full (9) | ✅ 14 functions, **auto-capture**, Cache/LocalCache iteration | **100%** | 10 |
 | Console/REPL | ✅ Full | ✅ Socket + file + in-game overlay | **95%** | 5 |
 | PersistentVars | ✅ Full | ✅ File-based | **90%** | 2.4 |
-| Client Lua State | ✅ Full | ❌ Not impl | **0%** | 2.7 |
+| Client Lua State | ✅ Full | ✅ Context awareness, two-phase bootstrap | **90%** | 2.7 |
 | Debugger | ✅ Full | ❌ Not impl | **0%** | 11 |
 
 ---
@@ -503,20 +503,36 @@ Ext.Vars.SyncModVariables()
 **Not Yet Implemented:**
 - Client/server sync (requires NetChannel API)
 
-### 2.7 Client Lua State
-**Status:** ❌ Not Started - **HIGH**
+### 2.7 Client Lua State & Context Separation
+**Status:** ✅ Complete (v0.36.4 - Issue #15)
 
 From API.md: "The game is split into client and server components... the extender keeps multiple Lua states."
 
-**Current State:** bg3se-macos only runs server-side Lua (BootstrapServer.lua)
+**Architecture Decision:** Single Lua state with context awareness (not dual states)
+- BG3 macOS is single-player where server/client run in same process
+- Simpler than dual Lua VMs while matching Windows BG3SE behavior
 
-**Missing:**
-- BootstrapClient.lua loading
-- Separate client Lua state
-- Client-only APIs (UI, rendering, level scaling)
+**Implemented:**
+- [x] `Ext.GetContext()` - Returns "Server", "Client", or "None"
+- [x] `Ext.IsServer()` / `Ext.IsClient()` - Real context detection (were hardcoded stubs)
+- [x] Two-phase bootstrap loading:
+  1. Phase 1: All BootstrapServer.lua files load in SERVER context
+  2. Phase 2: All BootstrapClient.lua files load in CLIENT context
+- [x] Context guards for server-only APIs (Osiris, Stats writes)
+- [x] Lifecycle: None → Server → Client
+
+**API:**
+```lua
+-- Check context
+print("Context:", Ext.GetContext())    -- "Server", "Client", or "None"
+print("IsServer:", Ext.IsServer())     -- true during BootstrapServer.lua
+print("IsClient:", Ext.IsClient())     -- true during BootstrapClient.lua
+```
+
+**Not Yet Implemented:**
+- True dual Lua state separation (if needed for full isolation)
+- Client-only APIs (Ext.UI, Ext.IMGUI, rendering hooks)
 - Context annotations (C = Client, S = Server, R = Restricted)
-
-**Impact:** Client-side mods (UI modification, visual effects) completely broken.
 
 ### 2.8 Object Scopes/Lifetimes
 **Status:** ✅ Complete (v0.29.0 - Issue #28)
@@ -1278,7 +1294,7 @@ Full debugging experience with breakpoints, stepping, and variable inspection.
 
 | ID | Feature | Effort | Status |
 |----|---------|--------|--------|
-| B1 | Client Lua State | High | ❌ Not Started |
+| B1 | Client Lua State | High | ✅ Complete (v0.36.4) - Context awareness, two-phase bootstrap |
 | B2 | Timer API | Low | ✅ Complete |
 | B3 | Console/REPL | Medium | ✅ Complete (socket + file + in-game overlay) |
 | B4 | GetAllComponents | Low | ✅ Complete |
@@ -1325,6 +1341,7 @@ See **[docs/CHANGELOG.md](docs/CHANGELOG.md)** for detailed version history with
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| v0.36.4 | 2025-12-22 | **Context System** - Server/Client context awareness, two-phase bootstrap, API guards (#15) |
 | v0.36.3 | 2025-12-22 | **StaticData All 9 Types** - ForceCapture + HashLookup for Race, God, FeatDescription (#45) |
 | v0.36.2 | 2025-12-21 | **Ext.Resource API** - 34 resource types (Visual, Material, Texture, etc.) (#41) |
 | v0.36.1 | 2025-12-21 | **Template Auto-Capture** - Direct global pointer reads, no hooks needed (#41) |
@@ -1386,7 +1403,7 @@ We've built automation tools to accelerate reaching Windows BG3SE component pari
 | **#36 IMGUI** | Ext.IMGUI | **70%** | Official ImGui Metal backend exists | None |
 | ~~#41 Resource~~ | ~~Ext.Resource/Template~~ | ✅ DONE | Both Ext.Resource + Ext.Template complete | None |
 | **#42 Debugger** | VS Code Debugger | **60%** | DAP protocol has reference implementations | None |
-| **#15 Client State** | Client Lua State | **50%** | Mirror server pattern, hook game state | None |
+| ~~#15 Client State~~ | ~~Client Lua State~~ | ✅ DONE | Context awareness, two-phase bootstrap | None |
 | **#37 Level** | Ext.Level (Physics) | **50%** | Find physics engine, port LevelLib.inl | None |
 | **#38 Audio** | Ext.Audio | **45%** | Wwise SDK has documented API | None |
 | ~~#32 Stats Sync~~ | ~~Prototype Managers~~ | ✅ DONE | Shadow stats + game stats sync complete | None |

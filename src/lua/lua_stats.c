@@ -5,6 +5,7 @@
  */
 
 #include "lua_stats.h"
+#include "lua_context.h"
 #include "../stats/stats_manager.h"
 #include "../stats/prototype_managers.h"
 #include "../strings/fixed_string.h"
@@ -152,6 +153,11 @@ static int lua_stats_object_index(lua_State *L) {
 
 // StatsObject.__newindex - Property modification
 static int lua_stats_object_newindex(lua_State *L) {
+    // Stats modification should be server-only, but allow with warning for compatibility
+    if (!lua_context_is_server() && lua_context_get() != LUA_CONTEXT_NONE) {
+        LOG_STATS_DEBUG("Warning: Stats modification in Client context (should be Server)");
+    }
+
     LuaStatsObject *ud = check_stats_object(L, 1);
     if (!lifetime_lua_is_valid(L, ud->lifetime)) {
         return lifetime_lua_expired_error(L, "StatsObject");
@@ -283,6 +289,11 @@ static int lua_stats_object_get_property(lua_State *L) {
 
 // StatsObject:SetProperty(name, value) -> bool
 static int lua_stats_object_set_property(lua_State *L) {
+    // Stats modification should be server-only, but allow with warning for compatibility
+    if (!lua_context_is_server() && lua_context_get() != LUA_CONTEXT_NONE) {
+        LOG_STATS_DEBUG("Warning: Stats.SetProperty in Client context (should be Server)");
+    }
+
     LuaStatsObject *ud = check_stats_object(L, 1);
     if (!lifetime_lua_is_valid(L, ud->lifetime)) {
         return lifetime_lua_expired_error(L, "StatsObject");
@@ -379,6 +390,11 @@ static int lua_stats_getall(lua_State *L) {
 
 // Ext.Stats.Sync(name) -> bool
 static int lua_stats_sync(lua_State *L) {
+    // Sync should be server-only, but allow with warning for compatibility
+    if (!lua_context_is_server() && lua_context_get() != LUA_CONTEXT_NONE) {
+        LOG_STATS_DEBUG("Warning: Stats.Sync in Client context (should be Server)");
+    }
+
     const char *name = luaL_checkstring(L, 1);
 
     bool success = stats_sync(name);
@@ -388,6 +404,11 @@ static int lua_stats_sync(lua_State *L) {
 
 // Ext.Stats.Create(name, type, template?) -> StatsObject or nil
 static int lua_stats_create(lua_State *L) {
+    // Create should be server-only, but allow with warning for compatibility
+    if (!lua_context_is_server() && lua_context_get() != LUA_CONTEXT_NONE) {
+        LOG_STATS_DEBUG("Warning: Stats.Create in Client context (should be Server)");
+    }
+
     const char *name = luaL_checkstring(L, 1);
     const char *type = luaL_checkstring(L, 2);
     const char *template_name = NULL;

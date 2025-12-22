@@ -13,6 +13,46 @@ Each entry includes:
 
 ---
 
+## [v0.36.4] - 2025-12-22
+
+**Parity:** ~76% | **Category:** Context System | **Issues:** #15
+
+### Added
+- **Client/Server Context Separation** - Lua execution context awareness
+  - `Ext.GetContext()` - Returns "Server", "Client", or "None"
+  - `Ext.IsServer()` / `Ext.IsClient()` - Now return real context state (were hardcoded stubs)
+  - Context transitions through lifecycle: None → Server (BootstrapServer.lua) → Client (BootstrapClient.lua)
+
+- **Context-Aware Bootstrap Loading** - Proper two-phase mod initialization
+  - Phase 1: All BootstrapServer.lua files load in SERVER context
+  - Phase 2: All BootstrapClient.lua files load in CLIENT context
+  - Matches Windows BG3SE single-player behavior
+
+- **Context Guards for Server-Only APIs**
+  - Ext.Osiris operations: RegisterListener, NewCall, NewQuery, NewEvent, RaiseEvent
+  - Ext.Stats write operations: SetProperty, Create, Sync
+  - Guards log warnings (not errors) for backward compatibility
+
+### Technical
+- **Architecture Decision**: Single Lua state with context flag (not dual states)
+  - BG3 macOS is single-player where server/client run in same process
+  - Simpler to maintain while matching Windows BG3SE behavior
+- **New module**: `src/lua/lua_context.c/h` - Context management
+  - `LuaContext` enum: NONE, SERVER, CLIENT
+  - Thread-safe static state with logging on transitions
+- **Context detection**: Based on bootstrap loading phase, not runtime hooks
+
+### Files Modified
+- `src/lua/lua_context.c` - NEW: Context management implementation
+- `src/lua/lua_context.h` - NEW: Context API declarations
+- `src/lua/lua_ext.c` - Real IsServer/IsClient/GetContext implementations
+- `src/injector/main.c` - Context init, two-phase bootstrap loading
+- `src/lua/lua_osiris.c` - Context guards for Osiris operations
+- `src/lua/lua_stats.c` - Context guards for Stats writes
+- `CMakeLists.txt` - Added lua_context.c to build
+
+---
+
 ## [v0.36.3] - 2025-12-22
 
 **Parity:** ~75% | **Category:** StaticData | **Issues:** #45

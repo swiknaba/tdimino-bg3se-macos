@@ -40,6 +40,12 @@ int lua_ext_isserver(lua_State *L);
  */
 int lua_ext_isclient(lua_State *L);
 
+/**
+ * Ext.GetContext() - Get current execution context as string
+ * @return "Server", "Client", or "None"
+ */
+int lua_ext_getcontext(lua_State *L);
+
 // ============================================================================
 // Ext.IO Functions
 // ============================================================================

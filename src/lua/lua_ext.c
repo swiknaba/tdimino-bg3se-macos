@@ -5,6 +5,7 @@
  */
 
 #include "lua_ext.h"
+#include "lua_context.h"
 #include "version.h"
 #include "logging.h"
 #include "../console/console.h"
@@ -51,14 +52,20 @@ int lua_ext_getversion(lua_State *L) {
 }
 
 int lua_ext_isserver(lua_State *L) {
-    // For now, always return false (client-side)
-    lua_pushboolean(L, 0);
+    // Use context system to determine if in server context
+    lua_pushboolean(L, lua_context_is_server());
     return 1;
 }
 
 int lua_ext_isclient(lua_State *L) {
-    // For now, always return true (client-side)
-    lua_pushboolean(L, 1);
+    // Use context system to determine if in client context
+    lua_pushboolean(L, lua_context_is_client());
+    return 1;
+}
+
+int lua_ext_getcontext(lua_State *L) {
+    // Return current context as string: "Server", "Client", or "None"
+    lua_pushstring(L, lua_context_get_name(lua_context_get()));
     return 1;
 }
 
@@ -351,6 +358,9 @@ void lua_ext_register_basic(lua_State *L, int ext_table_index) {
 
     lua_pushcfunction(L, lua_ext_isclient);
     lua_setfield(L, ext_table_index, "IsClient");
+
+    lua_pushcfunction(L, lua_ext_getcontext);
+    lua_setfield(L, ext_table_index, "GetContext");
 
     lua_pushcfunction(L, console_register_command);
     lua_setfield(L, ext_table_index, "RegisterConsoleCommand");
