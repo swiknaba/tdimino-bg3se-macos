@@ -6,6 +6,7 @@
 
 #include "component_property.h"
 #include "component_offsets.h"
+#include "generated_property_defs.h"  // 504 generated component layouts
 #include "../core/safe_memory.h"
 #include "../core/logging.h"
 #include "../lifetime/lifetime.h"
@@ -22,7 +23,7 @@
 // Constants
 // ============================================================================
 
-#define MAX_COMPONENT_LAYOUTS 128
+#define MAX_COMPONENT_LAYOUTS 1024  // Enough for all 1,999 components
 #define COMPONENT_PROXY_METATABLE "bg3se.ComponentProxy"
 #define ARRAY_PROXY_METATABLE "bg3se.ArrayProxy"
 
@@ -48,16 +49,32 @@ bool component_property_init(void) {
 
     g_LayoutCount = 0;
 
-    // Register built-in layouts from component_offsets.h
+    // Register built-in layouts from component_offsets.h (hand-verified)
+    int verified_count = 0;
     for (int i = 0; g_AllComponentLayouts[i] != NULL; i++) {
-        if (!component_property_register_layout(g_AllComponentLayouts[i])) {
-            LOG_ENTITY_DEBUG("Failed to register layout: %s",
-                           g_AllComponentLayouts[i]->componentName);
+        if (component_property_register_layout(g_AllComponentLayouts[i])) {
+            verified_count++;
         }
     }
+    LOG_ENTITY_DEBUG("Registered %d verified component layouts", verified_count);
+
+    // Register generated layouts from Windows BG3SE headers (unverified offsets)
+    int generated_count = 0;
+    for (int i = 0; i < GENERATED_COMPONENT_COUNT; i++) {
+        const ComponentLayoutDef* layout = g_GeneratedComponentLayouts[i];
+        if (!layout) continue;
+
+        // Skip if already registered (from g_AllComponentLayouts)
+        if (component_property_get_layout(layout->componentName)) continue;
+
+        if (component_property_register_layout(layout)) {
+            generated_count++;
+        }
+    }
+    LOG_ENTITY_DEBUG("Registered %d generated component layouts (Windows offsets)", generated_count);
 
     g_Initialized = true;
-    LOG_ENTITY_DEBUG("Component property system initialized with %d layouts", g_LayoutCount);
+    LOG_ENTITY_DEBUG("Component property system initialized with %d total layouts", g_LayoutCount);
     return true;
 }
 

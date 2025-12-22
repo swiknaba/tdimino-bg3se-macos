@@ -215,12 +215,16 @@ def parse_all_components() -> List[Component]:
 
     return all_components
 
-def generate_property_def(comp: Component) -> str:
-    """Generate C property definition for a component."""
+def generate_property_def(comp: Component, prefix: str = "Gen_") -> str:
+    """Generate C property definition for a component.
+
+    Uses prefix to avoid symbol conflicts with hand-verified layouts.
+    """
     lines = []
+    sym_name = f"{prefix}{comp.short_name}Component"
     lines.append(f"// {comp.full_name} (from {comp.source_file})")
     lines.append(f"// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!")
-    lines.append(f"static const ComponentPropertyDef g_{comp.short_name}Component_Properties[] = {{")
+    lines.append(f"static const ComponentPropertyDef g_{sym_name}_Properties[] = {{")
 
     for prop in comp.properties:
         # Map to FieldType enum from component_property.h
@@ -259,13 +263,13 @@ def generate_property_def(comp: Component) -> str:
     lines.append("")
 
     # Generate layout definition
-    lines.append(f"static const ComponentLayoutDef g_{comp.short_name}Component_Layout = {{")
+    lines.append(f"static const ComponentLayoutDef g_{sym_name}_Layout = {{")
     lines.append(f'    .componentName = "{comp.full_name}",')
     lines.append(f'    .shortName = "{comp.short_name}",')
     lines.append(f'    .componentTypeIndex = 0,  // Set dynamically from TypeId')
     lines.append(f'    .componentSize = 0x{max((p.offset + p.size) for p in comp.properties) if comp.properties else 0:02x},')
-    lines.append(f'    .properties = g_{comp.short_name}Component_Properties,')
-    lines.append(f'    .propertyCount = sizeof(g_{comp.short_name}Component_Properties) / sizeof(g_{comp.short_name}Component_Properties[0]),')
+    lines.append(f'    .properties = g_{sym_name}_Properties,')
+    lines.append(f'    .propertyCount = sizeof(g_{sym_name}_Properties) / sizeof(g_{sym_name}_Properties[0]),')
     lines.append("};")
     lines.append("")
 
@@ -354,7 +358,7 @@ def main():
     print()
     print("static const ComponentLayoutDef* g_GeneratedComponentLayouts[] = {")
     for comp in sorted_components:
-        print(f"    &g_{comp.short_name}Component_Layout,")
+        print(f"    &g_Gen_{comp.short_name}Component_Layout,")
     print("};")
     print()
     print("#endif // GENERATED_PROPERTY_DEFS_H")
