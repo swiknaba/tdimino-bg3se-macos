@@ -9,6 +9,7 @@
 #include "version.h"
 #include "logging.h"
 #include "../console/console.h"
+#include "../io/path_override.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -120,6 +121,24 @@ int lua_ext_io_savefile(lua_State *L) {
     fclose(f);
 
     lua_pushboolean(L, 1);
+    return 1;
+}
+
+int lua_ext_io_addpathoverride(lua_State *L) {
+    const char *original = luaL_checkstring(L, 1);
+    const char *override = luaL_checkstring(L, 2);
+    path_override_add(original, override);
+    return 0;
+}
+
+int lua_ext_io_getpathoverride(lua_State *L) {
+    const char *original = luaL_checkstring(L, 1);
+    const char *override = path_override_get(original);
+    if (override) {
+        lua_pushstring(L, override);
+    } else {
+        lua_pushnil(L);
+    }
     return 1;
 }
 
@@ -378,6 +397,10 @@ void lua_ext_register_io(lua_State *L, int ext_table_index) {
     lua_setfield(L, -2, "LoadFile");
     lua_pushcfunction(L, lua_ext_io_savefile);
     lua_setfield(L, -2, "SaveFile");
+    lua_pushcfunction(L, lua_ext_io_addpathoverride);
+    lua_setfield(L, -2, "AddPathOverride");
+    lua_pushcfunction(L, lua_ext_io_getpathoverride);
+    lua_setfield(L, -2, "GetPathOverride");
     lua_setfield(L, ext_table_index, "IO");
 }
 

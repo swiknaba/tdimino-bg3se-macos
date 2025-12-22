@@ -62,6 +62,18 @@ int lua_ext_io_loadfile(lua_State *L);
  */
 int lua_ext_io_savefile(lua_State *L);
 
+/**
+ * Ext.IO.AddPathOverride(original, override) - Add a path redirect
+ * When the game loads 'original', it will load 'override' instead.
+ */
+int lua_ext_io_addpathoverride(lua_State *L);
+
+/**
+ * Ext.IO.GetPathOverride(original) - Get path override
+ * @return override path if set, nil otherwise
+ */
+int lua_ext_io_getpathoverride(lua_State *L);
+
 // ============================================================================
 // Registration
 // ============================================================================

@@ -78,6 +78,9 @@ extern "C" {
 #include "timer.h"
 #include "lua_timer.h"
 
+// Path override system
+#include "path_override.h"
+
 // PersistentVars
 #include "lua_persistentvars.h"
 
@@ -1687,6 +1690,9 @@ static void init_lua(void) {
     // Initialize timer system
     timer_init();
 
+    // Initialize path override system
+    path_override_init();
+
     // Initialize game state tracker
     game_state_init();
 
@@ -2214,6 +2220,7 @@ static void fake_Event(void *thisPtr, uint32_t funcId, OsiArgumentDesc *args) {
         console_poll(L);
         input_poll(L);
         timer_update(L);  // Process timer callbacks
+        timer_update_persistent(L);  // Process persistent timer callbacks
         persist_tick(L);  // Check for dirty PersistentVars to auto-save
 
         // Fire Tick event with delta time
@@ -2221,8 +2228,13 @@ static void fake_Event(void *thisPtr, uint32_t funcId, OsiArgumentDesc *args) {
         if (g_last_tick_time_ms == 0) {
             g_last_tick_time_ms = (uint64_t)now;
         }
-        float delta_seconds = (float)(now - g_last_tick_time_ms) / 1000.0f;
+        double delta_ms = now - g_last_tick_time_ms;
+        float delta_seconds = (float)delta_ms / 1000.0f;
         g_last_tick_time_ms = (uint64_t)now;
+
+        // Update game time tracking (for Ext.Timer.GameTime/DeltaTime)
+        timer_tick(delta_ms);
+
         events_fire_tick(L, delta_seconds);
     }
 

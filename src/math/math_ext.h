@@ -40,6 +40,14 @@ typedef struct {
 } mat4;
 
 // ============================================================================
+// Quaternion Type (w, x, y, z order - scalar first)
+// ============================================================================
+
+typedef struct {
+    float w, x, y, z;
+} quat;
+
+// ============================================================================
 // Vector Operations
 // ============================================================================
 
@@ -136,16 +144,43 @@ mat3 mat3_outer_product(vec3 c, vec3 r);
 mat4 mat4_outer_product(vec4 c, vec4 r);
 
 // ============================================================================
+// Quaternion Operations
+// ============================================================================
+
+quat quat_identity(void);
+quat quat_from_euler(vec3 euler);           // Euler angles (radians) to quaternion
+quat quat_from_axis_angle(vec3 axis, float angle);
+quat quat_from_to_rotation(vec3 from, vec3 to);  // Rotation from one direction to another
+float quat_dot(quat a, quat b);
+quat quat_slerp(quat a, quat b, float t);   // Spherical interpolation
+mat3 quat_to_mat3(quat q);
+mat4 quat_to_mat4(quat q);
+quat quat_from_mat3(mat3 m);
+quat quat_from_mat4(mat4 m);
+quat quat_normalize(quat q);
+quat quat_inverse(quat q);
+quat quat_conjugate(quat q);
+float quat_length(quat q);
+vec3 quat_rotate(quat q, vec3 v);           // Rotate vector by quaternion
+quat quat_mul(quat a, quat b);              // Quaternion multiplication
+
+// ============================================================================
 // Scalar Functions
 // ============================================================================
 
 float math_clamp(float val, float min, float max);
 float math_lerp(float a, float b, float t);
+float math_smoothstep(float edge0, float edge1, float x);
 float math_fract(float x);
 float math_trunc(float x);
 float math_sign(float x);
+float math_round(float x);
 float math_radians(float degrees);
 float math_degrees(float radians);
+bool math_is_nan(float x);
+bool math_is_inf(float x);
+float math_random(void);
+float math_random_range(float min, float max);
 
 // ============================================================================
 // Lua Registration

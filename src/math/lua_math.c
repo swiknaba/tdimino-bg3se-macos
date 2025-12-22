@@ -115,6 +115,40 @@ static void push_mat4(lua_State *L, mat4 m) {
     }
 }
 
+static bool parse_quat_from_table(lua_State *L, int idx, quat *out) {
+    if (!lua_istable(L, idx)) return false;
+
+    lua_rawgeti(L, idx, 1);
+    out->w = lua_tonumber(L, -1);
+    lua_pop(L, 1);
+
+    lua_rawgeti(L, idx, 2);
+    out->x = lua_tonumber(L, -1);
+    lua_pop(L, 1);
+
+    lua_rawgeti(L, idx, 3);
+    out->y = lua_tonumber(L, -1);
+    lua_pop(L, 1);
+
+    lua_rawgeti(L, idx, 4);
+    out->z = lua_tonumber(L, -1);
+    lua_pop(L, 1);
+
+    return true;
+}
+
+static void push_quat(lua_State *L, quat q) {
+    lua_createtable(L, 4, 0);
+    lua_pushnumber(L, q.w);
+    lua_rawseti(L, -2, 1);
+    lua_pushnumber(L, q.x);
+    lua_rawseti(L, -2, 2);
+    lua_pushnumber(L, q.y);
+    lua_rawseti(L, -2, 3);
+    lua_pushnumber(L, q.z);
+    lua_rawseti(L, -2, 4);
+}
+
 // Detect vector dimension from table size
 static int get_vec_size(lua_State *L, int idx) {
     if (!lua_istable(L, idx)) return 0;
@@ -830,6 +864,200 @@ static int lua_math_degrees(lua_State *L) {
     return 1;
 }
 
+static int lua_math_smoothstep(lua_State *L) {
+    float edge0 = luaL_checknumber(L, 1);
+    float edge1 = luaL_checknumber(L, 2);
+    float x = luaL_checknumber(L, 3);
+    lua_pushnumber(L, math_smoothstep(edge0, edge1, x));
+    return 1;
+}
+
+static int lua_math_round(lua_State *L) {
+    float x = luaL_checknumber(L, 1);
+    lua_pushnumber(L, math_round(x));
+    return 1;
+}
+
+static int lua_math_isnan(lua_State *L) {
+    float x = luaL_checknumber(L, 1);
+    lua_pushboolean(L, math_is_nan(x));
+    return 1;
+}
+
+static int lua_math_isinf(lua_State *L) {
+    float x = luaL_checknumber(L, 1);
+    lua_pushboolean(L, math_is_inf(x));
+    return 1;
+}
+
+static int lua_math_random(lua_State *L) {
+    int nargs = lua_gettop(L);
+    if (nargs == 0) {
+        // Random [0, 1)
+        lua_pushnumber(L, math_random());
+    } else if (nargs == 1) {
+        // Random [0, max)
+        float max = luaL_checknumber(L, 1);
+        lua_pushnumber(L, math_random_range(0.0f, max));
+    } else {
+        // Random [min, max)
+        float min = luaL_checknumber(L, 1);
+        float max = luaL_checknumber(L, 2);
+        lua_pushnumber(L, math_random_range(min, max));
+    }
+    return 1;
+}
+
+// ============================================================================
+// Quaternion Operations
+// ============================================================================
+
+static int lua_math_quat_identity(lua_State *L) {
+    push_quat(L, quat_identity());
+    return 1;
+}
+
+static int lua_math_quat_from_euler(lua_State *L) {
+    vec3 euler;
+    if (!parse_vec3_from_table(L, 1, &euler)) {
+        return luaL_error(L, "QuatFromEuler requires vec3 (pitch, yaw, roll)");
+    }
+    push_quat(L, quat_from_euler(euler));
+    return 1;
+}
+
+static int lua_math_quat_from_axis_angle(lua_State *L) {
+    vec3 axis;
+    if (!parse_vec3_from_table(L, 1, &axis)) {
+        return luaL_error(L, "QuatFromAxisAngle requires axis vec3");
+    }
+    float angle = luaL_checknumber(L, 2);
+    push_quat(L, quat_from_axis_angle(axis, angle));
+    return 1;
+}
+
+static int lua_math_quat_from_to_rotation(lua_State *L) {
+    vec3 from, to;
+    if (!parse_vec3_from_table(L, 1, &from) || !parse_vec3_from_table(L, 2, &to)) {
+        return luaL_error(L, "QuatFromToRotation requires two vec3");
+    }
+    push_quat(L, quat_from_to_rotation(from, to));
+    return 1;
+}
+
+static int lua_math_quat_dot(lua_State *L) {
+    quat a, b;
+    if (!parse_quat_from_table(L, 1, &a) || !parse_quat_from_table(L, 2, &b)) {
+        return luaL_error(L, "QuatDot requires two quaternions");
+    }
+    lua_pushnumber(L, quat_dot(a, b));
+    return 1;
+}
+
+static int lua_math_quat_slerp(lua_State *L) {
+    quat a, b;
+    if (!parse_quat_from_table(L, 1, &a) || !parse_quat_from_table(L, 2, &b)) {
+        return luaL_error(L, "QuatSlerp requires two quaternions and t");
+    }
+    float t = luaL_checknumber(L, 3);
+    push_quat(L, quat_slerp(a, b, t));
+    return 1;
+}
+
+static int lua_math_quat_to_mat3(lua_State *L) {
+    quat q;
+    if (!parse_quat_from_table(L, 1, &q)) {
+        return luaL_error(L, "QuatToMat3 requires a quaternion");
+    }
+    push_mat3(L, quat_to_mat3(q));
+    return 1;
+}
+
+static int lua_math_quat_to_mat4(lua_State *L) {
+    quat q;
+    if (!parse_quat_from_table(L, 1, &q)) {
+        return luaL_error(L, "QuatToMat4 requires a quaternion");
+    }
+    push_mat4(L, quat_to_mat4(q));
+    return 1;
+}
+
+static int lua_math_quat_from_mat3(lua_State *L) {
+    mat3 m;
+    if (!parse_mat3_from_table(L, 1, &m)) {
+        return luaL_error(L, "QuatFromMat3 requires a mat3");
+    }
+    push_quat(L, quat_from_mat3(m));
+    return 1;
+}
+
+static int lua_math_quat_from_mat4(lua_State *L) {
+    mat4 m;
+    if (!parse_mat4_from_table(L, 1, &m)) {
+        return luaL_error(L, "QuatFromMat4 requires a mat4");
+    }
+    push_quat(L, quat_from_mat4(m));
+    return 1;
+}
+
+static int lua_math_quat_normalize(lua_State *L) {
+    quat q;
+    if (!parse_quat_from_table(L, 1, &q)) {
+        return luaL_error(L, "QuatNormalize requires a quaternion");
+    }
+    push_quat(L, quat_normalize(q));
+    return 1;
+}
+
+static int lua_math_quat_inverse(lua_State *L) {
+    quat q;
+    if (!parse_quat_from_table(L, 1, &q)) {
+        return luaL_error(L, "QuatInverse requires a quaternion");
+    }
+    push_quat(L, quat_inverse(q));
+    return 1;
+}
+
+static int lua_math_quat_conjugate(lua_State *L) {
+    quat q;
+    if (!parse_quat_from_table(L, 1, &q)) {
+        return luaL_error(L, "QuatConjugate requires a quaternion");
+    }
+    push_quat(L, quat_conjugate(q));
+    return 1;
+}
+
+static int lua_math_quat_length(lua_State *L) {
+    quat q;
+    if (!parse_quat_from_table(L, 1, &q)) {
+        return luaL_error(L, "QuatLength requires a quaternion");
+    }
+    lua_pushnumber(L, quat_length(q));
+    return 1;
+}
+
+static int lua_math_quat_rotate(lua_State *L) {
+    quat q;
+    vec3 v;
+    if (!parse_quat_from_table(L, 1, &q)) {
+        return luaL_error(L, "QuatRotate requires a quaternion and vec3");
+    }
+    if (!parse_vec3_from_table(L, 2, &v)) {
+        return luaL_error(L, "QuatRotate requires a quaternion and vec3");
+    }
+    push_vec3(L, quat_rotate(q, v));
+    return 1;
+}
+
+static int lua_math_quat_mul(lua_State *L) {
+    quat a, b;
+    if (!parse_quat_from_table(L, 1, &a) || !parse_quat_from_table(L, 2, &b)) {
+        return luaL_error(L, "QuatMul requires two quaternions");
+    }
+    push_quat(L, quat_mul(a, b));
+    return 1;
+}
+
 // ============================================================================
 // Registration
 // ============================================================================
@@ -968,6 +1196,70 @@ void lua_math_register(lua_State *L, int ext_table_index) {
 
     lua_pushcfunction(L, lua_math_degrees);
     lua_setfield(L, -2, "Degrees");
+
+    lua_pushcfunction(L, lua_math_smoothstep);
+    lua_setfield(L, -2, "Smoothstep");
+
+    lua_pushcfunction(L, lua_math_round);
+    lua_setfield(L, -2, "Round");
+
+    lua_pushcfunction(L, lua_math_isnan);
+    lua_setfield(L, -2, "IsNaN");
+
+    lua_pushcfunction(L, lua_math_isinf);
+    lua_setfield(L, -2, "IsInf");
+
+    lua_pushcfunction(L, lua_math_random);
+    lua_setfield(L, -2, "Random");
+
+    // Quaternion operations
+    lua_pushcfunction(L, lua_math_quat_identity);
+    lua_setfield(L, -2, "QuatIdentity");
+
+    lua_pushcfunction(L, lua_math_quat_from_euler);
+    lua_setfield(L, -2, "QuatFromEuler");
+
+    lua_pushcfunction(L, lua_math_quat_from_axis_angle);
+    lua_setfield(L, -2, "QuatFromAxisAngle");
+
+    lua_pushcfunction(L, lua_math_quat_from_to_rotation);
+    lua_setfield(L, -2, "QuatFromToRotation");
+
+    lua_pushcfunction(L, lua_math_quat_dot);
+    lua_setfield(L, -2, "QuatDot");
+
+    lua_pushcfunction(L, lua_math_quat_slerp);
+    lua_setfield(L, -2, "QuatSlerp");
+
+    lua_pushcfunction(L, lua_math_quat_to_mat3);
+    lua_setfield(L, -2, "QuatToMat3");
+
+    lua_pushcfunction(L, lua_math_quat_to_mat4);
+    lua_setfield(L, -2, "QuatToMat4");
+
+    lua_pushcfunction(L, lua_math_quat_from_mat3);
+    lua_setfield(L, -2, "QuatFromMat3");
+
+    lua_pushcfunction(L, lua_math_quat_from_mat4);
+    lua_setfield(L, -2, "QuatFromMat4");
+
+    lua_pushcfunction(L, lua_math_quat_normalize);
+    lua_setfield(L, -2, "QuatNormalize");
+
+    lua_pushcfunction(L, lua_math_quat_inverse);
+    lua_setfield(L, -2, "QuatInverse");
+
+    lua_pushcfunction(L, lua_math_quat_conjugate);
+    lua_setfield(L, -2, "QuatConjugate");
+
+    lua_pushcfunction(L, lua_math_quat_length);
+    lua_setfield(L, -2, "QuatLength");
+
+    lua_pushcfunction(L, lua_math_quat_rotate);
+    lua_setfield(L, -2, "QuatRotate");
+
+    lua_pushcfunction(L, lua_math_quat_mul);
+    lua_setfield(L, -2, "QuatMul");
 
     // Set Ext.Math
     lua_setfield(L, ext_table_index, "Math");

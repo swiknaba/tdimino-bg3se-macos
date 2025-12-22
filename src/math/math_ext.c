@@ -7,6 +7,8 @@
 #include "math_ext.h"
 #include <math.h>
 #include <string.h>
+#include <stdlib.h>
+#include <time.h>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -721,6 +723,13 @@ float math_lerp(float a, float b, float t) {
     return a + (b - a) * t;
 }
 
+float math_smoothstep(float edge0, float edge1, float x) {
+    // Clamp x to [0,1] range
+    float t = math_clamp((x - edge0) / (edge1 - edge0), 0.0f, 1.0f);
+    // Hermite interpolation
+    return t * t * (3.0f - 2.0f * t);
+}
+
 float math_fract(float x) {
     return x - floorf(x);
 }
@@ -735,10 +744,272 @@ float math_sign(float x) {
     return 0.0f;
 }
 
+float math_round(float x) {
+    return roundf(x);
+}
+
 float math_radians(float degrees) {
     return degrees * (M_PI / 180.0f);
 }
 
 float math_degrees(float radians) {
     return radians * (180.0f / M_PI);
+}
+
+bool math_is_nan(float x) {
+    return isnan(x);
+}
+
+bool math_is_inf(float x) {
+    return isinf(x);
+}
+
+// Simple random using drand48 (seeded once)
+static bool s_random_initialized = false;
+
+float math_random(void) {
+    if (!s_random_initialized) {
+        srand48((long)time(NULL));
+        s_random_initialized = true;
+    }
+    return (float)drand48();
+}
+
+float math_random_range(float min, float max) {
+    return min + math_random() * (max - min);
+}
+
+// ============================================================================
+// Quaternion Operations
+// ============================================================================
+
+quat quat_identity(void) {
+    return (quat){1.0f, 0.0f, 0.0f, 0.0f};
+}
+
+quat quat_from_euler(vec3 euler) {
+    // euler = (pitch, yaw, roll) in radians
+    // Using ZYX rotation order
+    float cx = cosf(euler.x * 0.5f);
+    float sx = sinf(euler.x * 0.5f);
+    float cy = cosf(euler.y * 0.5f);
+    float sy = sinf(euler.y * 0.5f);
+    float cz = cosf(euler.z * 0.5f);
+    float sz = sinf(euler.z * 0.5f);
+
+    return (quat){
+        cx * cy * cz + sx * sy * sz,  // w
+        sx * cy * cz - cx * sy * sz,  // x
+        cx * sy * cz + sx * cy * sz,  // y
+        cx * cy * sz - sx * sy * cz   // z
+    };
+}
+
+quat quat_from_axis_angle(vec3 axis, float angle) {
+    axis = vec3_normalize(axis);
+    float half_angle = angle * 0.5f;
+    float s = sinf(half_angle);
+    return (quat){
+        cosf(half_angle),
+        axis.x * s,
+        axis.y * s,
+        axis.z * s
+    };
+}
+
+quat quat_from_to_rotation(vec3 from, vec3 to) {
+    from = vec3_normalize(from);
+    to = vec3_normalize(to);
+
+    float d = vec3_dot(from, to);
+
+    if (d >= 1.0f - 1e-6f) {
+        // Vectors are the same
+        return quat_identity();
+    }
+
+    if (d <= -1.0f + 1e-6f) {
+        // Vectors are opposite - find orthogonal axis
+        vec3 ortho = vec3_cross((vec3){1, 0, 0}, from);
+        if (vec3_length(ortho) < 1e-6f) {
+            ortho = vec3_cross((vec3){0, 1, 0}, from);
+        }
+        ortho = vec3_normalize(ortho);
+        return (quat){0, ortho.x, ortho.y, ortho.z};
+    }
+
+    vec3 axis = vec3_cross(from, to);
+    float w = sqrtf(vec3_dot(from, from) * vec3_dot(to, to)) + d;
+
+    return quat_normalize((quat){w, axis.x, axis.y, axis.z});
+}
+
+float quat_dot(quat a, quat b) {
+    return a.w * b.w + a.x * b.x + a.y * b.y + a.z * b.z;
+}
+
+quat quat_slerp(quat a, quat b, float t) {
+    // Normalize inputs
+    a = quat_normalize(a);
+    b = quat_normalize(b);
+
+    float dot = quat_dot(a, b);
+
+    // If dot is negative, negate one quaternion to take shorter path
+    if (dot < 0.0f) {
+        b = (quat){-b.w, -b.x, -b.y, -b.z};
+        dot = -dot;
+    }
+
+    // If quaternions are very close, use linear interpolation
+    if (dot > 0.9995f) {
+        quat result = {
+            a.w + t * (b.w - a.w),
+            a.x + t * (b.x - a.x),
+            a.y + t * (b.y - a.y),
+            a.z + t * (b.z - a.z)
+        };
+        return quat_normalize(result);
+    }
+
+    float theta_0 = acosf(dot);
+    float theta = theta_0 * t;
+    float sin_theta = sinf(theta);
+    float sin_theta_0 = sinf(theta_0);
+
+    float s0 = cosf(theta) - dot * sin_theta / sin_theta_0;
+    float s1 = sin_theta / sin_theta_0;
+
+    return (quat){
+        s0 * a.w + s1 * b.w,
+        s0 * a.x + s1 * b.x,
+        s0 * a.y + s1 * b.y,
+        s0 * a.z + s1 * b.z
+    };
+}
+
+mat3 quat_to_mat3(quat q) {
+    q = quat_normalize(q);
+
+    float xx = q.x * q.x;
+    float yy = q.y * q.y;
+    float zz = q.z * q.z;
+    float xy = q.x * q.y;
+    float xz = q.x * q.z;
+    float yz = q.y * q.z;
+    float wx = q.w * q.x;
+    float wy = q.w * q.y;
+    float wz = q.w * q.z;
+
+    mat3 m;
+    MAT3_ELEM(m, 0, 0) = 1.0f - 2.0f * (yy + zz);
+    MAT3_ELEM(m, 0, 1) = 2.0f * (xy + wz);
+    MAT3_ELEM(m, 0, 2) = 2.0f * (xz - wy);
+
+    MAT3_ELEM(m, 1, 0) = 2.0f * (xy - wz);
+    MAT3_ELEM(m, 1, 1) = 1.0f - 2.0f * (xx + zz);
+    MAT3_ELEM(m, 1, 2) = 2.0f * (yz + wx);
+
+    MAT3_ELEM(m, 2, 0) = 2.0f * (xz + wy);
+    MAT3_ELEM(m, 2, 1) = 2.0f * (yz - wx);
+    MAT3_ELEM(m, 2, 2) = 1.0f - 2.0f * (xx + yy);
+
+    return m;
+}
+
+mat4 quat_to_mat4(quat q) {
+    mat3 m3 = quat_to_mat3(q);
+    mat4 m4 = mat4_identity();
+
+    // Copy rotation part
+    for (int col = 0; col < 3; col++) {
+        for (int row = 0; row < 3; row++) {
+            MAT4_ELEM(m4, col, row) = MAT3_ELEM(m3, col, row);
+        }
+    }
+
+    return m4;
+}
+
+quat quat_from_mat3(mat3 m) {
+    float trace = MAT3_ELEM(m, 0, 0) + MAT3_ELEM(m, 1, 1) + MAT3_ELEM(m, 2, 2);
+    quat q;
+
+    if (trace > 0.0f) {
+        float s = sqrtf(trace + 1.0f) * 2.0f;
+        q.w = 0.25f * s;
+        q.x = (MAT3_ELEM(m, 1, 2) - MAT3_ELEM(m, 2, 1)) / s;
+        q.y = (MAT3_ELEM(m, 2, 0) - MAT3_ELEM(m, 0, 2)) / s;
+        q.z = (MAT3_ELEM(m, 0, 1) - MAT3_ELEM(m, 1, 0)) / s;
+    } else if (MAT3_ELEM(m, 0, 0) > MAT3_ELEM(m, 1, 1) && MAT3_ELEM(m, 0, 0) > MAT3_ELEM(m, 2, 2)) {
+        float s = sqrtf(1.0f + MAT3_ELEM(m, 0, 0) - MAT3_ELEM(m, 1, 1) - MAT3_ELEM(m, 2, 2)) * 2.0f;
+        q.w = (MAT3_ELEM(m, 1, 2) - MAT3_ELEM(m, 2, 1)) / s;
+        q.x = 0.25f * s;
+        q.y = (MAT3_ELEM(m, 1, 0) + MAT3_ELEM(m, 0, 1)) / s;
+        q.z = (MAT3_ELEM(m, 2, 0) + MAT3_ELEM(m, 0, 2)) / s;
+    } else if (MAT3_ELEM(m, 1, 1) > MAT3_ELEM(m, 2, 2)) {
+        float s = sqrtf(1.0f + MAT3_ELEM(m, 1, 1) - MAT3_ELEM(m, 0, 0) - MAT3_ELEM(m, 2, 2)) * 2.0f;
+        q.w = (MAT3_ELEM(m, 2, 0) - MAT3_ELEM(m, 0, 2)) / s;
+        q.x = (MAT3_ELEM(m, 1, 0) + MAT3_ELEM(m, 0, 1)) / s;
+        q.y = 0.25f * s;
+        q.z = (MAT3_ELEM(m, 2, 1) + MAT3_ELEM(m, 1, 2)) / s;
+    } else {
+        float s = sqrtf(1.0f + MAT3_ELEM(m, 2, 2) - MAT3_ELEM(m, 0, 0) - MAT3_ELEM(m, 1, 1)) * 2.0f;
+        q.w = (MAT3_ELEM(m, 0, 1) - MAT3_ELEM(m, 1, 0)) / s;
+        q.x = (MAT3_ELEM(m, 2, 0) + MAT3_ELEM(m, 0, 2)) / s;
+        q.y = (MAT3_ELEM(m, 2, 1) + MAT3_ELEM(m, 1, 2)) / s;
+        q.z = 0.25f * s;
+    }
+
+    return quat_normalize(q);
+}
+
+quat quat_from_mat4(mat4 m) {
+    // Extract 3x3 rotation part
+    mat3 m3;
+    for (int col = 0; col < 3; col++) {
+        for (int row = 0; row < 3; row++) {
+            MAT3_ELEM(m3, col, row) = MAT4_ELEM(m, col, row);
+        }
+    }
+    return quat_from_mat3(m3);
+}
+
+quat quat_normalize(quat q) {
+    float len = quat_length(q);
+    if (len < 1e-10f) return quat_identity();
+    return (quat){q.w / len, q.x / len, q.y / len, q.z / len};
+}
+
+quat quat_inverse(quat q) {
+    float len_sq = q.w * q.w + q.x * q.x + q.y * q.y + q.z * q.z;
+    if (len_sq < 1e-10f) return quat_identity();
+    return (quat){q.w / len_sq, -q.x / len_sq, -q.y / len_sq, -q.z / len_sq};
+}
+
+quat quat_conjugate(quat q) {
+    return (quat){q.w, -q.x, -q.y, -q.z};
+}
+
+float quat_length(quat q) {
+    return sqrtf(q.w * q.w + q.x * q.x + q.y * q.y + q.z * q.z);
+}
+
+vec3 quat_rotate(quat q, vec3 v) {
+    // q * v * q^-1
+    // Optimized version without full quaternion multiplication
+    vec3 qv = {q.x, q.y, q.z};
+    vec3 uv = vec3_cross(qv, v);
+    vec3 uuv = vec3_cross(qv, uv);
+
+    return vec3_add(v, vec3_add(vec3_mul(uv, 2.0f * q.w), vec3_mul(uuv, 2.0f)));
+}
+
+quat quat_mul(quat a, quat b) {
+    return (quat){
+        a.w * b.w - a.x * b.x - a.y * b.y - a.z * b.z,
+        a.w * b.x + a.x * b.w + a.y * b.z - a.z * b.y,
+        a.w * b.y - a.x * b.z + a.y * b.w + a.z * b.x,
+        a.w * b.z + a.x * b.y - a.y * b.x + a.z * b.w
+    };
 }

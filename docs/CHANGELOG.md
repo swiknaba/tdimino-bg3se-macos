@@ -13,6 +13,69 @@ Each entry includes:
 
 ---
 
+## [v0.36.5] - 2025-12-22
+
+**Parity:** ~77% | **Category:** Math/Timer/IO APIs | **Issues:** #47, #49, #50
+
+### Added
+- **Ext.Math Quaternion Operations** - Full quaternion math library (16 functions)
+  - `QuatIdentity()` - Identity quaternion
+  - `QuatFromEuler(vec3)` - Euler angles to quaternion
+  - `QuatFromAxisAngle(axis, angle)` - Axis-angle to quaternion
+  - `QuatFromToRotation(from, to)` - Rotation between directions
+  - `QuatToMat3(quat)` / `QuatToMat4(quat)` - Convert to matrix
+  - `QuatFromMat3(mat3)` / `QuatFromMat4(mat4)` - Extract from matrix
+  - `QuatNormalize(quat)` / `QuatInverse(quat)` / `QuatConjugate(quat)`
+  - `QuatLength(quat)` / `QuatDot(q1, q2)`
+  - `QuatMul(q1, q2)` - Quaternion multiplication
+  - `QuatRotate(quat, vec3)` - Rotate vector by quaternion
+  - `QuatSlerp(q1, q2, t)` - Spherical linear interpolation
+
+- **Ext.Math Scalar Functions** - Missing math utilities
+  - `Smoothstep(edge0, edge1, x)` - Hermite interpolation
+  - `Round(x)` - Round to nearest integer
+  - `IsNaN(x)` / `IsInf(x)` - Numeric validation
+  - `Random()` / `RandomRange(min, max)` - Random number generation
+
+- **Ext.Timer Time Utilities** - Precision timing functions
+  - `MicrosecTime()` - Microseconds since app start (high-precision)
+  - `ClockEpoch()` - Unix timestamp in seconds
+  - `ClockTime()` - Formatted datetime string "YYYY-MM-DD HH:MM:SS"
+  - `WaitForRealtime(delay, callback, [repeat])` - Wall-clock timer (ignores game pause)
+  - `GameTime()` - Game time in seconds (pauses when game pauses)
+  - `DeltaTime()` - Last frame's delta time in seconds
+  - `Ticks()` - Game tick count
+  - `IsGamePaused()` - Check if game time is paused
+
+- **Ext.Timer Persistent Timers** - Timers that survive save/load cycles
+  - `RegisterPersistentHandler(name, callback)` - Register named callback for persistence
+  - `UnregisterPersistentHandler(name)` - Remove persistent handler
+  - `WaitForPersistent(delay, handler, [args], [repeat])` - Create persistent timer
+  - `CancelPersistent(handle)` - Cancel persistent timer
+  - `ExportPersistent()` - Export timer state as JSON (for saving)
+  - `ImportPersistent(json)` - Restore timer state from JSON (after loading)
+
+- **Ext.IO Path Override System** - Virtual file path mapping
+  - `AddPathOverride(original, override)` - Register path redirection
+  - `GetPathOverride(original)` - Query registered override
+
+### Technical
+- **Quaternion representation**: w,x,y,z (scalar-first) matching Windows BG3SE
+- **Thread-safe path overrides**: pthread_rwlock_t for concurrent access
+- **High-precision timing**: mach_absolute_time() for microsecond resolution
+- **Persistent timers**: Named handlers with JSON-serializable args for save/load
+- Uses existing math_ext.c infrastructure for vector/matrix operations
+
+### Files Modified
+- `src/math/math_ext.c/h` - Added quat type and 16 quaternion operations
+- `src/math/lua_math.c` - Lua bindings for all new math functions
+- `src/timer/timer.c/h` - Time utility implementations
+- `src/lua/lua_timer.c` - Timer Lua bindings
+- `src/io/path_override.c/h` - NEW: Path override system
+- `src/lua/lua_ext.c/h` - IO path override bindings
+
+---
+
 ## [v0.36.4] - 2025-12-22
 
 **Parity:** ~76% | **Category:** Context System | **Issues:** #15

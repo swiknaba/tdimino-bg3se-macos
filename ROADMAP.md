@@ -2,9 +2,9 @@
 
 This document tracks the development roadmap for achieving feature parity with Windows BG3SE (Norbyte's Script Extender).
 
-## Current Status: v0.36.4
+## Current Status: v0.36.5
 
-**Overall Feature Parity: ~76%** (based on comprehensive API function count analysis)
+**Overall Feature Parity: ~77%** (based on comprehensive API function count analysis)
 
 **Working Features:**
 - DYLD injection and Dobby hooking infrastructure
@@ -35,16 +35,16 @@ This document tracks the development roadmap for achieving feature parity with W
 | `Osi.*` | ✅ Full | ✅ Dynamic metatable | **95%** | 1 |
 | `Ext.Osiris` | ✅ Full | ✅ RegisterListener + NewCall/NewQuery/NewEvent/RaiseEvent/GetCustomFunctions | **100%** | 1 |
 | `Ext.Json` | ✅ Full (2) | ✅ Parse, Stringify | **100%** | 1 |
-| `Ext.IO` | ✅ Full (4) | ✅ LoadFile, SaveFile | **50%** | 1 |
+| `Ext.IO` | ✅ Full (4) | ✅ LoadFile, SaveFile, AddPathOverride, GetPathOverride (4) | **100%** | 1 |
 | `Ext.Entity` | ✅ Full (26) | ⚠️ Get, GetByHandle, components, enumeration (16) | **62%** | 2 |
 | `Ext.Stats` | ✅ Full (52) | ✅ Get, GetAll, Create, Sync (all), property read/write (18) | **35%** | 3 |
 | `Ext.Events` | ✅ Full (~30) | ⚠️ 10 events + Subscribe/Unsubscribe/Prevent | **33%** | 2.5 |
-| `Ext.Timer` | ✅ Full (13) | ⚠️ WaitFor, Cancel, Pause, Resume, IsPaused, MonotonicTime (6) | **46%** | 2.3 |
+| `Ext.Timer` | ✅ Full (13) | ✅ WaitFor, WaitForRealtime, Cancel, Pause, Resume, IsPaused, MonotonicTime, MicrosecTime, ClockEpoch, ClockTime, GameTime, DeltaTime, Ticks, IsGamePaused, +6 persistent (20) | **100%** | 2.3 |
 | `Ext.Debug` | ✅ Full (8) | ✅ Memory introspection (11 macOS-specific) | **100%** | 2.3 |
 | `Ext.Vars` | ✅ Full (8) | ✅ User + Mod Variables (12) | **100%** | 2.6 |
 | `Ext.Types` | ✅ Full (15) | ⚠️ GetAllTypes, GetObjectType, GetTypeInfo, Validate (4) | **27%** | 7 |
 | `Ext.Enums` | ✅ Full | ✅ 14 enum/bitfield types | **100%** | 7 |
-| `Ext.Math` | ✅ Full (59) | ✅ 35 functions | **59%** | 7.5 |
+| `Ext.Math` | ✅ Full (59) | ✅ 57 functions (vectors, matrices, 16 quaternions, scalars) | **97%** | 7.5 |
 | `Ext.Input` | ✅ Full | ✅ CGEventTap capture, hotkeys (8 macOS-specific) | **100%** | 9 |
 | `Ext.Net` | ✅ Full | ❌ Not impl | **0%** | 6 |
 | `Ext.UI` | ✅ Full (9) | ❌ Not impl | **0%** | 8 |
@@ -303,15 +303,20 @@ Features:
 | ls::PhysicsComponent | 1947 |
 
 ### 2.3 Timer API
-**Status:** ✅ Complete (v0.11.0)
+**Status:** ✅ Complete (v0.36.5)
 
-Scheduling API for delayed and periodic callbacks.
+Scheduling API for delayed and periodic callbacks with full time utilities.
 
 **Implemented API:**
 ```lua
 -- One-shot timer (delay in milliseconds)
 local handle = Ext.Timer.WaitFor(1000, function(h)
     Ext.Print("1 second later!")
+end)
+
+-- Wall-clock timer (ignores game pause)
+local handle = Ext.Timer.WaitForRealtime(1000, function(h)
+    Ext.Print("1 second real time!")
 end)
 
 -- Repeating timer (third arg = repeat interval)
@@ -325,16 +330,34 @@ Ext.Timer.Pause(handle)    -- Pause timer
 Ext.Timer.Resume(handle)   -- Resume paused timer
 Ext.Timer.IsPaused(handle) -- Check if paused
 
--- Utility
-local ms = Ext.Timer.MonotonicTime()  -- High-resolution clock
+-- Time utilities
+local ms = Ext.Timer.MonotonicTime()  -- Milliseconds since app start
+local us = Ext.Timer.MicrosecTime()   -- Microseconds since app start
+local epoch = Ext.Timer.ClockEpoch()  -- Unix timestamp (seconds)
+local time = Ext.Timer.ClockTime()    -- "YYYY-MM-DD HH:MM:SS"
+local game = Ext.Timer.GameTime()     -- Game time in seconds (pauses with game)
+local delta = Ext.Timer.DeltaTime()   -- Last frame delta in seconds
+local ticks = Ext.Timer.Ticks()       -- Game tick count
+local paused = Ext.Timer.IsGamePaused() -- Check if game time paused
+
+-- Persistent timers (survive save/load)
+Ext.Timer.RegisterPersistentHandler("MyHandler", function(handle, argsJson)
+    local args = Ext.Json.Parse(argsJson)
+    -- Handle timer
+end)
+local handle = Ext.Timer.WaitForPersistent(5000, "MyHandler", {target = "player"})
+Ext.Timer.CancelPersistent(handle)
+local json = Ext.Timer.ExportPersistent()  -- For saving
+local count = Ext.Timer.ImportPersistent(json)  -- After loading
 ```
 
 **Implementation:**
-- Fixed-size timer pool (256 timers max)
+- Fixed-size timer pool (256 regular + 64 persistent timers)
 - Min-heap priority queue for efficient scheduling
 - Callbacks stored via `luaL_ref` to prevent GC
 - Polled from `COsiris::Event` hook
 - 1-based handles (0 = error sentinel)
+- Persistent timers use named handlers with JSON-serializable args
 - Input validation: delay >= 0, finite, <= 24 hours
 
 ### 2.4 PersistentVars (Savegame Persistence)
@@ -1341,6 +1364,7 @@ See **[docs/CHANGELOG.md](docs/CHANGELOG.md)** for detailed version history with
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| v0.36.5 | 2025-12-22 | **Math/Timer/IO APIs Complete** - 16 quaternion ops, **20 timer functions** (persistent timers + GameTime), path overrides (#47, #49, #50 all complete) |
 | v0.36.4 | 2025-12-22 | **Context System** - Server/Client context awareness, two-phase bootstrap, API guards (#15) |
 | v0.36.3 | 2025-12-22 | **StaticData All 9 Types** - ForceCapture + HashLookup for Race, God, FeatDescription (#45) |
 | v0.36.2 | 2025-12-21 | **Ext.Resource API** - 34 resource types (Visual, Material, Texture, etc.) (#41) |
@@ -1394,22 +1418,46 @@ We've built automation tools to accelerate reaching Windows BG3SE component pari
 3. Verify ARM64 offsets via Ghidra or `Ext.Debug.ProbeStruct()`
 4. Add to `component_typeid.c` and `component_offsets.h`
 
-### Issue Acceleration Matrix (Dec 2025 Deep Audit)
+### Issue Acceleration Matrix (Dec 2025 Comprehensive Audit)
 
-| Issue | Feature | Acceleration | Key Technique | Blocker |
-|-------|---------|--------------|---------------|---------|
-| **#33 Components** | Component Layouts | **80%** | Existing tools: `extract_typeids.py` + `generate_component_stubs.py` | None |
-| **#39 Localization** | Ext.Localization | **75%** | Simple string table lookup, minimal API surface | None |
-| **#36 IMGUI** | Ext.IMGUI | **70%** | Official ImGui Metal backend exists | None |
-| ~~#41 Resource~~ | ~~Ext.Resource/Template~~ | ✅ DONE | Both Ext.Resource + Ext.Template complete | None |
-| **#42 Debugger** | VS Code Debugger | **60%** | DAP protocol has reference implementations | None |
-| ~~#15 Client State~~ | ~~Client Lua State~~ | ✅ DONE | Context awareness, two-phase bootstrap | None |
-| **#37 Level** | Ext.Level (Physics) | **50%** | Find physics engine, port LevelLib.inl | None |
-| **#38 Audio** | Ext.Audio | **45%** | Wwise SDK has documented API | None |
-| ~~#32 Stats Sync~~ | ~~Prototype Managers~~ | ✅ DONE | Shadow stats + game stats sync complete | None |
-| **#6 NetChannel** | NetChannel API | **30%** | Network stack analysis needed, but Lua wrappers portable | None |
-| **#35 Ext.UI** | Noesis UI | **25%** | Deep game UI integration required | None |
-| **#40 StaticData** | Ext.StaticData | **85%** | **Auto-capture complete**, no Frida needed, TriggerCapture API | None ✅ |
+**Quick Wins (90%+ acceleration, 1-2 days):**
+| Issue | Feature | Acceleration | Key Technique |
+|-------|---------|--------------|---------------|
+| **#49 Ext.IO** | Path Overrides | ✅ **Complete** | 2 functions, pure C implementation |
+| **#47 Ext.Math** | Full Math Library | ✅ **Complete** | 47 functions, pure math, no RE needed |
+| **#50 Ext.Timer** | Persistent/Realtime | ✅ **Complete** | 20 functions, full timer system |
+| **#46 Context Docs** | API Annotations | **95%** | Documentation only |
+
+**Core Expansion (60-80% acceleration, 1-2 weeks):**
+| Issue | Feature | Acceleration | Key Technique |
+|-------|---------|--------------|---------------|
+| **#52 Components** | Coverage Expansion | **80%** | Tools ready: `extract_typeids.py` + stubs |
+| **#48 Ext.Types** | Full Reflection | **70%** | Port from Windows Types.inl |
+| **#51 Ext.Events** | Engine Events | **60%** | Hook game event dispatch |
+| **#53 Stats Functors** | ExecuteFunctors | **50%** | Windows code portable |
+
+**Client Features (45-70% acceleration, 2-4 weeks):**
+| Issue | Feature | Acceleration | Key Technique |
+|-------|---------|--------------|---------------|
+| **#36 IMGUI** | Debug Overlay | **70%** | Official ImGui Metal backend |
+| **#42 Debugger** | VS Code DAP | **60%** | DAP reference implementations |
+| **#38 Audio** | WWise Audio | **45%** | WWise SDK documented |
+| **#7 IDE Types** | LuaLS Annotations | **50%** | Build on #48 |
+
+**Complex Integrations (25-50% acceleration, 4+ weeks):**
+| Issue | Feature | Acceleration | Key Technique |
+|-------|---------|--------------|---------------|
+| **#37 Ext.Level** | Physics/Raycast | **50%** | Find physics engine, port LevelLib.inl |
+| **#6 NetChannel** | Networking | **30%** | Lua wrappers portable, C bridge complex |
+| **#35 Ext.UI** | Noesis UI | **25%** | Deep game UI hooks required |
+
+**Completed:**
+| Issue | Feature | Status |
+|-------|---------|--------|
+| ~~#15~~ | Client Lua State | ✅ DONE (v0.36.4) |
+| ~~#32~~ | Stats Sync | ✅ DONE |
+| ~~#40~~ | StaticData | ✅ DONE (auto-capture) |
+| ~~#41~~ | Resource/Template | ✅ DONE |
 
 ### ARM64 Hooking Infrastructure (Dec 2025) ✅ RESOLVED
 
@@ -1438,32 +1486,49 @@ FeatManager::GetFeats prologue @ 0x101b752b4:
 
 **Infrastructure Available For:** Future functions that DO have ADRP+LDR patterns will use the skip-and-redirect strategy automatically.
 
-### Prioritized Implementation Order
+### Prioritized Implementation Order (Dec 2025 Audit)
 
-**Tier 1: High Acceleration (70-80%) - Do First (Unblocked)**
-1. **#39 Localization** - Quick win (~2 hours), small API, 75% acceleration
-2. **#33 Components** - Tools ready, incremental progress, 80% acceleration
-3. **#36 IMGUI** - Official Metal backend, 70% acceleration
-4. **#41 Resource/Template** - Same pattern as StaticData, 65% acceleration
+**Phase 1: Quick Wins (1-2 days each)**
 
-**Tier 2: Medium Acceleration (40-60%) - Second Priority**
-5. **#42 Debugger** - DAP reference implementations available
-6. **#15 Client State** - Mirror server pattern
+| Order | Issue | Status | Why First |
+|-------|-------|--------|-----------|
+| 1 | **#49 Ext.IO** | ✅ Complete | 2 functions, pure C implementation |
+| 2 | **#47 Ext.Math** | ✅ Complete | 47 functions, pure math, no RE needed |
+| 3 | **#50 Ext.Timer** | ✅ Complete | 20 functions, full timer system |
+| 4 | **#46 Context Docs** | 95% | Documentation only |
 
-**Tier 3: Infrastructure (Unblocks Other Features)**
-7. **#44 ARM64 Hooking** - Unblocks #40 (StaticData), may unblock future features
+**Phase 2: Core Expansion (1-2 weeks each)**
 
-**Tier 4: Lower Acceleration (25-30%) - Complex/Blocked**
-8. **#40 StaticData** - BLOCKED by #44 (ARM64 hooking)
-9. **#6 NetChannel** - Requires extensive network RE
-10. **#35 Ext.UI** - Deep Noesis integration
+| Order | Issue | Acceleration | Why This Order |
+|-------|-------|--------------|----------------|
+| 5 | **#48 Ext.Types** | 70% | Unlocks debugger/IDE features |
+| 6 | **#51 Ext.Events** | 60% | Unlocks stat functors |
+| 7 | **#52 Components** | 80% | Accelerated workflow exists |
+| 8 | **#53 Stats Functors** | 50% | Needs #51 events |
 
-**Recommended Next Issue: #39 (Localization)**
-- Estimated time: ~2 hours
-- No blockers
-- High acceleration (75%)
-- Simple string table lookup pattern
-- Minimal API surface (2 functions: Get, GetLanguage)
+**Phase 3: Client Features (1-3 weeks each)**
+
+| Order | Issue | Acceleration | Why This Order |
+|-------|-------|--------------|----------------|
+| 9 | **#36 Ext.IMGUI** | 70% | Official Metal backend |
+| 10 | **#38 Ext.Audio** | 45% | WWise documented |
+| 11 | **#42 Debugger** | 60% | DAP reference exists |
+| 12 | **#7 IDE Types** | 50% | Builds on #48 |
+
+**Phase 4: Complex Integrations (2-4 weeks each)**
+
+| Order | Issue | Acceleration | Why Last |
+|-------|-------|--------------|----------|
+| 13 | **#37 Ext.Level** | 50% | Physics RE needed |
+| 14 | **#35 Ext.UI** | 25% | Deep Noesis hooks |
+| 15 | **#6 Ext.Net** | 30% | Network stack RE |
+
+**Recommended Starting Point (All Complete as of v0.36.5):**
+1. ✅ **#49 Ext.IO** - 4 functions: LoadFile, SaveFile, AddPathOverride, GetPathOverride
+2. ✅ **#47 Ext.Math** - 47+ functions including 16 quaternion operations
+3. ✅ **#50 Ext.Timer** - 20 functions: core timers, time utilities, persistent timers
+
+All quick wins completed. Next: Context documentation (#46) or Core Expansion issues.
 
 ### Patterns from Windows BG3SE
 

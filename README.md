@@ -44,7 +44,7 @@ SE mods work automatically—just install them like any other mod:
 
 ## Status
 
-**Version:** v0.36.4 | **Feature Parity:** ~76%
+**Version:** v0.36.5 | **Feature Parity:** ~77%
 
 | Feature | Status |
 |---------|--------|
@@ -55,10 +55,11 @@ SE mods work automatically—just install them like any other mod:
 | Ext.Entity | ✅ GUID lookup, 158 components, **6 array-enabled** (Tags, Classes, Spells, Passives, Boosts) |
 | Ext.Stats | ✅ 15,774 stats, property read/write, **Sync complete (created + existing stats)** |
 | Ext.Events | ✅ 10 events with Prevent pattern |
-| Ext.Timer | ✅ WaitFor, Cancel, Pause, Resume |
+| Ext.IO | ✅ LoadFile, SaveFile, **AddPathOverride, GetPathOverride** |
+| Ext.Timer | ✅ WaitFor, WaitForRealtime, Cancel, Pause, Resume, **MicrosecTime, ClockEpoch, ClockTime, GameTime, DeltaTime, Ticks, Persistent timers (6 functions)** |
 | Ext.Vars | ✅ PersistentVars + User Variables + Mod Variables |
 | Ext.Input | ✅ Hotkeys, key injection |
-| Ext.Math | ✅ Vector/matrix operations |
+| Ext.Math | ✅ Vector/matrix operations, **16 quaternion functions**, scalar utils |
 | Ext.Enums | ✅ 14 enum/bitfield types |
 | Ext.StaticData | ✅ **All 9 types** (Feat, Race, Background, Origin, God, Class, Progression, ActionResource, FeatDescription) via ForceCapture |
 | Ext.Resource | ✅ Get, GetAll, GetTypes, GetCount (34 resource types) |
