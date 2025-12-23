@@ -294,22 +294,120 @@ python3 tools/generate_component_stubs.py --namespace eoc > eoc_stubs.c
    local e = Ext.Entity.Get("GUID"); _D(e.YourComponent)
    ```
 
-### Component Coverage Statistics (v0.36.6)
+### Component Coverage Statistics (Dec 2025)
 
 **Two-Tier Registration System:**
-- **158 verified layouts** - Hand-verified ARM64 offsets, trusted property access
+- **438 size-verified** - ARM64 sizes via Ghidra MCP decompilation
 - **462 generated layouts** - Windows offsets (estimated), runtime-safe defaults
-- **620 total layouts** (~31% coverage)
+- **~900 total layouts** (~45% coverage)
 
-| Namespace | Available | Verified | Generated | Total Layouts |
-|-----------|-----------|----------|-----------|---------------|
-| eoc::     | 701       | ~94      | ~350      | ~444          |
-| esv::     | 596       | ~28      | ~50       | ~78           |
-| ecl::     | 429       | ~4       | ~30       | ~34           |
-| ls::      | 233       | ~32      | ~32       | ~64           |
-| **Total** | **1,999** | **158**  | **462**   | **620**       |
+| Namespace | Available | Size-Verified | Generated | Total Layouts |
+|-----------|-----------|---------------|-----------|---------------|
+| eoc::     | 701       | ~290          | ~350      | ~640          |
+| esv::     | 596       | ~58           | ~50       | ~108          |
+| ecl::     | 429       | ~19           | ~30       | ~49           |
+| ls::      | 233       | ~60           | ~32       | ~92           |
+| navcloud::| 13        | 9             | 0         | 9             |
+| **Total** | **1,999** | **438**       | **462**   | **~900**      |
 
 **Implementation notes:**
 - Verified layouts from `g_AllComponentLayouts` take precedence over generated
 - Generated layouts use `Gen_` prefix to avoid symbol conflicts
 - MAX_COMPONENT_LAYOUTS = 1024 (increased from 128)
+
+## Ghidra MCP Batch Extraction Workflow
+
+For bulk component size extraction using Ghidra MCP and parallel subagents.
+
+### Prerequisites
+
+1. **Ghidra with MCP plugin** - Ghidra 11.3+ with pyghidra-mcp installed
+2. **BG3 binary loaded** - ARM64 slice of Baldur's Gate 3 analyzed
+3. **Claude Code** - With Task tool for launching subagents
+
+### The Pattern
+
+Component sizes are extracted from `AddComponent<T>` template functions:
+
+```c
+// Ghidra decompilation shows:
+ComponentFrameStorageAllocRaw((ComponentFrameStorage*)(this_00 + 0x48), SIZE, ...)
+//                                                                      ^^^^
+//                                                        Second argument = component size in bytes
+```
+
+### Parallel Agent Workflow
+
+**Step 1: Search for AddComponent functions**
+```
+mcp__ghidra__search_functions_by_name(query="AddComponent", offset=0, limit=50)
+```
+
+**Step 2: Launch parallel extraction agents**
+```
+Task tool with subagent_type="general-purpose":
+- Agent 1: Extract components at offset 0-50
+- Agent 2: Extract components at offset 50-100
+- Agent 3: Extract components at offset 100-150
+... (8-10 agents in parallel)
+```
+
+**Step 3: Each agent decompiles and extracts sizes**
+```python
+# For each function in range:
+mcp__ghidra__decompile_function(name="AddComponent<eoc::HealthComponent>")
+# Parse output for ComponentFrameStorageAllocRaw SIZE parameter
+# Return results in markdown table format
+```
+
+**Step 4: Agents write to staging (prevents context loss)**
+Include in each agent prompt:
+```
+Write your final results to: ghidra/offsets/staging/AGENT_NAME.md
+```
+
+Agents write directly to staging:
+```
+ghidra/offsets/staging/
+├── alpha_eoc_1500-1600.md
+├── bravo_eoc_1600-1700.md
+├── charlie_esv_500-600.md
+└── ...
+```
+
+**Fallback:** If an agent fails to write, the primary session writes the output manually after TaskOutput retrieval.
+
+This prevents losing agent outputs during context compaction. The staging directory persists even if the conversation resets.
+
+**Step 5: Consolidate to main docs**
+After all agents complete, merge staging files into documentation:
+- eoc:: namespaced → ghidra/offsets/COMPONENT_SIZES_EOC_NAMESPACED.md
+- eoc:: boost → ghidra/offsets/COMPONENT_SIZES_EOC_BOOST.md
+- ls:: → ghidra/offsets/COMPONENT_SIZES_LS.md
+- esv:: → ghidra/offsets/COMPONENT_SIZES_ESV.md
+- ecl:: → ghidra/offsets/COMPONENT_SIZES_ECL.md
+
+Then wipe staging: `rm ghidra/offsets/staging/*.md`
+
+### Documentation Structure
+
+Results organized by namespace in `ghidra/offsets/`:
+
+| File | Contents |
+|------|----------|
+| `COMPONENT_SIZES.md` | Master index with statistics |
+| `COMPONENT_SIZES_EOC_CORE.md` | Core eoc:: components |
+| `COMPONENT_SIZES_EOC_BOOST.md` | All boost components |
+| `COMPONENT_SIZES_EOC_NAMESPACED.md` | Sub-namespaced components |
+| `COMPONENT_SIZES_LS.md` | Larian engine components |
+| `COMPONENT_SIZES_ESV.md` | Server components |
+| `COMPONENT_SIZES_ECL.md` | Client components |
+| `COMPONENT_SIZES_NAVCLOUD.md` | Navigation components |
+
+### Tips for Effective Extraction
+
+1. **Use pagination** - There are 2000+ AddComponent functions; process in batches
+2. **Skip failures silently** - Not all functions decompile cleanly
+3. **Match namespace patterns** - Group by prefix (eoc::, esv::, ls::, etc.)
+4. **Note heap allocations** - Some sizes show malloc size, not inline size
+5. **Document new namespaces** - Create new files when discovering new prefixes

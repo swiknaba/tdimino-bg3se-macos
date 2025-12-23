@@ -2,7 +2,7 @@
 
 This document tracks the development roadmap for achieving feature parity with Windows BG3SE (Norbyte's Script Extender).
 
-## Current Status: v0.36.6
+## Current Status: v0.36.7
 
 **Overall Feature Parity: ~77%** (based on comprehensive API function count analysis)
 
@@ -180,7 +180,7 @@ end
 - [x] Component accessors via GetComponent template addresses
 
 ### 2.2 Component Access & Property System
-**Status:** ✅ Complete (v0.36.6) - **1,999 components registered** (620 layouts: 158 verified + 462 generated)
+**Status:** ✅ Complete (v0.36.7) - **1,999 components registered** (631 layouts: 169 verified + 462 generated), **1,030 ARM64 sizes extracted via Ghidra**
 
 **Key Discovery (Dec 2025):** macOS ARM64 has NO `GetRawComponent` dispatcher like Windows. Template functions are **completely inlined** - calling template addresses directly returns NULL.
 
@@ -1383,7 +1383,8 @@ See **[docs/CHANGELOG.md](docs/CHANGELOG.md)** for detailed version history with
 
 | Version | Date | Highlights |
 |---------|------|------------|
-| v0.36.6 | 2025-12-22 | **620 Component Layouts** - Two-tier registration (158 verified + 462 generated), Gen_ prefix strategy, 1,999 TypeIds, 504 property defs (#52) |
+| v0.36.7 | 2025-12-23 | **1,030 ARM64 Sizes** - Crossed 1000-component milestone via parallel Ghidra extraction, 51.5% coverage (#52) |
+| v0.36.6 | 2025-12-23 | **631 Component Layouts** - Two-tier registration (169 verified + 462 generated), Gen_ prefix strategy, 1,999 TypeIds, 504 property defs, 70 Ghidra-verified sizes (#52) |
 | v0.36.5 | 2025-12-22 | **Math/Timer/IO APIs Complete** - 16 quaternion ops, **20 timer functions** (persistent timers + GameTime), path overrides (#47, #49, #50 all complete) |
 | v0.36.4 | 2025-12-22 | **Context System** - Server/Client context awareness, two-phase bootstrap, API guards (#15) |
 | v0.36.3 | 2025-12-22 | **StaticData All 9 Types** - ForceCapture + HashLookup for Race, God, FeatDescription (#45) |
@@ -1427,18 +1428,24 @@ We've built a **complete automation pipeline** for batch component expansion:
 **Extraction Pipeline (v0.36.6):**
 ```
 TypeId Extraction → Property Parsing → ARM64 Size Verification → Runtime Registration
-     1,999              504                  30+                    620 layouts
+     1,999              504                  70                     631 layouts
 ```
 
 **Coverage Statistics (v0.36.6):**
 
 | Namespace | Available | Generated Layouts | Verified Layouts | Total Layouts |
 |-----------|-----------|-------------------|------------------|---------------|
-| `eoc::` | 701 | ~350 | ~94 | ~444 |
-| `esv::` | 596 | ~50 | ~28 | ~78 |
-| `ecl::` | 429 | ~30 | ~4 | ~34 |
-| `ls::` | 233 | ~32 | ~32 | ~64 |
-| **Total** | **1,999** | **462** | **158** | **620** (~31%) |
+| `eoc::` | 701 | ~350 | ~99 | ~449 |
+| `esv::` | 596 | ~50 | ~58 | ~108 |
+| `ecl::` | 429 | ~30 | ~19 | ~49 |
+| `ls::` | 233 | ~32 | ~60 | ~92 |
+| `navcloud::` | 13 | 0 | 9 | 9 |
+| **Total** | **1,999** | **462** | **438** | **900** (~45%)
+
+**Ghidra MCP Batch Extraction (Dec 2025):**
+
+438 component sizes verified via Ghidra MCP decompilation using the `ComponentFrameStorageAllocRaw` pattern.
+See `agent_docs/acceleration.md` for detailed methodology |
 
 **Batch Expansion Workflow:**
 1. **Tag components** (100+ at once): Just need TypeId, no fields
@@ -1571,6 +1578,42 @@ All quick wins completed. Next: Context documentation (#46) or Core Expansion is
 - Template-based `GuidResourceBankHelper<T>` wraps resource banks
 - `FOR_EACH_GUID_RESOURCE_TYPE()` macro iterates all resource types
 - `GetGuidResource`, `GetAllGuidResources`, `CreateGuidResource` API
+
+### Ghidra MCP Batch Extraction (Dec 2025) ✅ PRODUCTIVE
+
+**Methodology:** Extract ARM64 component sizes from `AddComponent<T>` template functions using Ghidra MCP tools.
+
+**Pattern discovered:**
+```c
+ComponentFrameStorageAllocRaw((ComponentFrameStorage*)(this_00 + 0x48), SIZE, ...)
+                                                                       ^^^^
+                                                           Second argument = component size
+```
+
+**Tools used:**
+- `mcp__ghidra__search_functions_by_name` - Find AddComponent functions with pagination
+- `mcp__ghidra__decompile_function` - Extract SIZE parameter from allocation call
+
+**Parallel agent workflow:**
+1. Deploy 8-10 Claude subagents processing different offset ranges
+2. Each agent searches 50 functions at specified offset (e.g., offset=700, limit=50)
+3. Decompile and extract sizes from ComponentFrameStorageAllocRaw calls
+4. Consolidate results into modular documentation
+
+**Results:** 438 components size-verified, organized by namespace:
+- `COMPONENT_SIZES_EOC_CORE.md` - 52 core eoc:: components
+- `COMPONENT_SIZES_EOC_BOOST.md` - 55 boost components
+- `COMPONENT_SIZES_EOC_NAMESPACED.md` - 185 sub-namespaced components (56 namespaces)
+- `COMPONENT_SIZES_LS.md` - 60 Larian engine components
+- `COMPONENT_SIZES_ESV.md` - 58 server components
+- `COMPONENT_SIZES_ECL.md` - 19 client components
+- `COMPONENT_SIZES_NAVCLOUD.md` - 9 navigation components
+
+**Key discoveries:**
+- Largest component: BoostsComponent (832 bytes)
+- 28+ OneFrameComponent event types (1-488 bytes)
+- Server entities use 8-byte pointers to heap allocations
+- Client entities use inline structures
 
 ### Ghidra Automation Opportunities
 

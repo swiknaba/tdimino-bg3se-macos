@@ -13,7 +13,45 @@ Each entry includes:
 
 ---
 
-## [v0.36.6] - 2025-12-22
+## [v0.36.7] - 2025-12-23
+
+**Parity:** ~77% | **Category:** Component System | **Issues:** #52
+
+### Added
+- **1,030 ARM64 Component Sizes** - Crossed 1000-component milestone via parallel Ghidra extraction
+  - 51.5% coverage of all 1,999 BG3 ECS components
+  - Parallel subagent extraction workflow with staging directory for persistence
+  - Documented in modular namespace files under `ghidra/offsets/`
+
+- **Component Size Documentation Expansion**
+  - `COMPONENT_SIZES_EOC_NAMESPACED.md` - 520 sub-namespaced components (115 namespaces)
+  - `COMPONENT_SIZES_EOC_BOOST.md` - 76 boost components
+  - `COMPONENT_SIZES_LS.md` - 106 Larian engine components
+  - `COMPONENT_SIZES_ESV.md` - 160 server components
+  - `COMPONENT_SIZES_ECL.md` - 99 client components
+  - `COMPONENT_SIZES_NAVCLOUD.md` - 17 navigation components
+
+- **New Component Categories Discovered**
+  - eoc::spell_cast:: - 15 one-frame event components (CastStart, CastHit, Finished, etc.)
+  - eoc::script:: - 3 scripting bridge components
+  - eoc::shapeshift:: - 3 transformation state components
+  - ls::cluster:: - 5 spatial partitioning components (X/Y/Z position)
+  - ls::physics:: - 6 async resource loading components
+
+### Technical
+- **Extraction Pattern**: `ComponentFrameStorageAllocRaw((ComponentFrameStorage*)(this_00 + 0x48), SIZE, ...)`
+- **Staging Directory Workflow**: Agents write to `ghidra/offsets/staging/` to survive context compaction
+- **Parallel Agent Strategy**: 5+ agents extracting different offset ranges concurrently
+- **Size Distribution**:
+  - 1 byte: Tag/presence markers (IsInCombat, Active, etc.)
+  - 4-8 bytes: Simple values (handles, integers)
+  - 40-64 bytes: Standard data components (Health, Armor)
+  - 400-500 bytes: Large events (CastEvent, HitResult)
+  - 800+ bytes: Massive containers (BoostsComponent at 832 bytes)
+
+---
+
+## [v0.36.6] - 2025-12-23
 
 **Parity:** ~77% | **Category:** Component System | **Issues:** #52
 
@@ -23,8 +61,8 @@ Each entry includes:
   - Extracted via `tools/extract_typeids.py` from macOS binary symbols
   - Namespace breakdown: eoc (701), esv (596), ecl (429), ls (233), gui (26), navcloud (13), ecs (1)
 
-- **620 Component Property Layouts** - Two-tier registration system
-  - **158 verified layouts** - Hand-verified ARM64 offsets, trusted property access
+- **631 Component Property Layouts** - Two-tier registration system
+  - **169 verified layouts** - Hand-verified ARM64 offsets, trusted property access
   - **462 generated layouts** - Windows offsets (estimated), runtime-safe defaults
   - `src/entity/generated_property_defs.h` - 504 property definitions with `Gen_` prefix
   - `tools/parse_component_headers.py` - Header parser with symbol prefix to avoid conflicts
@@ -38,8 +76,8 @@ Each entry includes:
   - `ls-components.md` - 233 ls:: engine base components
   - `misc-components.md` - gui, navcloud, ecs namespaces
 
-- **Ghidra-Based Component Size Extraction** - 30 ARM64 sizes verified
-  - `ghidra/offsets/component_sizes.json` - Central database
+- **Ghidra-Based Component Size Extraction** - 70 ARM64 sizes verified
+  - `ghidra/offsets/COMPONENT_SIZES.md` - Central documentation
   - `ghidra/offsets/EXTRACTION_METHODOLOGY.md` - Extraction workflow
   - Pattern: `AddComponent<T>` → `ComponentFrameStorageAllocRaw(..., SIZE, ...)`
 
