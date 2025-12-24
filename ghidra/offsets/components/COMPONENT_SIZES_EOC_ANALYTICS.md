@@ -16,6 +16,8 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | eoc::analytics::EventGoldChangedComponent | 0x10 | 16 | Gold changed |
 | eoc::analytics::EventInterruptUsedComponent | 0x20 | 32 | Interrupt used |
 | eoc::analytics::EventInventoryAddedComponent | 0x40 | 64 | Inventory added |
+| eoc::analytics::EventInventoryRemovedComponent | 48 (via `* 0x30`) |  |  |
+| eoc::analytics::EventItemCombineComponent | 48 (via `* 0x30`) |  |  |
 | eoc::analytics::EventItemUseComponent | 0x18 | 24 | Item usage tracking |
 | eoc::analytics::EventLevelUpEndedComponent | 0x68 | 104 | Level up analytics |
 | eoc::analytics::EventOsirisComponent | 0x28 | 40 | Osiris event tracking |
@@ -24,4 +26,4 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | eoc::analytics::EventSaveGameErrorComponent | 0x10 | 16 | Save error tracking |
 | eoc::analytics::EventSpellUseComponent | 0x80 | 128 | Spell usage (largest analytics!) |
 
-**Total: 19 components**
+**Total: 21 components**

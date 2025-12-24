@@ -227,7 +227,35 @@ if __name__ == "__main__":
 tail -f /tmp/ghidra_progress.log
 ```
 
-### Step 2.4: Manual Ghidra Investigation
+### Step 2.4: Ghidra MCP (AI-Assisted Decompilation)
+
+When Ghidra is running with the pyghidra-mcp plugin enabled, Claude has direct access to decompilation via MCP tools. This enables automated bulk extraction.
+
+**Available MCP tools:**
+```
+mcp__ghidra__search_functions_by_name(query, offset, limit)  # Find functions
+mcp__ghidra__decompile_function(name)                        # Decompile by name
+mcp__ghidra__decompile_function_by_address(address)          # Decompile by address
+mcp__ghidra__list_strings(filter, limit)                     # Search strings
+mcp__ghidra__get_xrefs_to(address)                           # Find references
+```
+
+**Example: Batch component size extraction**
+```
+# Search for AddComponent functions
+mcp__ghidra__search_functions_by_name(query="AddComponent", offset=0, limit=50)
+
+# Decompile specific function
+mcp__ghidra__decompile_function(name="AddComponent<eoc::HealthComponent>")
+# Output includes: ComponentFrameStorageAllocRaw(..., SIZE, ...)
+#                                                     ^^^^
+#                                       Second arg = component size
+```
+
+**Parallel extraction with subagents:**
+Launch multiple Claude subagents to process different offset ranges simultaneously. See "Subagent Workflow Patterns" section below.
+
+### Step 2.5: Manual Ghidra Investigation
 
 Sometimes you need interactive Ghidra. Key techniques:
 
@@ -824,6 +852,84 @@ Context7 MCP server fetches up-to-date documentation for frameworks and librarie
 **Code Review:** Use specialized review agents (architecture-strategist, security-sentinel, performance-oracle) for multi-perspective code review before merging.
 
 **Plan Review:** Use `/compounding-engineering:plan_review` to have multiple AI agents analyze implementation plans in parallel before starting work.
+
+---
+
+## Subagent Workflow Patterns
+
+Claude Code's Task tool enables launching parallel subagents for bulk extraction and analysis tasks. This dramatically accelerates repetitive work.
+
+### When to Use Subagents
+
+- **Bulk extraction**: Processing 100+ similar items (components, functions, offsets)
+- **Independent work**: Tasks that don't depend on each other's results
+- **Large search spaces**: Covering different ranges of a large dataset
+
+### Pattern: Parallel Ghidra MCP Extraction
+
+**Goal:** Extract ARM64 component sizes from 2000+ AddComponent functions
+
+**Step 1: Determine total scope**
+```
+mcp__ghidra__search_functions_by_name(query="AddComponent", offset=0, limit=1)
+# Note total count from response
+```
+
+**Step 2: Launch parallel agents**
+```
+Task tool with subagent_type="general-purpose":
+
+Agent 1: "Search AddComponent functions at offset 0-50, decompile each,
+          extract SIZE from ComponentFrameStorageAllocRaw calls.
+          Report component name and size for each."
+
+Agent 2: "Search AddComponent functions at offset 50-100, decompile each,
+          extract SIZE from ComponentFrameStorageAllocRaw calls.
+          Report component name and size for each."
+
+... (8-10 agents covering offset 0-500+)
+```
+
+**Step 3: Collect results**
+```
+TaskOutput(task_id="agent_1_id", block=true)
+TaskOutput(task_id="agent_2_id", block=true)
+# Consolidate into documentation
+```
+
+### Best Practices
+
+1. **Clear, specific prompts**: Tell agents exactly what to extract and report
+2. **Consistent output format**: Request structured output (tables, lists)
+3. **Error tolerance**: Agents should skip failures and continue
+4. **Namespace awareness**: Group results by component prefix
+5. **Documentation target**: Tell agents which doc file to reference/update
+
+### Example Agent Prompt
+
+```
+You are extracting ARM64 component sizes via Ghidra MCP.
+
+TASK:
+1. Search for AddComponent functions: offset=700, limit=50
+2. For each function, decompile and look for ComponentFrameStorageAllocRaw
+3. Extract the SIZE parameter (second argument, in hex or decimal)
+4. Report results as: ComponentName | Size (bytes) | Notes
+
+PATTERN TO FIND:
+ComponentFrameStorageAllocRaw((ComponentFrameStorage*)(this_00 + 0x48), SIZE, ...)
+
+Skip any functions that don't match this pattern.
+Organize results by namespace prefix (eoc::, esv::, ls::, etc.).
+```
+
+### Results from Dec 2025 Extraction
+
+Using 10 parallel agents, extracted 438 component sizes in ~20 minutes:
+- `COMPONENT_SIZES_EOC_NAMESPACED.md`: 185 components (56 sub-namespaces)
+- `COMPONENT_SIZES_LS.md`: 60 engine components
+- `COMPONENT_SIZES_ESV.md`: 58 server components
+- Key discovery: OneFrameComponent pattern (28+ event types, 1-488 bytes)
 
 ---
 

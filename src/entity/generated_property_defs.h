@@ -1,13 +1,12 @@
 /**
  * generated_property_defs.h - Auto-generated component property definitions
  *
- * Generated from Windows BG3SE headers by tools/parse_component_headers.py
- * Total components: 504
+ * Generated from Windows BG3SE headers by tools/generate_layouts.py
+ * Total components: 519
+ * ARM64 verified (Ghidra): 543
  *
- * WARNING: Offsets are ESTIMATED from Windows x64 ABI.
- * ARM64 may differ for complex types. Verify via runtime probing!
- *
- * Usage: Include this file in component_offsets.h and add entries to g_AllComponentLayouts[]
+ * SIZES: Ghidra-verified ARM64 sizes used where available,
+ * otherwise Windows x64 estimates (may differ on ARM64).
  */
 
 #ifndef GENERATED_PROPERTY_DEFS_H
@@ -15,8954 +14,6447 @@
 
 #include "component_property.h"
 
-// ecl::CharacterIconRequestComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ClientCharacterIconRequestComponent_Properties[] = {
-    { "Visual", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "VisualSet", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Equipment", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Template", 0x18, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ArmorSetState", 0x20, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_190", 0x28, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Trigger", 0x30, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_1B0", 0x38, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ecl::CharacterIconRequestComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x1b0 (432 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_CharacterIconRequestComponent_Properties[] = {
+    { "Visual", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "Template", 0x04, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "field_190", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "field_1B0", 0x10, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ClientCharacterIconRequestComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ecl_CharacterIconRequestComponent_Layout = {
     .componentName = "ecl::CharacterIconRequestComponent",
-    .shortName = "ClientCharacterIconRequest",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x3c,
-    .properties = g_Gen_ClientCharacterIconRequestComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ClientCharacterIconRequestComponent_Properties) / sizeof(g_Gen_ClientCharacterIconRequestComponent_Properties[0]),
+    .shortName = "CharacterIconRequest",
+    .componentTypeIndex = 0,
+    .componentSize = 0x1b0,
+    .properties = g_Gen_ecl_CharacterIconRequestComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_CharacterIconRequestComponent_Properties) / sizeof(g_Gen_ecl_CharacterIconRequestComponent_Properties[0]),
 };
 
-// ecl::CharacterIconResultComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ClientCharacterIconResultComponent_Properties[] = {
-    { "Icon", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ecl::CharacterLightComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x18 (24 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_CharacterLightComponent_Properties[] = {
+    { "Enabled", 0x00, FIELD_TYPE_BOOL, 0, true },
+    { "LightChannel", 0x01, FIELD_TYPE_UINT8, 0, true },
+    { "field_2", 0x02, FIELD_TYPE_UINT8, 0, true },
+    { "field_3", 0x03, FIELD_TYPE_UINT8, 0, true },
+    { "field_4", 0x04, FIELD_TYPE_UINT8, 0, true },
+    { "field_5", 0x05, FIELD_TYPE_UINT8, 0, true },
+    { "field_6", 0x06, FIELD_TYPE_UINT8, 0, true },
+    { "field_7", 0x07, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ClientCharacterIconResultComponent_Layout = {
-    .componentName = "ecl::CharacterIconResultComponent",
-    .shortName = "ClientCharacterIconResult",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ClientCharacterIconResultComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ClientCharacterIconResultComponent_Properties) / sizeof(g_Gen_ClientCharacterIconResultComponent_Properties[0]),
-};
-
-// ecl::CharacterLightComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CharacterLightComponent_Properties[] = {
-    { "Enabled", 0x00, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "LightChannel", 0x01, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_2", 0x02, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_3", 0x03, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_4", 0x04, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_5", 0x05, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_6", 0x06, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_7", 0x07, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_CharacterLightComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ecl_CharacterLightComponent_Layout = {
     .componentName = "ecl::CharacterLightComponent",
     .shortName = "CharacterLight",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_CharacterLightComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CharacterLightComponent_Properties) / sizeof(g_Gen_CharacterLightComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x18,
+    .properties = g_Gen_ecl_CharacterLightComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_CharacterLightComponent_Properties) / sizeof(g_Gen_ecl_CharacterLightComponent_Properties[0]),
 };
 
-// ecl::CharacterLightSingletonComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CharacterLightSingletonComponent_Properties[] = {
-    { "Views", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ecl::ClientTimelineActorControlComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x28 (40 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_ClientTimelineActorControlComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_GUID, 0, true },
+    { "field_10", 0x10, FIELD_TYPE_GUID, 0, true },
+    { "field_20", 0x20, FIELD_TYPE_UINT8, 0, true },
+    { "field_21", 0x21, FIELD_TYPE_UINT8, 0, true },
+    { "field_22", 0x22, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CharacterLightSingletonComponent_Layout = {
-    .componentName = "ecl::CharacterLightSingletonComponent",
-    .shortName = "CharacterLightSingleton",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_CharacterLightSingletonComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CharacterLightSingletonComponent_Properties) / sizeof(g_Gen_CharacterLightSingletonComponent_Properties[0]),
-};
-
-// ecl::ClientTimelineActorControlComponent (from Timeline.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ClientTimelineActorControlComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_10", 0x10, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_20", 0x20, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_21", 0x21, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_22", 0x22, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ClientTimelineActorControlComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ecl_ClientTimelineActorControlComponent_Layout = {
     .componentName = "ecl::ClientTimelineActorControlComponent",
     .shortName = "ClientTimelineActorControl",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x23,
-    .properties = g_Gen_ClientTimelineActorControlComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ClientTimelineActorControlComponent_Properties) / sizeof(g_Gen_ClientTimelineActorControlComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x28,
+    .properties = g_Gen_ecl_ClientTimelineActorControlComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_ClientTimelineActorControlComponent_Properties) / sizeof(g_Gen_ecl_ClientTimelineActorControlComponent_Properties[0]),
 };
 
-// ecl::EquipmentVisualsComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ClientEquipmentVisualsComponent_Properties[] = {
-    { "Entity", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Equipment", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ecl::EquipmentVisualsComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x48 (72 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_EquipmentVisualsComponent_Properties[] = {
+    { "Entity", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ClientEquipmentVisualsComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ecl_EquipmentVisualsComponent_Layout = {
     .componentName = "ecl::EquipmentVisualsComponent",
-    .shortName = "ClientEquipmentVisuals",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_ClientEquipmentVisualsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ClientEquipmentVisualsComponent_Properties) / sizeof(g_Gen_ClientEquipmentVisualsComponent_Properties[0]),
+    .shortName = "EquipmentVisuals",
+    .componentTypeIndex = 0,
+    .componentSize = 0x48,
+    .properties = g_Gen_ecl_EquipmentVisualsComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_EquipmentVisualsComponent_Properties) / sizeof(g_Gen_ecl_EquipmentVisualsComponent_Properties[0]),
 };
 
-// ecl::GameCameraBehavior (from Camera.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_GameCameraBehaviorComponent_Properties[] = {
-    { "Trigger", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Target", 0x08, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "TargetFalling", 0x10, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_11", 0x11, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "MovingToTarget", 0x12, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_13", 0x13, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_14", 0x14, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "TargetPreviousDestination", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "TargetDestination", 0x20, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_30", 0x28, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_3C", 0x30, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "TargetCurrent", 0x38, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Distance", 0x40, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_58", 0x44, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_5C", 0x48, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_60", 0x4c, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_64", 0x50, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_68", 0x54, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "MovementDistanceMax", 0x58, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Direction", 0x60, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "DirectionDestination", 0x68, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_88", 0x70, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "SpeedXZ", 0x78, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "XRotationSpeed", 0x80, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "XRotationSpeedMouse", 0x84, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ZoomSpeed", 0x88, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "CameraMode", 0x8c, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_A9", 0x8d, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RotationY", 0x90, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RotationTarget", 0x98, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "MouseRotationSpeed", 0xa0, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "TargetLastPosition", 0xa8, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_D0", 0xb0, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_D8", 0xb8, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_DC", 0xbc, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_E0", 0xc0, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_E4", 0xc4, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_E8", 0xc8, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "FollowTarget", 0xd0, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Targets", 0xd8, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "LastPlayerInputTime", 0xe0, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "PlayerInControl", 0xe4, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_145", 0xe5, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "IsPaused", 0xe6, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "TargetMode", 0xe8, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "SelectMode", 0xec, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "WasInSelectMode", 0xed, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_150", 0xf0, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_15C", 0xf8, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Zoom", 0xfc, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "PitchDegrees", 0x100, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "TacticalMode", 0x108, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "TacticalTimeout", 0x110, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "EffectEntities", 0x118, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_188", 0x120, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "FreezeHeight", 0x121, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_18A", 0x122, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_18B", 0x123, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_190__EH_CameraCollisionDebugInfo", 0x128, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "DebugPosition", 0x130, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "DebugOffset", 0x138, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_1E0", 0x140, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "TrackTarget", 0x148, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "IsMoving", 0x150, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "IsRotating", 0x151, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_1F2", 0x152, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "IsSnapping", 0x153, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "LastPickingTarget", 0x158, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_200", 0x160, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_208", 0x168, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_238", 0x170, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_248", 0x178, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ecl::GameCameraBehavior
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x258 (600 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_GameCameraBehavior_Properties[] = {
+    { "Trigger", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "Target", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "TargetFalling", 0x10, FIELD_TYPE_BOOL, 0, true },
+    { "field_11", 0x11, FIELD_TYPE_BOOL, 0, true },
+    { "MovingToTarget", 0x12, FIELD_TYPE_BOOL, 0, true },
+    { "field_13", 0x13, FIELD_TYPE_BOOL, 0, true },
+    { "field_14", 0x14, FIELD_TYPE_FLOAT, 0, true },
+    { "TargetPreviousDestination", 0x18, FIELD_TYPE_VEC3, 0, true },
+    { "TargetDestination", 0x28, FIELD_TYPE_VEC3, 0, true },
+    { "field_30", 0x38, FIELD_TYPE_VEC3, 0, true },
+    { "field_3C", 0x48, FIELD_TYPE_VEC3, 0, true },
+    { "TargetCurrent", 0x58, FIELD_TYPE_VEC3, 0, true },
+    { "Distance", 0x64, FIELD_TYPE_FLOAT, 0, true },
+    { "field_58", 0x68, FIELD_TYPE_FLOAT, 0, true },
+    { "field_5C", 0x6c, FIELD_TYPE_FLOAT, 0, true },
+    { "field_60", 0x70, FIELD_TYPE_FLOAT, 0, true },
+    { "field_64", 0x74, FIELD_TYPE_FLOAT, 0, true },
+    { "field_68", 0x78, FIELD_TYPE_FLOAT, 0, true },
+    { "MovementDistanceMax", 0x7c, FIELD_TYPE_FLOAT, 0, true },
+    { "Direction", 0x80, FIELD_TYPE_VEC3, 0, true },
+    { "DirectionDestination", 0x90, FIELD_TYPE_VEC3, 0, true },
+    { "field_88", 0xa0, FIELD_TYPE_VEC3, 0, true },
+    { "XRotationSpeed", 0xac, FIELD_TYPE_FLOAT, 0, true },
+    { "XRotationSpeedMouse", 0xb0, FIELD_TYPE_INT32, 0, true },
+    { "ZoomSpeed", 0xb4, FIELD_TYPE_FLOAT, 0, true },
+    { "CameraMode", 0xb8, FIELD_TYPE_UINT8, 0, true },
+    { "field_A9", 0xb9, FIELD_TYPE_UINT8, 0, true },
+    { "RotationY", 0xbc, FIELD_TYPE_FLOAT, 0, true },
+    { "MouseRotationSpeed", 0xc0, FIELD_TYPE_FLOAT, 0, true },
+    { "TargetLastPosition", 0xc8, FIELD_TYPE_VEC3, 0, true },
+    { "field_D8", 0xd4, FIELD_TYPE_FLOAT, 0, true },
+    { "field_DC", 0xd8, FIELD_TYPE_FLOAT, 0, true },
+    { "field_E0", 0xdc, FIELD_TYPE_FLOAT, 0, true },
+    { "field_E4", 0xe0, FIELD_TYPE_FLOAT, 0, true },
+    { "field_E8", 0xe4, FIELD_TYPE_FLOAT, 0, true },
+    { "Trigger1ID", 0xe8, FIELD_TYPE_INT32, 0, true },
+    { "Trigger2ID", 0xec, FIELD_TYPE_INT32, 0, true },
+    { "Trigger3ID", 0xf0, FIELD_TYPE_INT32, 0, true },
+    { "LastPlayerInputTime", 0xf4, FIELD_TYPE_FLOAT, 0, true },
+    { "PlayerInControl", 0xf8, FIELD_TYPE_BOOL, 0, true },
+    { "field_145", 0xf9, FIELD_TYPE_BOOL, 0, true },
+    { "IsPaused", 0xfa, FIELD_TYPE_BOOL, 0, true },
+    { "TargetMode", 0xfc, FIELD_TYPE_UINT32, 0, true },
+    { "SelectMode", 0x100, FIELD_TYPE_BOOL, 0, true },
+    { "WasInSelectMode", 0x101, FIELD_TYPE_BOOL, 0, true },
+    { "field_150", 0x108, FIELD_TYPE_VEC3, 0, true },
+    { "field_15C", 0x114, FIELD_TYPE_FLOAT, 0, true },
+    { "Zoom", 0x118, FIELD_TYPE_FLOAT, 0, true },
+    { "PitchDegrees", 0x11c, FIELD_TYPE_FLOAT, 0, true },
+    { "field_188", 0x120, FIELD_TYPE_BOOL, 0, true },
+    { "FreezeHeight", 0x121, FIELD_TYPE_BOOL, 0, true },
+    { "field_18A", 0x122, FIELD_TYPE_BOOL, 0, true },
+    { "field_18B", 0x123, FIELD_TYPE_BOOL, 0, true },
+    { "DebugPosition", 0x128, FIELD_TYPE_VEC3, 0, true },
+    { "DebugOffset", 0x134, FIELD_TYPE_FLOAT, 0, true },
+    { "TrackTarget", 0x138, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "IsMoving", 0x140, FIELD_TYPE_BOOL, 0, true },
+    { "IsRotating", 0x141, FIELD_TYPE_BOOL, 0, true },
+    { "field_1F2", 0x142, FIELD_TYPE_BOOL, 0, true },
+    { "IsSnapping", 0x143, FIELD_TYPE_BOOL, 0, true },
+    { "LastPickingTarget", 0x148, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "field_200", 0x150, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_GameCameraBehaviorComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ecl_GameCameraBehavior_Layout = {
     .componentName = "ecl::GameCameraBehavior",
     .shortName = "GameCameraBehavior",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x180,
-    .properties = g_Gen_GameCameraBehaviorComponent_Properties,
-    .propertyCount = sizeof(g_Gen_GameCameraBehaviorComponent_Properties) / sizeof(g_Gen_GameCameraBehaviorComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x258,
+    .properties = g_Gen_ecl_GameCameraBehavior_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_GameCameraBehavior_Properties) / sizeof(g_Gen_ecl_GameCameraBehavior_Properties[0]),
 };
 
-// ecl::PaperdollComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ClientPaperdollComponent_Properties[] = {
-    { "Entity", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Combat", 0x08, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ecl::PaperdollComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_PaperdollComponent_Properties[] = {
+    { "Entity", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ClientPaperdollComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ecl_PaperdollComponent_Layout = {
     .componentName = "ecl::PaperdollComponent",
-    .shortName = "ClientPaperdoll",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x09,
-    .properties = g_Gen_ClientPaperdollComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ClientPaperdollComponent_Properties) / sizeof(g_Gen_ClientPaperdollComponent_Properties[0]),
-};
-
-// ecl::camera::CombatTargetComponent (from Camera.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CameraCombatTargetComponent_Properties[] = {
-    { "Target", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_CameraCombatTargetComponent_Layout = {
-    .componentName = "ecl::camera::CombatTargetComponent",
-    .shortName = "CameraCombatTarget",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_CameraCombatTargetComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CameraCombatTargetComponent_Properties) / sizeof(g_Gen_CameraCombatTargetComponent_Properties[0]),
-};
-
-// ecl::camera::SelectorModeComponent (from Camera.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CameraSelectorModeComponent_Properties[] = {
-    { "Mode", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_CameraSelectorModeComponent_Layout = {
-    .componentName = "ecl::camera::SelectorModeComponent",
-    .shortName = "CameraSelectorMode",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x01,
-    .properties = g_Gen_CameraSelectorModeComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CameraSelectorModeComponent_Properties) / sizeof(g_Gen_CameraSelectorModeComponent_Properties[0]),
-};
-
-// ecl::camera::TargetComponent (from Camera.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CameraTargetComponent_Properties[] = {
-    { "Target", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_CameraTargetComponent_Layout = {
-    .componentName = "ecl::camera::TargetComponent",
-    .shortName = "CameraTarget",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_CameraTargetComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CameraTargetComponent_Properties) / sizeof(g_Gen_CameraTargetComponent_Properties[0]),
-};
-
-// ecl::character_creation::BaseDefinitionComponent (from CharacterCreation.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ClientCCBaseDefinitionStateComponent_Properties[] = {
-    { "Definition", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ClientCCBaseDefinitionStateComponent_Layout = {
-    .componentName = "ecl::character_creation::BaseDefinitionComponent",
-    .shortName = "ClientCCBaseDefinitionState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ClientCCBaseDefinitionStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ClientCCBaseDefinitionStateComponent_Properties) / sizeof(g_Gen_ClientCCBaseDefinitionStateComponent_Properties[0]),
-};
-
-// ecl::character_creation::ChangeAppearanceDefinitionComponent (from CharacterCreation.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ClientCCChangeAppearanceDefinitionComponent_Properties[] = {
-    { "Definition", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ClientCCChangeAppearanceDefinitionComponent_Layout = {
-    .componentName = "ecl::character_creation::ChangeAppearanceDefinitionComponent",
-    .shortName = "ClientCCChangeAppearanceDefinition",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ClientCCChangeAppearanceDefinitionComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ClientCCChangeAppearanceDefinitionComponent_Properties) / sizeof(g_Gen_ClientCCChangeAppearanceDefinitionComponent_Properties[0]),
-};
-
-// ecl::character_creation::CompanionDefinitionComponent (from CharacterCreation.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ClientCCCompanionDefinitionComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_10", 0x10, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_20", 0x20, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_21", 0x21, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_28", 0x28, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Visual", 0x38, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_110", 0x40, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_120", 0x50, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_130", 0x60, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ClientCCCompanionDefinitionComponent_Layout = {
-    .componentName = "ecl::character_creation::CompanionDefinitionComponent",
-    .shortName = "ClientCCCompanionDefinition",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x61,
-    .properties = g_Gen_ClientCCCompanionDefinitionComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ClientCCCompanionDefinitionComponent_Properties) / sizeof(g_Gen_ClientCCCompanionDefinitionComponent_Properties[0]),
-};
-
-// ecl::character_creation::DefinitionStateComponent (from CharacterCreation.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ClientCCDefinitionStateComponent_Properties[] = {
-    { "Entity", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8", 0x08, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_C", 0x0c, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ChangeId", 0x10, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Errors", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ClientCCDefinitionStateComponent_Layout = {
-    .componentName = "ecl::character_creation::DefinitionStateComponent",
-    .shortName = "ClientCCDefinitionState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x20,
-    .properties = g_Gen_ClientCCDefinitionStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ClientCCDefinitionStateComponent_Properties) / sizeof(g_Gen_ClientCCDefinitionStateComponent_Properties[0]),
-};
-
-// ecl::character_creation::DefinitionStateExComponent (from CharacterCreation.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ClientCCDefinitionStateExComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_1", 0x01, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_2", 0x02, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ChangeId", 0x10, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "NeedsSync", 0x14, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ClientCCDefinitionStateExComponent_Layout = {
-    .componentName = "ecl::character_creation::DefinitionStateExComponent",
-    .shortName = "ClientCCDefinitionStateEx",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x15,
-    .properties = g_Gen_ClientCCDefinitionStateExComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ClientCCDefinitionStateExComponent_Properties) / sizeof(g_Gen_ClientCCDefinitionStateExComponent_Properties[0]),
-};
-
-// ecl::character_creation::DummyDefinitionComponent (from CharacterCreation.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ClientCCDummyDefinitionComponent_Properties[] = {
-    { "Dummy", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ChangeId", 0x08, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ChangeId2", 0x0c, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_10", 0x10, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_18_Map_unk_FS", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_58", 0x20, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_59", 0x21, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_5A", 0x22, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_5B", 0x23, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RootTemplate", 0x28, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Origin", 0x38, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "BodyType", 0x48, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "BodyShape", 0x49, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Race", 0x50, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Subrace", 0x60, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_A8", 0x70, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_1A0", 0x78, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_1A8", 0x80, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ClientCCDummyDefinitionComponent_Layout = {
-    .componentName = "ecl::character_creation::DummyDefinitionComponent",
-    .shortName = "ClientCCDummyDefinition",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x88,
-    .properties = g_Gen_ClientCCDummyDefinitionComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ClientCCDummyDefinitionComponent_Properties) / sizeof(g_Gen_ClientCCDummyDefinitionComponent_Properties[0]),
-};
-
-// ecl::character_creation::FullRespecDefinitionComponent (from CharacterCreation.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ClientCCFullRespecDefinitionComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_10", 0x10, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_20", 0x20, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "LevelUpUpgrades", 0x28, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "SpellIds", 0x30, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ClientCCFullRespecDefinitionComponent_Layout = {
-    .componentName = "ecl::character_creation::FullRespecDefinitionComponent",
-    .shortName = "ClientCCFullRespecDefinition",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x38,
-    .properties = g_Gen_ClientCCFullRespecDefinitionComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ClientCCFullRespecDefinitionComponent_Properties) / sizeof(g_Gen_ClientCCFullRespecDefinitionComponent_Properties[0]),
-};
-
-// ecl::character_creation::LevelUpDefinitionComponent (from CharacterCreation.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ClientCCLevelUpDefinitionComponent_Properties[] = {
-    { "Definition", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ClientCCLevelUpDefinitionComponent_Layout = {
-    .componentName = "ecl::character_creation::LevelUpDefinitionComponent",
-    .shortName = "ClientCCLevelUpDefinition",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ClientCCLevelUpDefinitionComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ClientCCLevelUpDefinitionComponent_Properties) / sizeof(g_Gen_ClientCCLevelUpDefinitionComponent_Properties[0]),
-};
-
-// ecl::dummy::AnimationStateComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DummyAnimationStateComponent_Properties[] = {
-    { "State", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_DummyAnimationStateComponent_Layout = {
-    .componentName = "ecl::dummy::AnimationStateComponent",
-    .shortName = "DummyAnimationState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_DummyAnimationStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DummyAnimationStateComponent_Properties) / sizeof(g_Gen_DummyAnimationStateComponent_Properties[0]),
-};
-
-// ecl::dummy::AvailableAnimationsComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DummyAvailableAnimationsComponent_Properties[] = {
-    { "EmoteCollections", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "FaceExpressionCollections", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_DummyAvailableAnimationsComponent_Layout = {
-    .componentName = "ecl::dummy::AvailableAnimationsComponent",
-    .shortName = "DummyAvailableAnimations",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .shortName = "Paperdoll",
+    .componentTypeIndex = 0,
     .componentSize = 0x10,
-    .properties = g_Gen_DummyAvailableAnimationsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DummyAvailableAnimationsComponent_Properties) / sizeof(g_Gen_DummyAvailableAnimationsComponent_Properties[0]),
+    .properties = g_Gen_ecl_PaperdollComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_PaperdollComponent_Properties) / sizeof(g_Gen_ecl_PaperdollComponent_Properties[0]),
 };
 
-// ecl::dummy::CharacterVFXInitializationComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DummyCharacterVFXInitializationComponent_Properties[] = {
-    { "Effects", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ecl::Scenery
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x40 (64 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_Scenery_Properties[] = {
+    { "Entity2", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "Uuid", 0x08, FIELD_TYPE_GUID, 0, true },
+    { "Visual", 0x18, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "VisualLoadFlags", 0x1c, FIELD_TYPE_UINT16, 0, true },
+    { "field_60", 0x20, FIELD_TYPE_UINT64, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_DummyCharacterVFXInitializationComponent_Layout = {
-    .componentName = "ecl::dummy::CharacterVFXInitializationComponent",
-    .shortName = "DummyCharacterVFXInitialization",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_DummyCharacterVFXInitializationComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DummyCharacterVFXInitializationComponent_Properties) / sizeof(g_Gen_DummyCharacterVFXInitializationComponent_Properties[0]),
+static const ComponentLayoutDef g_Gen_ecl_Scenery_Layout = {
+    .componentName = "ecl::Scenery",
+    .shortName = "Scenery",
+    .componentTypeIndex = 0,
+    .componentSize = 0x40,
+    .properties = g_Gen_ecl_Scenery_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_Scenery_Properties) / sizeof(g_Gen_ecl_Scenery_Properties[0]),
 };
 
-// ecl::dummy::DummiesCreatedSingletonComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DummiesCreatedSingletonComponent_Properties[] = {
-    { "Dummies", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ecl::TLPreviewDummy
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_TLPreviewDummy_Properties[] = {
+    { "CurrentLevel", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "Flags", 0x04, FIELD_TYPE_UINT16, 0, true },
+    { "field_30", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "PhysicsResourceId", 0x10, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "VisualResourceId", 0x14, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "SourceTemplateOverride", 0x18, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "ShapeShiftSourceTemplateOverride", 0x1c, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "OriginalCharacterTemplate", 0x20, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "Listener", 0x28, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "VisibilityFlags", 0x30, FIELD_TYPE_UINT32, 0, true },
+    { "field_AC", 0x34, FIELD_TYPE_UINT8, 0, true },
+    { "field_AD", 0x35, FIELD_TYPE_UINT8, 0, true },
+    { "LightChannel", 0x36, FIELD_TYPE_UINT8, 0, true },
+    { "TimelineType", 0x37, FIELD_TYPE_UINT8, 0, true },
+    { "ComponentLayoutFlags", 0x38, FIELD_TYPE_UINT32, 0, true },
+    { "ActiveDummy", 0x3c, FIELD_TYPE_BOOL, 0, true },
+    { "ArmorVisibilityControlled", 0x3d, FIELD_TYPE_BOOL, 0, true },
+    { "field_C2", 0x3e, FIELD_TYPE_UINT8, 0, true },
+    { "ArmorVisibilityControlled2", 0x3f, FIELD_TYPE_BOOL, 0, true },
+    { "field_C4", 0x40, FIELD_TYPE_UINT8, 0, true },
+    { "IsWeaponUnsheathed", 0x41, FIELD_TYPE_BOOL, 0, true },
+    { "ShouldShowVanityWeapon", 0x42, FIELD_TYPE_BOOL, 0, true },
+    { "_Pad", 0x48, FIELD_TYPE_UINT64, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_DummiesCreatedSingletonComponent_Layout = {
-    .componentName = "ecl::dummy::DummiesCreatedSingletonComponent",
-    .shortName = "DummiesCreatedSingleton",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_DummiesCreatedSingletonComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DummiesCreatedSingletonComponent_Properties) / sizeof(g_Gen_DummiesCreatedSingletonComponent_Properties[0]),
+static const ComponentLayoutDef g_Gen_ecl_TLPreviewDummy_Layout = {
+    .componentName = "ecl::TLPreviewDummy",
+    .shortName = "TLPreviewDummy",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_ecl_TLPreviewDummy_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_TLPreviewDummy_Properties) / sizeof(g_Gen_ecl_TLPreviewDummy_Properties[0]),
 };
 
-// ecl::dummy::DummyComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DummyComponent_Properties[] = {
-    { "Entity", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ecl::camera::SelectorModeComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x1 (1 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_camera_SelectorModeComponent_Properties[] = {
+    { "Mode", 0x00, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_DummyComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ecl_camera_SelectorModeComponent_Layout = {
+    .componentName = "ecl::camera::SelectorModeComponent",
+    .shortName = "SelectorMode",
+    .componentTypeIndex = 0,
+    .componentSize = 0x1,
+    .properties = g_Gen_ecl_camera_SelectorModeComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_camera_SelectorModeComponent_Properties) / sizeof(g_Gen_ecl_camera_SelectorModeComponent_Properties[0]),
+};
+
+// ======================================================================
+// ecl::character_creation::CompanionDefinitionComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x68 (104 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_character_creation_CompanionDefinitionComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_GUID, 0, true },
+    { "field_10", 0x10, FIELD_TYPE_GUID, 0, true },
+    { "field_20", 0x20, FIELD_TYPE_UINT8, 0, true },
+    { "field_21", 0x21, FIELD_TYPE_UINT8, 0, true },
+    { "field_28", 0x28, FIELD_TYPE_GUID, 0, true },
+    { "field_110", 0x38, FIELD_TYPE_GUID, 0, true },
+    { "field_120", 0x48, FIELD_TYPE_GUID, 0, true },
+    { "field_130", 0x58, FIELD_TYPE_UINT8, 0, true },
+};
+
+static const ComponentLayoutDef g_Gen_ecl_character_creation_CompanionDefinitionComponent_Layout = {
+    .componentName = "ecl::character_creation::CompanionDefinitionComponent",
+    .shortName = "CompanionDefinition",
+    .componentTypeIndex = 0,
+    .componentSize = 0x68,
+    .properties = g_Gen_ecl_character_creation_CompanionDefinitionComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_character_creation_CompanionDefinitionComponent_Properties) / sizeof(g_Gen_ecl_character_creation_CompanionDefinitionComponent_Properties[0]),
+};
+
+// ======================================================================
+// ecl::character_creation::DefinitionStateComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0xc8 (200 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_character_creation_DefinitionStateComponent_Properties[] = {
+    { "field_8", 0x00, FIELD_TYPE_UINT32, 0, true },
+    { "field_C", 0x04, FIELD_TYPE_UINT32, 0, true },
+};
+
+static const ComponentLayoutDef g_Gen_ecl_character_creation_DefinitionStateComponent_Layout = {
+    .componentName = "ecl::character_creation::DefinitionStateComponent",
+    .shortName = "DefinitionState",
+    .componentTypeIndex = 0,
+    .componentSize = 0xc8,
+    .properties = g_Gen_ecl_character_creation_DefinitionStateComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_character_creation_DefinitionStateComponent_Properties) / sizeof(g_Gen_ecl_character_creation_DefinitionStateComponent_Properties[0]),
+};
+
+// ======================================================================
+// ecl::character_creation::DefinitionStateExComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x28 (40 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_character_creation_DefinitionStateExComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, true },
+    { "field_1", 0x01, FIELD_TYPE_UINT8, 0, true },
+    { "field_2", 0x02, FIELD_TYPE_UINT8, 0, true },
+    { "field_18", 0x04, FIELD_TYPE_UINT32, 0, true },
+};
+
+static const ComponentLayoutDef g_Gen_ecl_character_creation_DefinitionStateExComponent_Layout = {
+    .componentName = "ecl::character_creation::DefinitionStateExComponent",
+    .shortName = "DefinitionStateEx",
+    .componentTypeIndex = 0,
+    .componentSize = 0x28,
+    .properties = g_Gen_ecl_character_creation_DefinitionStateExComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_character_creation_DefinitionStateExComponent_Properties) / sizeof(g_Gen_ecl_character_creation_DefinitionStateExComponent_Properties[0]),
+};
+
+// ======================================================================
+// ecl::character_creation::DummyDefinitionComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x1b0 (432 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_character_creation_DummyDefinitionComponent_Properties[] = {
+    { "field_10", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "field_58", 0x04, FIELD_TYPE_UINT8, 0, true },
+    { "field_59", 0x05, FIELD_TYPE_UINT8, 0, true },
+    { "field_5A", 0x06, FIELD_TYPE_UINT8, 0, true },
+    { "field_5B", 0x07, FIELD_TYPE_UINT8, 0, true },
+    { "field_1A0", 0x08, FIELD_TYPE_UINT8, 0, true },
+    { "field_1A8", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+};
+
+static const ComponentLayoutDef g_Gen_ecl_character_creation_DummyDefinitionComponent_Layout = {
+    .componentName = "ecl::character_creation::DummyDefinitionComponent",
+    .shortName = "DummyDefinition",
+    .componentTypeIndex = 0,
+    .componentSize = 0x1b0,
+    .properties = g_Gen_ecl_character_creation_DummyDefinitionComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_character_creation_DummyDefinitionComponent_Properties) / sizeof(g_Gen_ecl_character_creation_DummyDefinitionComponent_Properties[0]),
+};
+
+// ======================================================================
+// ecl::character_creation::FullRespecDefinitionComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0xa8 (168 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_character_creation_FullRespecDefinitionComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_GUID, 0, true },
+    { "field_10", 0x10, FIELD_TYPE_GUID, 0, true },
+    { "field_20", 0x20, FIELD_TYPE_INT32, 0, true },
+};
+
+static const ComponentLayoutDef g_Gen_ecl_character_creation_FullRespecDefinitionComponent_Layout = {
+    .componentName = "ecl::character_creation::FullRespecDefinitionComponent",
+    .shortName = "FullRespecDefinition",
+    .componentTypeIndex = 0,
+    .componentSize = 0xa8,
+    .properties = g_Gen_ecl_character_creation_FullRespecDefinitionComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_character_creation_FullRespecDefinitionComponent_Properties) / sizeof(g_Gen_ecl_character_creation_FullRespecDefinitionComponent_Properties[0]),
+};
+
+// ======================================================================
+// ecl::dummy::DummyComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_dummy_DummyComponent_Properties[] = {
+    { "Entity", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+};
+
+static const ComponentLayoutDef g_Gen_ecl_dummy_DummyComponent_Layout = {
     .componentName = "ecl::dummy::DummyComponent",
     .shortName = "Dummy",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_DummyComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DummyComponent_Properties) / sizeof(g_Gen_DummyComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_ecl_dummy_DummyComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_dummy_DummyComponent_Properties) / sizeof(g_Gen_ecl_dummy_DummyComponent_Properties[0]),
 };
 
-// ecl::dummy::EquipmentVisualsStateComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DummyEquipmentVisualsStateComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ecl::dummy::EquipmentVisualsStateComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x4 (4 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_dummy_EquipmentVisualsStateComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_DummyEquipmentVisualsStateComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ecl_dummy_EquipmentVisualsStateComponent_Layout = {
     .componentName = "ecl::dummy::EquipmentVisualsStateComponent",
-    .shortName = "DummyEquipmentVisualsState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_DummyEquipmentVisualsStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DummyEquipmentVisualsStateComponent_Properties) / sizeof(g_Gen_DummyEquipmentVisualsStateComponent_Properties[0]),
+    .shortName = "EquipmentVisualsState",
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_ecl_dummy_EquipmentVisualsStateComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_dummy_EquipmentVisualsStateComponent_Properties) / sizeof(g_Gen_ecl_dummy_EquipmentVisualsStateComponent_Properties[0]),
 };
 
-// ecl::dummy::FootIKStateComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DummyFootIKStateComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8", 0x08, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_C", 0x0c, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_D", 0x0d, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_E", 0x0e, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ecl::dummy::FootIKStateComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x10 (16 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_dummy_FootIKStateComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_INT64, 0, true },
+    { "field_8", 0x08, FIELD_TYPE_INT32, 0, true },
+    { "field_C", 0x0c, FIELD_TYPE_UINT8, 0, true },
+    { "field_D", 0x0d, FIELD_TYPE_UINT8, 0, true },
+    { "field_E", 0x0e, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_DummyFootIKStateComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ecl_dummy_FootIKStateComponent_Layout = {
     .componentName = "ecl::dummy::FootIKStateComponent",
-    .shortName = "DummyFootIKState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x0f,
-    .properties = g_Gen_DummyFootIKStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DummyFootIKStateComponent_Properties) / sizeof(g_Gen_DummyFootIKStateComponent_Properties[0]),
+    .shortName = "FootIKState",
+    .componentTypeIndex = 0,
+    .componentSize = 0x10,
+    .properties = g_Gen_ecl_dummy_FootIKStateComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_dummy_FootIKStateComponent_Properties) / sizeof(g_Gen_ecl_dummy_FootIKStateComponent_Properties[0]),
 };
 
-// ecl::dummy::HasDummyComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_HasDummyComponent_Properties[] = {
-    { "Entity", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ecl::dummy::HasDummyComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_dummy_HasDummyComponent_Properties[] = {
+    { "Entity", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_HasDummyComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ecl_dummy_HasDummyComponent_Layout = {
     .componentName = "ecl::dummy::HasDummyComponent",
     .shortName = "HasDummy",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_HasDummyComponent_Properties,
-    .propertyCount = sizeof(g_Gen_HasDummyComponent_Properties) / sizeof(g_Gen_HasDummyComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_ecl_dummy_HasDummyComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_dummy_HasDummyComponent_Properties) / sizeof(g_Gen_ecl_dummy_HasDummyComponent_Properties[0]),
 };
 
-// ecl::dummy::OriginalTransformComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DummyOriginalTransformComponent_Properties[] = {
-    { "Transform", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ecl::dummy::SplatterComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x14 (20 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_dummy_SplatterComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "field_4", 0x04, FIELD_TYPE_INT32, 0, true },
+    { "field_8", 0x08, FIELD_TYPE_INT32, 0, true },
+    { "field_C", 0x0c, FIELD_TYPE_INT32, 0, true },
+    { "byte10", 0x10, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_DummyOriginalTransformComponent_Layout = {
-    .componentName = "ecl::dummy::OriginalTransformComponent",
-    .shortName = "DummyOriginalTransform",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_DummyOriginalTransformComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DummyOriginalTransformComponent_Properties) / sizeof(g_Gen_DummyOriginalTransformComponent_Properties[0]),
-};
-
-// ecl::dummy::SpellVFXInitializationComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DummySpellVFXInitializationComponent_Properties[] = {
-    { "Effects", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_DummySpellVFXInitializationComponent_Layout = {
-    .componentName = "ecl::dummy::SpellVFXInitializationComponent",
-    .shortName = "DummySpellVFXInitialization",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_DummySpellVFXInitializationComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DummySpellVFXInitializationComponent_Properties) / sizeof(g_Gen_DummySpellVFXInitializationComponent_Properties[0]),
-};
-
-// ecl::dummy::SplatterComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DummySplatterComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_4", 0x04, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8", 0x08, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_C", 0x0c, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "byte10", 0x10, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_DummySplatterComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ecl_dummy_SplatterComponent_Layout = {
     .componentName = "ecl::dummy::SplatterComponent",
-    .shortName = "DummySplatter",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x11,
-    .properties = g_Gen_DummySplatterComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DummySplatterComponent_Properties) / sizeof(g_Gen_DummySplatterComponent_Properties[0]),
+    .shortName = "Splatter",
+    .componentTypeIndex = 0,
+    .componentSize = 0x14,
+    .properties = g_Gen_ecl_dummy_SplatterComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_dummy_SplatterComponent_Properties) / sizeof(g_Gen_ecl_dummy_SplatterComponent_Properties[0]),
 };
 
-// ecl::dummy::StoredClothComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DummyStoredClothComponent_Properties[] = {
-    { "Cloths", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Attachments", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ecl::dummy::UnsheathComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x10 (16 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_dummy_UnsheathComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "field_4", 0x04, FIELD_TYPE_INT32, 0, true },
+    { "field_8", 0x08, FIELD_TYPE_INT32, 0, true },
+    { "field_C", 0x0c, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_DummyStoredClothComponent_Layout = {
-    .componentName = "ecl::dummy::StoredClothComponent",
-    .shortName = "DummyStoredCloth",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_DummyStoredClothComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DummyStoredClothComponent_Properties) / sizeof(g_Gen_DummyStoredClothComponent_Properties[0]),
-};
-
-// ecl::dummy::TransformRequestsSingletonComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DummyTransformRequestsSingletonComponent_Properties[] = {
-    { "Requests", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Requests2", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_DummyTransformRequestsSingletonComponent_Layout = {
-    .componentName = "ecl::dummy::TransformRequestsSingletonComponent",
-    .shortName = "DummyTransformRequestsSingleton",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_DummyTransformRequestsSingletonComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DummyTransformRequestsSingletonComponent_Properties) / sizeof(g_Gen_DummyTransformRequestsSingletonComponent_Properties[0]),
-};
-
-// ecl::dummy::UnsheathComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DummyUnsheathComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_4", 0x04, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8", 0x08, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_C", 0x0c, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_DummyUnsheathComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ecl_dummy_UnsheathComponent_Layout = {
     .componentName = "ecl::dummy::UnsheathComponent",
-    .shortName = "DummyUnsheath",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .shortName = "Unsheath",
+    .componentTypeIndex = 0,
     .componentSize = 0x10,
-    .properties = g_Gen_DummyUnsheathComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DummyUnsheathComponent_Properties) / sizeof(g_Gen_DummyUnsheathComponent_Properties[0]),
+    .properties = g_Gen_ecl_dummy_UnsheathComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_dummy_UnsheathComponent_Properties) / sizeof(g_Gen_ecl_dummy_UnsheathComponent_Properties[0]),
 };
 
-// ecl::dummy::VFXEntitiesComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DummyVFXEntitiesComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ecl::equipment::VisualsVisibilityStateComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x48 (72 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_equipment_VisualsVisibilityStateComponent_Properties[] = {
+    { "field_40", 0x00, FIELD_TYPE_UINT8, 0, true },
+    { "field_41", 0x01, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_DummyVFXEntitiesComponent_Layout = {
-    .componentName = "ecl::dummy::VFXEntitiesComponent",
-    .shortName = "DummyVFXEntities",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_DummyVFXEntitiesComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DummyVFXEntitiesComponent_Properties) / sizeof(g_Gen_DummyVFXEntitiesComponent_Properties[0]),
-};
-
-// ecl::equipment::VisualsDesiredStateComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ClientVisualsDesiredStateComponent_Properties[] = {
-    { "Slots", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ClientVisualsDesiredStateComponent_Layout = {
-    .componentName = "ecl::equipment::VisualsDesiredStateComponent",
-    .shortName = "ClientVisualsDesiredState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ClientVisualsDesiredStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ClientVisualsDesiredStateComponent_Properties) / sizeof(g_Gen_ClientVisualsDesiredStateComponent_Properties[0]),
-};
-
-// ecl::equipment::VisualsVisibilityStateComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ClientEquipmentVisibilityStateComponent_Properties[] = {
-    { "Equipment", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_40", 0x08, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_41", 0x09, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ClientEquipmentVisibilityStateComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ecl_equipment_VisualsVisibilityStateComponent_Layout = {
     .componentName = "ecl::equipment::VisualsVisibilityStateComponent",
-    .shortName = "ClientEquipmentVisibilityState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x0a,
-    .properties = g_Gen_ClientEquipmentVisibilityStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ClientEquipmentVisibilityStateComponent_Properties) / sizeof(g_Gen_ClientEquipmentVisibilityStateComponent_Properties[0]),
+    .shortName = "VisualsVisibilityState",
+    .componentTypeIndex = 0,
+    .componentSize = 0x48,
+    .properties = g_Gen_ecl_equipment_VisualsVisibilityStateComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_equipment_VisualsVisibilityStateComponent_Properties) / sizeof(g_Gen_ecl_equipment_VisualsVisibilityStateComponent_Properties[0]),
 };
 
-// ecl::interrupt::PlayerDecisionComponent (from Interrupt.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ClientInterruptPlayerDecisionComponent_Properties[] = {
-    { "Decisions", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ecl::photo_mode::CameraOffsetComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x20 (32 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_photo_mode_CameraOffsetComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_VEC3, 0, true },
+    { "field_C", 0x10, FIELD_TYPE_VEC3, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ClientInterruptPlayerDecisionComponent_Layout = {
-    .componentName = "ecl::interrupt::PlayerDecisionComponent",
-    .shortName = "ClientInterruptPlayerDecision",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ClientInterruptPlayerDecisionComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ClientInterruptPlayerDecisionComponent_Properties) / sizeof(g_Gen_ClientInterruptPlayerDecisionComponent_Properties[0]),
-};
-
-// ecl::photo_mode::CameraOffsetComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PhotoModeCameraOffsetComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_C", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_PhotoModeCameraOffsetComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ecl_photo_mode_CameraOffsetComponent_Layout = {
     .componentName = "ecl::photo_mode::CameraOffsetComponent",
-    .shortName = "PhotoModeCameraOffset",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_PhotoModeCameraOffsetComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PhotoModeCameraOffsetComponent_Properties) / sizeof(g_Gen_PhotoModeCameraOffsetComponent_Properties[0]),
+    .shortName = "CameraOffset",
+    .componentTypeIndex = 0,
+    .componentSize = 0x20,
+    .properties = g_Gen_ecl_photo_mode_CameraOffsetComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_photo_mode_CameraOffsetComponent_Properties) / sizeof(g_Gen_ecl_photo_mode_CameraOffsetComponent_Properties[0]),
 };
 
-// ecl::photo_mode::CameraSavedTransformComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PhotoModeCameraSavedTransformComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_28", 0x08, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_2C", 0x0c, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_30", 0x10, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_34", 0x14, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ecl::photo_mode::CameraSavedTransformComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x18 (24 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_photo_mode_CameraSavedTransformComponent_Properties[] = {
+    { "field_28", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "field_2C", 0x04, FIELD_TYPE_INT32, 0, true },
+    { "field_30", 0x08, FIELD_TYPE_INT32, 0, true },
+    { "field_34", 0x0c, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_PhotoModeCameraSavedTransformComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ecl_photo_mode_CameraSavedTransformComponent_Layout = {
     .componentName = "ecl::photo_mode::CameraSavedTransformComponent",
-    .shortName = "PhotoModeCameraSavedTransform",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .shortName = "CameraSavedTransform",
+    .componentTypeIndex = 0,
     .componentSize = 0x18,
-    .properties = g_Gen_PhotoModeCameraSavedTransformComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PhotoModeCameraSavedTransformComponent_Properties) / sizeof(g_Gen_PhotoModeCameraSavedTransformComponent_Properties[0]),
+    .properties = g_Gen_ecl_photo_mode_CameraSavedTransformComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_photo_mode_CameraSavedTransformComponent_Properties) / sizeof(g_Gen_ecl_photo_mode_CameraSavedTransformComponent_Properties[0]),
 };
 
-// ecl::photo_mode::CameraTiltComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PhotoModeCameraTiltComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_4", 0x04, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ecl::photo_mode::CameraTiltComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x8 (8 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_photo_mode_CameraTiltComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_FLOAT, 0, true },
+    { "field_4", 0x04, FIELD_TYPE_FLOAT, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_PhotoModeCameraTiltComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ecl_photo_mode_CameraTiltComponent_Layout = {
     .componentName = "ecl::photo_mode::CameraTiltComponent",
-    .shortName = "PhotoModeCameraTilt",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_PhotoModeCameraTiltComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PhotoModeCameraTiltComponent_Properties) / sizeof(g_Gen_PhotoModeCameraTiltComponent_Properties[0]),
+    .shortName = "CameraTilt",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_ecl_photo_mode_CameraTiltComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_photo_mode_CameraTiltComponent_Properties) / sizeof(g_Gen_ecl_photo_mode_CameraTiltComponent_Properties[0]),
 };
 
-// ecl::photo_mode::CameraTrackingComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PhotoModeCameraTrackingComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ecl::photo_mode::CameraTrackingComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x8 (8 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_photo_mode_CameraTrackingComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_PhotoModeCameraTrackingComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ecl_photo_mode_CameraTrackingComponent_Layout = {
     .componentName = "ecl::photo_mode::CameraTrackingComponent",
-    .shortName = "PhotoModeCameraTracking",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_PhotoModeCameraTrackingComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PhotoModeCameraTrackingComponent_Properties) / sizeof(g_Gen_PhotoModeCameraTrackingComponent_Properties[0]),
+    .shortName = "CameraTracking",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_ecl_photo_mode_CameraTrackingComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_photo_mode_CameraTrackingComponent_Properties) / sizeof(g_Gen_ecl_photo_mode_CameraTrackingComponent_Properties[0]),
 };
 
-// ecl::photo_mode::DummyAnimationUpdateSingletonComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PhotoModeDummyAnimationUpdateSingletonComponent_Properties[] = {
-    { "Updates", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ecl::photo_mode::DummyEquipmentSetupOneFrameComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x4 (4 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_photo_mode_DummyEquipmentSetupOneFrameComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, true },
+    { "field_1", 0x01, FIELD_TYPE_UINT8, 0, true },
+    { "field_2", 0x02, FIELD_TYPE_UINT8, 0, true },
+    { "field_3", 0x03, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_PhotoModeDummyAnimationUpdateSingletonComponent_Layout = {
-    .componentName = "ecl::photo_mode::DummyAnimationUpdateSingletonComponent",
-    .shortName = "PhotoModeDummyAnimationUpdateSingleton",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_PhotoModeDummyAnimationUpdateSingletonComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PhotoModeDummyAnimationUpdateSingletonComponent_Properties) / sizeof(g_Gen_PhotoModeDummyAnimationUpdateSingletonComponent_Properties[0]),
-};
-
-// ecl::photo_mode::DummyEquipmentSetupOneFrameComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PhotoModeDummyEquipmentSetupOneFrameComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_1", 0x01, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_2", 0x02, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_3", 0x03, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_PhotoModeDummyEquipmentSetupOneFrameComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ecl_photo_mode_DummyEquipmentSetupOneFrameComponent_Layout = {
     .componentName = "ecl::photo_mode::DummyEquipmentSetupOneFrameComponent",
-    .shortName = "PhotoModeDummyEquipmentSetupOneFrame",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_PhotoModeDummyEquipmentSetupOneFrameComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PhotoModeDummyEquipmentSetupOneFrameComponent_Properties) / sizeof(g_Gen_PhotoModeDummyEquipmentSetupOneFrameComponent_Properties[0]),
+    .shortName = "DummyEquipmentSetupOneFrame",
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_ecl_photo_mode_DummyEquipmentSetupOneFrameComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_photo_mode_DummyEquipmentSetupOneFrameComponent_Properties) / sizeof(g_Gen_ecl_photo_mode_DummyEquipmentSetupOneFrameComponent_Properties[0]),
 };
 
-// ecl::photo_mode::DummyEquipmentVisualUpdateSingletonComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PhotoModeDummyEquipmentVisualUpdateSingletonComponent_Properties[] = {
-    { "Updates", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ecl::photo_mode::RequestedSingletonComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x1 (1 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ecl_photo_mode_RequestedSingletonComponent_Properties[] = {
+    { "Requested", 0x00, FIELD_TYPE_BOOL, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_PhotoModeDummyEquipmentVisualUpdateSingletonComponent_Layout = {
-    .componentName = "ecl::photo_mode::DummyEquipmentVisualUpdateSingletonComponent",
-    .shortName = "PhotoModeDummyEquipmentVisualUpdateSingleton",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_PhotoModeDummyEquipmentVisualUpdateSingletonComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PhotoModeDummyEquipmentVisualUpdateSingletonComponent_Properties) / sizeof(g_Gen_PhotoModeDummyEquipmentVisualUpdateSingletonComponent_Properties[0]),
-};
-
-// ecl::photo_mode::DummySplatterUpdateSingletonComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PhotoModeDummySplatterUpdateSingletonComponent_Properties[] = {
-    { "Updates", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_PhotoModeDummySplatterUpdateSingletonComponent_Layout = {
-    .componentName = "ecl::photo_mode::DummySplatterUpdateSingletonComponent",
-    .shortName = "PhotoModeDummySplatterUpdateSingleton",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_PhotoModeDummySplatterUpdateSingletonComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PhotoModeDummySplatterUpdateSingletonComponent_Properties) / sizeof(g_Gen_PhotoModeDummySplatterUpdateSingletonComponent_Properties[0]),
-};
-
-// ecl::photo_mode::DummyTransformUpdateSingletonComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PhotoModeDummyTransformUpdateSingletonComponent_Properties[] = {
-    { "Updates", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_PhotoModeDummyTransformUpdateSingletonComponent_Layout = {
-    .componentName = "ecl::photo_mode::DummyTransformUpdateSingletonComponent",
-    .shortName = "PhotoModeDummyTransformUpdateSingleton",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_PhotoModeDummyTransformUpdateSingletonComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PhotoModeDummyTransformUpdateSingletonComponent_Properties) / sizeof(g_Gen_PhotoModeDummyTransformUpdateSingletonComponent_Properties[0]),
-};
-
-// ecl::photo_mode::InvisibilityRequestSingletonComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PhotoModeInvisibilityRequestSingletonComponent_Properties[] = {
-    { "Requests", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_PhotoModeInvisibilityRequestSingletonComponent_Layout = {
-    .componentName = "ecl::photo_mode::InvisibilityRequestSingletonComponent",
-    .shortName = "PhotoModeInvisibilityRequestSingleton",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_PhotoModeInvisibilityRequestSingletonComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PhotoModeInvisibilityRequestSingletonComponent_Properties) / sizeof(g_Gen_PhotoModeInvisibilityRequestSingletonComponent_Properties[0]),
-};
-
-// ecl::photo_mode::RequestedSingletonComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PhotoModeRequestedSingletonComponent_Properties[] = {
-    { "Requested", 0x00, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_PhotoModeRequestedSingletonComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ecl_photo_mode_RequestedSingletonComponent_Layout = {
     .componentName = "ecl::photo_mode::RequestedSingletonComponent",
-    .shortName = "PhotoModeRequestedSingleton",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x01,
-    .properties = g_Gen_PhotoModeRequestedSingletonComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PhotoModeRequestedSingletonComponent_Properties) / sizeof(g_Gen_PhotoModeRequestedSingletonComponent_Properties[0]),
+    .shortName = "RequestedSingleton",
+    .componentTypeIndex = 0,
+    .componentSize = 0x1,
+    .properties = g_Gen_ecl_photo_mode_RequestedSingletonComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ecl_photo_mode_RequestedSingletonComponent_Properties) / sizeof(g_Gen_ecl_photo_mode_RequestedSingletonComponent_Properties[0]),
 };
 
-// eoc::ArmorComponent (from Stats.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ArmorComponent_Properties[] = {
-    { "ArmorType", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ArmorClass", 0x04, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "AbilityModifierCap", 0x08, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ArmorClassAbility", 0x0c, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "EquipmentType", 0x10, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::ArmorComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_ArmorComponent_Properties[] = {
+    { "ArmorType", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "ArmorClass", 0x04, FIELD_TYPE_INT32, 0, true },
+    { "AbilityModifierCap", 0x08, FIELD_TYPE_INT32, 0, true },
+    { "ArmorClassAbility", 0x0c, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ArmorComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_ArmorComponent_Layout = {
     .componentName = "eoc::ArmorComponent",
     .shortName = "Armor",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x14,
-    .properties = g_Gen_ArmorComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ArmorComponent_Properties) / sizeof(g_Gen_ArmorComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x10,
+    .properties = g_Gen_eoc_ArmorComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_ArmorComponent_Properties) / sizeof(g_Gen_eoc_ArmorComponent_Properties[0]),
 };
 
-// eoc::AttributeFlagsComponent (from Stats.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_AttributeFlagsComponent_Properties[] = {
-    { "AttributeFlags", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::AttributeFlagsComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_AttributeFlagsComponent_Properties[] = {
+    { "AttributeFlags", 0x00, FIELD_TYPE_UINT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_AttributeFlagsComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_AttributeFlagsComponent_Layout = {
     .componentName = "eoc::AttributeFlagsComponent",
     .shortName = "AttributeFlags",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_AttributeFlagsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_AttributeFlagsComponent_Properties) / sizeof(g_Gen_AttributeFlagsComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_eoc_AttributeFlagsComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_AttributeFlagsComponent_Properties) / sizeof(g_Gen_eoc_AttributeFlagsComponent_Properties[0]),
 };
 
-// eoc::BackgroundComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_BackgroundComponent_Properties[] = {
-    { "Background", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::BackgroundComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_BackgroundComponent_Properties[] = {
+    { "Background", 0x00, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_BackgroundComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_BackgroundComponent_Layout = {
     .componentName = "eoc::BackgroundComponent",
     .shortName = "Background",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .componentTypeIndex = 0,
     .componentSize = 0x10,
-    .properties = g_Gen_BackgroundComponent_Properties,
-    .propertyCount = sizeof(g_Gen_BackgroundComponent_Properties) / sizeof(g_Gen_BackgroundComponent_Properties[0]),
+    .properties = g_Gen_eoc_BackgroundComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_BackgroundComponent_Properties) / sizeof(g_Gen_eoc_BackgroundComponent_Properties[0]),
 };
 
-// eoc::BackgroundPassivesComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_BackgroundPassivesComponent_Properties[] = {
-    { "field_18", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::BaseHpComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_BaseHpComponent_Properties[] = {
+    { "Vitality", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "VitalityBoost", 0x04, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_BackgroundPassivesComponent_Layout = {
-    .componentName = "eoc::BackgroundPassivesComponent",
-    .shortName = "BackgroundPassives",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_BackgroundPassivesComponent_Properties,
-    .propertyCount = sizeof(g_Gen_BackgroundPassivesComponent_Properties) / sizeof(g_Gen_BackgroundPassivesComponent_Properties[0]),
-};
-
-// eoc::BackgroundTagComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_BackgroundTagComponent_Properties[] = {
-    { "Tags", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_BackgroundTagComponent_Layout = {
-    .componentName = "eoc::BackgroundTagComponent",
-    .shortName = "BackgroundTag",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_BackgroundTagComponent_Properties,
-    .propertyCount = sizeof(g_Gen_BackgroundTagComponent_Properties) / sizeof(g_Gen_BackgroundTagComponent_Properties[0]),
-};
-
-// eoc::BaseHpComponent (from Stats.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_BaseHpComponent_Properties[] = {
-    { "Vitality", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "VitalityBoost", 0x04, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_BaseHpComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_BaseHpComponent_Layout = {
     .componentName = "eoc::BaseHpComponent",
     .shortName = "BaseHp",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_BaseHpComponent_Properties,
-    .propertyCount = sizeof(g_Gen_BaseHpComponent_Properties) / sizeof(g_Gen_BaseHpComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_eoc_BaseHpComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_BaseHpComponent_Properties) / sizeof(g_Gen_eoc_BaseHpComponent_Properties[0]),
 };
 
-// eoc::BaseStatsComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_BaseStatsComponent_Properties[] = {
-    { "BaseAbilities", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::BlockAbilityModifierFromACComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x1 (1 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_BlockAbilityModifierFromACComponent_Properties[] = {
+    { "Ability", 0x00, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_BaseStatsComponent_Layout = {
-    .componentName = "eoc::BaseStatsComponent",
-    .shortName = "BaseStats",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_BaseStatsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_BaseStatsComponent_Properties) / sizeof(g_Gen_BaseStatsComponent_Properties[0]),
-};
-
-// eoc::BlockAbilityModifierFromACComponent (from Boosts.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_BlockAbilityModifierFromACBoostComponent_Properties[] = {
-    { "Ability", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_BlockAbilityModifierFromACBoostComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_BlockAbilityModifierFromACComponent_Layout = {
     .componentName = "eoc::BlockAbilityModifierFromACComponent",
-    .shortName = "BlockAbilityModifierFromACBoost",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x01,
-    .properties = g_Gen_BlockAbilityModifierFromACBoostComponent_Properties,
-    .propertyCount = sizeof(g_Gen_BlockAbilityModifierFromACBoostComponent_Properties) / sizeof(g_Gen_BlockAbilityModifierFromACBoostComponent_Properties[0]),
+    .shortName = "BlockAbilityModifierFromAC",
+    .componentTypeIndex = 0,
+    .componentSize = 0x1,
+    .properties = g_Gen_eoc_BlockAbilityModifierFromACComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_BlockAbilityModifierFromACComponent_Properties) / sizeof(g_Gen_eoc_BlockAbilityModifierFromACComponent_Properties[0]),
 };
 
-// eoc::BodyTypeComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_BodyTypeComponent_Properties[] = {
-    { "BodyType", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "BodyType2", 0x01, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::BodyTypeComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x2 (2 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_BodyTypeComponent_Properties[] = {
+    { "BodyType", 0x00, FIELD_TYPE_UINT8, 0, true },
+    { "BodyType2", 0x01, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_BodyTypeComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_BodyTypeComponent_Layout = {
     .componentName = "eoc::BodyTypeComponent",
     .shortName = "BodyType",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x02,
-    .properties = g_Gen_BodyTypeComponent_Properties,
-    .propertyCount = sizeof(g_Gen_BodyTypeComponent_Properties) / sizeof(g_Gen_BodyTypeComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x2,
+    .properties = g_Gen_eoc_BodyTypeComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_BodyTypeComponent_Properties) / sizeof(g_Gen_eoc_BodyTypeComponent_Properties[0]),
 };
 
-// eoc::BoostConditionComponent (from Boosts.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_BoostConditionComponent_Properties[] = {
-    { "ConditionFlags", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_1C", 0x04, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::BoostConditionComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_BoostConditionComponent_Properties[] = {
+    { "ConditionFlags", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "field_1C", 0x04, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_BoostConditionComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_BoostConditionComponent_Layout = {
     .componentName = "eoc::BoostConditionComponent",
     .shortName = "BoostCondition",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x05,
-    .properties = g_Gen_BoostConditionComponent_Properties,
-    .propertyCount = sizeof(g_Gen_BoostConditionComponent_Properties) / sizeof(g_Gen_BoostConditionComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_eoc_BoostConditionComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_BoostConditionComponent_Properties) / sizeof(g_Gen_eoc_BoostConditionComponent_Properties[0]),
 };
 
-// eoc::BoostInfoComponent (from Boosts.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_BoostInfoComponent_Properties[] = {
-    { "CauseUuid", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_20", 0x10, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Cause", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Owner", 0x20, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Params", 0x28, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Type", 0x30, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Prototype", 0x38, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::BoostInfoComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x58 (88 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_BoostInfoComponent_Properties[] = {
+    { "field_20", 0x00, FIELD_TYPE_BOOL, 0, true },
+    { "Owner", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_BoostInfoComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_BoostInfoComponent_Layout = {
     .componentName = "eoc::BoostInfoComponent",
     .shortName = "BoostInfo",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x48,
-    .properties = g_Gen_BoostInfoComponent_Properties,
-    .propertyCount = sizeof(g_Gen_BoostInfoComponent_Properties) / sizeof(g_Gen_BoostInfoComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x58,
+    .properties = g_Gen_eoc_BoostInfoComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_BoostInfoComponent_Properties) / sizeof(g_Gen_eoc_BoostInfoComponent_Properties[0]),
 };
 
-// eoc::BoostsContainerComponent (from Boosts.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_BoostsContainerComponent_Properties[] = {
-    { "Boosts", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::CanBeDisarmedComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x2 (2 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_CanBeDisarmedComponent_Properties[] = {
+    { "Flags", 0x00, FIELD_TYPE_UINT16, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_BoostsContainerComponent_Layout = {
-    .componentName = "eoc::BoostsContainerComponent",
-    .shortName = "BoostsContainer",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_BoostsContainerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_BoostsContainerComponent_Properties) / sizeof(g_Gen_BoostsContainerComponent_Properties[0]),
-};
-
-// eoc::CanBeDisarmedComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CanBeDisarmedComponent_Properties[] = {
-    { "Flags", 0x00, FIELD_TYPE_UINT16, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_CanBeDisarmedComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_CanBeDisarmedComponent_Layout = {
     .componentName = "eoc::CanBeDisarmedComponent",
     .shortName = "CanBeDisarmed",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x02,
-    .properties = g_Gen_CanBeDisarmedComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CanBeDisarmedComponent_Properties) / sizeof(g_Gen_CanBeDisarmedComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x2,
+    .properties = g_Gen_eoc_CanBeDisarmedComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_CanBeDisarmedComponent_Properties) / sizeof(g_Gen_eoc_CanBeDisarmedComponent_Properties[0]),
 };
 
-// eoc::CanBeLootedComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CanBeLootedComponent_Properties[] = {
-    { "Flags", 0x00, FIELD_TYPE_UINT16, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::CanBeLootedComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x2 (2 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_CanBeLootedComponent_Properties[] = {
+    { "Flags", 0x00, FIELD_TYPE_UINT16, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CanBeLootedComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_CanBeLootedComponent_Layout = {
     .componentName = "eoc::CanBeLootedComponent",
     .shortName = "CanBeLooted",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x02,
-    .properties = g_Gen_CanBeLootedComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CanBeLootedComponent_Properties) / sizeof(g_Gen_CanBeLootedComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x2,
+    .properties = g_Gen_eoc_CanBeLootedComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_CanBeLootedComponent_Properties) / sizeof(g_Gen_eoc_CanBeLootedComponent_Properties[0]),
 };
 
-// eoc::CanDeflectProjectilesComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CanDeflectProjectilesComponent_Properties[] = {
-    { "Flags", 0x00, FIELD_TYPE_UINT16, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::CanDeflectProjectilesComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x2 (2 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_CanDeflectProjectilesComponent_Properties[] = {
+    { "Flags", 0x00, FIELD_TYPE_UINT16, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CanDeflectProjectilesComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_CanDeflectProjectilesComponent_Layout = {
     .componentName = "eoc::CanDeflectProjectilesComponent",
     .shortName = "CanDeflectProjectiles",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x02,
-    .properties = g_Gen_CanDeflectProjectilesComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CanDeflectProjectilesComponent_Properties) / sizeof(g_Gen_CanDeflectProjectilesComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x2,
+    .properties = g_Gen_eoc_CanDeflectProjectilesComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_CanDeflectProjectilesComponent_Properties) / sizeof(g_Gen_eoc_CanDeflectProjectilesComponent_Properties[0]),
 };
 
-// eoc::CanDoActionsComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CanDoActionsComponent_Properties[] = {
-    { "Flags", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::CanInteractComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_CanInteractComponent_Properties[] = {
+    { "Flags2", 0x00, FIELD_TYPE_UINT16, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CanDoActionsComponent_Layout = {
-    .componentName = "eoc::CanDoActionsComponent",
-    .shortName = "CanDoActions",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_CanDoActionsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CanDoActionsComponent_Properties) / sizeof(g_Gen_CanDoActionsComponent_Properties[0]),
-};
-
-// eoc::CanDoRestComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CanDoRestComponent_Properties[] = {
-    { "Flags", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "LongRestErrorFlags", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ShortRestErrorFlags", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_CanDoRestComponent_Layout = {
-    .componentName = "eoc::CanDoRestComponent",
-    .shortName = "CanDoRest",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x18,
-    .properties = g_Gen_CanDoRestComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CanDoRestComponent_Properties) / sizeof(g_Gen_CanDoRestComponent_Properties[0]),
-};
-
-// eoc::CanInteractComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CanInteractComponent_Properties[] = {
-    { "Flags", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Flags2", 0x04, FIELD_TYPE_UINT16, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_CanInteractComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_CanInteractComponent_Layout = {
     .componentName = "eoc::CanInteractComponent",
     .shortName = "CanInteract",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x06,
-    .properties = g_Gen_CanInteractComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CanInteractComponent_Properties) / sizeof(g_Gen_CanInteractComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_eoc_CanInteractComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_CanInteractComponent_Properties) / sizeof(g_Gen_eoc_CanInteractComponent_Properties[0]),
 };
 
-// eoc::CanModifyHealthComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CanModifyHealthComponent_Properties[] = {
-    { "Flags", 0x00, FIELD_TYPE_UINT16, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::CanModifyHealthComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x2 (2 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_CanModifyHealthComponent_Properties[] = {
+    { "Flags", 0x00, FIELD_TYPE_UINT16, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CanModifyHealthComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_CanModifyHealthComponent_Layout = {
     .componentName = "eoc::CanModifyHealthComponent",
     .shortName = "CanModifyHealth",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x02,
-    .properties = g_Gen_CanModifyHealthComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CanModifyHealthComponent_Properties) / sizeof(g_Gen_CanModifyHealthComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x2,
+    .properties = g_Gen_eoc_CanModifyHealthComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_CanModifyHealthComponent_Properties) / sizeof(g_Gen_eoc_CanModifyHealthComponent_Properties[0]),
 };
 
-// eoc::CanMoveComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CanMoveComponent_Properties[] = {
-    { "Flags", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_4", 0x08, FIELD_TYPE_UINT16, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_6", 0x0a, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::CanMoveComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x6 (6 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_CanMoveComponent_Properties[] = {
+    { "field_4", 0x00, FIELD_TYPE_UINT16, 0, true },
+    { "field_6", 0x02, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CanMoveComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_CanMoveComponent_Layout = {
     .componentName = "eoc::CanMoveComponent",
     .shortName = "CanMove",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x0b,
-    .properties = g_Gen_CanMoveComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CanMoveComponent_Properties) / sizeof(g_Gen_CanMoveComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x6,
+    .properties = g_Gen_eoc_CanMoveComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_CanMoveComponent_Properties) / sizeof(g_Gen_eoc_CanMoveComponent_Properties[0]),
 };
 
-// eoc::CanSenseComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CanSenseComponent_Properties[] = {
-    { "Flags", 0x00, FIELD_TYPE_UINT16, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::CanSenseComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x2 (2 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_CanSenseComponent_Properties[] = {
+    { "Flags", 0x00, FIELD_TYPE_UINT16, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CanSenseComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_CanSenseComponent_Layout = {
     .componentName = "eoc::CanSenseComponent",
     .shortName = "CanSense",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x02,
-    .properties = g_Gen_CanSenseComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CanSenseComponent_Properties) / sizeof(g_Gen_CanSenseComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x2,
+    .properties = g_Gen_eoc_CanSenseComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_CanSenseComponent_Properties) / sizeof(g_Gen_eoc_CanSenseComponent_Properties[0]),
 };
 
-// eoc::CanSpeakComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CanSpeakComponent_Properties[] = {
-    { "Flags", 0x00, FIELD_TYPE_UINT16, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::CanSpeakComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x2 (2 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_CanSpeakComponent_Properties[] = {
+    { "Flags", 0x00, FIELD_TYPE_UINT16, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CanSpeakComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_CanSpeakComponent_Layout = {
     .componentName = "eoc::CanSpeakComponent",
     .shortName = "CanSpeak",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x02,
-    .properties = g_Gen_CanSpeakComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CanSpeakComponent_Properties) / sizeof(g_Gen_CanSpeakComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x2,
+    .properties = g_Gen_eoc_CanSpeakComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_CanSpeakComponent_Properties) / sizeof(g_Gen_eoc_CanSpeakComponent_Properties[0]),
 };
 
-// eoc::CanTravelComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CanTravelComponent_Properties[] = {
-    { "Flags", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_2", 0x08, FIELD_TYPE_UINT16, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ErrorFlags", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::CanTravelComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x6 (6 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_CanTravelComponent_Properties[] = {
+    { "field_2", 0x00, FIELD_TYPE_UINT16, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CanTravelComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_CanTravelComponent_Layout = {
     .componentName = "eoc::CanTravelComponent",
     .shortName = "CanTravel",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x18,
-    .properties = g_Gen_CanTravelComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CanTravelComponent_Properties) / sizeof(g_Gen_CanTravelComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x6,
+    .properties = g_Gen_eoc_CanTravelComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_CanTravelComponent_Properties) / sizeof(g_Gen_eoc_CanTravelComponent_Properties[0]),
 };
 
-// eoc::CharacterCreationStatsComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CharacterCreationStatsComponent_Properties[] = {
-    { "Race", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "SubRace", 0x10, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "BodyType", 0x20, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "BodyShape", 0x21, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Name", 0x28, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Abilities", 0x30, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_5C", 0x38, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::CharacterCreationStatsComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x58 (88 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_CharacterCreationStatsComponent_Properties[] = {
+    { "Race", 0x00, FIELD_TYPE_GUID, 0, true },
+    { "SubRace", 0x10, FIELD_TYPE_GUID, 0, true },
+    { "BodyType", 0x20, FIELD_TYPE_UINT8, 0, true },
+    { "BodyShape", 0x21, FIELD_TYPE_UINT8, 0, true },
+    { "field_5C", 0x22, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CharacterCreationStatsComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_CharacterCreationStatsComponent_Layout = {
     .componentName = "eoc::CharacterCreationStatsComponent",
     .shortName = "CharacterCreationStats",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x39,
-    .properties = g_Gen_CharacterCreationStatsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CharacterCreationStatsComponent_Properties) / sizeof(g_Gen_CharacterCreationStatsComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x58,
+    .properties = g_Gen_eoc_CharacterCreationStatsComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_CharacterCreationStatsComponent_Properties) / sizeof(g_Gen_eoc_CharacterCreationStatsComponent_Properties[0]),
 };
 
-// eoc::ClassTagComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ClassTagComponent_Properties[] = {
-    { "Tags", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::CombinedLightComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x40 (64 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_CombinedLightComponent_Properties[] = {
+    { "Entity", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "Template", 0x08, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "InstanceGuid", 0x0c, FIELD_TYPE_FIXEDSTRING, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ClassTagComponent_Layout = {
-    .componentName = "eoc::ClassTagComponent",
-    .shortName = "ClassTag",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ClassTagComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ClassTagComponent_Properties) / sizeof(g_Gen_ClassTagComponent_Properties[0]),
+static const ComponentLayoutDef g_Gen_eoc_CombinedLightComponent_Layout = {
+    .componentName = "eoc::CombinedLightComponent",
+    .shortName = "CombinedLight",
+    .componentTypeIndex = 0,
+    .componentSize = 0x40,
+    .properties = g_Gen_eoc_CombinedLightComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_CombinedLightComponent_Properties) / sizeof(g_Gen_eoc_CombinedLightComponent_Properties[0]),
 };
 
-// eoc::ClassesComponent (from Stats.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ClassesComponent_Properties[] = {
-    { "Classes", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::CustomIconComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x60 (96 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_CustomIconComponent_Properties[] = {
+    { "Source", 0x00, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ClassesComponent_Layout = {
-    .componentName = "eoc::ClassesComponent",
-    .shortName = "Classes",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ClassesComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ClassesComponent_Properties) / sizeof(g_Gen_ClassesComponent_Properties[0]),
-};
-
-// eoc::CustomIconComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CustomIconComponent_Properties[] = {
-    { "Icon", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Source", 0x08, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_CustomIconComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_CustomIconComponent_Layout = {
     .componentName = "eoc::CustomIconComponent",
     .shortName = "CustomIcon",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x09,
-    .properties = g_Gen_CustomIconComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CustomIconComponent_Properties) / sizeof(g_Gen_CustomIconComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x60,
+    .properties = g_Gen_eoc_CustomIconComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_CustomIconComponent_Properties) / sizeof(g_Gen_eoc_CustomIconComponent_Properties[0]),
 };
 
-// eoc::CustomIconsStorageSingletonComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CustomIconsStorageComponent_Properties[] = {
-    { "Icons", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::DamageReductionBoostComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x38 (56 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_DamageReductionBoostComponent_Properties[] = {
+    { "Flat", 0x00, FIELD_TYPE_BOOL, 0, true },
+    { "Half", 0x01, FIELD_TYPE_BOOL, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CustomIconsStorageComponent_Layout = {
-    .componentName = "eoc::CustomIconsStorageSingletonComponent",
-    .shortName = "CustomIconsStorage",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_CustomIconsStorageComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CustomIconsStorageComponent_Properties) / sizeof(g_Gen_CustomIconsStorageComponent_Properties[0]),
-};
-
-// eoc::CustomNameComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CustomNameComponent_Properties[] = {
-    { "Name", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_CustomNameComponent_Layout = {
-    .componentName = "eoc::CustomNameComponent",
-    .shortName = "CustomName",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_CustomNameComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CustomNameComponent_Properties) / sizeof(g_Gen_CustomNameComponent_Properties[0]),
-};
-
-// eoc::CustomStatsComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CustomStatsComponent_Properties[] = {
-    { "Stats", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_CustomStatsComponent_Layout = {
-    .componentName = "eoc::CustomStatsComponent",
-    .shortName = "CustomStats",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_CustomStatsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CustomStatsComponent_Properties) / sizeof(g_Gen_CustomStatsComponent_Properties[0]),
-};
-
-// eoc::DamageReductionBoostComponent (from Boosts.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DamageReductionBoostComponent_Properties[] = {
-    { "DamageType", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Amount", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Flat", 0x10, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Half", 0x11, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_DamageReductionBoostComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_DamageReductionBoostComponent_Layout = {
     .componentName = "eoc::DamageReductionBoostComponent",
     .shortName = "DamageReductionBoost",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x12,
-    .properties = g_Gen_DamageReductionBoostComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DamageReductionBoostComponent_Properties) / sizeof(g_Gen_DamageReductionBoostComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x38,
+    .properties = g_Gen_eoc_DamageReductionBoostComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_DamageReductionBoostComponent_Properties) / sizeof(g_Gen_eoc_DamageReductionBoostComponent_Properties[0]),
 };
 
-// eoc::DarknessComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DarknessComponent_Properties[] = {
-    { "Sneaking", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Obscurity", 0x01, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "SneakingConesVisibility", 0x02, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "CharacterSneaking", 0x03, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ActuallySneaking", 0x04, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "GracePeriod", 0x08, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "GraceFrames", 0x0c, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::DarknessComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_DarknessComponent_Properties[] = {
+    { "Sneaking", 0x00, FIELD_TYPE_UINT8, 0, true },
+    { "Obscurity", 0x01, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_DarknessComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_DarknessComponent_Layout = {
     .componentName = "eoc::DarknessComponent",
     .shortName = "Darkness",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .componentTypeIndex = 0,
     .componentSize = 0x10,
-    .properties = g_Gen_DarknessComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DarknessComponent_Properties) / sizeof(g_Gen_DarknessComponent_Properties[0]),
+    .properties = g_Gen_eoc_DarknessComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_DarknessComponent_Properties) / sizeof(g_Gen_eoc_DarknessComponent_Properties[0]),
 };
 
-// eoc::DataComponent (from Stats.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DataComponent_Properties[] = {
-    { "Weight", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "StatsId", 0x04, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "StepsType", 0x08, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::DataComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0xc (12 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_DataComponent_Properties[] = {
+    { "Weight", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "StatsId", 0x04, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "StepsType", 0x08, FIELD_TYPE_UINT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_DataComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_DataComponent_Layout = {
     .componentName = "eoc::DataComponent",
     .shortName = "Data",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x0c,
-    .properties = g_Gen_DataComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DataComponent_Properties) / sizeof(g_Gen_DataComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0xc,
+    .properties = g_Gen_eoc_DataComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_DataComponent_Properties) / sizeof(g_Gen_eoc_DataComponent_Properties[0]),
 };
 
-// eoc::DetachedComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DetachedComponent_Properties[] = {
-    { "Flags", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::DetachedComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_DetachedComponent_Properties[] = {
+    { "Flags", 0x00, FIELD_TYPE_UINT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_DetachedComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_DetachedComponent_Layout = {
     .componentName = "eoc::DetachedComponent",
     .shortName = "Detached",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_DetachedComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DetachedComponent_Properties) / sizeof(g_Gen_DetachedComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_eoc_DetachedComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_DetachedComponent_Properties) / sizeof(g_Gen_eoc_DetachedComponent_Properties[0]),
 };
 
-// eoc::DifficultyCheckComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DifficultyCheckComponent_Properties[] = {
-    { "AbilityDC", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "AbilityModifiers", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Abilities", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_30", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_40", 0x20, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_44", 0x24, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::DifficultyCheckComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x48 (72 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_DifficultyCheckComponent_Properties[] = {
+    { "field_40", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "field_44", 0x04, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_DifficultyCheckComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_DifficultyCheckComponent_Layout = {
     .componentName = "eoc::DifficultyCheckComponent",
     .shortName = "DifficultyCheck",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x28,
-    .properties = g_Gen_DifficultyCheckComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DifficultyCheckComponent_Properties) / sizeof(g_Gen_DifficultyCheckComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x48,
+    .properties = g_Gen_eoc_DifficultyCheckComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_DifficultyCheckComponent_Properties) / sizeof(g_Gen_eoc_DifficultyCheckComponent_Properties[0]),
 };
 
-// eoc::DisabledEquipmentComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DisabledEquipmentComponent_Properties[] = {
-    { "ShapeshiftFlag", 0x00, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::DisabledEquipmentComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x1 (1 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_DisabledEquipmentComponent_Properties[] = {
+    { "ShapeshiftFlag", 0x00, FIELD_TYPE_BOOL, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_DisabledEquipmentComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_DisabledEquipmentComponent_Layout = {
     .componentName = "eoc::DisabledEquipmentComponent",
     .shortName = "DisabledEquipment",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x01,
-    .properties = g_Gen_DisabledEquipmentComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DisabledEquipmentComponent_Properties) / sizeof(g_Gen_DisabledEquipmentComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x1,
+    .properties = g_Gen_eoc_DisabledEquipmentComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_DisabledEquipmentComponent_Properties) / sizeof(g_Gen_eoc_DisabledEquipmentComponent_Properties[0]),
 };
 
-// eoc::DisarmableComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DisarmableComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_10", 0x10, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_11", 0x11, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::DisarmableComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x18 (24 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_DisarmableComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_GUID, 0, true },
+    { "field_10", 0x10, FIELD_TYPE_UINT8, 0, true },
+    { "field_11", 0x11, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_DisarmableComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_DisarmableComponent_Layout = {
     .componentName = "eoc::DisarmableComponent",
     .shortName = "Disarmable",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x12,
-    .properties = g_Gen_DisarmableComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DisarmableComponent_Properties) / sizeof(g_Gen_DisarmableComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x18,
+    .properties = g_Gen_eoc_DisarmableComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_DisarmableComponent_Properties) / sizeof(g_Gen_eoc_DisarmableComponent_Properties[0]),
 };
 
-// eoc::DisplayNameComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DisplayNameComponent_Properties[] = {
-    { "Name", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Title", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::DualWieldingComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x7 (7 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_DualWieldingComponent_Properties[] = {
+    { "MeleeUI", 0x00, FIELD_TYPE_BOOL, 0, true },
+    { "RangedUI", 0x01, FIELD_TYPE_BOOL, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_DisplayNameComponent_Layout = {
-    .componentName = "eoc::DisplayNameComponent",
-    .shortName = "DisplayName",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_DisplayNameComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DisplayNameComponent_Properties) / sizeof(g_Gen_DisplayNameComponent_Properties[0]),
-};
-
-// eoc::DualWieldingComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DualWieldingComponent_Properties[] = {
-    { "MeleeToggledOn", 0x00, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "MeleeUI", 0x01, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "HasMeleeBoosts", 0x02, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RangedToggledOn", 0x03, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RangedUI", 0x04, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "HasRangedBoosts", 0x05, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ToggledOn", 0x06, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_DualWieldingComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_DualWieldingComponent_Layout = {
     .componentName = "eoc::DualWieldingComponent",
     .shortName = "DualWielding",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x07,
-    .properties = g_Gen_DualWieldingComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DualWieldingComponent_Properties) / sizeof(g_Gen_DualWieldingComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x7,
+    .properties = g_Gen_eoc_DualWieldingComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_DualWieldingComponent_Properties) / sizeof(g_Gen_eoc_DualWieldingComponent_Properties[0]),
 };
 
-// eoc::EquipableComponent (from Stats.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_EquipableComponent_Properties[] = {
-    { "EquipmentTypeID", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Slot", 0x10, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::FloatingComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_FloatingComponent_Properties[] = {
+    { "field_18", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "field_1C", 0x04, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_EquipableComponent_Layout = {
-    .componentName = "eoc::EquipableComponent",
-    .shortName = "Equipable",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x11,
-    .properties = g_Gen_EquipableComponent_Properties,
-    .propertyCount = sizeof(g_Gen_EquipableComponent_Properties) / sizeof(g_Gen_EquipableComponent_Properties[0]),
-};
-
-// eoc::FleeCapabilityComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_FleeCapabilityComponent_Properties[] = {
-    { "Flags", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "FleeDistance", 0x08, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "CurrentFleeDistance", 0x0c, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_FleeCapabilityComponent_Layout = {
-    .componentName = "eoc::FleeCapabilityComponent",
-    .shortName = "FleeCapability",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_FleeCapabilityComponent_Properties,
-    .propertyCount = sizeof(g_Gen_FleeCapabilityComponent_Properties) / sizeof(g_Gen_FleeCapabilityComponent_Properties[0]),
-};
-
-// eoc::FloatingComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_FloatingComponent_Properties[] = {
-    { "field_18", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_1C", 0x04, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_FloatingComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_FloatingComponent_Layout = {
     .componentName = "eoc::FloatingComponent",
     .shortName = "Floating",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_FloatingComponent_Properties,
-    .propertyCount = sizeof(g_Gen_FloatingComponent_Properties) / sizeof(g_Gen_FloatingComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_eoc_FloatingComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_FloatingComponent_Properties) / sizeof(g_Gen_eoc_FloatingComponent_Properties[0]),
 };
 
-// eoc::GameObjectVisualComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_GameObjectVisualComponent_Properties[] = {
-    { "RootTemplateId", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RootTemplateType", 0x04, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Icon", 0x08, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Scale", 0x0c, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Type", 0x10, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::FogVolumeRequestComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_FogVolumeRequestComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_GameObjectVisualComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_FogVolumeRequestComponent_Layout = {
+    .componentName = "eoc::FogVolumeRequestComponent",
+    .shortName = "FogVolumeRequest",
+    .componentTypeIndex = 0,
+    .componentSize = 0x10,
+    .properties = g_Gen_eoc_FogVolumeRequestComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_FogVolumeRequestComponent_Properties) / sizeof(g_Gen_eoc_FogVolumeRequestComponent_Properties[0]),
+};
+
+// ======================================================================
+// eoc::GameObjectVisualComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x14 (20 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_GameObjectVisualComponent_Properties[] = {
+    { "RootTemplateId", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "RootTemplateType", 0x04, FIELD_TYPE_UINT8, 0, true },
+    { "Icon", 0x08, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "Scale", 0x0c, FIELD_TYPE_FLOAT, 0, true },
+    { "Type", 0x10, FIELD_TYPE_UINT8, 0, true },
+};
+
+static const ComponentLayoutDef g_Gen_eoc_GameObjectVisualComponent_Layout = {
     .componentName = "eoc::GameObjectVisualComponent",
     .shortName = "GameObjectVisual",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x11,
-    .properties = g_Gen_GameObjectVisualComponent_Properties,
-    .propertyCount = sizeof(g_Gen_GameObjectVisualComponent_Properties) / sizeof(g_Gen_GameObjectVisualComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x14,
+    .properties = g_Gen_eoc_GameObjectVisualComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_GameObjectVisualComponent_Properties) / sizeof(g_Gen_eoc_GameObjectVisualComponent_Properties[0]),
 };
 
-// eoc::GameplayLightComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_GameplayLightComponent_Properties[] = {
-    { "Active", 0x00, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Radius", 0x04, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "EdgeSharpening", 0x08, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "SpotlightAngle", 0x0c, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "DirectionalDimensions", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "LightType", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "IsHalfLit", 0x20, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Sunlight", 0x21, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "AttachAt", 0x28, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "PointLightVerticalLimit", 0x30, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "CheckLOS", 0x38, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "LightCookie", 0x3c, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_3C", 0x40, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_40", 0x44, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_44", 0x48, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::GameplayLightComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0xc (12 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_GameplayLightComponent_Properties[] = {
+    { "field_3C", 0x00, FIELD_TYPE_FLOAT, 0, true },
+    { "field_40", 0x04, FIELD_TYPE_FLOAT, 0, true },
+    { "field_44", 0x08, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_GameplayLightComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_GameplayLightComponent_Layout = {
     .componentName = "eoc::GameplayLightComponent",
     .shortName = "GameplayLight",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x49,
-    .properties = g_Gen_GameplayLightComponent_Properties,
-    .propertyCount = sizeof(g_Gen_GameplayLightComponent_Properties) / sizeof(g_Gen_GameplayLightComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0xc,
+    .properties = g_Gen_eoc_GameplayLightComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_GameplayLightComponent_Properties) / sizeof(g_Gen_eoc_GameplayLightComponent_Properties[0]),
 };
 
-// eoc::GravityDisabledUntilMovedComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_GravityDisabledUntilMovedComponent_Properties[] = {
-    { "Transform", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::HealthComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x28 (40 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_HealthComponent_Properties[] = {
+    { "Hp", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "MaxHp", 0x04, FIELD_TYPE_INT32, 0, true },
+    { "TemporaryHp", 0x08, FIELD_TYPE_INT32, 0, true },
+    { "MaxTemporaryHp", 0x0c, FIELD_TYPE_INT32, 0, true },
+    { "field_10", 0x10, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_GravityDisabledUntilMovedComponent_Layout = {
-    .componentName = "eoc::GravityDisabledUntilMovedComponent",
-    .shortName = "GravityDisabledUntilMoved",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_GravityDisabledUntilMovedComponent_Properties,
-    .propertyCount = sizeof(g_Gen_GravityDisabledUntilMovedComponent_Properties) / sizeof(g_Gen_GravityDisabledUntilMovedComponent_Properties[0]),
-};
-
-// eoc::HealthComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_HealthComponent_Properties[] = {
-    { "Hp", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "MaxHp", 0x04, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "TemporaryHp", 0x08, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "MaxTemporaryHp", 0x0c, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_10", 0x10, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "IsInvulnerable", 0x20, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_HealthComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_HealthComponent_Layout = {
     .componentName = "eoc::HealthComponent",
     .shortName = "Health",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x21,
-    .properties = g_Gen_HealthComponent_Properties,
-    .propertyCount = sizeof(g_Gen_HealthComponent_Properties) / sizeof(g_Gen_HealthComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x28,
+    .properties = g_Gen_eoc_HealthComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_HealthComponent_Properties) / sizeof(g_Gen_eoc_HealthComponent_Properties[0]),
 };
 
-// eoc::HearingComponent (from Stats.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_HearingComponent_Properties[] = {
-    { "Hearing", 0x00, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::HearingComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_HearingComponent_Properties[] = {
+    { "Hearing", 0x00, FIELD_TYPE_FLOAT, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_HearingComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_HearingComponent_Layout = {
     .componentName = "eoc::HearingComponent",
     .shortName = "Hearing",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_HearingComponent_Properties,
-    .propertyCount = sizeof(g_Gen_HearingComponent_Properties) / sizeof(g_Gen_HearingComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_eoc_HearingComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_HearingComponent_Properties) / sizeof(g_Gen_eoc_HearingComponent_Properties[0]),
 };
 
-// eoc::IconComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_IconComponent_Properties[] = {
-    { "Icon", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::IconComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_IconComponent_Properties[] = {
+    { "Icon", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_IconComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_IconComponent_Layout = {
     .componentName = "eoc::IconComponent",
     .shortName = "Icon",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_IconComponent_Properties,
-    .propertyCount = sizeof(g_Gen_IconComponent_Properties) / sizeof(g_Gen_IconComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_eoc_IconComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_IconComponent_Properties) / sizeof(g_Gen_eoc_IconComponent_Properties[0]),
 };
 
-// eoc::IncreaseMaxHPBoostComponent (from Boosts.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_IncreaseMaxHPBoostComponent_Properties[] = {
-    { "Amount", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_30", 0x08, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::IncreaseMaxHPBoostComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x30 (48 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_IncreaseMaxHPBoostComponent_Properties[] = {
+    { "field_30", 0x00, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_IncreaseMaxHPBoostComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_IncreaseMaxHPBoostComponent_Layout = {
     .componentName = "eoc::IncreaseMaxHPBoostComponent",
     .shortName = "IncreaseMaxHPBoost",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x0c,
-    .properties = g_Gen_IncreaseMaxHPBoostComponent_Properties,
-    .propertyCount = sizeof(g_Gen_IncreaseMaxHPBoostComponent_Properties) / sizeof(g_Gen_IncreaseMaxHPBoostComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x30,
+    .properties = g_Gen_eoc_IncreaseMaxHPBoostComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_IncreaseMaxHPBoostComponent_Properties) / sizeof(g_Gen_eoc_IncreaseMaxHPBoostComponent_Properties[0]),
 };
 
-// eoc::InteractionFilterComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_InteractionFilterComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_30", 0x08, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_31", 0x09, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::InteractionFilterComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x38 (56 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_InteractionFilterComponent_Properties[] = {
+    { "field_30", 0x00, FIELD_TYPE_UINT8, 0, true },
+    { "field_31", 0x01, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_InteractionFilterComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_InteractionFilterComponent_Layout = {
     .componentName = "eoc::InteractionFilterComponent",
     .shortName = "InteractionFilter",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x0a,
-    .properties = g_Gen_InteractionFilterComponent_Properties,
-    .propertyCount = sizeof(g_Gen_InteractionFilterComponent_Properties) / sizeof(g_Gen_InteractionFilterComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x38,
+    .properties = g_Gen_eoc_InteractionFilterComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_InteractionFilterComponent_Properties) / sizeof(g_Gen_eoc_InteractionFilterComponent_Properties[0]),
 };
 
-// eoc::InvisibilityComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_InvisibilityComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_4", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_10", 0x10, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::InvisibilityComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x14 (20 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_InvisibilityComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, true },
+    { "field_4", 0x08, FIELD_TYPE_VEC3, 0, true },
+    { "field_10", 0x14, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_InvisibilityComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_InvisibilityComponent_Layout = {
     .componentName = "eoc::InvisibilityComponent",
     .shortName = "Invisibility",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x11,
-    .properties = g_Gen_InvisibilityComponent_Properties,
-    .propertyCount = sizeof(g_Gen_InvisibilityComponent_Properties) / sizeof(g_Gen_InvisibilityComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x14,
+    .properties = g_Gen_eoc_InvisibilityComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_InvisibilityComponent_Properties) / sizeof(g_Gen_eoc_InvisibilityComponent_Properties[0]),
 };
 
-// eoc::ItemBoostsComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ItemBoostsComponent_Properties[] = {
-    { "Boosts", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::LevelComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_LevelComponent_Properties[] = {
+    { "Level", 0x00, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ItemBoostsComponent_Layout = {
-    .componentName = "eoc::ItemBoostsComponent",
-    .shortName = "ItemBoosts",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ItemBoostsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ItemBoostsComponent_Properties) / sizeof(g_Gen_ItemBoostsComponent_Properties[0]),
-};
-
-// eoc::LevelComponent (from Stats.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_EocLevelComponent_Properties[] = {
-    { "Level", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_EocLevelComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_LevelComponent_Layout = {
     .componentName = "eoc::LevelComponent",
-    .shortName = "EocLevel",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_EocLevelComponent_Properties,
-    .propertyCount = sizeof(g_Gen_EocLevelComponent_Properties) / sizeof(g_Gen_EocLevelComponent_Properties[0]),
+    .shortName = "Level",
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_eoc_LevelComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_LevelComponent_Properties) / sizeof(g_Gen_eoc_LevelComponent_Properties[0]),
 };
 
-// eoc::LootComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_LootComponent_Properties[] = {
-    { "Flags", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "InventoryType", 0x01, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::LootComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x2 (2 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_LootComponent_Properties[] = {
+    { "Flags", 0x00, FIELD_TYPE_UINT8, 0, true },
+    { "InventoryType", 0x01, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_LootComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_LootComponent_Layout = {
     .componentName = "eoc::LootComponent",
     .shortName = "Loot",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x02,
-    .properties = g_Gen_LootComponent_Properties,
-    .propertyCount = sizeof(g_Gen_LootComponent_Properties) / sizeof(g_Gen_LootComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x2,
+    .properties = g_Gen_eoc_LootComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_LootComponent_Properties) / sizeof(g_Gen_eoc_LootComponent_Properties[0]),
 };
 
-// eoc::LootingStateComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_LootingStateComponent_Properties[] = {
-    { "Looter_M", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "State", 0x08, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_24", 0x0c, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::LootingStateComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_LootingStateComponent_Properties[] = {
+    { "Looter_M", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "State", 0x08, FIELD_TYPE_UINT8, 0, true },
+    { "field_24", 0x0c, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_LootingStateComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_LootingStateComponent_Layout = {
     .componentName = "eoc::LootingStateComponent",
     .shortName = "LootingState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .componentTypeIndex = 0,
     .componentSize = 0x10,
-    .properties = g_Gen_LootingStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_LootingStateComponent_Properties) / sizeof(g_Gen_LootingStateComponent_Properties[0]),
+    .properties = g_Gen_eoc_LootingStateComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_LootingStateComponent_Properties) / sizeof(g_Gen_eoc_LootingStateComponent_Properties[0]),
 };
 
-// eoc::MaterialParameterOverrideComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_MaterialParameterOverrideComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_10", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::MovementComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x18 (24 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_MovementComponent_Properties[] = {
+    { "Direction", 0x00, FIELD_TYPE_VEC3, 0, true },
+    { "Acceleration", 0x0c, FIELD_TYPE_FLOAT, 0, true },
+    { "Speed", 0x10, FIELD_TYPE_FLOAT, 0, true },
+    { "Speed2", 0x14, FIELD_TYPE_FLOAT, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_MaterialParameterOverrideComponent_Layout = {
-    .componentName = "eoc::MaterialParameterOverrideComponent",
-    .shortName = "MaterialParameterOverride",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_MaterialParameterOverrideComponent_Properties,
-    .propertyCount = sizeof(g_Gen_MaterialParameterOverrideComponent_Properties) / sizeof(g_Gen_MaterialParameterOverrideComponent_Properties[0]),
-};
-
-// eoc::MovementComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_MovementComponent_Properties[] = {
-    { "Direction", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Acceleration", 0x08, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Speed", 0x0c, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Speed2", 0x10, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_MovementComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_MovementComponent_Layout = {
     .componentName = "eoc::MovementComponent",
     .shortName = "Movement",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x14,
-    .properties = g_Gen_MovementComponent_Properties,
-    .propertyCount = sizeof(g_Gen_MovementComponent_Properties) / sizeof(g_Gen_MovementComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x18,
+    .properties = g_Gen_eoc_MovementComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_MovementComponent_Properties) / sizeof(g_Gen_eoc_MovementComponent_Properties[0]),
 };
 
-// eoc::ObjectInteractionComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ObjectInteractionComponent_Properties[] = {
-    { "Interactions", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::ObjectSizeComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x2 (2 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_ObjectSizeComponent_Properties[] = {
+    { "Size", 0x00, FIELD_TYPE_INT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ObjectInteractionComponent_Layout = {
-    .componentName = "eoc::ObjectInteractionComponent",
-    .shortName = "ObjectInteraction",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ObjectInteractionComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ObjectInteractionComponent_Properties) / sizeof(g_Gen_ObjectInteractionComponent_Properties[0]),
-};
-
-// eoc::ObjectSizeComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ObjectSizeComponent_Properties[] = {
-    { "Size", 0x00, FIELD_TYPE_INT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "SoundSize", 0x01, FIELD_TYPE_INT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ObjectSizeComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_ObjectSizeComponent_Layout = {
     .componentName = "eoc::ObjectSizeComponent",
     .shortName = "ObjectSize",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x02,
-    .properties = g_Gen_ObjectSizeComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ObjectSizeComponent_Properties) / sizeof(g_Gen_ObjectSizeComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x2,
+    .properties = g_Gen_eoc_ObjectSizeComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_ObjectSizeComponent_Properties) / sizeof(g_Gen_eoc_ObjectSizeComponent_Properties[0]),
 };
 
-// eoc::OriginAppearanceTagComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_OriginAppearanceTagComponent_Properties[] = {
-    { "Tags", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::OriginComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x18 (24 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_OriginComponent_Properties[] = {
+    { "field_18", 0x00, FIELD_TYPE_GUID, 0, true },
+    { "Origin", 0x10, FIELD_TYPE_FIXEDSTRING, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_OriginAppearanceTagComponent_Layout = {
-    .componentName = "eoc::OriginAppearanceTagComponent",
-    .shortName = "OriginAppearanceTag",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_OriginAppearanceTagComponent_Properties,
-    .propertyCount = sizeof(g_Gen_OriginAppearanceTagComponent_Properties) / sizeof(g_Gen_OriginAppearanceTagComponent_Properties[0]),
-};
-
-// eoc::OriginComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_OriginComponent_Properties[] = {
-    { "field_18", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Origin", 0x10, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_OriginComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_OriginComponent_Layout = {
     .componentName = "eoc::OriginComponent",
     .shortName = "Origin",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x14,
-    .properties = g_Gen_OriginComponent_Properties,
-    .propertyCount = sizeof(g_Gen_OriginComponent_Properties) / sizeof(g_Gen_OriginComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x18,
+    .properties = g_Gen_eoc_OriginComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_OriginComponent_Properties) / sizeof(g_Gen_eoc_OriginComponent_Properties[0]),
 };
 
-// eoc::OriginPassivesComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_OriginPassivesComponent_Properties[] = {
-    { "Passives", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::PassiveComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x20 (32 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_PassiveComponent_Properties[] = {
+    { "PassiveId", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "field_1C", 0x04, FIELD_TYPE_UINT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_OriginPassivesComponent_Layout = {
-    .componentName = "eoc::OriginPassivesComponent",
-    .shortName = "OriginPassives",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_OriginPassivesComponent_Properties,
-    .propertyCount = sizeof(g_Gen_OriginPassivesComponent_Properties) / sizeof(g_Gen_OriginPassivesComponent_Properties[0]),
-};
-
-// eoc::OriginTagComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_OriginTagComponent_Properties[] = {
-    { "Tags", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_OriginTagComponent_Layout = {
-    .componentName = "eoc::OriginTagComponent",
-    .shortName = "OriginTag",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_OriginTagComponent_Properties,
-    .propertyCount = sizeof(g_Gen_OriginTagComponent_Properties) / sizeof(g_Gen_OriginTagComponent_Properties[0]),
-};
-
-// eoc::PassiveComponent (from Passives.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PassiveComponent_Properties[] = {
-    { "Type", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "PassiveId", 0x08, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Source", 0x10, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Item", 0x18, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ToggledOn", 0x20, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Disabled", 0x21, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_1C", 0x24, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_PassiveComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_PassiveComponent_Layout = {
     .componentName = "eoc::PassiveComponent",
     .shortName = "Passive",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x28,
-    .properties = g_Gen_PassiveComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PassiveComponent_Properties) / sizeof(g_Gen_PassiveComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x20,
+    .properties = g_Gen_eoc_PassiveComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_PassiveComponent_Properties) / sizeof(g_Gen_eoc_PassiveComponent_Properties[0]),
 };
 
-// eoc::PassiveContainerComponent (from Passives.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PassiveContainerComponent_Properties[] = {
-    { "Passives", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::PathingComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x50 (80 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_PathingComponent_Properties[] = {
+    { "field_20", 0x00, FIELD_TYPE_VEC3, 0, true },
+    { "MovementTiltToRemap", 0x0c, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "field_30", 0x10, FIELD_TYPE_INT64, 0, true },
+    { "field_38", 0x18, FIELD_TYPE_INT32, 0, true },
+    { "PathId", 0x1c, FIELD_TYPE_INT32, 0, true },
+    { "Flags", 0x20, FIELD_TYPE_UINT8, 0, true },
+    { "PathMovementSpeed", 0x24, FIELD_TYPE_FLOAT, 0, true },
+    { "field_48", 0x28, FIELD_TYPE_INT32, 0, true },
+    { "ServerControl", 0x2c, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_PassiveContainerComponent_Layout = {
-    .componentName = "eoc::PassiveContainerComponent",
-    .shortName = "PassiveContainer",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_PassiveContainerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PassiveContainerComponent_Properties) / sizeof(g_Gen_PassiveContainerComponent_Properties[0]),
-};
-
-// eoc::PathingComponent (from Runtime.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PathingComponent_Properties[] = {
-    { "VectorParameters", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "PathParameters", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_20", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "MovementTiltToRemap", 0x18, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_30", 0x20, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_38", 0x28, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "PathId", 0x2c, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Flags", 0x30, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "PathMovementSpeed", 0x34, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_48", 0x38, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ServerControl", 0x3c, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_PathingComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_PathingComponent_Layout = {
     .componentName = "eoc::PathingComponent",
     .shortName = "Pathing",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x3d,
-    .properties = g_Gen_PathingComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PathingComponent_Properties) / sizeof(g_Gen_PathingComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x50,
+    .properties = g_Gen_eoc_PathingComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_PathingComponent_Properties) / sizeof(g_Gen_eoc_PathingComponent_Properties[0]),
 };
 
-// eoc::RaceComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_RaceComponent_Properties[] = {
-    { "Race", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::RaceComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_RaceComponent_Properties[] = {
+    { "Race", 0x00, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_RaceComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_RaceComponent_Layout = {
     .componentName = "eoc::RaceComponent",
     .shortName = "Race",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .componentTypeIndex = 0,
     .componentSize = 0x10,
-    .properties = g_Gen_RaceComponent_Properties,
-    .propertyCount = sizeof(g_Gen_RaceComponent_Properties) / sizeof(g_Gen_RaceComponent_Properties[0]),
+    .properties = g_Gen_eoc_RaceComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_RaceComponent_Properties) / sizeof(g_Gen_eoc_RaceComponent_Properties[0]),
 };
 
-// eoc::RequestedRollComponent (from Roll.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_RequestedRollComponent_Properties[] = {
-    { "RollEntity", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RollUuid", 0x08, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RollComponentType", 0x18, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RollType", 0x19, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Roller", 0x20, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "StatsExpression", 0x28, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "AdvantageType", 0x30, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "DC", 0x38, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "NaturalRoll", 0x39, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "DiscardedDiceTotal", 0x3a, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "DiceAdditionalValue", 0x3b, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "AdditionalValue", 0x3c, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "SpellCheck", 0x40, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Finished", 0x41, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Canceled", 0x42, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_4F", 0x43, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "PassiveRollDelay", 0x44, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RollContext", 0x48, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "FromScript", 0x49, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "DialogId", 0x4c, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Subject", 0x50, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ResolvedRollBonuses", 0x58, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "FixedRollBonuses", 0x60, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RolledComponentType0", 0x68, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_89", 0x69, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8A", 0x6a, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ExcludedBonusesTags", 0x70, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Ability", 0x78, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Skill", 0x80, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ConsumedInspirationPoint", 0x88, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Roll", 0x90, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Result", 0x98, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Metadata", 0xa0, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_1B0", 0xa8, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RollDelayRemaining", 0xb0, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RequestStop", 0xb4, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "EntityUuid", 0xb8, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Entity2Uuid", 0xc8, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::RequestedRollComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x1e0 (480 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_RequestedRollComponent_Properties[] = {
+    { "RollEntity", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "RollUuid", 0x08, FIELD_TYPE_GUID, 0, true },
+    { "RollComponentType", 0x18, FIELD_TYPE_UINT8, 0, true },
+    { "RollType", 0x19, FIELD_TYPE_UINT8, 0, true },
+    { "NaturalRoll", 0x1a, FIELD_TYPE_UINT8, 0, true },
+    { "DiscardedDiceTotal", 0x1b, FIELD_TYPE_UINT8, 0, true },
+    { "DiceAdditionalValue", 0x1c, FIELD_TYPE_UINT8, 0, true },
+    { "AdditionalValue", 0x20, FIELD_TYPE_INT32, 0, true },
+    { "SpellCheck", 0x24, FIELD_TYPE_UINT8, 0, true },
+    { "Finished", 0x25, FIELD_TYPE_BOOL, 0, true },
+    { "field_4F", 0x26, FIELD_TYPE_UINT8, 0, true },
+    { "PassiveRollDelay", 0x28, FIELD_TYPE_FLOAT, 0, true },
+    { "RollContext", 0x2c, FIELD_TYPE_UINT8, 0, true },
+    { "field_89", 0x2d, FIELD_TYPE_UINT8, 0, true },
+    { "field_8A", 0x2e, FIELD_TYPE_UINT8, 0, true },
+    { "Ability", 0x2f, FIELD_TYPE_UINT8, 0, true },
+    { "Skill", 0x30, FIELD_TYPE_UINT8, 0, true },
+    { "EntityUuid", 0x38, FIELD_TYPE_GUID, 0, true },
+    { "Entity2Uuid", 0x48, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_RequestedRollComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_RequestedRollComponent_Layout = {
     .componentName = "eoc::RequestedRollComponent",
     .shortName = "RequestedRoll",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0xd8,
-    .properties = g_Gen_RequestedRollComponent_Properties,
-    .propertyCount = sizeof(g_Gen_RequestedRollComponent_Properties) / sizeof(g_Gen_RequestedRollComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x1e0,
+    .properties = g_Gen_eoc_RequestedRollComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_RequestedRollComponent_Properties) / sizeof(g_Gen_eoc_RequestedRollComponent_Properties[0]),
 };
 
-// eoc::ResistancesComponent (from Stats.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ResistancesComponent_Properties[] = {
-    { "Resistances", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_E", 0x08, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "AC", 0x0c, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "PerDamageTypeHealthThresholds", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "PerDamageTypeHealthThresholds2", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::ResistancesComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x20 (32 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_ResistancesComponent_Properties[] = {
+    { "Resistances", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "field_E", 0x04, FIELD_TYPE_UINT8, 0, true },
+    { "AC", 0x08, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ResistancesComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_ResistancesComponent_Layout = {
     .componentName = "eoc::ResistancesComponent",
     .shortName = "Resistances",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .componentTypeIndex = 0,
     .componentSize = 0x20,
-    .properties = g_Gen_ResistancesComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ResistancesComponent_Properties) / sizeof(g_Gen_ResistancesComponent_Properties[0]),
+    .properties = g_Gen_eoc_ResistancesComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_ResistancesComponent_Properties) / sizeof(g_Gen_eoc_ResistancesComponent_Properties[0]),
 };
 
-// eoc::SpeakerComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_SpeakerComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::StatsComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0xa0 (160 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_StatsComponent_Properties[] = {
+    { "InitiativeBonus", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "ProficiencyBonus", 0x04, FIELD_TYPE_INT32, 0, true },
+    { "SpellCastingAbility", 0x08, FIELD_TYPE_UINT8, 0, true },
+    { "field_8C", 0x0c, FIELD_TYPE_INT32, 0, true },
+    { "field_90", 0x10, FIELD_TYPE_INT32, 0, true },
+    { "ArmorType", 0x14, FIELD_TYPE_INT32, 0, true },
+    { "ArmorType2", 0x18, FIELD_TYPE_INT32, 0, true },
+    { "UnarmedAttackAbility", 0x1c, FIELD_TYPE_UINT8, 0, true },
+    { "RangedAttackAbility", 0x1d, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_SpeakerComponent_Layout = {
-    .componentName = "eoc::SpeakerComponent",
-    .shortName = "Speaker",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_SpeakerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_SpeakerComponent_Properties) / sizeof(g_Gen_SpeakerComponent_Properties[0]),
-};
-
-// eoc::StatsComponent (from Stats.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_StatsComponent_Properties[] = {
-    { "InitiativeBonus", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Abilities", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "AbilityModifiers", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Skills", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ProficiencyBonus", 0x20, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "SpellCastingAbility", 0x24, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8C", 0x28, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_90", 0x2c, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ArmorType", 0x30, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ArmorType2", 0x34, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "UnarmedAttackAbility", 0x38, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RangedAttackAbility", 0x39, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_StatsComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_StatsComponent_Layout = {
     .componentName = "eoc::StatsComponent",
     .shortName = "Stats",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x3a,
-    .properties = g_Gen_StatsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_StatsComponent_Properties) / sizeof(g_Gen_StatsComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0xa0,
+    .properties = g_Gen_eoc_StatsComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_StatsComponent_Properties) / sizeof(g_Gen_eoc_StatsComponent_Properties[0]),
 };
 
-// eoc::StealthComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_StealthComponent_Properties[] = {
-    { "SeekHiddenFlag", 0x00, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Position", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "SeekHiddenTimeout", 0x10, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_14", 0x14, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_18", 0x18, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_1C", 0x1c, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_20", 0x20, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::StealthComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x24 (36 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_StealthComponent_Properties[] = {
+    { "SeekHiddenFlag", 0x00, FIELD_TYPE_BOOL, 0, true },
+    { "Position", 0x08, FIELD_TYPE_VEC3, 0, true },
+    { "SeekHiddenTimeout", 0x14, FIELD_TYPE_FLOAT, 0, true },
+    { "field_14", 0x18, FIELD_TYPE_FLOAT, 0, true },
+    { "field_18", 0x1c, FIELD_TYPE_INT32, 0, true },
+    { "field_1C", 0x20, FIELD_TYPE_FLOAT, 0, true },
+    { "field_20", 0x24, FIELD_TYPE_FLOAT, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_StealthComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_StealthComponent_Layout = {
     .componentName = "eoc::StealthComponent",
     .shortName = "Stealth",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .componentTypeIndex = 0,
     .componentSize = 0x24,
-    .properties = g_Gen_StealthComponent_Properties,
-    .propertyCount = sizeof(g_Gen_StealthComponent_Properties) / sizeof(g_Gen_StealthComponent_Properties[0]),
+    .properties = g_Gen_eoc_StealthComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_StealthComponent_Properties) / sizeof(g_Gen_eoc_StealthComponent_Properties[0]),
 };
 
-// eoc::SteeringComponent (from Runtime.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_SteeringComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "TargetRotation", 0x08, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Speed", 0x0c, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RequestSteering", 0x10, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_18", 0x14, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_1C", 0x18, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::SteeringComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x20 (32 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_SteeringComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_VEC3, 0, true },
+    { "field_18", 0x0c, FIELD_TYPE_FLOAT, 0, true },
+    { "field_1C", 0x10, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_SteeringComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_SteeringComponent_Layout = {
     .componentName = "eoc::SteeringComponent",
     .shortName = "Steering",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x19,
-    .properties = g_Gen_SteeringComponent_Properties,
-    .propertyCount = sizeof(g_Gen_SteeringComponent_Properties) / sizeof(g_Gen_SteeringComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x20,
+    .properties = g_Gen_eoc_SteeringComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_SteeringComponent_Properties) / sizeof(g_Gen_eoc_SteeringComponent_Properties[0]),
 };
 
-// eoc::SurfacePathInfluencesComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_SurfacePathInfluencesComponent_Properties[] = {
-    { "PathInfluences", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::TimelineActorDataComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x28 (40 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_TimelineActorDataComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_GUID, 0, true },
+    { "field_10", 0x10, FIELD_TYPE_GUID, 0, true },
+    { "field_20", 0x20, FIELD_TYPE_UINT16, 0, true },
+    { "field_22", 0x22, FIELD_TYPE_UINT8, 0, true },
+    { "field_23", 0x23, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_SurfacePathInfluencesComponent_Layout = {
-    .componentName = "eoc::SurfacePathInfluencesComponent",
-    .shortName = "SurfacePathInfluences",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_SurfacePathInfluencesComponent_Properties,
-    .propertyCount = sizeof(g_Gen_SurfacePathInfluencesComponent_Properties) / sizeof(g_Gen_SurfacePathInfluencesComponent_Properties[0]),
-};
-
-// eoc::TagComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_TagComponent_Properties[] = {
-    { "Tags", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_TagComponent_Layout = {
-    .componentName = "eoc::TagComponent",
-    .shortName = "Tag",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_TagComponent_Properties,
-    .propertyCount = sizeof(g_Gen_TagComponent_Properties) / sizeof(g_Gen_TagComponent_Properties[0]),
-};
-
-// eoc::TimelineActorDataComponent (from Timeline.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_TimelineActorDataComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_10", 0x10, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_20", 0x20, FIELD_TYPE_UINT16, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_22", 0x22, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_23", 0x23, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_TimelineActorDataComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_TimelineActorDataComponent_Layout = {
     .componentName = "eoc::TimelineActorDataComponent",
     .shortName = "TimelineActorData",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x24,
-    .properties = g_Gen_TimelineActorDataComponent_Properties,
-    .propertyCount = sizeof(g_Gen_TimelineActorDataComponent_Properties) / sizeof(g_Gen_TimelineActorDataComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x28,
+    .properties = g_Gen_eoc_TimelineActorDataComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_TimelineActorDataComponent_Properties) / sizeof(g_Gen_eoc_TimelineActorDataComponent_Properties[0]),
 };
 
-// eoc::TurnBasedComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_TurnBasedComponent_Properties[] = {
-    { "IsActiveCombatTurn", 0x00, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Removed", 0x01, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RequestedEndTurn", 0x02, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "TurnActionsCompleted", 0x03, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ActedThisRoundInCombat", 0x04, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "HadTurnInCombat", 0x05, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "CanActInCombat", 0x06, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Timeout", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "PauseTimer", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "EndTurnHoldTimer", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "CombatTeam", 0x20, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::TurnBasedComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x30 (48 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_TurnBasedComponent_Properties[] = {
+    { "RequestedEndTurn", 0x00, FIELD_TYPE_BOOL, 0, true },
+    { "ActedThisRoundInCombat", 0x01, FIELD_TYPE_BOOL, 0, true },
+    { "HadTurnInCombat", 0x02, FIELD_TYPE_BOOL, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_TurnBasedComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_TurnBasedComponent_Layout = {
     .componentName = "eoc::TurnBasedComponent",
     .shortName = "TurnBased",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .componentTypeIndex = 0,
     .componentSize = 0x30,
-    .properties = g_Gen_TurnBasedComponent_Properties,
-    .propertyCount = sizeof(g_Gen_TurnBasedComponent_Properties) / sizeof(g_Gen_TurnBasedComponent_Properties[0]),
+    .properties = g_Gen_eoc_TurnBasedComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_TurnBasedComponent_Properties) / sizeof(g_Gen_eoc_TurnBasedComponent_Properties[0]),
 };
 
-// eoc::TurnOrderComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_TurnOrderComponent_Properties[] = {
-    { "TurnOrderIndices", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Groups", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "TurnOrderIndices2", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Groups2", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_40", 0x20, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_44", 0x24, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_48", 0x28, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_4C", 0x2c, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::TurnOrderComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x50 (80 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_TurnOrderComponent_Properties[] = {
+    { "field_40", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "field_44", 0x04, FIELD_TYPE_INT32, 0, true },
+    { "field_48", 0x08, FIELD_TYPE_INT32, 0, true },
+    { "field_4C", 0x0c, FIELD_TYPE_FLOAT, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_TurnOrderComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_TurnOrderComponent_Layout = {
     .componentName = "eoc::TurnOrderComponent",
     .shortName = "TurnOrder",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x30,
-    .properties = g_Gen_TurnOrderComponent_Properties,
-    .propertyCount = sizeof(g_Gen_TurnOrderComponent_Properties) / sizeof(g_Gen_TurnOrderComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x50,
+    .properties = g_Gen_eoc_TurnOrderComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_TurnOrderComponent_Properties) / sizeof(g_Gen_eoc_TurnOrderComponent_Properties[0]),
 };
 
-// eoc::UseBoostsComponent (from Boosts.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_UseBoostsComponent_Properties[] = {
-    { "Boosts", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::UseComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x50 (80 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_UseComponent_Properties[] = {
+    { "Charges", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "MaxCharges", 0x04, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_UseBoostsComponent_Layout = {
-    .componentName = "eoc::UseBoostsComponent",
-    .shortName = "UseBoosts",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_UseBoostsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_UseBoostsComponent_Properties) / sizeof(g_Gen_UseBoostsComponent_Properties[0]),
-};
-
-// eoc::UseComponent (from Stats.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_UseComponent_Properties[] = {
-    { "Requirements", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Charges", 0x08, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "MaxCharges", 0x0c, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ItemUseType", 0x10, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ItemUseBlocked", 0x11, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "CanCombine", 0x12, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "CombineFlag", 0x13, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Boosts", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "BoostsOnEquipMainHand", 0x20, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "BoostsOnEquipOffHand", 0x28, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_UseComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_UseComponent_Layout = {
     .componentName = "eoc::UseComponent",
     .shortName = "Use",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x30,
-    .properties = g_Gen_UseComponent_Properties,
-    .propertyCount = sizeof(g_Gen_UseComponent_Properties) / sizeof(g_Gen_UseComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x50,
+    .properties = g_Gen_eoc_UseComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_UseComponent_Properties) / sizeof(g_Gen_eoc_UseComponent_Properties[0]),
 };
 
-// eoc::ValueComponent (from Stats.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ValueComponent_Properties[] = {
-    { "Value", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Rarity", 0x04, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Unique", 0x05, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::ValueComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_ValueComponent_Properties[] = {
+    { "Value", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "Rarity", 0x04, FIELD_TYPE_UINT8, 0, true },
+    { "Unique", 0x05, FIELD_TYPE_BOOL, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ValueComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_ValueComponent_Layout = {
     .componentName = "eoc::ValueComponent",
     .shortName = "Value",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x06,
-    .properties = g_Gen_ValueComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ValueComponent_Properties) / sizeof(g_Gen_ValueComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_eoc_ValueComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_ValueComponent_Properties) / sizeof(g_Gen_eoc_ValueComponent_Properties[0]),
 };
 
-// eoc::VoiceComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_VoiceComponent_Properties[] = {
-    { "Voice", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::VoiceComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_VoiceComponent_Properties[] = {
+    { "Voice", 0x00, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_VoiceComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_VoiceComponent_Layout = {
     .componentName = "eoc::VoiceComponent",
     .shortName = "Voice",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .componentTypeIndex = 0,
     .componentSize = 0x10,
-    .properties = g_Gen_VoiceComponent_Properties,
-    .propertyCount = sizeof(g_Gen_VoiceComponent_Properties) / sizeof(g_Gen_VoiceComponent_Properties[0]),
+    .properties = g_Gen_eoc_VoiceComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_VoiceComponent_Properties) / sizeof(g_Gen_eoc_VoiceComponent_Properties[0]),
 };
 
-// eoc::VoiceTagComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_VoiceTagComponent_Properties[] = {
-    { "Tags", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::WeaponComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x50 (80 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_WeaponComponent_Properties[] = {
+    { "WeaponRange", 0x00, FIELD_TYPE_FLOAT, 0, true },
+    { "DamageRange", 0x04, FIELD_TYPE_FLOAT, 0, true },
+    { "WeaponProperties", 0x08, FIELD_TYPE_UINT32, 0, true },
+    { "WeaponGroup", 0x0c, FIELD_TYPE_UINT8, 0, true },
+    { "Ability", 0x0d, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_VoiceTagComponent_Layout = {
-    .componentName = "eoc::VoiceTagComponent",
-    .shortName = "VoiceTag",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_VoiceTagComponent_Properties,
-    .propertyCount = sizeof(g_Gen_VoiceTagComponent_Properties) / sizeof(g_Gen_VoiceTagComponent_Properties[0]),
-};
-
-// eoc::WeaponComponent (from Stats.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_WeaponComponent_Properties[] = {
-    { "WeaponRange", 0x00, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "DamageRange", 0x04, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "WeaponProperties", 0x08, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "WeaponGroup", 0x0c, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Ability", 0x0d, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "DamageValues", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "DamageDice", 0x18, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "VersatileDamageDice", 0x19, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_WeaponComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_WeaponComponent_Layout = {
     .componentName = "eoc::WeaponComponent",
     .shortName = "Weapon",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x1a,
-    .properties = g_Gen_WeaponComponent_Properties,
-    .propertyCount = sizeof(g_Gen_WeaponComponent_Properties) / sizeof(g_Gen_WeaponComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x50,
+    .properties = g_Gen_eoc_WeaponComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_WeaponComponent_Properties) / sizeof(g_Gen_eoc_WeaponComponent_Properties[0]),
 };
 
-// eoc::WeaponSetComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_WeaponSetComponent_Properties[] = {
-    { "WeaponSet", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::WieldingComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_WieldingComponent_Properties[] = {
+    { "Owner", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_WeaponSetComponent_Layout = {
-    .componentName = "eoc::WeaponSetComponent",
-    .shortName = "WeaponSet",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_WeaponSetComponent_Properties,
-    .propertyCount = sizeof(g_Gen_WeaponSetComponent_Properties) / sizeof(g_Gen_WeaponSetComponent_Properties[0]),
-};
-
-// eoc::WieldingComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_WieldingComponent_Properties[] = {
-    { "Owner", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_WieldingComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_WieldingComponent_Layout = {
     .componentName = "eoc::WieldingComponent",
     .shortName = "Wielding",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_WieldingComponent_Properties,
-    .propertyCount = sizeof(g_Gen_WieldingComponent_Properties) / sizeof(g_Gen_WieldingComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_eoc_WieldingComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_WieldingComponent_Properties) / sizeof(g_Gen_eoc_WieldingComponent_Properties[0]),
 };
 
-// eoc::action::ActionUseConditionsComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ActionUseConditionsComponent_Properties[] = {
-    { "Conditions", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::active_roll::ModifiersComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x90 (144 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_active_roll_ModifiersComponent_Properties[] = {
+    { "field_18", 0x00, FIELD_TYPE_UINT8, 0, true },
+    { "field_19", 0x01, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ActionUseConditionsComponent_Layout = {
-    .componentName = "eoc::action::ActionUseConditionsComponent",
-    .shortName = "ActionUseConditions",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ActionUseConditionsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ActionUseConditionsComponent_Properties) / sizeof(g_Gen_ActionUseConditionsComponent_Properties[0]),
-};
-
-// eoc::active_roll::ModifiersComponent (from Roll.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_RollModifiersComponent_Properties[] = {
-    { "Entity", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "DynamicModifiers", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_18", 0x10, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_19", 0x11, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "StaticModifiers", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "DynamicModifiers2", 0x20, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ConsumableModifiers", 0x28, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ItemSpellModifiers", 0x30, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "SpellModifiers", 0x38, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ToggledPassiveModifiers", 0x40, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "DynamicModifiers3", 0x48, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_RollModifiersComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_active_roll_ModifiersComponent_Layout = {
     .componentName = "eoc::active_roll::ModifiersComponent",
-    .shortName = "RollModifiers",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x50,
-    .properties = g_Gen_RollModifiersComponent_Properties,
-    .propertyCount = sizeof(g_Gen_RollModifiersComponent_Properties) / sizeof(g_Gen_RollModifiersComponent_Properties[0]),
+    .shortName = "Modifiers",
+    .componentTypeIndex = 0,
+    .componentSize = 0x90,
+    .properties = g_Gen_eoc_active_roll_ModifiersComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_active_roll_ModifiersComponent_Properties) / sizeof(g_Gen_eoc_active_roll_ModifiersComponent_Properties[0]),
 };
 
-// eoc::approval::RatingsComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ApprovalRatingsComponent_Properties[] = {
-    { "Ratings", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_70", 0x08, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::calendar::DaysPassedComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_calendar_DaysPassedComponent_Properties[] = {
+    { "Days", 0x00, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ApprovalRatingsComponent_Layout = {
-    .componentName = "eoc::approval::RatingsComponent",
-    .shortName = "ApprovalRatings",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_ApprovalRatingsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ApprovalRatingsComponent_Properties) / sizeof(g_Gen_ApprovalRatingsComponent_Properties[0]),
-};
-
-// eoc::armor_set::StateComponent (from Stats.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ArmorSetStateComponent_Properties[] = {
-    { "State", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ArmorSetStateComponent_Layout = {
-    .componentName = "eoc::armor_set::StateComponent",
-    .shortName = "ArmorSetState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_ArmorSetStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ArmorSetStateComponent_Properties) / sizeof(g_Gen_ArmorSetStateComponent_Properties[0]),
-};
-
-// eoc::attitude::AttitudesToPlayersComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_AttitudesToPlayersComponent_Properties[] = {
-    { "Attitudes", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_AttitudesToPlayersComponent_Layout = {
-    .componentName = "eoc::attitude::AttitudesToPlayersComponent",
-    .shortName = "AttitudesToPlayers",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_AttitudesToPlayersComponent_Properties,
-    .propertyCount = sizeof(g_Gen_AttitudesToPlayersComponent_Properties) / sizeof(g_Gen_AttitudesToPlayersComponent_Properties[0]),
-};
-
-// eoc::calendar::DaysPassedComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CalendarDaysPassedComponent_Properties[] = {
-    { "Days", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_CalendarDaysPassedComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_calendar_DaysPassedComponent_Layout = {
     .componentName = "eoc::calendar::DaysPassedComponent",
-    .shortName = "CalendarDaysPassed",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_CalendarDaysPassedComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CalendarDaysPassedComponent_Properties) / sizeof(g_Gen_CalendarDaysPassedComponent_Properties[0]),
+    .shortName = "DaysPassed",
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_eoc_calendar_DaysPassedComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_calendar_DaysPassedComponent_Properties) / sizeof(g_Gen_eoc_calendar_DaysPassedComponent_Properties[0]),
 };
 
-// eoc::calendar::StartingDateComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CalendarStartingDateComponent_Properties[] = {
-    { "Day", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Year", 0x04, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::calendar::StartingDateComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_calendar_StartingDateComponent_Properties[] = {
+    { "Day", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "Year", 0x04, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CalendarStartingDateComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_calendar_StartingDateComponent_Layout = {
     .componentName = "eoc::calendar::StartingDateComponent",
-    .shortName = "CalendarStartingDate",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_CalendarStartingDateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CalendarStartingDateComponent_Properties) / sizeof(g_Gen_CalendarStartingDateComponent_Properties[0]),
+    .shortName = "StartingDate",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_eoc_calendar_StartingDateComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_calendar_StartingDateComponent_Properties) / sizeof(g_Gen_eoc_calendar_StartingDateComponent_Properties[0]),
 };
 
-// eoc::camp::ChestComponent (from Camp.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CampChestComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "UserID", 0x08, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_1C", 0x0c, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_20", 0x10, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_28", 0x18, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::camp::ChestComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x28 (40 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_camp_ChestComponent_Properties[] = {
+    { "UserID", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "field_1C", 0x04, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "field_20", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "field_28", 0x10, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CampChestComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_camp_ChestComponent_Layout = {
     .componentName = "eoc::camp::ChestComponent",
-    .shortName = "CampChest",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x1c,
-    .properties = g_Gen_CampChestComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CampChestComponent_Properties) / sizeof(g_Gen_CampChestComponent_Properties[0]),
+    .shortName = "Chest",
+    .componentTypeIndex = 0,
+    .componentSize = 0x28,
+    .properties = g_Gen_eoc_camp_ChestComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_camp_ChestComponent_Properties) / sizeof(g_Gen_eoc_camp_ChestComponent_Properties[0]),
 };
 
-// eoc::camp::EndTheDayStateComponent (from Camp.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CampEndTheDayStateComponent_Properties[] = {
-    { "State", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8", 0x08, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::camp::EndTheDayStateComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_camp_EndTheDayStateComponent_Properties[] = {
+    { "State", 0x00, FIELD_TYPE_UINT8, 0, true },
+    { "field_8", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CampEndTheDayStateComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_camp_EndTheDayStateComponent_Layout = {
     .componentName = "eoc::camp::EndTheDayStateComponent",
-    .shortName = "CampEndTheDayState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .shortName = "EndTheDayState",
+    .componentTypeIndex = 0,
     .componentSize = 0x10,
-    .properties = g_Gen_CampEndTheDayStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CampEndTheDayStateComponent_Properties) / sizeof(g_Gen_CampEndTheDayStateComponent_Properties[0]),
+    .properties = g_Gen_eoc_camp_EndTheDayStateComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_camp_EndTheDayStateComponent_Properties) / sizeof(g_Gen_eoc_camp_EndTheDayStateComponent_Properties[0]),
 };
 
-// eoc::camp::QualityComponent (from Camp.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CampQualityComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_4", 0x04, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::camp::QualityComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_camp_QualityComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "field_4", 0x04, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CampQualityComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_camp_QualityComponent_Layout = {
     .componentName = "eoc::camp::QualityComponent",
-    .shortName = "CampQuality",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_CampQualityComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CampQualityComponent_Properties) / sizeof(g_Gen_CampQualityComponent_Properties[0]),
+    .shortName = "Quality",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_eoc_camp_QualityComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_camp_QualityComponent_Properties) / sizeof(g_Gen_eoc_camp_QualityComponent_Properties[0]),
 };
 
-// eoc::camp::SettingsComponent (from Camp.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CampSettingsComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_1", 0x01, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_4", 0x04, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::camp::SettingsComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_camp_SettingsComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, true },
+    { "field_1", 0x01, FIELD_TYPE_UINT8, 0, true },
+    { "field_4", 0x04, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CampSettingsComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_camp_SettingsComponent_Layout = {
     .componentName = "eoc::camp::SettingsComponent",
-    .shortName = "CampSettings",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_CampSettingsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CampSettingsComponent_Properties) / sizeof(g_Gen_CampSettingsComponent_Properties[0]),
+    .shortName = "Settings",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_eoc_camp_SettingsComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_camp_SettingsComponent_Properties) / sizeof(g_Gen_eoc_camp_SettingsComponent_Properties[0]),
 };
 
-// eoc::camp::SupplyComponent (from Camp.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CampSupplyComponent_Properties[] = {
-    { "Amount", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::camp::SupplyComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_camp_SupplyComponent_Properties[] = {
+    { "Amount", 0x00, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CampSupplyComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_camp_SupplyComponent_Layout = {
     .componentName = "eoc::camp::SupplyComponent",
-    .shortName = "CampSupply",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_CampSupplyComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CampSupplyComponent_Properties) / sizeof(g_Gen_CampSupplyComponent_Properties[0]),
+    .shortName = "Supply",
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_eoc_camp_SupplyComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_camp_SupplyComponent_Properties) / sizeof(g_Gen_eoc_camp_SupplyComponent_Properties[0]),
 };
 
-// eoc::camp::TotalSuppliesComponent (from Camp.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CampTotalSuppliesComponent_Properties[] = {
-    { "Amount", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::camp::TotalSuppliesComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_camp_TotalSuppliesComponent_Properties[] = {
+    { "Amount", 0x00, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CampTotalSuppliesComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_camp_TotalSuppliesComponent_Layout = {
     .componentName = "eoc::camp::TotalSuppliesComponent",
-    .shortName = "CampTotalSupplies",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_CampTotalSuppliesComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CampTotalSuppliesComponent_Properties) / sizeof(g_Gen_CampTotalSuppliesComponent_Properties[0]),
+    .shortName = "TotalSupplies",
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_eoc_camp_TotalSuppliesComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_camp_TotalSuppliesComponent_Properties) / sizeof(g_Gen_eoc_camp_TotalSuppliesComponent_Properties[0]),
 };
 
-// eoc::character::EquipmentVisualComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_EquipmentVisualComponent_Properties[] = {
-    { "State", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::character::EquipmentVisualComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x1 (1 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_character_EquipmentVisualComponent_Properties[] = {
+    { "State", 0x00, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_EquipmentVisualComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_character_EquipmentVisualComponent_Layout = {
     .componentName = "eoc::character::EquipmentVisualComponent",
     .shortName = "EquipmentVisual",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x01,
-    .properties = g_Gen_EquipmentVisualComponent_Properties,
-    .propertyCount = sizeof(g_Gen_EquipmentVisualComponent_Properties) / sizeof(g_Gen_EquipmentVisualComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x1,
+    .properties = g_Gen_eoc_character_EquipmentVisualComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_character_EquipmentVisualComponent_Properties) / sizeof(g_Gen_eoc_character_EquipmentVisualComponent_Properties[0]),
 };
 
-// eoc::character_creation::AppearanceComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CharacterCreationAppearanceComponent_Properties[] = {
-    { "Visuals", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Elements", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "AdditionalChoices", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "SkinColor", 0x18, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "EyeColor", 0x28, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "SecondEyeColor", 0x38, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "HairColor", 0x48, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::character_creation::AppearanceComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x70 (112 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_character_creation_AppearanceComponent_Properties[] = {
+    { "SkinColor", 0x00, FIELD_TYPE_GUID, 0, true },
+    { "EyeColor", 0x10, FIELD_TYPE_GUID, 0, true },
+    { "SecondEyeColor", 0x20, FIELD_TYPE_GUID, 0, true },
+    { "HairColor", 0x30, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CharacterCreationAppearanceComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_character_creation_AppearanceComponent_Layout = {
     .componentName = "eoc::character_creation::AppearanceComponent",
-    .shortName = "CharacterCreationAppearance",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x58,
-    .properties = g_Gen_CharacterCreationAppearanceComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CharacterCreationAppearanceComponent_Properties) / sizeof(g_Gen_CharacterCreationAppearanceComponent_Properties[0]),
+    .shortName = "Appearance",
+    .componentTypeIndex = 0,
+    .componentSize = 0x70,
+    .properties = g_Gen_eoc_character_creation_AppearanceComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_character_creation_AppearanceComponent_Properties) / sizeof(g_Gen_eoc_character_creation_AppearanceComponent_Properties[0]),
 };
 
-// eoc::character_creation::ChangeAppearanceDefinitionComponent (from CharacterCreation.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CCChangeAppearanceDefinitionComponent_Properties[] = {
-    { "Definition", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Appearance", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_2E0", 0x10, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_2E4", 0x14, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_2E8", 0x18, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::character_creation::ChangeAppearanceDefinitionComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x2e0 (736 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_character_creation_ChangeAppearanceDefinitionComponent_Properties[] = {
+    { "field_2E0", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "field_2E4", 0x04, FIELD_TYPE_UINT8, 0, true },
+    { "field_2E8", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CCChangeAppearanceDefinitionComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_character_creation_ChangeAppearanceDefinitionComponent_Layout = {
     .componentName = "eoc::character_creation::ChangeAppearanceDefinitionComponent",
-    .shortName = "CCChangeAppearanceDefinition",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x20,
-    .properties = g_Gen_CCChangeAppearanceDefinitionComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CCChangeAppearanceDefinitionComponent_Properties) / sizeof(g_Gen_CCChangeAppearanceDefinitionComponent_Properties[0]),
+    .shortName = "ChangeAppearanceDefinition",
+    .componentTypeIndex = 0,
+    .componentSize = 0x2e0,
+    .properties = g_Gen_eoc_character_creation_ChangeAppearanceDefinitionComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_character_creation_ChangeAppearanceDefinitionComponent_Properties) / sizeof(g_Gen_eoc_character_creation_ChangeAppearanceDefinitionComponent_Properties[0]),
 };
 
-// eoc::character_creation::CharacterDefinitionComponent (from CharacterCreation.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CCCharacterDefinitionComponent_Properties[] = {
-    { "Definition", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_288", 0x08, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ChangeId", 0x0c, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "NeedsSync", 0x10, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::character_creation::CharacterDefinitionComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x290 (656 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_character_creation_CharacterDefinitionComponent_Properties[] = {
+    { "field_288", 0x00, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CCCharacterDefinitionComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_character_creation_CharacterDefinitionComponent_Layout = {
     .componentName = "eoc::character_creation::CharacterDefinitionComponent",
-    .shortName = "CCCharacterDefinition",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x11,
-    .properties = g_Gen_CCCharacterDefinitionComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CCCharacterDefinitionComponent_Properties) / sizeof(g_Gen_CCCharacterDefinitionComponent_Properties[0]),
+    .shortName = "CharacterDefinition",
+    .componentTypeIndex = 0,
+    .componentSize = 0x290,
+    .properties = g_Gen_eoc_character_creation_CharacterDefinitionComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_character_creation_CharacterDefinitionComponent_Properties) / sizeof(g_Gen_eoc_character_creation_CharacterDefinitionComponent_Properties[0]),
 };
 
-// eoc::character_creation::CompanionDefinitionComponent (from CharacterCreation.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CCCompanionDefinitionComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_10", 0x10, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_20", 0x20, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_21", 0x21, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_28", 0x28, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Visual", 0x38, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_110", 0x40, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_120", 0x50, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_130", 0x60, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "IconVersion", 0x64, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "HasIcon", 0x68, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::character_creation::CompanionDefinitionComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x140 (320 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_character_creation_CompanionDefinitionComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_GUID, 0, true },
+    { "field_10", 0x10, FIELD_TYPE_GUID, 0, true },
+    { "field_20", 0x20, FIELD_TYPE_UINT8, 0, true },
+    { "field_21", 0x21, FIELD_TYPE_UINT8, 0, true },
+    { "field_28", 0x28, FIELD_TYPE_GUID, 0, true },
+    { "field_110", 0x38, FIELD_TYPE_GUID, 0, true },
+    { "field_120", 0x48, FIELD_TYPE_GUID, 0, true },
+    { "field_130", 0x58, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CCCompanionDefinitionComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_character_creation_CompanionDefinitionComponent_Layout = {
     .componentName = "eoc::character_creation::CompanionDefinitionComponent",
-    .shortName = "CCCompanionDefinition",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x69,
-    .properties = g_Gen_CCCompanionDefinitionComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CCCompanionDefinitionComponent_Properties) / sizeof(g_Gen_CCCompanionDefinitionComponent_Properties[0]),
+    .shortName = "CompanionDefinition",
+    .componentTypeIndex = 0,
+    .componentSize = 0x140,
+    .properties = g_Gen_eoc_character_creation_CompanionDefinitionComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_character_creation_CompanionDefinitionComponent_Properties) / sizeof(g_Gen_eoc_character_creation_CompanionDefinitionComponent_Properties[0]),
 };
 
-// eoc::character_creation::DefinitionCommonComponent (from CharacterCreation.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CCDefinitionCommonComponent_Properties[] = {
-    { "ChangeId", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Error", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::character_creation::DefinitionCommonComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0xc0 (192 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_character_creation_DefinitionCommonComponent_Properties[] = {
+    { "field_8", 0x00, FIELD_TYPE_INT64, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CCDefinitionCommonComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_character_creation_DefinitionCommonComponent_Layout = {
     .componentName = "eoc::character_creation::DefinitionCommonComponent",
-    .shortName = "CCDefinitionCommon",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x18,
-    .properties = g_Gen_CCDefinitionCommonComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CCDefinitionCommonComponent_Properties) / sizeof(g_Gen_CCDefinitionCommonComponent_Properties[0]),
+    .shortName = "DefinitionCommon",
+    .componentTypeIndex = 0,
+    .componentSize = 0xc0,
+    .properties = g_Gen_eoc_character_creation_DefinitionCommonComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_character_creation_DefinitionCommonComponent_Properties) / sizeof(g_Gen_eoc_character_creation_DefinitionCommonComponent_Properties[0]),
 };
 
-// eoc::character_creation::FullRespecDefinitionComponent (from CharacterCreation.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CCFullRespecDefinitionComponent_Properties[] = {
-    { "Definition", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_1C0", 0x08, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_1D0", 0x18, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_1E0", 0x28, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "LevelUpUpgrades", 0x30, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Spells", 0x38, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_268", 0x40, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::character_creation::FullRespecDefinitionComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x268 (616 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_character_creation_FullRespecDefinitionComponent_Properties[] = {
+    { "field_1C0", 0x00, FIELD_TYPE_GUID, 0, true },
+    { "field_1D0", 0x10, FIELD_TYPE_GUID, 0, true },
+    { "field_1E0", 0x20, FIELD_TYPE_INT32, 0, true },
+    { "field_268", 0x24, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CCFullRespecDefinitionComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_character_creation_FullRespecDefinitionComponent_Layout = {
     .componentName = "eoc::character_creation::FullRespecDefinitionComponent",
-    .shortName = "CCFullRespecDefinition",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x41,
-    .properties = g_Gen_CCFullRespecDefinitionComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CCFullRespecDefinitionComponent_Properties) / sizeof(g_Gen_CCFullRespecDefinitionComponent_Properties[0]),
+    .shortName = "FullRespecDefinition",
+    .componentTypeIndex = 0,
+    .componentSize = 0x268,
+    .properties = g_Gen_eoc_character_creation_FullRespecDefinitionComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_character_creation_FullRespecDefinitionComponent_Properties) / sizeof(g_Gen_eoc_character_creation_FullRespecDefinitionComponent_Properties[0]),
 };
 
-// eoc::character_creation::LevelUpComponent (from CharacterCreation.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CCLevelUpComponent_Properties[] = {
-    { "LevelUps", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::character_creation::LevelUpDefinitionComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x330 (816 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_character_creation_LevelUpDefinitionComponent_Properties[] = {
+    { "field_160", 0x00, FIELD_TYPE_UINT8, 0, true },
+    { "field_16C", 0x04, FIELD_TYPE_INT32, 0, true },
+    { "Character", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CCLevelUpComponent_Layout = {
-    .componentName = "eoc::character_creation::LevelUpComponent",
-    .shortName = "CCLevelUp",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_CCLevelUpComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CCLevelUpComponent_Properties) / sizeof(g_Gen_CCLevelUpComponent_Properties[0]),
-};
-
-// eoc::character_creation::LevelUpDefinitionComponent (from CharacterCreation.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CCLevelUpDefinitionComponent_Properties[] = {
-    { "Definition", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "LevelUp", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_160", 0x10, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ChangeId", 0x14, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "NeedsSync", 0x18, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_16C", 0x1c, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Character", 0x20, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_CCLevelUpDefinitionComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_character_creation_LevelUpDefinitionComponent_Layout = {
     .componentName = "eoc::character_creation::LevelUpDefinitionComponent",
-    .shortName = "CCLevelUpDefinition",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x28,
-    .properties = g_Gen_CCLevelUpDefinitionComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CCLevelUpDefinitionComponent_Properties) / sizeof(g_Gen_CCLevelUpDefinitionComponent_Properties[0]),
+    .shortName = "LevelUpDefinition",
+    .componentTypeIndex = 0,
+    .componentSize = 0x330,
+    .properties = g_Gen_eoc_character_creation_LevelUpDefinitionComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_character_creation_LevelUpDefinitionComponent_Properties) / sizeof(g_Gen_eoc_character_creation_LevelUpDefinitionComponent_Properties[0]),
 };
 
-// eoc::character_creation::RespecDefinitionComponent (from CharacterCreation.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CCRespecDefinitionComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Definition", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_298", 0x18, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::character_creation::RespecDefinitionComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x298 (664 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_character_creation_RespecDefinitionComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_GUID, 0, true },
+    { "field_298", 0x10, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CCRespecDefinitionComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_character_creation_RespecDefinitionComponent_Layout = {
     .componentName = "eoc::character_creation::RespecDefinitionComponent",
-    .shortName = "CCRespecDefinition",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x19,
-    .properties = g_Gen_CCRespecDefinitionComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CCRespecDefinitionComponent_Properties) / sizeof(g_Gen_CCRespecDefinitionComponent_Properties[0]),
+    .shortName = "RespecDefinition",
+    .componentTypeIndex = 0,
+    .componentSize = 0x298,
+    .properties = g_Gen_eoc_character_creation_RespecDefinitionComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_character_creation_RespecDefinitionComponent_Properties) / sizeof(g_Gen_eoc_character_creation_RespecDefinitionComponent_Properties[0]),
 };
 
-// eoc::character_creation::SessionCommonComponent (from CharacterCreation.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CCSessionCommonComponent_Properties[] = {
-    { "NetId", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_4", 0x04, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8", 0x08, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::character_creation::SessionCommonComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0xc (12 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_character_creation_SessionCommonComponent_Properties[] = {
+    { "NetId", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "field_4", 0x04, FIELD_TYPE_INT32, 0, true },
+    { "field_8", 0x08, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CCSessionCommonComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_character_creation_SessionCommonComponent_Layout = {
     .componentName = "eoc::character_creation::SessionCommonComponent",
-    .shortName = "CCSessionCommon",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x09,
-    .properties = g_Gen_CCSessionCommonComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CCSessionCommonComponent_Properties) / sizeof(g_Gen_CCSessionCommonComponent_Properties[0]),
+    .shortName = "SessionCommon",
+    .componentTypeIndex = 0,
+    .componentSize = 0xc,
+    .properties = g_Gen_eoc_character_creation_SessionCommonComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_character_creation_SessionCommonComponent_Properties) / sizeof(g_Gen_eoc_character_creation_SessionCommonComponent_Properties[0]),
 };
 
-// eoc::character_creation::StateComponent (from CharacterCreation.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CCStateComponent_Properties[] = {
-    { "HasDummy", 0x00, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Canceled", 0x01, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_2", 0x02, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::character_creation::StateComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x3 (3 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_character_creation_StateComponent_Properties[] = {
+    { "HasDummy", 0x00, FIELD_TYPE_BOOL, 0, true },
+    { "Canceled", 0x01, FIELD_TYPE_BOOL, 0, true },
+    { "field_2", 0x02, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CCStateComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_character_creation_StateComponent_Layout = {
     .componentName = "eoc::character_creation::StateComponent",
-    .shortName = "CCState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x03,
-    .properties = g_Gen_CCStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CCStateComponent_Properties) / sizeof(g_Gen_CCStateComponent_Properties[0]),
+    .shortName = "State",
+    .componentTypeIndex = 0,
+    .componentSize = 0x3,
+    .properties = g_Gen_eoc_character_creation_StateComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_character_creation_StateComponent_Properties) / sizeof(g_Gen_eoc_character_creation_StateComponent_Properties[0]),
 };
 
-// eoc::character_creation::definition::CreationComponent (from CharacterCreation.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CCCreationComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_10", 0x08, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::character_creation::definition::CreationComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x18 (24 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_character_creation_definition_CreationComponent_Properties[] = {
+    { "field_10", 0x00, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CCCreationComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_character_creation_definition_CreationComponent_Layout = {
     .componentName = "eoc::character_creation::definition::CreationComponent",
-    .shortName = "CCCreation",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x09,
-    .properties = g_Gen_CCCreationComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CCCreationComponent_Properties) / sizeof(g_Gen_CCCreationComponent_Properties[0]),
+    .shortName = "Creation",
+    .componentTypeIndex = 0,
+    .componentSize = 0x18,
+    .properties = g_Gen_eoc_character_creation_definition_CreationComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_character_creation_definition_CreationComponent_Properties) / sizeof(g_Gen_eoc_character_creation_definition_CreationComponent_Properties[0]),
 };
 
-// eoc::character_creation::definition::FullRespecComponent (from CharacterCreation.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CCFullRespecComponent_Properties[] = {
-    { "Character", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Respec", 0x08, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::character_creation::definition::LevelUpComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x18 (24 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_character_creation_definition_LevelUpComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "field_8", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "field_10", 0x10, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CCFullRespecComponent_Layout = {
-    .componentName = "eoc::character_creation::definition::FullRespecComponent",
-    .shortName = "CCFullRespec",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_CCFullRespecComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CCFullRespecComponent_Properties) / sizeof(g_Gen_CCFullRespecComponent_Properties[0]),
-};
-
-// eoc::character_creation::definition::LevelUpComponent (from CharacterCreation.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CCDefinitionLevelUpComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8", 0x08, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_10", 0x10, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_CCDefinitionLevelUpComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_character_creation_definition_LevelUpComponent_Layout = {
     .componentName = "eoc::character_creation::definition::LevelUpComponent",
-    .shortName = "CCDefinitionLevelUp",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x11,
-    .properties = g_Gen_CCDefinitionLevelUpComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CCDefinitionLevelUpComponent_Properties) / sizeof(g_Gen_CCDefinitionLevelUpComponent_Properties[0]),
+    .shortName = "LevelUp",
+    .componentTypeIndex = 0,
+    .componentSize = 0x18,
+    .properties = g_Gen_eoc_character_creation_definition_LevelUpComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_character_creation_definition_LevelUpComponent_Properties) / sizeof(g_Gen_eoc_character_creation_definition_LevelUpComponent_Properties[0]),
 };
 
-// eoc::character_creation::definition::RespecComponent (from CharacterCreation.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CCRespecComponent_Properties[] = {
-    { "Character", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Respec", 0x08, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::chasm::CanEnterChasmComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x1 (1 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_chasm_CanEnterChasmComponent_Properties[] = {
+    { "CanEnter", 0x00, FIELD_TYPE_BOOL, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CCRespecComponent_Layout = {
-    .componentName = "eoc::character_creation::definition::RespecComponent",
-    .shortName = "CCRespec",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_CCRespecComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CCRespecComponent_Properties) / sizeof(g_Gen_CCRespecComponent_Properties[0]),
-};
-
-// eoc::chasm::CanEnterChasmComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CanEnterChasmComponent_Properties[] = {
-    { "CanEnter", 0x00, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_CanEnterChasmComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_chasm_CanEnterChasmComponent_Layout = {
     .componentName = "eoc::chasm::CanEnterChasmComponent",
     .shortName = "CanEnterChasm",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x01,
-    .properties = g_Gen_CanEnterChasmComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CanEnterChasmComponent_Properties) / sizeof(g_Gen_CanEnterChasmComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x1,
+    .properties = g_Gen_eoc_chasm_CanEnterChasmComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_chasm_CanEnterChasmComponent_Properties) / sizeof(g_Gen_eoc_chasm_CanEnterChasmComponent_Properties[0]),
 };
 
-// eoc::combat::IsCombatPausedComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_IsCombatPausedComponent_Properties[] = {
-    { "PauseSourceTypes", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::combat::ParticipantComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x28 (40 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_combat_ParticipantComponent_Properties[] = {
+    { "CombatHandle", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "CombatGroupId", 0x08, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "AiHint", 0x10, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_IsCombatPausedComponent_Layout = {
-    .componentName = "eoc::combat::IsCombatPausedComponent",
-    .shortName = "IsCombatPaused",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x01,
-    .properties = g_Gen_IsCombatPausedComponent_Properties,
-    .propertyCount = sizeof(g_Gen_IsCombatPausedComponent_Properties) / sizeof(g_Gen_IsCombatPausedComponent_Properties[0]),
-};
-
-// eoc::combat::IsThreatenedComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CombatIsThreatenedComponent_Properties[] = {
-    { "ThreatenedBy", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_CombatIsThreatenedComponent_Layout = {
-    .componentName = "eoc::combat::IsThreatenedComponent",
-    .shortName = "CombatIsThreatened",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_CombatIsThreatenedComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CombatIsThreatenedComponent_Properties) / sizeof(g_Gen_CombatIsThreatenedComponent_Properties[0]),
-};
-
-// eoc::combat::ParticipantComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CombatParticipantComponent_Properties[] = {
-    { "CombatHandle", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "CombatGroupId", 0x08, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "InitiativeRoll", 0x0c, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Flags", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "AiHint", 0x18, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_CombatParticipantComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_combat_ParticipantComponent_Layout = {
     .componentName = "eoc::combat::ParticipantComponent",
-    .shortName = "CombatParticipant",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .shortName = "Participant",
+    .componentTypeIndex = 0,
     .componentSize = 0x28,
-    .properties = g_Gen_CombatParticipantComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CombatParticipantComponent_Properties) / sizeof(g_Gen_CombatParticipantComponent_Properties[0]),
+    .properties = g_Gen_eoc_combat_ParticipantComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_combat_ParticipantComponent_Properties) / sizeof(g_Gen_eoc_combat_ParticipantComponent_Properties[0]),
 };
 
-// eoc::combat::StateComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CombatStateComponent_Properties[] = {
-    { "MyGuid", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Initiatives", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Participants", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_98", 0x20, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_A0", 0x28, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Level", 0x30, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_AC", 0x34, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "IsInNarrativeCombat", 0x35, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_B0", 0x38, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_B8", 0x40, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_D0", 0x48, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::combat::StateComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x98 (152 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_combat_StateComponent_Properties[] = {
+    { "MyGuid", 0x00, FIELD_TYPE_GUID, 0, true },
+    { "field_98", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "field_A0", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "Level", 0x20, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "field_AC", 0x24, FIELD_TYPE_UINT8, 0, true },
+    { "IsInNarrativeCombat", 0x25, FIELD_TYPE_BOOL, 0, true },
+    { "field_B0", 0x28, FIELD_TYPE_FLOAT, 0, true },
+    { "field_D0", 0x2c, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CombatStateComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_combat_StateComponent_Layout = {
     .componentName = "eoc::combat::StateComponent",
-    .shortName = "CombatState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x49,
-    .properties = g_Gen_CombatStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CombatStateComponent_Properties) / sizeof(g_Gen_CombatStateComponent_Properties[0]),
+    .shortName = "State",
+    .componentTypeIndex = 0,
+    .componentSize = 0x98,
+    .properties = g_Gen_eoc_combat_StateComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_combat_StateComponent_Properties) / sizeof(g_Gen_eoc_combat_StateComponent_Properties[0]),
 };
 
-// eoc::combat::ThreatRangeComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ThreatRangeComponent_Properties[] = {
-    { "Range", 0x00, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "TargetCeiling", 0x04, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "TargetFloor", 0x08, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::combat::ThreatRangeComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0xc (12 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_combat_ThreatRangeComponent_Properties[] = {
+    { "Range", 0x00, FIELD_TYPE_FLOAT, 0, true },
+    { "TargetCeiling", 0x04, FIELD_TYPE_FLOAT, 0, true },
+    { "TargetFloor", 0x08, FIELD_TYPE_FLOAT, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ThreatRangeComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_combat_ThreatRangeComponent_Layout = {
     .componentName = "eoc::combat::ThreatRangeComponent",
     .shortName = "ThreatRange",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x0c,
-    .properties = g_Gen_ThreatRangeComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ThreatRangeComponent_Properties) / sizeof(g_Gen_ThreatRangeComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0xc,
+    .properties = g_Gen_eoc_combat_ThreatRangeComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_combat_ThreatRangeComponent_Properties) / sizeof(g_Gen_eoc_combat_ThreatRangeComponent_Properties[0]),
 };
 
-// eoc::concentration::ConcentrationComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ConcentrationComponent_Properties[] = {
-    { "Caster", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Targets", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "SpellId", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::death::DeadByDefaultComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x1 (1 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_death_DeadByDefaultComponent_Properties[] = {
+    { "DeadByDefault", 0x00, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ConcentrationComponent_Layout = {
-    .componentName = "eoc::concentration::ConcentrationComponent",
-    .shortName = "Concentration",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x18,
-    .properties = g_Gen_ConcentrationComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ConcentrationComponent_Properties) / sizeof(g_Gen_ConcentrationComponent_Properties[0]),
-};
-
-// eoc::death::DeadByDefaultComponent (from Death.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DeadByDefaultComponent_Properties[] = {
-    { "DeadByDefault", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_DeadByDefaultComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_death_DeadByDefaultComponent_Layout = {
     .componentName = "eoc::death::DeadByDefaultComponent",
     .shortName = "DeadByDefault",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x01,
-    .properties = g_Gen_DeadByDefaultComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DeadByDefaultComponent_Properties) / sizeof(g_Gen_DeadByDefaultComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x1,
+    .properties = g_Gen_eoc_death_DeadByDefaultComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_death_DeadByDefaultComponent_Properties) / sizeof(g_Gen_eoc_death_DeadByDefaultComponent_Properties[0]),
 };
 
-// eoc::death::DeathTypeComponent (from Death.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DeathTypeComponent_Properties[] = {
-    { "DeathType", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::death::DeathTypeComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x1 (1 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_death_DeathTypeComponent_Properties[] = {
+    { "DeathType", 0x00, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_DeathTypeComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_death_DeathTypeComponent_Layout = {
     .componentName = "eoc::death::DeathTypeComponent",
     .shortName = "DeathType",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x01,
-    .properties = g_Gen_DeathTypeComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DeathTypeComponent_Properties) / sizeof(g_Gen_DeathTypeComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x1,
+    .properties = g_Gen_eoc_death_DeathTypeComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_death_DeathTypeComponent_Properties) / sizeof(g_Gen_eoc_death_DeathTypeComponent_Properties[0]),
 };
 
-// eoc::death::DownedComponent (from Death.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DownedComponent_Properties[] = {
-    { "DownedStatus", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Entity", 0x08, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::death::DownedComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x18 (24 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_death_DownedComponent_Properties[] = {
+    { "DownedStatus", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "Entity", 0x08, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_DownedComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_death_DownedComponent_Layout = {
     .componentName = "eoc::death::DownedComponent",
     .shortName = "Downed",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .componentTypeIndex = 0,
     .componentSize = 0x18,
-    .properties = g_Gen_DownedComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DownedComponent_Properties) / sizeof(g_Gen_DownedComponent_Properties[0]),
+    .properties = g_Gen_eoc_death_DownedComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_death_DownedComponent_Properties) / sizeof(g_Gen_eoc_death_DownedComponent_Properties[0]),
 };
 
-// eoc::death::StateComponent (from Death.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DeathStateComponent_Properties[] = {
-    { "State", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::death::StateComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_death_StateComponent_Properties[] = {
+    { "State", 0x00, FIELD_TYPE_UINT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_DeathStateComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_death_StateComponent_Layout = {
     .componentName = "eoc::death::StateComponent",
-    .shortName = "DeathState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_DeathStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DeathStateComponent_Properties) / sizeof(g_Gen_DeathStateComponent_Properties[0]),
+    .shortName = "State",
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_eoc_death_StateComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_death_StateComponent_Properties) / sizeof(g_Gen_eoc_death_StateComponent_Properties[0]),
 };
 
-// eoc::dialog::StateComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DialogStateComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_1", 0x01, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_2", 0x02, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "DialogId", 0x04, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8", 0x08, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::dialog::StateComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0xc (12 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_dialog_StateComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, true },
+    { "field_1", 0x01, FIELD_TYPE_UINT8, 0, true },
+    { "field_2", 0x02, FIELD_TYPE_UINT8, 0, true },
+    { "field_8", 0x03, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_DialogStateComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_dialog_StateComponent_Layout = {
     .componentName = "eoc::dialog::StateComponent",
-    .shortName = "DialogState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x09,
-    .properties = g_Gen_DialogStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DialogStateComponent_Properties) / sizeof(g_Gen_DialogStateComponent_Properties[0]),
+    .shortName = "State",
+    .componentTypeIndex = 0,
+    .componentSize = 0xc,
+    .properties = g_Gen_eoc_dialog_StateComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_dialog_StateComponent_Properties) / sizeof(g_Gen_eoc_dialog_StateComponent_Properties[0]),
 };
 
-// eoc::encumbrance::StateComponent (from Stats.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_EncumbranceStateComponent_Properties[] = {
-    { "State", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::encumbrance::StateComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_encumbrance_StateComponent_Properties[] = {
+    { "State", 0x00, FIELD_TYPE_UINT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_EncumbranceStateComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_encumbrance_StateComponent_Layout = {
     .componentName = "eoc::encumbrance::StateComponent",
-    .shortName = "EncumbranceState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_EncumbranceStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_EncumbranceStateComponent_Properties) / sizeof(g_Gen_EncumbranceStateComponent_Properties[0]),
+    .shortName = "State",
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_eoc_encumbrance_StateComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_encumbrance_StateComponent_Properties) / sizeof(g_Gen_eoc_encumbrance_StateComponent_Properties[0]),
 };
 
-// eoc::encumbrance::StatsComponent (from Stats.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_EncumbranceStatsComponent_Properties[] = {
-    { "UnencumberedWeight", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "EncumberedWeight", 0x04, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "HeavilyEncumberedWeight", 0x08, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::exp::AvailableLevelComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_exp_AvailableLevelComponent_Properties[] = {
+    { "Level", 0x00, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_EncumbranceStatsComponent_Layout = {
-    .componentName = "eoc::encumbrance::StatsComponent",
-    .shortName = "EncumbranceStats",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x0c,
-    .properties = g_Gen_EncumbranceStatsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_EncumbranceStatsComponent_Properties) / sizeof(g_Gen_EncumbranceStatsComponent_Properties[0]),
-};
-
-// eoc::exp::AvailableLevelComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_AvailableLevelComponent_Properties[] = {
-    { "Level", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_AvailableLevelComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_exp_AvailableLevelComponent_Layout = {
     .componentName = "eoc::exp::AvailableLevelComponent",
     .shortName = "AvailableLevel",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_AvailableLevelComponent_Properties,
-    .propertyCount = sizeof(g_Gen_AvailableLevelComponent_Properties) / sizeof(g_Gen_AvailableLevelComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_eoc_exp_AvailableLevelComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_exp_AvailableLevelComponent_Properties) / sizeof(g_Gen_eoc_exp_AvailableLevelComponent_Properties[0]),
 };
 
-// eoc::exp::ExperienceComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ExperienceComponent_Properties[] = {
-    { "CurrentLevelExperience", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "NextLevelExperience", 0x04, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "TotalExperience", 0x08, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_28", 0x0c, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::exp::ExperienceComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_exp_ExperienceComponent_Properties[] = {
+    { "CurrentLevelExperience", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "NextLevelExperience", 0x04, FIELD_TYPE_INT32, 0, true },
+    { "TotalExperience", 0x08, FIELD_TYPE_INT32, 0, true },
+    { "field_28", 0x0c, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ExperienceComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_exp_ExperienceComponent_Layout = {
     .componentName = "eoc::exp::ExperienceComponent",
     .shortName = "Experience",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x0d,
-    .properties = g_Gen_ExperienceComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ExperienceComponent_Properties) / sizeof(g_Gen_ExperienceComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x10,
+    .properties = g_Gen_eoc_exp_ExperienceComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_exp_ExperienceComponent_Properties) / sizeof(g_Gen_eoc_exp_ExperienceComponent_Properties[0]),
 };
 
-// eoc::expertise::ExpertiseComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ExpertiseComponent_Properties[] = {
-    { "Expertise", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::ftb::ParticipantComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_ftb_ParticipantComponent_Properties[] = {
+    { "field_18", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ExpertiseComponent_Layout = {
-    .componentName = "eoc::expertise::ExpertiseComponent",
-    .shortName = "Expertise",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ExpertiseComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ExpertiseComponent_Properties) / sizeof(g_Gen_ExpertiseComponent_Properties[0]),
-};
-
-// eoc::ftb::ParticipantComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_FTBParticipantComponent_Properties[] = {
-    { "field_18", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_FTBParticipantComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_ftb_ParticipantComponent_Layout = {
     .componentName = "eoc::ftb::ParticipantComponent",
-    .shortName = "FTBParticipant",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_FTBParticipantComponent_Properties,
-    .propertyCount = sizeof(g_Gen_FTBParticipantComponent_Properties) / sizeof(g_Gen_FTBParticipantComponent_Properties[0]),
+    .shortName = "Participant",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_eoc_ftb_ParticipantComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_ftb_ParticipantComponent_Properties) / sizeof(g_Gen_eoc_ftb_ParticipantComponent_Properties[0]),
 };
 
-// eoc::ftb::ZoneBlockReasonComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_FTBZoneBlockReasonComponent_Properties[] = {
-    { "Reason", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::ftb::ZoneBlockReasonComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x1 (1 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_ftb_ZoneBlockReasonComponent_Properties[] = {
+    { "Reason", 0x00, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_FTBZoneBlockReasonComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_ftb_ZoneBlockReasonComponent_Layout = {
     .componentName = "eoc::ftb::ZoneBlockReasonComponent",
-    .shortName = "FTBZoneBlockReason",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x01,
-    .properties = g_Gen_FTBZoneBlockReasonComponent_Properties,
-    .propertyCount = sizeof(g_Gen_FTBZoneBlockReasonComponent_Properties) / sizeof(g_Gen_FTBZoneBlockReasonComponent_Properties[0]),
+    .shortName = "ZoneBlockReason",
+    .componentTypeIndex = 0,
+    .componentSize = 0x1,
+    .properties = g_Gen_eoc_ftb_ZoneBlockReasonComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_ftb_ZoneBlockReasonComponent_Properties) / sizeof(g_Gen_eoc_ftb_ZoneBlockReasonComponent_Properties[0]),
 };
 
-// eoc::god::GodComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_GodComponent_Properties[] = {
-    { "God", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "GodOverride", 0x10, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::god::GodComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x28 (40 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_god_GodComponent_Properties[] = {
+    { "God", 0x00, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_GodComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_god_GodComponent_Layout = {
     .componentName = "eoc::god::GodComponent",
     .shortName = "God",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x18,
-    .properties = g_Gen_GodComponent_Properties,
-    .propertyCount = sizeof(g_Gen_GodComponent_Properties) / sizeof(g_Gen_GodComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x28,
+    .properties = g_Gen_eoc_god_GodComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_god_GodComponent_Properties) / sizeof(g_Gen_eoc_god_GodComponent_Properties[0]),
 };
 
-// eoc::god::TagComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_GodTagComponent_Properties[] = {
-    { "Tags", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::hit::AttackerComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x8 (8 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_hit_AttackerComponent_Properties[] = {
+    { "Attacker", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_GodTagComponent_Layout = {
-    .componentName = "eoc::god::TagComponent",
-    .shortName = "GodTag",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_GodTagComponent_Properties,
-    .propertyCount = sizeof(g_Gen_GodTagComponent_Properties) / sizeof(g_Gen_GodTagComponent_Properties[0]),
-};
-
-// eoc::hit::AttackerComponent (from Hit.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_HitAttackerComponent_Properties[] = {
-    { "Attacker", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_HitAttackerComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_hit_AttackerComponent_Layout = {
     .componentName = "eoc::hit::AttackerComponent",
-    .shortName = "HitAttacker",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_HitAttackerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_HitAttackerComponent_Properties) / sizeof(g_Gen_HitAttackerComponent_Properties[0]),
+    .shortName = "Attacker",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_eoc_hit_AttackerComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_hit_AttackerComponent_Properties) / sizeof(g_Gen_eoc_hit_AttackerComponent_Properties[0]),
 };
 
-// eoc::hit::LifetimeComponent (from Hit.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_HitLifetimeComponent_Properties[] = {
-    { "Lifetime", 0x00, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_4", 0x04, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::hit::LifetimeComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_hit_LifetimeComponent_Properties[] = {
+    { "Lifetime", 0x00, FIELD_TYPE_FLOAT, 0, true },
+    { "field_4", 0x04, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_HitLifetimeComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_hit_LifetimeComponent_Layout = {
     .componentName = "eoc::hit::LifetimeComponent",
-    .shortName = "HitLifetime",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x05,
-    .properties = g_Gen_HitLifetimeComponent_Properties,
-    .propertyCount = sizeof(g_Gen_HitLifetimeComponent_Properties) / sizeof(g_Gen_HitLifetimeComponent_Properties[0]),
+    .shortName = "Lifetime",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_eoc_hit_LifetimeComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_hit_LifetimeComponent_Properties) / sizeof(g_Gen_eoc_hit_LifetimeComponent_Properties[0]),
 };
 
-// eoc::hit::MetaComponent (from Hit.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_HitMetaComponent_Properties[] = {
-    { "HitGuid", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::hit::MetaComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_hit_MetaComponent_Properties[] = {
+    { "HitGuid", 0x00, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_HitMetaComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_hit_MetaComponent_Layout = {
     .componentName = "eoc::hit::MetaComponent",
-    .shortName = "HitMeta",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .shortName = "Meta",
+    .componentTypeIndex = 0,
     .componentSize = 0x10,
-    .properties = g_Gen_HitMetaComponent_Properties,
-    .propertyCount = sizeof(g_Gen_HitMetaComponent_Properties) / sizeof(g_Gen_HitMetaComponent_Properties[0]),
+    .properties = g_Gen_eoc_hit_MetaComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_hit_MetaComponent_Properties) / sizeof(g_Gen_eoc_hit_MetaComponent_Properties[0]),
 };
 
-// eoc::hit::ProxyComponent (from Hit.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_HitProxyComponent_Properties[] = {
-    { "Owner", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8", 0x08, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::hit::ProxyComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_hit_ProxyComponent_Properties[] = {
+    { "Owner", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "field_8", 0x08, FIELD_TYPE_FIXEDSTRING, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_HitProxyComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_hit_ProxyComponent_Layout = {
     .componentName = "eoc::hit::ProxyComponent",
-    .shortName = "HitProxy",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x0c,
-    .properties = g_Gen_HitProxyComponent_Properties,
-    .propertyCount = sizeof(g_Gen_HitProxyComponent_Properties) / sizeof(g_Gen_HitProxyComponent_Properties[0]),
+    .shortName = "Proxy",
+    .componentTypeIndex = 0,
+    .componentSize = 0x10,
+    .properties = g_Gen_eoc_hit_ProxyComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_hit_ProxyComponent_Properties) / sizeof(g_Gen_eoc_hit_ProxyComponent_Properties[0]),
 };
 
-// eoc::hit::ProxyOwnerComponent (from Hit.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_HitProxyOwnerComponent_Properties[] = {
-    { "Owners", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::hit::TargetComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x18 (24 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_hit_TargetComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "field_8", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_HitProxyOwnerComponent_Layout = {
-    .componentName = "eoc::hit::ProxyOwnerComponent",
-    .shortName = "HitProxyOwner",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_HitProxyOwnerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_HitProxyOwnerComponent_Properties) / sizeof(g_Gen_HitProxyOwnerComponent_Properties[0]),
-};
-
-// eoc::hit::ReactionComponent (from Hit.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_HitReactionComponent_Properties[] = {
-    { "Reactions", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_HitReactionComponent_Layout = {
-    .componentName = "eoc::hit::ReactionComponent",
-    .shortName = "HitReaction",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_HitReactionComponent_Properties,
-    .propertyCount = sizeof(g_Gen_HitReactionComponent_Properties) / sizeof(g_Gen_HitReactionComponent_Properties[0]),
-};
-
-// eoc::hit::TargetComponent (from Hit.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_HitTargetComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8", 0x08, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Target", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_HitTargetComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_hit_TargetComponent_Layout = {
     .componentName = "eoc::hit::TargetComponent",
-    .shortName = "HitTarget",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .shortName = "Target",
+    .componentTypeIndex = 0,
     .componentSize = 0x18,
-    .properties = g_Gen_HitTargetComponent_Properties,
-    .propertyCount = sizeof(g_Gen_HitTargetComponent_Properties) / sizeof(g_Gen_HitTargetComponent_Properties[0]),
+    .properties = g_Gen_eoc_hit_TargetComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_hit_TargetComponent_Properties) / sizeof(g_Gen_eoc_hit_TargetComponent_Properties[0]),
 };
 
-// eoc::hit::ThrownObjectComponent (from Hit.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_HitThrownObjectComponent_Properties[] = {
-    { "ThrownObject", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::hit::ThrownObjectComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x8 (8 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_hit_ThrownObjectComponent_Properties[] = {
+    { "ThrownObject", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_HitThrownObjectComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_hit_ThrownObjectComponent_Layout = {
     .componentName = "eoc::hit::ThrownObjectComponent",
-    .shortName = "HitThrownObject",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_HitThrownObjectComponent_Properties,
-    .propertyCount = sizeof(g_Gen_HitThrownObjectComponent_Properties) / sizeof(g_Gen_HitThrownObjectComponent_Properties[0]),
+    .shortName = "ThrownObject",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_eoc_hit_ThrownObjectComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_hit_ThrownObjectComponent_Properties) / sizeof(g_Gen_eoc_hit_ThrownObjectComponent_Properties[0]),
 };
 
-// eoc::hit::WeaponComponent (from Hit.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_HitWeaponComponent_Properties[] = {
-    { "Weapon", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::hit::WeaponComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x8 (8 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_hit_WeaponComponent_Properties[] = {
+    { "Weapon", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_HitWeaponComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_hit_WeaponComponent_Layout = {
     .componentName = "eoc::hit::WeaponComponent",
-    .shortName = "HitWeapon",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_HitWeaponComponent_Properties,
-    .propertyCount = sizeof(g_Gen_HitWeaponComponent_Properties) / sizeof(g_Gen_HitWeaponComponent_Properties[0]),
+    .shortName = "Weapon",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_eoc_hit_WeaponComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_hit_WeaponComponent_Properties) / sizeof(g_Gen_eoc_hit_WeaponComponent_Properties[0]),
 };
 
-// eoc::hotbar::ContainerComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_HotbarContainerComponent_Properties[] = {
-    { "ActiveContainer", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::hotbar::ContainerComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x48 (72 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_hotbar_ContainerComponent_Properties[] = {
+    { "ActiveContainer", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_HotbarContainerComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_hotbar_ContainerComponent_Layout = {
     .componentName = "eoc::hotbar::ContainerComponent",
-    .shortName = "HotbarContainer",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_HotbarContainerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_HotbarContainerComponent_Properties) / sizeof(g_Gen_HotbarContainerComponent_Properties[0]),
+    .shortName = "Container",
+    .componentTypeIndex = 0,
+    .componentSize = 0x48,
+    .properties = g_Gen_eoc_hotbar_ContainerComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_hotbar_ContainerComponent_Properties) / sizeof(g_Gen_eoc_hotbar_ContainerComponent_Properties[0]),
 };
 
-// eoc::hotbar::CurrentDecksComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_HotbarDecksComponent_Properties[] = {
-    { "Decks", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::identity::IdentityComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x1 (1 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_identity_IdentityComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_HotbarDecksComponent_Layout = {
-    .componentName = "eoc::hotbar::CurrentDecksComponent",
-    .shortName = "HotbarDecks",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_HotbarDecksComponent_Properties,
-    .propertyCount = sizeof(g_Gen_HotbarDecksComponent_Properties) / sizeof(g_Gen_HotbarDecksComponent_Properties[0]),
-};
-
-// eoc::identity::IdentityComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_IdentityComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_IdentityComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_identity_IdentityComponent_Layout = {
     .componentName = "eoc::identity::IdentityComponent",
     .shortName = "Identity",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x01,
-    .properties = g_Gen_IdentityComponent_Properties,
-    .propertyCount = sizeof(g_Gen_IdentityComponent_Properties) / sizeof(g_Gen_IdentityComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x1,
+    .properties = g_Gen_eoc_identity_IdentityComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_identity_IdentityComponent_Properties) / sizeof(g_Gen_eoc_identity_IdentityComponent_Properties[0]),
 };
 
-// eoc::identity::OriginalIdentityComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_OriginalIdentityComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::identity::OriginalIdentityComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x1 (1 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_identity_OriginalIdentityComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_OriginalIdentityComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_identity_OriginalIdentityComponent_Layout = {
     .componentName = "eoc::identity::OriginalIdentityComponent",
     .shortName = "OriginalIdentity",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x01,
-    .properties = g_Gen_OriginalIdentityComponent_Properties,
-    .propertyCount = sizeof(g_Gen_OriginalIdentityComponent_Properties) / sizeof(g_Gen_OriginalIdentityComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x1,
+    .properties = g_Gen_eoc_identity_OriginalIdentityComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_identity_OriginalIdentityComponent_Properties) / sizeof(g_Gen_eoc_identity_OriginalIdentityComponent_Properties[0]),
 };
 
-// eoc::identity::StateComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_IdentityStateComponent_Properties[] = {
-    { "Disguised", 0x00, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::improvised_weapon::WieldedComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_improvised_weapon_WieldedComponent_Properties[] = {
+    { "Wielder", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "field_8", 0x08, FIELD_TYPE_UINT8, 0, true },
+    { "field_9", 0x09, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_IdentityStateComponent_Layout = {
-    .componentName = "eoc::identity::StateComponent",
-    .shortName = "IdentityState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x01,
-    .properties = g_Gen_IdentityStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_IdentityStateComponent_Properties) / sizeof(g_Gen_IdentityStateComponent_Properties[0]),
-};
-
-// eoc::improvised_weapon::WieldedComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ImprovisedWeaponWieldedComponent_Properties[] = {
-    { "Wielder", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8", 0x08, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_9", 0x09, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ImprovisedWeaponWieldedComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_improvised_weapon_WieldedComponent_Layout = {
     .componentName = "eoc::improvised_weapon::WieldedComponent",
-    .shortName = "ImprovisedWeaponWielded",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x0a,
-    .properties = g_Gen_ImprovisedWeaponWieldedComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ImprovisedWeaponWieldedComponent_Properties) / sizeof(g_Gen_ImprovisedWeaponWieldedComponent_Properties[0]),
+    .shortName = "Wielded",
+    .componentTypeIndex = 0,
+    .componentSize = 0x10,
+    .properties = g_Gen_eoc_improvised_weapon_WieldedComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_improvised_weapon_WieldedComponent_Properties) / sizeof(g_Gen_eoc_improvised_weapon_WieldedComponent_Properties[0]),
 };
 
-// eoc::improvised_weapon::WieldingComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ImprovisedWeaponWieldingComponent_Properties[] = {
-    { "Weapon", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::improvised_weapon::WieldingComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_improvised_weapon_WieldingComponent_Properties[] = {
+    { "Weapon", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ImprovisedWeaponWieldingComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_improvised_weapon_WieldingComponent_Layout = {
     .componentName = "eoc::improvised_weapon::WieldingComponent",
-    .shortName = "ImprovisedWeaponWielding",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ImprovisedWeaponWieldingComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ImprovisedWeaponWieldingComponent_Properties) / sizeof(g_Gen_ImprovisedWeaponWieldingComponent_Properties[0]),
+    .shortName = "Wielding",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_eoc_improvised_weapon_WieldingComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_improvised_weapon_WieldingComponent_Properties) / sizeof(g_Gen_eoc_improvised_weapon_WieldingComponent_Properties[0]),
 };
 
-// eoc::interrupt::ActionStateComponent (from Interrupt.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_InterruptActionStateComponent_Properties[] = {
-    { "Event", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Actions", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "SpellCastGuid", 0x10, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::interrupt::ActionStateComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x128 (296 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_interrupt_ActionStateComponent_Properties[] = {
+    { "SpellCastGuid", 0x00, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_InterruptActionStateComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_interrupt_ActionStateComponent_Layout = {
     .componentName = "eoc::interrupt::ActionStateComponent",
-    .shortName = "InterruptActionState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x20,
-    .properties = g_Gen_InterruptActionStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_InterruptActionStateComponent_Properties) / sizeof(g_Gen_InterruptActionStateComponent_Properties[0]),
+    .shortName = "ActionState",
+    .componentTypeIndex = 0,
+    .componentSize = 0x128,
+    .properties = g_Gen_eoc_interrupt_ActionStateComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_interrupt_ActionStateComponent_Properties) / sizeof(g_Gen_eoc_interrupt_ActionStateComponent_Properties[0]),
 };
 
-// eoc::interrupt::ConditionallyDisabledComponent (from Interrupt.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_InterruptConditionallyDisabledComponent_Properties[] = {
-    { "Dummy", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::interrupt::ConditionallyDisabledComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x1 (1 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_interrupt_ConditionallyDisabledComponent_Properties[] = {
+    { "Dummy", 0x00, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_InterruptConditionallyDisabledComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_interrupt_ConditionallyDisabledComponent_Layout = {
     .componentName = "eoc::interrupt::ConditionallyDisabledComponent",
-    .shortName = "InterruptConditionallyDisabled",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x01,
-    .properties = g_Gen_InterruptConditionallyDisabledComponent_Properties,
-    .propertyCount = sizeof(g_Gen_InterruptConditionallyDisabledComponent_Properties) / sizeof(g_Gen_InterruptConditionallyDisabledComponent_Properties[0]),
+    .shortName = "ConditionallyDisabled",
+    .componentTypeIndex = 0,
+    .componentSize = 0x1,
+    .properties = g_Gen_eoc_interrupt_ConditionallyDisabledComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_interrupt_ConditionallyDisabledComponent_Properties) / sizeof(g_Gen_eoc_interrupt_ConditionallyDisabledComponent_Properties[0]),
 };
 
-// eoc::interrupt::ContainerComponent (from Interrupt.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_InterruptContainerComponent_Properties[] = {
-    { "Interrupts", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::interrupt::DataComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x20 (32 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_interrupt_DataComponent_Properties[] = {
+    { "Interrupt", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "field_4", 0x04, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_InterruptContainerComponent_Layout = {
-    .componentName = "eoc::interrupt::ContainerComponent",
-    .shortName = "InterruptContainer",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_InterruptContainerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_InterruptContainerComponent_Properties) / sizeof(g_Gen_InterruptContainerComponent_Properties[0]),
-};
-
-// eoc::interrupt::DataComponent (from Interrupt.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_InterruptDataComponent_Properties[] = {
-    { "Interrupt", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_4", 0x04, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "InterruptEntity", 0x08, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Caster", 0x10, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Spell", 0x18, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_InterruptDataComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_interrupt_DataComponent_Layout = {
     .componentName = "eoc::interrupt::DataComponent",
-    .shortName = "InterruptData",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x1c,
-    .properties = g_Gen_InterruptDataComponent_Properties,
-    .propertyCount = sizeof(g_Gen_InterruptDataComponent_Properties) / sizeof(g_Gen_InterruptDataComponent_Properties[0]),
+    .shortName = "Data",
+    .componentTypeIndex = 0,
+    .componentSize = 0x20,
+    .properties = g_Gen_eoc_interrupt_DataComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_interrupt_DataComponent_Properties) / sizeof(g_Gen_eoc_interrupt_DataComponent_Properties[0]),
 };
 
-// eoc::interrupt::DecisionComponent (from Interrupt.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_InterruptDecisionComponent_Properties[] = {
-    { "Decisions", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::interrupt::PreparedComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x1 (1 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_interrupt_PreparedComponent_Properties[] = {
+    { "Dummy", 0x00, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_InterruptDecisionComponent_Layout = {
-    .componentName = "eoc::interrupt::DecisionComponent",
-    .shortName = "InterruptDecision",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_InterruptDecisionComponent_Properties,
-    .propertyCount = sizeof(g_Gen_InterruptDecisionComponent_Properties) / sizeof(g_Gen_InterruptDecisionComponent_Properties[0]),
-};
-
-// eoc::interrupt::PreferencesComponent (from Interrupt.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_InterruptPreferencesComponent_Properties[] = {
-    { "Preferences", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_InterruptPreferencesComponent_Layout = {
-    .componentName = "eoc::interrupt::PreferencesComponent",
-    .shortName = "InterruptPreferences",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_InterruptPreferencesComponent_Properties,
-    .propertyCount = sizeof(g_Gen_InterruptPreferencesComponent_Properties) / sizeof(g_Gen_InterruptPreferencesComponent_Properties[0]),
-};
-
-// eoc::interrupt::PreparedComponent (from Interrupt.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_InterruptPreparedComponent_Properties[] = {
-    { "Dummy", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_InterruptPreparedComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_interrupt_PreparedComponent_Layout = {
     .componentName = "eoc::interrupt::PreparedComponent",
-    .shortName = "InterruptPrepared",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x01,
-    .properties = g_Gen_InterruptPreparedComponent_Properties,
-    .propertyCount = sizeof(g_Gen_InterruptPreparedComponent_Properties) / sizeof(g_Gen_InterruptPreparedComponent_Properties[0]),
+    .shortName = "Prepared",
+    .componentTypeIndex = 0,
+    .componentSize = 0x1,
+    .properties = g_Gen_eoc_interrupt_PreparedComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_interrupt_PreparedComponent_Properties) / sizeof(g_Gen_eoc_interrupt_PreparedComponent_Properties[0]),
 };
 
-// eoc::interrupt::ZoneComponent (from Interrupt.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_InterruptZoneComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::interrupt::ZoneComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_interrupt_ZoneComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_InterruptZoneComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_interrupt_ZoneComponent_Layout = {
     .componentName = "eoc::interrupt::ZoneComponent",
-    .shortName = "InterruptZone",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .shortName = "Zone",
+    .componentTypeIndex = 0,
     .componentSize = 0x10,
-    .properties = g_Gen_InterruptZoneComponent_Properties,
-    .propertyCount = sizeof(g_Gen_InterruptZoneComponent_Properties) / sizeof(g_Gen_InterruptZoneComponent_Properties[0]),
+    .properties = g_Gen_eoc_interrupt_ZoneComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_interrupt_ZoneComponent_Properties) / sizeof(g_Gen_eoc_interrupt_ZoneComponent_Properties[0]),
 };
 
-// eoc::interrupt::ZoneParticipantComponent (from Interrupt.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_InterruptZoneParticipantComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::interrupt::ZoneSourceComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x1 (1 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_interrupt_ZoneSourceComponent_Properties[] = {
+    { "Dummy", 0x00, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_InterruptZoneParticipantComponent_Layout = {
-    .componentName = "eoc::interrupt::ZoneParticipantComponent",
-    .shortName = "InterruptZoneParticipant",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_InterruptZoneParticipantComponent_Properties,
-    .propertyCount = sizeof(g_Gen_InterruptZoneParticipantComponent_Properties) / sizeof(g_Gen_InterruptZoneParticipantComponent_Properties[0]),
-};
-
-// eoc::interrupt::ZoneSourceComponent (from Interrupt.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_InterruptZoneSourceComponent_Properties[] = {
-    { "Dummy", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_InterruptZoneSourceComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_interrupt_ZoneSourceComponent_Layout = {
     .componentName = "eoc::interrupt::ZoneSourceComponent",
-    .shortName = "InterruptZoneSource",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x01,
-    .properties = g_Gen_InterruptZoneSourceComponent_Properties,
-    .propertyCount = sizeof(g_Gen_InterruptZoneSourceComponent_Properties) / sizeof(g_Gen_InterruptZoneSourceComponent_Properties[0]),
+    .shortName = "ZoneSource",
+    .componentTypeIndex = 0,
+    .componentSize = 0x1,
+    .properties = g_Gen_eoc_interrupt_ZoneSourceComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_interrupt_ZoneSourceComponent_Properties) / sizeof(g_Gen_eoc_interrupt_ZoneSourceComponent_Properties[0]),
 };
 
-// eoc::inventory::ContainerComponent (from Inventory.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_InventoryContainerComponent_Properties[] = {
-    { "Items", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::inventory::IsOwnedComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_inventory_IsOwnedComponent_Properties[] = {
+    { "Owner", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_InventoryContainerComponent_Layout = {
-    .componentName = "eoc::inventory::ContainerComponent",
-    .shortName = "InventoryContainer",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_InventoryContainerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_InventoryContainerComponent_Properties) / sizeof(g_Gen_InventoryContainerComponent_Properties[0]),
-};
-
-// eoc::inventory::DataComponent (from Inventory.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_InventoryDataComponent_Properties[] = {
-    { "Type", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "SlotLimit", 0x08, FIELD_TYPE_UINT16, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_InventoryDataComponent_Layout = {
-    .componentName = "eoc::inventory::DataComponent",
-    .shortName = "InventoryData",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x0a,
-    .properties = g_Gen_InventoryDataComponent_Properties,
-    .propertyCount = sizeof(g_Gen_InventoryDataComponent_Properties) / sizeof(g_Gen_InventoryDataComponent_Properties[0]),
-};
-
-// eoc::inventory::IsOwnedComponent (from Inventory.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_InventoryIsOwnedComponent_Properties[] = {
-    { "Owner", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_InventoryIsOwnedComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_inventory_IsOwnedComponent_Layout = {
     .componentName = "eoc::inventory::IsOwnedComponent",
-    .shortName = "InventoryIsOwned",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_InventoryIsOwnedComponent_Properties,
-    .propertyCount = sizeof(g_Gen_InventoryIsOwnedComponent_Properties) / sizeof(g_Gen_InventoryIsOwnedComponent_Properties[0]),
+    .shortName = "IsOwned",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_eoc_inventory_IsOwnedComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_inventory_IsOwnedComponent_Properties) / sizeof(g_Gen_eoc_inventory_IsOwnedComponent_Properties[0]),
 };
 
-// eoc::inventory::MemberComponent (from Inventory.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_InventoryMemberComponent_Properties[] = {
-    { "Inventory", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "EquipmentSlot", 0x08, FIELD_TYPE_INT16, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::inventory::MemberComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_inventory_MemberComponent_Properties[] = {
+    { "Inventory", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "EquipmentSlot", 0x08, FIELD_TYPE_INT16, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_InventoryMemberComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_inventory_MemberComponent_Layout = {
     .componentName = "eoc::inventory::MemberComponent",
-    .shortName = "InventoryMember",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x0a,
-    .properties = g_Gen_InventoryMemberComponent_Properties,
-    .propertyCount = sizeof(g_Gen_InventoryMemberComponent_Properties) / sizeof(g_Gen_InventoryMemberComponent_Properties[0]),
+    .shortName = "Member",
+    .componentTypeIndex = 0,
+    .componentSize = 0x10,
+    .properties = g_Gen_eoc_inventory_MemberComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_inventory_MemberComponent_Properties) / sizeof(g_Gen_eoc_inventory_MemberComponent_Properties[0]),
 };
 
-// eoc::inventory::MemberTransformComponent (from Inventory.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_InventoryMemberTransformComponent_Properties[] = {
-    { "Transform", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::inventory::OwnerComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x18 (24 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_inventory_OwnerComponent_Properties[] = {
+    { "PrimaryInventory", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_InventoryMemberTransformComponent_Layout = {
-    .componentName = "eoc::inventory::MemberTransformComponent",
-    .shortName = "InventoryMemberTransform",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_InventoryMemberTransformComponent_Properties,
-    .propertyCount = sizeof(g_Gen_InventoryMemberTransformComponent_Properties) / sizeof(g_Gen_InventoryMemberTransformComponent_Properties[0]),
-};
-
-// eoc::inventory::OwnerComponent (from Inventory.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_InventoryOwnerComponent_Properties[] = {
-    { "Inventories", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "PrimaryInventory", 0x08, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_InventoryOwnerComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_inventory_OwnerComponent_Layout = {
     .componentName = "eoc::inventory::OwnerComponent",
-    .shortName = "InventoryOwner",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_InventoryOwnerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_InventoryOwnerComponent_Properties) / sizeof(g_Gen_InventoryOwnerComponent_Properties[0]),
+    .shortName = "Owner",
+    .componentTypeIndex = 0,
+    .componentSize = 0x18,
+    .properties = g_Gen_eoc_inventory_OwnerComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_inventory_OwnerComponent_Properties) / sizeof(g_Gen_eoc_inventory_OwnerComponent_Properties[0]),
 };
 
-// eoc::inventory::StackComponent (from Inventory.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_InventoryStackComponent_Properties[] = {
-    { "Elements", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Entries", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::inventory::StackMemberComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_inventory_StackMemberComponent_Properties[] = {
+    { "Stack", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_InventoryStackComponent_Layout = {
-    .componentName = "eoc::inventory::StackComponent",
-    .shortName = "InventoryStack",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_InventoryStackComponent_Properties,
-    .propertyCount = sizeof(g_Gen_InventoryStackComponent_Properties) / sizeof(g_Gen_InventoryStackComponent_Properties[0]),
-};
-
-// eoc::inventory::StackMemberComponent (from Inventory.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_InventoryStackMemberComponent_Properties[] = {
-    { "Stack", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_InventoryStackMemberComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_inventory_StackMemberComponent_Layout = {
     .componentName = "eoc::inventory::StackMemberComponent",
-    .shortName = "InventoryStackMember",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_InventoryStackMemberComponent_Properties,
-    .propertyCount = sizeof(g_Gen_InventoryStackMemberComponent_Properties) / sizeof(g_Gen_InventoryStackMemberComponent_Properties[0]),
+    .shortName = "StackMember",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_eoc_inventory_StackMemberComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_inventory_StackMemberComponent_Properties) / sizeof(g_Gen_eoc_inventory_StackMemberComponent_Properties[0]),
 };
 
-// eoc::inventory::TopOwnerComponent (from Inventory.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_InventoryTopOwnerComponent_Properties[] = {
-    { "TopOwner", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::inventory::TopOwnerComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_inventory_TopOwnerComponent_Properties[] = {
+    { "TopOwner", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_InventoryTopOwnerComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_inventory_TopOwnerComponent_Layout = {
     .componentName = "eoc::inventory::TopOwnerComponent",
-    .shortName = "InventoryTopOwner",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_InventoryTopOwnerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_InventoryTopOwnerComponent_Properties) / sizeof(g_Gen_InventoryTopOwnerComponent_Properties[0]),
+    .shortName = "TopOwner",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_eoc_inventory_TopOwnerComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_inventory_TopOwnerComponent_Properties) / sizeof(g_Gen_eoc_inventory_TopOwnerComponent_Properties[0]),
 };
 
-// eoc::inventory::TradeBuybackDataComponent (from Inventory.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_TradeBuybackDataComponent_Properties[] = {
-    { "Amount", 0x00, FIELD_TYPE_UINT16, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Trader", 0x08, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Buyer", 0x10, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::inventory::TradeBuybackDataComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x18 (24 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_inventory_TradeBuybackDataComponent_Properties[] = {
+    { "Amount", 0x00, FIELD_TYPE_UINT16, 0, true },
+    { "Trader", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "Buyer", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_TradeBuybackDataComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_inventory_TradeBuybackDataComponent_Layout = {
     .componentName = "eoc::inventory::TradeBuybackDataComponent",
     .shortName = "TradeBuybackData",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .componentTypeIndex = 0,
     .componentSize = 0x18,
-    .properties = g_Gen_TradeBuybackDataComponent_Properties,
-    .propertyCount = sizeof(g_Gen_TradeBuybackDataComponent_Properties) / sizeof(g_Gen_TradeBuybackDataComponent_Properties[0]),
+    .properties = g_Gen_eoc_inventory_TradeBuybackDataComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_inventory_TradeBuybackDataComponent_Properties) / sizeof(g_Gen_eoc_inventory_TradeBuybackDataComponent_Properties[0]),
 };
 
-// eoc::inventory::WeightComponent (from Inventory.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_InventoryWeightComponent_Properties[] = {
-    { "Weight", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::inventory::WeightComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_inventory_WeightComponent_Properties[] = {
+    { "Weight", 0x00, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_InventoryWeightComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_inventory_WeightComponent_Layout = {
     .componentName = "eoc::inventory::WeightComponent",
-    .shortName = "InventoryWeight",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_InventoryWeightComponent_Properties,
-    .propertyCount = sizeof(g_Gen_InventoryWeightComponent_Properties) / sizeof(g_Gen_InventoryWeightComponent_Properties[0]),
+    .shortName = "Weight",
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_eoc_inventory_WeightComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_inventory_WeightComponent_Properties) / sizeof(g_Gen_eoc_inventory_WeightComponent_Properties[0]),
 };
 
-// eoc::inventory::WieldedComponent (from Inventory.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_WieldedComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::inventory::WieldedComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x10 (16 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_inventory_WieldedComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_WieldedComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_inventory_WieldedComponent_Layout = {
     .componentName = "eoc::inventory::WieldedComponent",
     .shortName = "Wielded",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .componentTypeIndex = 0,
     .componentSize = 0x10,
-    .properties = g_Gen_WieldedComponent_Properties,
-    .propertyCount = sizeof(g_Gen_WieldedComponent_Properties) / sizeof(g_Gen_WieldedComponent_Properties[0]),
+    .properties = g_Gen_eoc_inventory_WieldedComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_inventory_WieldedComponent_Properties) / sizeof(g_Gen_eoc_inventory_WieldedComponent_Properties[0]),
 };
 
-// eoc::inventory::WieldingHistoryComponent (from Inventory.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_WieldingHistoryComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::inventory::WieldingHistoryComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x10 (16 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_inventory_WieldingHistoryComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_WieldingHistoryComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_inventory_WieldingHistoryComponent_Layout = {
     .componentName = "eoc::inventory::WieldingHistoryComponent",
     .shortName = "WieldingHistory",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .componentTypeIndex = 0,
     .componentSize = 0x10,
-    .properties = g_Gen_WieldingHistoryComponent_Properties,
-    .propertyCount = sizeof(g_Gen_WieldingHistoryComponent_Properties) / sizeof(g_Gen_WieldingHistoryComponent_Properties[0]),
+    .properties = g_Gen_eoc_inventory_WieldingHistoryComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_inventory_WieldingHistoryComponent_Properties) / sizeof(g_Gen_eoc_inventory_WieldingHistoryComponent_Properties[0]),
 };
 
-// eoc::item::DestroyedComponent (from Item.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ItemDestroyedComponent_Properties[] = {
-    { "Info", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::item::DyeComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_item_DyeComponent_Properties[] = {
+    { "Color", 0x00, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ItemDestroyedComponent_Layout = {
-    .componentName = "eoc::item::DestroyedComponent",
-    .shortName = "ItemDestroyed",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ItemDestroyedComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ItemDestroyedComponent_Properties) / sizeof(g_Gen_ItemDestroyedComponent_Properties[0]),
-};
-
-// eoc::item::DyeComponent (from Item.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ItemDyeComponent_Properties[] = {
-    { "Color", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ItemDyeComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_item_DyeComponent_Layout = {
     .componentName = "eoc::item::DyeComponent",
-    .shortName = "ItemDye",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .shortName = "Dye",
+    .componentTypeIndex = 0,
     .componentSize = 0x10,
-    .properties = g_Gen_ItemDyeComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ItemDyeComponent_Properties) / sizeof(g_Gen_ItemDyeComponent_Properties[0]),
+    .properties = g_Gen_eoc_item_DyeComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_item_DyeComponent_Properties) / sizeof(g_Gen_eoc_item_DyeComponent_Properties[0]),
 };
 
-// eoc::item::MapMarkerStyleComponent (from Item.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_MapMarkerStyleComponent_Properties[] = {
-    { "Style", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::item::MapMarkerStyleComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_item_MapMarkerStyleComponent_Properties[] = {
+    { "Style", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_MapMarkerStyleComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_item_MapMarkerStyleComponent_Layout = {
     .componentName = "eoc::item::MapMarkerStyleComponent",
     .shortName = "MapMarkerStyle",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_MapMarkerStyleComponent_Properties,
-    .propertyCount = sizeof(g_Gen_MapMarkerStyleComponent_Properties) / sizeof(g_Gen_MapMarkerStyleComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_eoc_item_MapMarkerStyleComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_item_MapMarkerStyleComponent_Properties) / sizeof(g_Gen_eoc_item_MapMarkerStyleComponent_Properties[0]),
 };
 
-// eoc::item::PortalComponent (from Item.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ItemPortalComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_1", 0x01, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::item::PortalComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x2 (2 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_item_PortalComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, true },
+    { "field_1", 0x01, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ItemPortalComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_item_PortalComponent_Layout = {
     .componentName = "eoc::item::PortalComponent",
-    .shortName = "ItemPortal",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x02,
-    .properties = g_Gen_ItemPortalComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ItemPortalComponent_Properties) / sizeof(g_Gen_ItemPortalComponent_Properties[0]),
+    .shortName = "Portal",
+    .componentTypeIndex = 0,
+    .componentSize = 0x2,
+    .properties = g_Gen_eoc_item_PortalComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_item_PortalComponent_Properties) / sizeof(g_Gen_eoc_item_PortalComponent_Properties[0]),
 };
 
-// eoc::item_template::ActionTypeComponent (from Item.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ActionTypeComponent_Properties[] = {
-    { "ActionTypes", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::light::ActiveCharacterLightComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_light_ActiveCharacterLightComponent_Properties[] = {
+    { "Light", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ActionTypeComponent_Layout = {
-    .componentName = "eoc::item_template::ActionTypeComponent",
-    .shortName = "ActionType",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ActionTypeComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ActionTypeComponent_Properties) / sizeof(g_Gen_ActionTypeComponent_Properties[0]),
-};
-
-// eoc::item_template::UseActionComponent (from Item.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_UseActionComponent_Properties[] = {
-    { "UseActions", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_UseActionComponent_Layout = {
-    .componentName = "eoc::item_template::UseActionComponent",
-    .shortName = "UseAction",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_UseActionComponent_Properties,
-    .propertyCount = sizeof(g_Gen_UseActionComponent_Properties) / sizeof(g_Gen_UseActionComponent_Properties[0]),
-};
-
-// eoc::light::ActiveCharacterLightComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ActiveCharacterLightComponent_Properties[] = {
-    { "Light", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ActiveCharacterLightComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_light_ActiveCharacterLightComponent_Layout = {
     .componentName = "eoc::light::ActiveCharacterLightComponent",
     .shortName = "ActiveCharacterLight",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_ActiveCharacterLightComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ActiveCharacterLightComponent_Properties) / sizeof(g_Gen_ActiveCharacterLightComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_eoc_light_ActiveCharacterLightComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_light_ActiveCharacterLightComponent_Properties) / sizeof(g_Gen_eoc_light_ActiveCharacterLightComponent_Properties[0]),
 };
 
-// eoc::lock::KeyComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_KeyComponent_Properties[] = {
-    { "Key", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::lock::KeyComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_lock_KeyComponent_Properties[] = {
+    { "Key", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_KeyComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_lock_KeyComponent_Layout = {
     .componentName = "eoc::lock::KeyComponent",
     .shortName = "Key",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_KeyComponent_Properties,
-    .propertyCount = sizeof(g_Gen_KeyComponent_Properties) / sizeof(g_Gen_KeyComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_eoc_lock_KeyComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_lock_KeyComponent_Properties) / sizeof(g_Gen_eoc_lock_KeyComponent_Properties[0]),
 };
 
-// eoc::lock::LockComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_LockComponent_Properties[] = {
-    { "Key_M", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "LockDC", 0x04, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8", 0x08, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_18", 0x18, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::lock::LockComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x28 (40 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_lock_LockComponent_Properties[] = {
+    { "Key_M", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "LockDC", 0x04, FIELD_TYPE_INT32, 0, true },
+    { "field_8", 0x08, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_LockComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_lock_LockComponent_Layout = {
     .componentName = "eoc::lock::LockComponent",
     .shortName = "Lock",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x20,
-    .properties = g_Gen_LockComponent_Properties,
-    .propertyCount = sizeof(g_Gen_LockComponent_Properties) / sizeof(g_Gen_LockComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x28,
+    .properties = g_Gen_eoc_lock_LockComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_lock_LockComponent_Properties) / sizeof(g_Gen_eoc_lock_LockComponent_Properties[0]),
 };
 
-// eoc::multiplayer::UserComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_MultiplayerUserComponent_Properties[] = {
-    { "UserID", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::object_visual::CharacterCreationTemplateOverrideComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_object_visual_CharacterCreationTemplateOverrideComponent_Properties[] = {
+    { "Template", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_MultiplayerUserComponent_Layout = {
-    .componentName = "eoc::multiplayer::UserComponent",
-    .shortName = "MultiplayerUser",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_MultiplayerUserComponent_Properties,
-    .propertyCount = sizeof(g_Gen_MultiplayerUserComponent_Properties) / sizeof(g_Gen_MultiplayerUserComponent_Properties[0]),
-};
-
-// eoc::object_visual::AppearanceOverrideComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_AppearanceOverrideComponent_Properties[] = {
-    { "Visual", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_AppearanceOverrideComponent_Layout = {
-    .componentName = "eoc::object_visual::AppearanceOverrideComponent",
-    .shortName = "AppearanceOverride",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_AppearanceOverrideComponent_Properties,
-    .propertyCount = sizeof(g_Gen_AppearanceOverrideComponent_Properties) / sizeof(g_Gen_AppearanceOverrideComponent_Properties[0]),
-};
-
-// eoc::object_visual::CharacterCreationTemplateOverrideComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CharacterCreationTemplateOverrideComponent_Properties[] = {
-    { "Template", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_CharacterCreationTemplateOverrideComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_object_visual_CharacterCreationTemplateOverrideComponent_Layout = {
     .componentName = "eoc::object_visual::CharacterCreationTemplateOverrideComponent",
     .shortName = "CharacterCreationTemplateOverride",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_CharacterCreationTemplateOverrideComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CharacterCreationTemplateOverrideComponent_Properties) / sizeof(g_Gen_CharacterCreationTemplateOverrideComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_eoc_object_visual_CharacterCreationTemplateOverrideComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_object_visual_CharacterCreationTemplateOverrideComponent_Properties) / sizeof(g_Gen_eoc_object_visual_CharacterCreationTemplateOverrideComponent_Properties[0]),
 };
 
-// eoc::ownership::OwneeCurrentComponent (from Item.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_OwneeCurrentComponent_Properties[] = {
-    { "Ownee", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::ownership::OwneeCurrentComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_ownership_OwneeCurrentComponent_Properties[] = {
+    { "Ownee", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_OwneeCurrentComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_ownership_OwneeCurrentComponent_Layout = {
     .componentName = "eoc::ownership::OwneeCurrentComponent",
     .shortName = "OwneeCurrent",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_OwneeCurrentComponent_Properties,
-    .propertyCount = sizeof(g_Gen_OwneeCurrentComponent_Properties) / sizeof(g_Gen_OwneeCurrentComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_eoc_ownership_OwneeCurrentComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_ownership_OwneeCurrentComponent_Properties) / sizeof(g_Gen_eoc_ownership_OwneeCurrentComponent_Properties[0]),
 };
 
-// eoc::party::CompositionComponent (from Party.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PartyCompositionComponent_Properties[] = {
-    { "Party", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "PartyUuid", 0x08, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Members", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::party::CompositionComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x28 (40 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_party_CompositionComponent_Properties[] = {
+    { "Party", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_PartyCompositionComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_party_CompositionComponent_Layout = {
     .componentName = "eoc::party::CompositionComponent",
-    .shortName = "PartyComposition",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x20,
-    .properties = g_Gen_PartyCompositionComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PartyCompositionComponent_Properties) / sizeof(g_Gen_PartyCompositionComponent_Properties[0]),
+    .shortName = "Composition",
+    .componentTypeIndex = 0,
+    .componentSize = 0x28,
+    .properties = g_Gen_eoc_party_CompositionComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_party_CompositionComponent_Properties) / sizeof(g_Gen_eoc_party_CompositionComponent_Properties[0]),
 };
 
-// eoc::party::FollowerComponent (from Party.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PartyFollowerComponent_Properties[] = {
-    { "Following", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::party::FollowerComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_party_FollowerComponent_Properties[] = {
+    { "Following", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_PartyFollowerComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_party_FollowerComponent_Layout = {
     .componentName = "eoc::party::FollowerComponent",
-    .shortName = "PartyFollower",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_PartyFollowerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PartyFollowerComponent_Properties) / sizeof(g_Gen_PartyFollowerComponent_Properties[0]),
+    .shortName = "Follower",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_eoc_party_FollowerComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_party_FollowerComponent_Properties) / sizeof(g_Gen_eoc_party_FollowerComponent_Properties[0]),
 };
 
-// eoc::party::MemberComponent (from Party.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PartyMemberComponent_Properties[] = {
-    { "UserId", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "UserUuid", 0x08, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Party", 0x18, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ViewUuid", 0x20, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "IsPermanent", 0x30, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::party::MemberComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x38 (56 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_party_MemberComponent_Properties[] = {
+    { "Party", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_PartyMemberComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_party_MemberComponent_Layout = {
     .componentName = "eoc::party::MemberComponent",
-    .shortName = "PartyMember",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x31,
-    .properties = g_Gen_PartyMemberComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PartyMemberComponent_Properties) / sizeof(g_Gen_PartyMemberComponent_Properties[0]),
+    .shortName = "Member",
+    .componentTypeIndex = 0,
+    .componentSize = 0x38,
+    .properties = g_Gen_eoc_party_MemberComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_party_MemberComponent_Properties) / sizeof(g_Gen_eoc_party_MemberComponent_Properties[0]),
 };
 
-// eoc::party::PortalsComponent (from Party.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PartyPortalsComponent_Properties[] = {
-    { "Portals", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::photo_mode::DummyAnimationStateComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x18 (24 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_photo_mode_DummyAnimationStateComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "field_4", 0x04, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "field_8", 0x08, FIELD_TYPE_UINT8, 0, true },
+    { "qwordC", 0x0c, FIELD_TYPE_INT32, 0, true },
+    { "field_10", 0x10, FIELD_TYPE_INT32, 0, true },
+    { "word14", 0x14, FIELD_TYPE_UINT8, 0, true },
+    { "field_15", 0x15, FIELD_TYPE_UINT8, 0, true },
+    { "field_16", 0x16, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_PartyPortalsComponent_Layout = {
-    .componentName = "eoc::party::PortalsComponent",
-    .shortName = "PartyPortals",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_PartyPortalsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PartyPortalsComponent_Properties) / sizeof(g_Gen_PartyPortalsComponent_Properties[0]),
-};
-
-// eoc::party::RecipesComponent (from Party.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PartyRecipesComponent_Properties[] = {
-    { "Recipes", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_PartyRecipesComponent_Layout = {
-    .componentName = "eoc::party::RecipesComponent",
-    .shortName = "PartyRecipes",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_PartyRecipesComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PartyRecipesComponent_Properties) / sizeof(g_Gen_PartyRecipesComponent_Properties[0]),
-};
-
-// eoc::party::ViewComponent (from Party.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PartyViewComponent_Properties[] = {
-    { "PartyUuid", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Views", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Characters", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_PartyViewComponent_Layout = {
-    .componentName = "eoc::party::ViewComponent",
-    .shortName = "PartyView",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x20,
-    .properties = g_Gen_PartyViewComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PartyViewComponent_Properties) / sizeof(g_Gen_PartyViewComponent_Properties[0]),
-};
-
-// eoc::party::WaypointsComponent (from Party.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PartyWaypointsComponent_Properties[] = {
-    { "Waypoints", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_PartyWaypointsComponent_Layout = {
-    .componentName = "eoc::party::WaypointsComponent",
-    .shortName = "PartyWaypoints",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_PartyWaypointsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PartyWaypointsComponent_Properties) / sizeof(g_Gen_PartyWaypointsComponent_Properties[0]),
-};
-
-// eoc::passive::UsageCountComponent (from Passives.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PassiveUsageCountComponent_Properties[] = {
-    { "Passives", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_PassiveUsageCountComponent_Layout = {
-    .componentName = "eoc::passive::UsageCountComponent",
-    .shortName = "PassiveUsageCount",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_PassiveUsageCountComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PassiveUsageCountComponent_Properties) / sizeof(g_Gen_PassiveUsageCountComponent_Properties[0]),
-};
-
-// eoc::photo_mode::CameraTransformComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PhotoModeCameraTransformComponent_Properties[] = {
-    { "Transform", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_PhotoModeCameraTransformComponent_Layout = {
-    .componentName = "eoc::photo_mode::CameraTransformComponent",
-    .shortName = "PhotoModeCameraTransform",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_PhotoModeCameraTransformComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PhotoModeCameraTransformComponent_Properties) / sizeof(g_Gen_PhotoModeCameraTransformComponent_Properties[0]),
-};
-
-// eoc::photo_mode::DummyAnimationStateComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PhotoModeDummyAnimationStateComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_4", 0x04, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8", 0x08, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "qwordC", 0x0c, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_10", 0x10, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "word14", 0x14, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_15", 0x15, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_16", 0x16, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_PhotoModeDummyAnimationStateComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_photo_mode_DummyAnimationStateComponent_Layout = {
     .componentName = "eoc::photo_mode::DummyAnimationStateComponent",
-    .shortName = "PhotoModeDummyAnimationState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x17,
-    .properties = g_Gen_PhotoModeDummyAnimationStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PhotoModeDummyAnimationStateComponent_Properties) / sizeof(g_Gen_PhotoModeDummyAnimationStateComponent_Properties[0]),
+    .shortName = "DummyAnimationState",
+    .componentTypeIndex = 0,
+    .componentSize = 0x18,
+    .properties = g_Gen_eoc_photo_mode_DummyAnimationStateComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_photo_mode_DummyAnimationStateComponent_Properties) / sizeof(g_Gen_eoc_photo_mode_DummyAnimationStateComponent_Properties[0]),
 };
 
-// eoc::photo_mode::DummyComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PhotoModeDummyComponent_Properties[] = {
-    { "Entity", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "UserId", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::photo_mode::DummyComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_photo_mode_DummyComponent_Properties[] = {
+    { "Entity", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_PhotoModeDummyComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_photo_mode_DummyComponent_Layout = {
     .componentName = "eoc::photo_mode::DummyComponent",
-    .shortName = "PhotoModeDummy",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .shortName = "Dummy",
+    .componentTypeIndex = 0,
     .componentSize = 0x10,
-    .properties = g_Gen_PhotoModeDummyComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PhotoModeDummyComponent_Properties) / sizeof(g_Gen_PhotoModeDummyComponent_Properties[0]),
+    .properties = g_Gen_eoc_photo_mode_DummyComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_photo_mode_DummyComponent_Properties) / sizeof(g_Gen_eoc_photo_mode_DummyComponent_Properties[0]),
 };
 
-// eoc::photo_mode::DummyEquipmentVisualComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PhotoModeDummyEquipmentVisualComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::photo_mode::DummyEquipmentVisualComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_photo_mode_DummyEquipmentVisualComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_PhotoModeDummyEquipmentVisualComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_photo_mode_DummyEquipmentVisualComponent_Layout = {
     .componentName = "eoc::photo_mode::DummyEquipmentVisualComponent",
-    .shortName = "PhotoModeDummyEquipmentVisual",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_PhotoModeDummyEquipmentVisualComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PhotoModeDummyEquipmentVisualComponent_Properties) / sizeof(g_Gen_PhotoModeDummyEquipmentVisualComponent_Properties[0]),
+    .shortName = "DummyEquipmentVisual",
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_eoc_photo_mode_DummyEquipmentVisualComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_photo_mode_DummyEquipmentVisualComponent_Properties) / sizeof(g_Gen_eoc_photo_mode_DummyEquipmentVisualComponent_Properties[0]),
 };
 
-// eoc::photo_mode::DummyShowSplatterComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PhotoModeDummyShowSplatterComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::photo_mode::DummyShowSplatterComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x1 (1 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_photo_mode_DummyShowSplatterComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_PhotoModeDummyShowSplatterComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_photo_mode_DummyShowSplatterComponent_Layout = {
     .componentName = "eoc::photo_mode::DummyShowSplatterComponent",
-    .shortName = "PhotoModeDummyShowSplatter",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x01,
-    .properties = g_Gen_PhotoModeDummyShowSplatterComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PhotoModeDummyShowSplatterComponent_Properties) / sizeof(g_Gen_PhotoModeDummyShowSplatterComponent_Properties[0]),
+    .shortName = "DummyShowSplatter",
+    .componentTypeIndex = 0,
+    .componentSize = 0x1,
+    .properties = g_Gen_eoc_photo_mode_DummyShowSplatterComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_photo_mode_DummyShowSplatterComponent_Properties) / sizeof(g_Gen_eoc_photo_mode_DummyShowSplatterComponent_Properties[0]),
 };
 
-// eoc::photo_mode::DummyTransformComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PhotoModeDummyTransformComponent_Properties[] = {
-    { "Transform", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::photo_mode::SessionComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x1 (1 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_photo_mode_SessionComponent_Properties[] = {
+    { "State", 0x00, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_PhotoModeDummyTransformComponent_Layout = {
-    .componentName = "eoc::photo_mode::DummyTransformComponent",
-    .shortName = "PhotoModeDummyTransform",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_PhotoModeDummyTransformComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PhotoModeDummyTransformComponent_Properties) / sizeof(g_Gen_PhotoModeDummyTransformComponent_Properties[0]),
-};
-
-// eoc::photo_mode::SessionComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PhotoModeSessionComponent_Properties[] = {
-    { "State", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_PhotoModeSessionComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_photo_mode_SessionComponent_Layout = {
     .componentName = "eoc::photo_mode::SessionComponent",
-    .shortName = "PhotoModeSession",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x01,
-    .properties = g_Gen_PhotoModeSessionComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PhotoModeSessionComponent_Properties) / sizeof(g_Gen_PhotoModeSessionComponent_Properties[0]),
+    .shortName = "Session",
+    .componentTypeIndex = 0,
+    .componentSize = 0x1,
+    .properties = g_Gen_eoc_photo_mode_SessionComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_photo_mode_SessionComponent_Properties) / sizeof(g_Gen_eoc_photo_mode_SessionComponent_Properties[0]),
 };
 
-// eoc::pickup::PickUpRequestComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PickUpRequestComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "State", 0x10, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::pickup::PickUpRequestComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x18 (24 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_pickup_PickUpRequestComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_GUID, 0, true },
+    { "State", 0x10, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_PickUpRequestComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_pickup_PickUpRequestComponent_Layout = {
     .componentName = "eoc::pickup::PickUpRequestComponent",
     .shortName = "PickUpRequest",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x11,
-    .properties = g_Gen_PickUpRequestComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PickUpRequestComponent_Properties) / sizeof(g_Gen_PickUpRequestComponent_Properties[0]),
-};
-
-// eoc::progression::AbilityImprovementsComponent (from Progression.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ProgressionAbilityImprovementsComponent_Properties[] = {
-    { "Abilities", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "AbilityImprovements", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ProgressionAbilityImprovementsComponent_Layout = {
-    .componentName = "eoc::progression::AbilityImprovementsComponent",
-    .shortName = "ProgressionAbilityImprovements",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_ProgressionAbilityImprovementsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ProgressionAbilityImprovementsComponent_Properties) / sizeof(g_Gen_ProgressionAbilityImprovementsComponent_Properties[0]),
-};
-
-// eoc::progression::FeatComponent (from Progression.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ProgressionFeatComponent_Properties[] = {
-    { "Feat", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_10", 0x10, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ConditionId", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Proficiencies", 0x20, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Expertise", 0x28, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "AddSpells", 0x30, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "AddPassives", 0x38, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "AbilityImprovements", 0x40, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ProgressionFeatComponent_Layout = {
-    .componentName = "eoc::progression::FeatComponent",
-    .shortName = "ProgressionFeat",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x48,
-    .properties = g_Gen_ProgressionFeatComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ProgressionFeatComponent_Properties) / sizeof(g_Gen_ProgressionFeatComponent_Properties[0]),
-};
-
-// eoc::progression::LevelUpComponent (from Progression.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_LevelUpComponent_Properties[] = {
-    { "LevelUps", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_LevelUpComponent_Layout = {
-    .componentName = "eoc::progression::LevelUpComponent",
-    .shortName = "LevelUp",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_LevelUpComponent_Properties,
-    .propertyCount = sizeof(g_Gen_LevelUpComponent_Properties) / sizeof(g_Gen_LevelUpComponent_Properties[0]),
-};
-
-// eoc::progression::MetaComponent (from Progression.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ProgressionMetaComponent_Properties[] = {
-    { "field_18", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Progression", 0x08, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Source", 0x18, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ClassLevel", 0x28, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "SpellSourceType", 0x30, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Level", 0x38, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Owner", 0x40, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "MulticlassSpellSlotOverride", 0x48, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ProgressionMetaComponent_Layout = {
-    .componentName = "eoc::progression::MetaComponent",
-    .shortName = "ProgressionMeta",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x50,
-    .properties = g_Gen_ProgressionMetaComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ProgressionMetaComponent_Properties) / sizeof(g_Gen_ProgressionMetaComponent_Properties[0]),
-};
-
-// eoc::progression::PassivesComponent (from Progression.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ProgressionPassivesComponent_Properties[] = {
-    { "AddPassives", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RemovePassives", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ProgressionPassivesComponent_Layout = {
-    .componentName = "eoc::progression::PassivesComponent",
-    .shortName = "ProgressionPassives",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_ProgressionPassivesComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ProgressionPassivesComponent_Properties) / sizeof(g_Gen_ProgressionPassivesComponent_Properties[0]),
-};
-
-// eoc::progression::ReplicatedFeatComponent (from Progression.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ProgressionReplicatedFeatComponent_Properties[] = {
-    { "Feat", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_10", 0x10, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_14", 0x14, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ProgressionReplicatedFeatComponent_Layout = {
-    .componentName = "eoc::progression::ReplicatedFeatComponent",
-    .shortName = "ProgressionReplicatedFeat",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .componentTypeIndex = 0,
     .componentSize = 0x18,
-    .properties = g_Gen_ProgressionReplicatedFeatComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ProgressionReplicatedFeatComponent_Properties) / sizeof(g_Gen_ProgressionReplicatedFeatComponent_Properties[0]),
+    .properties = g_Gen_eoc_pickup_PickUpRequestComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_pickup_PickUpRequestComponent_Properties) / sizeof(g_Gen_eoc_pickup_PickUpRequestComponent_Properties[0]),
 };
 
-// eoc::progression::SkillsComponent (from Progression.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ProgressionSkillsComponent_Properties[] = {
-    { "Proficiencies", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Expertise", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::progression::FeatComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x80 (128 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_progression_FeatComponent_Properties[] = {
+    { "Feat", 0x00, FIELD_TYPE_GUID, 0, true },
+    { "field_10", 0x10, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ProgressionSkillsComponent_Layout = {
-    .componentName = "eoc::progression::SkillsComponent",
-    .shortName = "ProgressionSkills",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_ProgressionSkillsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ProgressionSkillsComponent_Properties) / sizeof(g_Gen_ProgressionSkillsComponent_Properties[0]),
+static const ComponentLayoutDef g_Gen_eoc_progression_FeatComponent_Layout = {
+    .componentName = "eoc::progression::FeatComponent",
+    .shortName = "Feat",
+    .componentTypeIndex = 0,
+    .componentSize = 0x80,
+    .properties = g_Gen_eoc_progression_FeatComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_progression_FeatComponent_Properties) / sizeof(g_Gen_eoc_progression_FeatComponent_Properties[0]),
 };
 
-// eoc::progression::SpellsComponent (from Progression.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ProgressionSpellsComponent_Properties[] = {
-    { "AddSpells", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RemoveSpells", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::progression::MetaComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x80 (128 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_progression_MetaComponent_Properties[] = {
+    { "field_18", 0x00, FIELD_TYPE_UINT8, 0, true },
+    { "Progression", 0x08, FIELD_TYPE_GUID, 0, true },
+    { "Owner", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ProgressionSpellsComponent_Layout = {
-    .componentName = "eoc::progression::SpellsComponent",
-    .shortName = "ProgressionSpells",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_ProgressionSpellsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ProgressionSpellsComponent_Properties) / sizeof(g_Gen_ProgressionSpellsComponent_Properties[0]),
+static const ComponentLayoutDef g_Gen_eoc_progression_MetaComponent_Layout = {
+    .componentName = "eoc::progression::MetaComponent",
+    .shortName = "Meta",
+    .componentTypeIndex = 0,
+    .componentSize = 0x80,
+    .properties = g_Gen_eoc_progression_MetaComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_progression_MetaComponent_Properties) / sizeof(g_Gen_eoc_progression_MetaComponent_Properties[0]),
 };
 
-// eoc::projectile::SourceInfoComponent (from Projectile.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ProjectileSourceComponent_Properties[] = {
-    { "Spell", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Entity", 0x08, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::progression::ReplicatedFeatComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x18 (24 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_progression_ReplicatedFeatComponent_Properties[] = {
+    { "Feat", 0x00, FIELD_TYPE_GUID, 0, true },
+    { "field_10", 0x10, FIELD_TYPE_UINT8, 0, true },
+    { "field_14", 0x14, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ProjectileSourceComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_progression_ReplicatedFeatComponent_Layout = {
+    .componentName = "eoc::progression::ReplicatedFeatComponent",
+    .shortName = "ReplicatedFeat",
+    .componentTypeIndex = 0,
+    .componentSize = 0x18,
+    .properties = g_Gen_eoc_progression_ReplicatedFeatComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_progression_ReplicatedFeatComponent_Properties) / sizeof(g_Gen_eoc_progression_ReplicatedFeatComponent_Properties[0]),
+};
+
+// ======================================================================
+// eoc::projectile::SourceInfoComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x40 (64 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_projectile_SourceInfoComponent_Properties[] = {
+    { "Entity", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+};
+
+static const ComponentLayoutDef g_Gen_eoc_projectile_SourceInfoComponent_Layout = {
     .componentName = "eoc::projectile::SourceInfoComponent",
-    .shortName = "ProjectileSource",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_ProjectileSourceComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ProjectileSourceComponent_Properties) / sizeof(g_Gen_ProjectileSourceComponent_Properties[0]),
+    .shortName = "SourceInfo",
+    .componentTypeIndex = 0,
+    .componentSize = 0x40,
+    .properties = g_Gen_eoc_projectile_SourceInfoComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_projectile_SourceInfoComponent_Properties) / sizeof(g_Gen_eoc_projectile_SourceInfoComponent_Properties[0]),
 };
 
-// eoc::recruit::RecruiterComponent (from Party.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_RecruiterComponent_Properties[] = {
-    { "Recruiters", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::relation::FactionComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x30 (48 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_relation_FactionComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "field_8", 0x08, FIELD_TYPE_GUID, 0, true },
+    { "field_18", 0x18, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_RecruiterComponent_Layout = {
-    .componentName = "eoc::recruit::RecruiterComponent",
-    .shortName = "Recruiter",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_RecruiterComponent_Properties,
-    .propertyCount = sizeof(g_Gen_RecruiterComponent_Properties) / sizeof(g_Gen_RecruiterComponent_Properties[0]),
-};
-
-// eoc::relation::FactionComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_FactionComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8", 0x08, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_18", 0x18, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "SummonOwner", 0x28, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_FactionComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_relation_FactionComponent_Layout = {
     .componentName = "eoc::relation::FactionComponent",
     .shortName = "Faction",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .componentTypeIndex = 0,
     .componentSize = 0x30,
-    .properties = g_Gen_FactionComponent_Properties,
-    .propertyCount = sizeof(g_Gen_FactionComponent_Properties) / sizeof(g_Gen_FactionComponent_Properties[0]),
+    .properties = g_Gen_eoc_relation_FactionComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_relation_FactionComponent_Properties) / sizeof(g_Gen_eoc_relation_FactionComponent_Properties[0]),
 };
 
-// eoc::relation::RelationComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_RelationComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_40", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_80", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_C0", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_100", 0x20, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_140", 0x28, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_170", 0x30, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::repose::StateComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x30 (48 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_repose_StateComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "field_8", 0x08, FIELD_TYPE_GUID, 0, true },
+    { "field_18", 0x18, FIELD_TYPE_INT32, 0, true },
+    { "field_1C", 0x20, FIELD_TYPE_VEC3, 0, true },
+    { "field_28", 0x2c, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_RelationComponent_Layout = {
-    .componentName = "eoc::relation::RelationComponent",
-    .shortName = "Relation",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x38,
-    .properties = g_Gen_RelationComponent_Properties,
-    .propertyCount = sizeof(g_Gen_RelationComponent_Properties) / sizeof(g_Gen_RelationComponent_Properties[0]),
-};
-
-// eoc::repose::StateComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ReposeComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8", 0x08, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_18", 0x18, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_1C", 0x20, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_28", 0x28, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ReposeComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_repose_StateComponent_Layout = {
     .componentName = "eoc::repose::StateComponent",
-    .shortName = "Repose",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x29,
-    .properties = g_Gen_ReposeComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ReposeComponent_Properties) / sizeof(g_Gen_ReposeComponent_Properties[0]),
+    .shortName = "State",
+    .componentTypeIndex = 0,
+    .componentSize = 0x30,
+    .properties = g_Gen_eoc_repose_StateComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_repose_StateComponent_Properties) / sizeof(g_Gen_eoc_repose_StateComponent_Properties[0]),
 };
 
-// eoc::rest::LongRestState (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_LongRestStateComponent_Properties[] = {
-    { "State", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "WaitingForOthers", 0x08, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "FinishConfirmed", 0x09, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Finishing", 0x0a, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "CancelReason", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8", 0x18, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Requester", 0x20, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::rest::LongRestState
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x18 (24 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_rest_LongRestState_Properties[] = {
+    { "WaitingForOthers", 0x00, FIELD_TYPE_BOOL, 0, true },
+    { "FinishConfirmed", 0x01, FIELD_TYPE_BOOL, 0, true },
+    { "Finishing", 0x02, FIELD_TYPE_BOOL, 0, true },
+    { "field_8", 0x04, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "Requester", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_LongRestStateComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_rest_LongRestState_Layout = {
     .componentName = "eoc::rest::LongRestState",
     .shortName = "LongRestState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x28,
-    .properties = g_Gen_LongRestStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_LongRestStateComponent_Properties) / sizeof(g_Gen_LongRestStateComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x18,
+    .properties = g_Gen_eoc_rest_LongRestState_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_rest_LongRestState_Properties) / sizeof(g_Gen_eoc_rest_LongRestState_Properties[0]),
 };
 
-// eoc::rest::LongRestTimeline (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_LongRestTimelineComponent_Properties[] = {
-    { "Timeline", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::rest::LongRestTimeline
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_rest_LongRestTimeline_Properties[] = {
+    { "Timeline", 0x00, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_LongRestTimelineComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_rest_LongRestTimeline_Layout = {
     .componentName = "eoc::rest::LongRestTimeline",
     .shortName = "LongRestTimeline",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .componentTypeIndex = 0,
     .componentSize = 0x10,
-    .properties = g_Gen_LongRestTimelineComponent_Properties,
-    .propertyCount = sizeof(g_Gen_LongRestTimelineComponent_Properties) / sizeof(g_Gen_LongRestTimelineComponent_Properties[0]),
+    .properties = g_Gen_eoc_rest_LongRestTimeline_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_rest_LongRestTimeline_Properties) / sizeof(g_Gen_eoc_rest_LongRestTimeline_Properties[0]),
 };
 
-// eoc::rest::LongRestTimers (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_LongRestTimersComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::rest::LongRestTimers
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_rest_LongRestTimers_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_LongRestTimersComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_rest_LongRestTimers_Layout = {
     .componentName = "eoc::rest::LongRestTimers",
     .shortName = "LongRestTimers",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_LongRestTimersComponent_Properties,
-    .propertyCount = sizeof(g_Gen_LongRestTimersComponent_Properties) / sizeof(g_Gen_LongRestTimersComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_eoc_rest_LongRestTimers_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_rest_LongRestTimers_Properties) / sizeof(g_Gen_eoc_rest_LongRestTimers_Properties[0]),
 };
 
-// eoc::rest::LongRestUsers (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_LongRestUsersComponent_Properties[] = {
-    { "RequestRestore", 0x00, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "States", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "FinishConfirmation", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::rest::LongRestUsers
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x78 (120 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_rest_LongRestUsers_Properties[] = {
+    { "RequestRestore", 0x00, FIELD_TYPE_BOOL, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_LongRestUsersComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_rest_LongRestUsers_Layout = {
     .componentName = "eoc::rest::LongRestUsers",
     .shortName = "LongRestUsers",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x18,
-    .properties = g_Gen_LongRestUsersComponent_Properties,
-    .propertyCount = sizeof(g_Gen_LongRestUsersComponent_Properties) / sizeof(g_Gen_LongRestUsersComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x78,
+    .properties = g_Gen_eoc_rest_LongRestUsers_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_rest_LongRestUsers_Properties) / sizeof(g_Gen_eoc_rest_LongRestUsers_Properties[0]),
 };
 
-// eoc::rest::RestingEntities (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_RestingEntitiesComponent_Properties[] = {
-    { "ScriptFinished", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RestRequested", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RestStarted", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Party", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "HasSurfaces", 0x20, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::rest::RestingEntities
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0xc8 (200 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_rest_RestingEntities_Properties[] = {
+    { "HasSurfaces", 0x00, FIELD_TYPE_BOOL, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_RestingEntitiesComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_rest_RestingEntities_Layout = {
     .componentName = "eoc::rest::RestingEntities",
     .shortName = "RestingEntities",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x21,
-    .properties = g_Gen_RestingEntitiesComponent_Properties,
-    .propertyCount = sizeof(g_Gen_RestingEntitiesComponent_Properties) / sizeof(g_Gen_RestingEntitiesComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0xc8,
+    .properties = g_Gen_eoc_rest_RestingEntities_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_rest_RestingEntities_Properties) / sizeof(g_Gen_eoc_rest_RestingEntities_Properties[0]),
 };
 
-// eoc::ruleset::RulesetComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_RulesetComponent_Properties[] = {
-    { "Rulesets", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_40", 0x08, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::ruleset::RulesetComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x60 (96 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_ruleset_RulesetComponent_Properties[] = {
+    { "field_40", 0x00, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_RulesetComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_ruleset_RulesetComponent_Layout = {
     .componentName = "eoc::ruleset::RulesetComponent",
     .shortName = "Ruleset",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x18,
-    .properties = g_Gen_RulesetComponent_Properties,
-    .propertyCount = sizeof(g_Gen_RulesetComponent_Properties) / sizeof(g_Gen_RulesetComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x60,
+    .properties = g_Gen_eoc_ruleset_RulesetComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_ruleset_RulesetComponent_Properties) / sizeof(g_Gen_eoc_ruleset_RulesetComponent_Properties[0]),
 };
 
-// eoc::shapeshift::AnimationComponent (from Shapeshift.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ShapeshiftAnimationComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_4", 0x04, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::shapeshift::AnimationComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_shapeshift_AnimationComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_UINT32, 0, true },
+    { "field_4", 0x04, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ShapeshiftAnimationComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_shapeshift_AnimationComponent_Layout = {
     .componentName = "eoc::shapeshift::AnimationComponent",
-    .shortName = "ShapeshiftAnimation",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x05,
-    .properties = g_Gen_ShapeshiftAnimationComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ShapeshiftAnimationComponent_Properties) / sizeof(g_Gen_ShapeshiftAnimationComponent_Properties[0]),
+    .shortName = "Animation",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_eoc_shapeshift_AnimationComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_shapeshift_AnimationComponent_Properties) / sizeof(g_Gen_eoc_shapeshift_AnimationComponent_Properties[0]),
 };
 
-// eoc::shapeshift::RecoveryAnimationComponent (from Shapeshift.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ShapeshiftRecoveryAnimationComponent_Properties[] = {
-    { "Animation", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::shapeshift::RecoveryAnimationComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_shapeshift_RecoveryAnimationComponent_Properties[] = {
+    { "Animation", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ShapeshiftRecoveryAnimationComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_shapeshift_RecoveryAnimationComponent_Layout = {
     .componentName = "eoc::shapeshift::RecoveryAnimationComponent",
-    .shortName = "ShapeshiftRecoveryAnimation",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_ShapeshiftRecoveryAnimationComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ShapeshiftRecoveryAnimationComponent_Properties) / sizeof(g_Gen_ShapeshiftRecoveryAnimationComponent_Properties[0]),
+    .shortName = "RecoveryAnimation",
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_eoc_shapeshift_RecoveryAnimationComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_shapeshift_RecoveryAnimationComponent_Properties) / sizeof(g_Gen_eoc_shapeshift_RecoveryAnimationComponent_Properties[0]),
 };
 
-// eoc::shapeshift::ReplicatedChangesComponent (from Shapeshift.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ShapeshiftReplicatedChangesComponent_Properties[] = {
-    { "HP", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "VisualChanged", 0x08, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ForceFinish", 0x09, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ItemTooltipFlags", 0x0a, FIELD_TYPE_UINT16, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ItemDescription", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "GoldAmount", 0x18, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ItemWeight", 0x1c, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "MuteEquipmentSound", 0x20, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "DisableEquipment", 0x21, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "HasWildShapeHotBar", 0x22, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "HasWeightOverride", 0x23, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "AC", 0x24, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::shapeshift::ReplicatedChangesComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0xa8 (168 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_shapeshift_ReplicatedChangesComponent_Properties[] = {
+    { "VisualChanged", 0x00, FIELD_TYPE_BOOL, 0, true },
+    { "ItemTooltipFlags", 0x02, FIELD_TYPE_UINT16, 0, true },
+    { "GoldAmount", 0x04, FIELD_TYPE_INT32, 0, true },
+    { "ItemWeight", 0x08, FIELD_TYPE_INT32, 0, true },
+    { "MuteEquipmentSound", 0x0c, FIELD_TYPE_BOOL, 0, true },
+    { "DisableEquipment", 0x0d, FIELD_TYPE_BOOL, 0, true },
+    { "HasWildShapeHotBar", 0x0e, FIELD_TYPE_BOOL, 0, true },
+    { "HasWeightOverride", 0x0f, FIELD_TYPE_BOOL, 0, true },
+    { "AC", 0x10, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ShapeshiftReplicatedChangesComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_shapeshift_ReplicatedChangesComponent_Layout = {
     .componentName = "eoc::shapeshift::ReplicatedChangesComponent",
-    .shortName = "ShapeshiftReplicatedChanges",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x28,
-    .properties = g_Gen_ShapeshiftReplicatedChangesComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ShapeshiftReplicatedChangesComponent_Properties) / sizeof(g_Gen_ShapeshiftReplicatedChangesComponent_Properties[0]),
+    .shortName = "ReplicatedChanges",
+    .componentTypeIndex = 0,
+    .componentSize = 0xa8,
+    .properties = g_Gen_eoc_shapeshift_ReplicatedChangesComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_shapeshift_ReplicatedChangesComponent_Properties) / sizeof(g_Gen_eoc_shapeshift_ReplicatedChangesComponent_Properties[0]),
 };
 
-// eoc::shapeshift::SourceCacheComponent (from Shapeshift.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ShapeshiftSourceCacheComponent_Properties[] = {
-    { "Source", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::sight::DataComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x28 (40 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_sight_DataComponent_Properties[] = {
+    { "field_20", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "field_24", 0x04, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ShapeshiftSourceCacheComponent_Layout = {
-    .componentName = "eoc::shapeshift::SourceCacheComponent",
-    .shortName = "ShapeshiftSourceCache",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ShapeshiftSourceCacheComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ShapeshiftSourceCacheComponent_Properties) / sizeof(g_Gen_ShapeshiftSourceCacheComponent_Properties[0]),
-};
-
-// eoc::shapeshift::StateComponent (from Shapeshift.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ShapeshiftStateComponent_Properties[] = {
-    { "BloodSurfaceType", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "BloodType", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Template", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ShapeshiftStateComponent_Layout = {
-    .componentName = "eoc::shapeshift::StateComponent",
-    .shortName = "ShapeshiftState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x18,
-    .properties = g_Gen_ShapeshiftStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ShapeshiftStateComponent_Properties) / sizeof(g_Gen_ShapeshiftStateComponent_Properties[0]),
-};
-
-// eoc::sight::BaseComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_SightComponent_Properties[] = {
-    { "Sight", 0x00, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "DarkvisionRange", 0x04, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "FOV", 0x08, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "VerticalFOV", 0x0c, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_SightComponent_Layout = {
-    .componentName = "eoc::sight::BaseComponent",
-    .shortName = "Sight",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_SightComponent_Properties,
-    .propertyCount = sizeof(g_Gen_SightComponent_Properties) / sizeof(g_Gen_SightComponent_Properties[0]),
-};
-
-// eoc::sight::DataComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_SightDataComponent_Properties[] = {
-    { "SightUuid", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "DarkvisionRange", 0x10, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "FOV", 0x14, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "VerticalFOV", 0x18, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Sight", 0x1c, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_20", 0x20, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_24", 0x24, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_SightDataComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_sight_DataComponent_Layout = {
     .componentName = "eoc::sight::DataComponent",
-    .shortName = "SightData",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .shortName = "Data",
+    .componentTypeIndex = 0,
     .componentSize = 0x28,
-    .properties = g_Gen_SightDataComponent_Properties,
-    .propertyCount = sizeof(g_Gen_SightDataComponent_Properties) / sizeof(g_Gen_SightDataComponent_Properties[0]),
+    .properties = g_Gen_eoc_sight_DataComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_sight_DataComponent_Properties) / sizeof(g_Gen_eoc_sight_DataComponent_Properties[0]),
 };
 
-// eoc::sight::EntityViewshedComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_SightEntityViewshedComponent_Properties[] = {
-    { "Viewshed", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::spatial_grid::DataComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x98 (152 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_spatial_grid_DataComponent_Properties[] = {
+    { "Level", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "field_94", 0x04, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_SightEntityViewshedComponent_Layout = {
-    .componentName = "eoc::sight::EntityViewshedComponent",
-    .shortName = "SightEntityViewshed",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_SightEntityViewshedComponent_Properties,
-    .propertyCount = sizeof(g_Gen_SightEntityViewshedComponent_Properties) / sizeof(g_Gen_SightEntityViewshedComponent_Properties[0]),
-};
-
-// eoc::sight::IgnoreSurfacesComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_IgnoreSurfacesComponent_Properties[] = {
-    { "SurfaceTypes", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_IgnoreSurfacesComponent_Layout = {
-    .componentName = "eoc::sight::IgnoreSurfacesComponent",
-    .shortName = "IgnoreSurfaces",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_IgnoreSurfacesComponent_Properties,
-    .propertyCount = sizeof(g_Gen_IgnoreSurfacesComponent_Properties) / sizeof(g_Gen_IgnoreSurfacesComponent_Properties[0]),
-};
-
-// eoc::spatial_grid::DataComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_SpatialGridComponent_Properties[] = {
-    { "Grid", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Level", 0x08, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_94", 0x0c, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_SpatialGridComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_spatial_grid_DataComponent_Layout = {
     .componentName = "eoc::spatial_grid::DataComponent",
-    .shortName = "SpatialGrid",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x0d,
-    .properties = g_Gen_SpatialGridComponent_Properties,
-    .propertyCount = sizeof(g_Gen_SpatialGridComponent_Properties) / sizeof(g_Gen_SpatialGridComponent_Properties[0]),
+    .shortName = "Data",
+    .componentTypeIndex = 0,
+    .componentSize = 0x98,
+    .properties = g_Gen_eoc_spatial_grid_DataComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_spatial_grid_DataComponent_Properties) / sizeof(g_Gen_eoc_spatial_grid_DataComponent_Properties[0]),
 };
 
-// eoc::spell::AddedSpellsComponent (from Spell.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_AddedSpellsComponent_Properties[] = {
-    { "Spells", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::spell::ScriptedExplosionComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_spell_ScriptedExplosionComponent_Properties[] = {
+    { "Projectile", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_AddedSpellsComponent_Layout = {
-    .componentName = "eoc::spell::AddedSpellsComponent",
-    .shortName = "AddedSpells",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_AddedSpellsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_AddedSpellsComponent_Properties) / sizeof(g_Gen_AddedSpellsComponent_Properties[0]),
-};
-
-// eoc::spell::AiConditionsComponent (from Spell.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_SpellAiConditionsComponent_Properties[] = {
-    { "Conditions", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_SpellAiConditionsComponent_Layout = {
-    .componentName = "eoc::spell::AiConditionsComponent",
-    .shortName = "SpellAiConditions",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_SpellAiConditionsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_SpellAiConditionsComponent_Properties) / sizeof(g_Gen_SpellAiConditionsComponent_Properties[0]),
-};
-
-// eoc::spell::AttackSpellOverrideComponent (from Spell.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_AttackSpellOverrideComponent_Properties[] = {
-    { "AttackSpells", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_AttackSpellOverrideComponent_Layout = {
-    .componentName = "eoc::spell::AttackSpellOverrideComponent",
-    .shortName = "AttackSpellOverride",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_AttackSpellOverrideComponent_Properties,
-    .propertyCount = sizeof(g_Gen_AttackSpellOverrideComponent_Properties) / sizeof(g_Gen_AttackSpellOverrideComponent_Properties[0]),
-};
-
-// eoc::spell::BookComponent (from Spell.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_SpellBookComponent_Properties[] = {
-    { "Entity", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Spells", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_SpellBookComponent_Layout = {
-    .componentName = "eoc::spell::BookComponent",
-    .shortName = "SpellBook",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_SpellBookComponent_Properties,
-    .propertyCount = sizeof(g_Gen_SpellBookComponent_Properties) / sizeof(g_Gen_SpellBookComponent_Properties[0]),
-};
-
-// eoc::spell::BookCooldownsComponent (from Spell.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_SpellBookCooldownsComponent_Properties[] = {
-    { "Cooldowns", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_SpellBookCooldownsComponent_Layout = {
-    .componentName = "eoc::spell::BookCooldownsComponent",
-    .shortName = "SpellBookCooldowns",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_SpellBookCooldownsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_SpellBookCooldownsComponent_Properties) / sizeof(g_Gen_SpellBookCooldownsComponent_Properties[0]),
-};
-
-// eoc::spell::BookPreparesComponent (from Spell.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_SpellBookPreparesComponent_Properties[] = {
-    { "PreparedSpells", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ClassPreparedSpellCount", 0x08, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ClassFallbackPreparedSpellCount", 0x10, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_SpellBookPreparesComponent_Layout = {
-    .componentName = "eoc::spell::BookPreparesComponent",
-    .shortName = "SpellBookPrepares",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x18,
-    .properties = g_Gen_SpellBookPreparesComponent_Properties,
-    .propertyCount = sizeof(g_Gen_SpellBookPreparesComponent_Properties) / sizeof(g_Gen_SpellBookPreparesComponent_Properties[0]),
-};
-
-// eoc::spell::CCPrepareSpellComponent (from Spell.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CCPrepareSpellComponent_Properties[] = {
-    { "Spells", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_CCPrepareSpellComponent_Layout = {
-    .componentName = "eoc::spell::CCPrepareSpellComponent",
-    .shortName = "CCPrepareSpell",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_CCPrepareSpellComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CCPrepareSpellComponent_Properties) / sizeof(g_Gen_CCPrepareSpellComponent_Properties[0]),
-};
-
-// eoc::spell::ContainerComponent (from Spell.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_SpellContainerComponent_Properties[] = {
-    { "Spells", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_SpellContainerComponent_Layout = {
-    .componentName = "eoc::spell::ContainerComponent",
-    .shortName = "SpellContainer",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_SpellContainerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_SpellContainerComponent_Properties) / sizeof(g_Gen_SpellContainerComponent_Properties[0]),
-};
-
-// eoc::spell::LearnedSpellsComponent (from Spell.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_LearnedSpellsComponent_Properties[] = {
-    { "SpellSchools", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_LearnedSpellsComponent_Layout = {
-    .componentName = "eoc::spell::LearnedSpellsComponent",
-    .shortName = "LearnedSpells",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_LearnedSpellsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_LearnedSpellsComponent_Properties) / sizeof(g_Gen_LearnedSpellsComponent_Properties[0]),
-};
-
-// eoc::spell::PlayerPrepareSpellComponent (from Spell.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PlayerPrepareSpellComponent_Properties[] = {
-    { "Spells", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "CharacterCreationPrepared", 0x08, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_PlayerPrepareSpellComponent_Layout = {
-    .componentName = "eoc::spell::PlayerPrepareSpellComponent",
-    .shortName = "PlayerPrepareSpell",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x09,
-    .properties = g_Gen_PlayerPrepareSpellComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PlayerPrepareSpellComponent_Properties) / sizeof(g_Gen_PlayerPrepareSpellComponent_Properties[0]),
-};
-
-// eoc::spell::ScriptedExplosionComponent (from Spell.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ScriptedExplosionComponent_Properties[] = {
-    { "Projectile", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ScriptedExplosionComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_spell_ScriptedExplosionComponent_Layout = {
     .componentName = "eoc::spell::ScriptedExplosionComponent",
     .shortName = "ScriptedExplosion",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_ScriptedExplosionComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ScriptedExplosionComponent_Properties) / sizeof(g_Gen_ScriptedExplosionComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_eoc_spell_ScriptedExplosionComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_spell_ScriptedExplosionComponent_Properties) / sizeof(g_Gen_eoc_spell_ScriptedExplosionComponent_Properties[0]),
 };
 
-// eoc::spell_cast::AnimationInfoComponent (from SpellCast.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_SpellCastAnimationInfoComponent_Properties[] = {
-    { "Event", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "TargetHitPosition", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "TargetPosition", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Target", 0x18, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_28", 0x20, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "TargetIsCaster", 0x21, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "LoopingCastAnimation", 0x22, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_2B", 0x23, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "DualWielding", 0x24, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "HasWeapon", 0x25, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ObjectSize", 0x26, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::spell_cast::AnimationInfoComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x30 (48 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_spell_cast_AnimationInfoComponent_Properties[] = {
+    { "TargetPosition", 0x00, FIELD_TYPE_VEC3, 0, true },
+    { "Target", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "field_28", 0x18, FIELD_TYPE_UINT8, 0, true },
+    { "TargetIsCaster", 0x19, FIELD_TYPE_BOOL, 0, true },
+    { "field_2B", 0x1a, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_SpellCastAnimationInfoComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_spell_cast_AnimationInfoComponent_Layout = {
     .componentName = "eoc::spell_cast::AnimationInfoComponent",
-    .shortName = "SpellCastAnimationInfo",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x27,
-    .properties = g_Gen_SpellCastAnimationInfoComponent_Properties,
-    .propertyCount = sizeof(g_Gen_SpellCastAnimationInfoComponent_Properties) / sizeof(g_Gen_SpellCastAnimationInfoComponent_Properties[0]),
+    .shortName = "AnimationInfo",
+    .componentTypeIndex = 0,
+    .componentSize = 0x30,
+    .properties = g_Gen_eoc_spell_cast_AnimationInfoComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_spell_cast_AnimationInfoComponent_Properties) / sizeof(g_Gen_eoc_spell_cast_AnimationInfoComponent_Properties[0]),
 };
 
-// eoc::spell_cast::CacheComponent (from SpellCast.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_SpellCastCacheComponent_Properties[] = {
-    { "SpellCastingAbility", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Flags", 0x04, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::spell_cast::CacheComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_spell_cast_CacheComponent_Properties[] = {
+    { "SpellCastingAbility", 0x00, FIELD_TYPE_UINT8, 0, true },
+    { "Flags", 0x04, FIELD_TYPE_UINT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_SpellCastCacheComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_spell_cast_CacheComponent_Layout = {
     .componentName = "eoc::spell_cast::CacheComponent",
-    .shortName = "SpellCastCache",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_SpellCastCacheComponent_Properties,
-    .propertyCount = sizeof(g_Gen_SpellCastCacheComponent_Properties) / sizeof(g_Gen_SpellCastCacheComponent_Properties[0]),
+    .shortName = "Cache",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_eoc_spell_cast_CacheComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_spell_cast_CacheComponent_Properties) / sizeof(g_Gen_eoc_spell_cast_CacheComponent_Properties[0]),
 };
 
-// eoc::spell_cast::DataCacheSingletonComponent (from SpellCast.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_SpellCastDataCacheComponent_Properties[] = {
-    { "Spells", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::spell_cast::InterruptResultsComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x38 (56 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_spell_cast_InterruptResultsComponent_Properties[] = {
+    { "HasReplacement", 0x00, FIELD_TYPE_BOOL, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_SpellCastDataCacheComponent_Layout = {
-    .componentName = "eoc::spell_cast::DataCacheSingletonComponent",
-    .shortName = "SpellCastDataCache",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_SpellCastDataCacheComponent_Properties,
-    .propertyCount = sizeof(g_Gen_SpellCastDataCacheComponent_Properties) / sizeof(g_Gen_SpellCastDataCacheComponent_Properties[0]),
-};
-
-// eoc::spell_cast::ExecutionTimeComponent (from SpellCast.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_SpellCastExecutionTimeComponent_Properties[] = {
-    { "Time", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_SpellCastExecutionTimeComponent_Layout = {
-    .componentName = "eoc::spell_cast::ExecutionTimeComponent",
-    .shortName = "SpellCastExecutionTime",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_SpellCastExecutionTimeComponent_Properties,
-    .propertyCount = sizeof(g_Gen_SpellCastExecutionTimeComponent_Properties) / sizeof(g_Gen_SpellCastExecutionTimeComponent_Properties[0]),
-};
-
-// eoc::spell_cast::InterruptResultsComponent (from SpellCast.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_SpellCastInterruptResultsComponent_Properties[] = {
-    { "HasReplacement", 0x00, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Results", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_SpellCastInterruptResultsComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_spell_cast_InterruptResultsComponent_Layout = {
     .componentName = "eoc::spell_cast::InterruptResultsComponent",
-    .shortName = "SpellCastInterruptResults",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_SpellCastInterruptResultsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_SpellCastInterruptResultsComponent_Properties) / sizeof(g_Gen_SpellCastInterruptResultsComponent_Properties[0]),
+    .shortName = "InterruptResults",
+    .componentTypeIndex = 0,
+    .componentSize = 0x38,
+    .properties = g_Gen_eoc_spell_cast_InterruptResultsComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_spell_cast_InterruptResultsComponent_Properties) / sizeof(g_Gen_eoc_spell_cast_InterruptResultsComponent_Properties[0]),
 };
 
-// eoc::spell_cast::IsCastingComponent (from SpellCast.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_SpellCastIsCastingComponent_Properties[] = {
-    { "Cast", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::spell_cast::IsCastingComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_spell_cast_IsCastingComponent_Properties[] = {
+    { "Cast", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_SpellCastIsCastingComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_spell_cast_IsCastingComponent_Layout = {
     .componentName = "eoc::spell_cast::IsCastingComponent",
-    .shortName = "SpellCastIsCasting",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_SpellCastIsCastingComponent_Properties,
-    .propertyCount = sizeof(g_Gen_SpellCastIsCastingComponent_Properties) / sizeof(g_Gen_SpellCastIsCastingComponent_Properties[0]),
+    .shortName = "IsCasting",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_eoc_spell_cast_IsCastingComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_spell_cast_IsCastingComponent_Properties) / sizeof(g_Gen_eoc_spell_cast_IsCastingComponent_Properties[0]),
 };
 
-// eoc::spell_cast::MovementComponent (from SpellCast.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_SpellCastMovementComponent_Properties[] = {
-    { "Position", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_C", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "TextKey", 0x10, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::spell_cast::MovementComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x1c (28 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_spell_cast_MovementComponent_Properties[] = {
+    { "Position", 0x00, FIELD_TYPE_VEC3, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_SpellCastMovementComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_spell_cast_MovementComponent_Layout = {
     .componentName = "eoc::spell_cast::MovementComponent",
-    .shortName = "SpellCastMovement",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x14,
-    .properties = g_Gen_SpellCastMovementComponent_Properties,
-    .propertyCount = sizeof(g_Gen_SpellCastMovementComponent_Properties) / sizeof(g_Gen_SpellCastMovementComponent_Properties[0]),
+    .shortName = "Movement",
+    .componentTypeIndex = 0,
+    .componentSize = 0x1c,
+    .properties = g_Gen_eoc_spell_cast_MovementComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_spell_cast_MovementComponent_Properties) / sizeof(g_Gen_eoc_spell_cast_MovementComponent_Properties[0]),
 };
 
-// eoc::spell_cast::OutcomeComponent (from SpellCast.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_SpellCastOutcomeComponent_Properties[] = {
-    { "Result", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::spell_cast::StateComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0xc0 (192 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_spell_cast_StateComponent_Properties[] = {
+    { "Entity", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "Caster", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "CasterStartPosition", 0x10, FIELD_TYPE_VEC3, 0, true },
+    { "SpellCastGuid", 0x20, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_SpellCastOutcomeComponent_Layout = {
-    .componentName = "eoc::spell_cast::OutcomeComponent",
-    .shortName = "SpellCastOutcome",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_SpellCastOutcomeComponent_Properties,
-    .propertyCount = sizeof(g_Gen_SpellCastOutcomeComponent_Properties) / sizeof(g_Gen_SpellCastOutcomeComponent_Properties[0]),
-};
-
-// eoc::spell_cast::RollsComponent (from SpellCast.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_SpellCastRollsComponent_Properties[] = {
-    { "Rolls", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_SpellCastRollsComponent_Layout = {
-    .componentName = "eoc::spell_cast::RollsComponent",
-    .shortName = "SpellCastRolls",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_SpellCastRollsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_SpellCastRollsComponent_Properties) / sizeof(g_Gen_SpellCastRollsComponent_Properties[0]),
-};
-
-// eoc::spell_cast::StateComponent (from SpellCast.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_SpellCastStateComponent_Properties[] = {
-    { "Entity", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Caster", 0x08, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "SpellId", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "CastOptions", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Targets", 0x20, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "CastPosition", 0x28, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "CastEndPosition", 0x30, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "CasterStartPosition", 0x38, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Source", 0x40, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Random", 0x48, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "SpellCastGuid", 0x50, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "NetGuid", 0x60, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_SpellCastStateComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_spell_cast_StateComponent_Layout = {
     .componentName = "eoc::spell_cast::StateComponent",
-    .shortName = "SpellCastState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x68,
-    .properties = g_Gen_SpellCastStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_SpellCastStateComponent_Properties) / sizeof(g_Gen_SpellCastStateComponent_Properties[0]),
+    .shortName = "State",
+    .componentTypeIndex = 0,
+    .componentSize = 0xc0,
+    .properties = g_Gen_eoc_spell_cast_StateComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_spell_cast_StateComponent_Properties) / sizeof(g_Gen_eoc_spell_cast_StateComponent_Properties[0]),
 };
 
-// eoc::spell_cast::SyncTargetingComponent (from SpellCast.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_SpellSyncTargetingComponent_Properties[] = {
-    { "Target", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Targets", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "CanMoveToThrowTarget", 0x10, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_44", 0x14, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_48", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "HoverPosition", 0x20, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "CasterPosition", 0x28, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "CasterMoveToPosition", 0x30, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_88", 0x38, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::spell_cast::SyncTargetingComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x98 (152 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_spell_cast_SyncTargetingComponent_Properties[] = {
+    { "field_44", 0x00, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_SpellSyncTargetingComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_spell_cast_SyncTargetingComponent_Layout = {
     .componentName = "eoc::spell_cast::SyncTargetingComponent",
-    .shortName = "SpellSyncTargeting",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x40,
-    .properties = g_Gen_SpellSyncTargetingComponent_Properties,
-    .propertyCount = sizeof(g_Gen_SpellSyncTargetingComponent_Properties) / sizeof(g_Gen_SpellSyncTargetingComponent_Properties[0]),
+    .shortName = "SyncTargeting",
+    .componentTypeIndex = 0,
+    .componentSize = 0x98,
+    .properties = g_Gen_eoc_spell_cast_SyncTargetingComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_spell_cast_SyncTargetingComponent_Properties) / sizeof(g_Gen_eoc_spell_cast_SyncTargetingComponent_Properties[0]),
 };
 
-// eoc::stats::proficiency::ProficiencyComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ProficiencyComponent_Properties[] = {
-    { "Flags", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::status::CauseComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_status_CauseComponent_Properties[] = {
+    { "Cause", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ProficiencyComponent_Layout = {
-    .componentName = "eoc::stats::proficiency::ProficiencyComponent",
-    .shortName = "Proficiency",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ProficiencyComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ProficiencyComponent_Properties) / sizeof(g_Gen_ProficiencyComponent_Properties[0]),
-};
-
-// eoc::stats::proficiency::ProficiencyGroupComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ProficiencyGroupComponent_Properties[] = {
-    { "Flags", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ProficiencyGroupComponent_Layout = {
-    .componentName = "eoc::stats::proficiency::ProficiencyGroupComponent",
-    .shortName = "ProficiencyGroup",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ProficiencyGroupComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ProficiencyGroupComponent_Properties) / sizeof(g_Gen_ProficiencyGroupComponent_Properties[0]),
-};
-
-// eoc::status::CauseComponent (from Status.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_StatusCauseComponent_Properties[] = {
-    { "Cause", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_StatusCauseComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_status_CauseComponent_Layout = {
     .componentName = "eoc::status::CauseComponent",
-    .shortName = "StatusCause",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_StatusCauseComponent_Properties,
-    .propertyCount = sizeof(g_Gen_StatusCauseComponent_Properties) / sizeof(g_Gen_StatusCauseComponent_Properties[0]),
+    .shortName = "Cause",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_eoc_status_CauseComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_status_CauseComponent_Properties) / sizeof(g_Gen_eoc_status_CauseComponent_Properties[0]),
 };
 
-// eoc::status::ContainerComponent (from Status.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_StatusContainerComponent_Properties[] = {
-    { "Statuses", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::status::IDComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_status_IDComponent_Properties[] = {
+    { "ID", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_StatusContainerComponent_Layout = {
-    .componentName = "eoc::status::ContainerComponent",
-    .shortName = "StatusContainer",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_StatusContainerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_StatusContainerComponent_Properties) / sizeof(g_Gen_StatusContainerComponent_Properties[0]),
-};
-
-// eoc::status::IDComponent (from Status.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_StatusIDComponent_Properties[] = {
-    { "ID", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_StatusIDComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_status_IDComponent_Layout = {
     .componentName = "eoc::status::IDComponent",
-    .shortName = "StatusID",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_StatusIDComponent_Properties,
-    .propertyCount = sizeof(g_Gen_StatusIDComponent_Properties) / sizeof(g_Gen_StatusIDComponent_Properties[0]),
+    .shortName = "ID",
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_eoc_status_IDComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_status_IDComponent_Properties) / sizeof(g_Gen_eoc_status_IDComponent_Properties[0]),
 };
 
-// eoc::status::IncapacitatedComponent (from Status.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_StatusIncapacitatedComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_48", 0x04, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::status::IncapacitatedComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x50 (80 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_status_IncapacitatedComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_UINT32, 0, true },
+    { "field_48", 0x04, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_StatusIncapacitatedComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_status_IncapacitatedComponent_Layout = {
     .componentName = "eoc::status::IncapacitatedComponent",
-    .shortName = "StatusIncapacitated",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x05,
-    .properties = g_Gen_StatusIncapacitatedComponent_Properties,
-    .propertyCount = sizeof(g_Gen_StatusIncapacitatedComponent_Properties) / sizeof(g_Gen_StatusIncapacitatedComponent_Properties[0]),
+    .shortName = "Incapacitated",
+    .componentTypeIndex = 0,
+    .componentSize = 0x50,
+    .properties = g_Gen_eoc_status_IncapacitatedComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_status_IncapacitatedComponent_Properties) / sizeof(g_Gen_eoc_status_IncapacitatedComponent_Properties[0]),
 };
 
-// eoc::status::LifetimeComponent (from Status.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_StatusLifetimeComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Lifetime", 0x04, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::status::LifetimeComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_status_LifetimeComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_StatusLifetimeComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_status_LifetimeComponent_Layout = {
     .componentName = "eoc::status::LifetimeComponent",
-    .shortName = "StatusLifetime",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_StatusLifetimeComponent_Properties,
-    .propertyCount = sizeof(g_Gen_StatusLifetimeComponent_Properties) / sizeof(g_Gen_StatusLifetimeComponent_Properties[0]),
+    .shortName = "Lifetime",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_eoc_status_LifetimeComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_status_LifetimeComponent_Properties) / sizeof(g_Gen_eoc_status_LifetimeComponent_Properties[0]),
 };
 
-// eoc::status::LoseControlComponent (from Status.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_StatusLoseControlComponent_Properties[] = {
-    { "LoseControl", 0x00, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::status::LoseControlComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x1 (1 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_status_LoseControlComponent_Properties[] = {
+    { "LoseControl", 0x00, FIELD_TYPE_BOOL, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_StatusLoseControlComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_status_LoseControlComponent_Layout = {
     .componentName = "eoc::status::LoseControlComponent",
-    .shortName = "StatusLoseControl",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x01,
-    .properties = g_Gen_StatusLoseControlComponent_Properties,
-    .propertyCount = sizeof(g_Gen_StatusLoseControlComponent_Properties) / sizeof(g_Gen_StatusLoseControlComponent_Properties[0]),
+    .shortName = "LoseControl",
+    .componentTypeIndex = 0,
+    .componentSize = 0x1,
+    .properties = g_Gen_eoc_status_LoseControlComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_status_LoseControlComponent_Properties) / sizeof(g_Gen_eoc_status_LoseControlComponent_Properties[0]),
 };
 
-// eoc::status::visual::DisabledComponent (from Status.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_StatusVisualDisabledComponent_Properties[] = {
-    { "Visuals", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::summon::IsSummonComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x30 (48 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_summon_IsSummonComponent_Properties[] = {
+    { "field_10", 0x00, FIELD_TYPE_GUID, 0, true },
+    { "field_20", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "field_28", 0x18, FIELD_TYPE_FIXEDSTRING, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_StatusVisualDisabledComponent_Layout = {
-    .componentName = "eoc::status::visual::DisabledComponent",
-    .shortName = "StatusVisualDisabled",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_StatusVisualDisabledComponent_Properties,
-    .propertyCount = sizeof(g_Gen_StatusVisualDisabledComponent_Properties) / sizeof(g_Gen_StatusVisualDisabledComponent_Properties[0]),
-};
-
-// eoc::summon::ContainerComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_SummonContainerComponent_Properties[] = {
-    { "Characters", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Items", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_SummonContainerComponent_Layout = {
-    .componentName = "eoc::summon::ContainerComponent",
-    .shortName = "SummonContainer",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_SummonContainerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_SummonContainerComponent_Properties) / sizeof(g_Gen_SummonContainerComponent_Properties[0]),
-};
-
-// eoc::summon::IsSummonComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_IsSummonComponent_Properties[] = {
-    { "Owner", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Summoner", 0x08, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_10", 0x10, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_20", 0x20, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_28", 0x28, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_IsSummonComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_summon_IsSummonComponent_Layout = {
     .componentName = "eoc::summon::IsSummonComponent",
     .shortName = "IsSummon",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x2c,
-    .properties = g_Gen_IsSummonComponent_Properties,
-    .propertyCount = sizeof(g_Gen_IsSummonComponent_Properties) / sizeof(g_Gen_IsSummonComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x30,
+    .properties = g_Gen_eoc_summon_IsSummonComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_summon_IsSummonComponent_Properties) / sizeof(g_Gen_eoc_summon_IsSummonComponent_Properties[0]),
 };
 
-// eoc::summon::LifetimeComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_SummonLifetimeComponent_Properties[] = {
-    { "Lifetime", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::tadpole_tree::TreeStateComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x1 (1 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_tadpole_tree_TreeStateComponent_Properties[] = {
+    { "State", 0x00, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_SummonLifetimeComponent_Layout = {
-    .componentName = "eoc::summon::LifetimeComponent",
-    .shortName = "SummonLifetime",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_SummonLifetimeComponent_Properties,
-    .propertyCount = sizeof(g_Gen_SummonLifetimeComponent_Properties) / sizeof(g_Gen_SummonLifetimeComponent_Properties[0]),
-};
-
-// eoc::tadpole_tree::PowerContainerComponent (from Tadpole.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_TadpolePowersComponent_Properties[] = {
-    { "Powers", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_TadpolePowersComponent_Layout = {
-    .componentName = "eoc::tadpole_tree::PowerContainerComponent",
-    .shortName = "TadpolePowers",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_TadpolePowersComponent_Properties,
-    .propertyCount = sizeof(g_Gen_TadpolePowersComponent_Properties) / sizeof(g_Gen_TadpolePowersComponent_Properties[0]),
-};
-
-// eoc::tadpole_tree::TreeStateComponent (from Tadpole.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_TadpoleTreeStateComponent_Properties[] = {
-    { "State", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_TadpoleTreeStateComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_tadpole_tree_TreeStateComponent_Layout = {
     .componentName = "eoc::tadpole_tree::TreeStateComponent",
-    .shortName = "TadpoleTreeState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x01,
-    .properties = g_Gen_TadpoleTreeStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_TadpoleTreeStateComponent_Properties) / sizeof(g_Gen_TadpoleTreeStateComponent_Properties[0]),
+    .shortName = "TreeState",
+    .componentTypeIndex = 0,
+    .componentSize = 0x1,
+    .properties = g_Gen_eoc_tadpole_tree_TreeStateComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_tadpole_tree_TreeStateComponent_Properties) / sizeof(g_Gen_eoc_tadpole_tree_TreeStateComponent_Properties[0]),
 };
 
-// eoc::templates::OriginalTemplateComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_OriginalTemplateComponent_Properties[] = {
-    { "OriginalTemplate", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "TemplateType", 0x04, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::templates::OriginalTemplateComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_templates_OriginalTemplateComponent_Properties[] = {
+    { "OriginalTemplate", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "TemplateType", 0x04, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_OriginalTemplateComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_templates_OriginalTemplateComponent_Layout = {
     .componentName = "eoc::templates::OriginalTemplateComponent",
     .shortName = "OriginalTemplate",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x05,
-    .properties = g_Gen_OriginalTemplateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_OriginalTemplateComponent_Properties) / sizeof(g_Gen_OriginalTemplateComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_eoc_templates_OriginalTemplateComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_templates_OriginalTemplateComponent_Properties) / sizeof(g_Gen_eoc_templates_OriginalTemplateComponent_Properties[0]),
 };
 
-// eoc::through::ShootThroughTypeComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ShootThroughTypeComponent_Properties[] = {
-    { "Type", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::through::ShootThroughTypeComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x1 (1 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_through_ShootThroughTypeComponent_Properties[] = {
+    { "Type", 0x00, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ShootThroughTypeComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_through_ShootThroughTypeComponent_Layout = {
     .componentName = "eoc::through::ShootThroughTypeComponent",
     .shortName = "ShootThroughType",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x01,
-    .properties = g_Gen_ShootThroughTypeComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ShootThroughTypeComponent_Properties) / sizeof(g_Gen_ShootThroughTypeComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x1,
+    .properties = g_Gen_eoc_through_ShootThroughTypeComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_through_ShootThroughTypeComponent_Properties) / sizeof(g_Gen_eoc_through_ShootThroughTypeComponent_Properties[0]),
 };
 
-// eoc::trigger::TypeComponent (from Trigger.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_TriggerTypeComponent_Properties[] = {
-    { "Type", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::trigger::TypeComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x1 (1 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_trigger_TypeComponent_Properties[] = {
+    { "Type", 0x00, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_TriggerTypeComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_trigger_TypeComponent_Layout = {
     .componentName = "eoc::trigger::TypeComponent",
-    .shortName = "TriggerType",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x01,
-    .properties = g_Gen_TriggerTypeComponent_Properties,
-    .propertyCount = sizeof(g_Gen_TriggerTypeComponent_Properties) / sizeof(g_Gen_TriggerTypeComponent_Properties[0]),
+    .shortName = "Type",
+    .componentTypeIndex = 0,
+    .componentSize = 0x1,
+    .properties = g_Gen_eoc_trigger_TypeComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_trigger_TypeComponent_Properties) / sizeof(g_Gen_eoc_trigger_TypeComponent_Properties[0]),
 };
 
-// eoc::unsheath::StateComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_UnsheathComponent_Properties[] = {
-    { "MainHandWeapon", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "OffHandWeapon", 0x08, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_10", 0x10, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "State", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_18", 0x20, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_19", 0x21, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_1A", 0x22, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::unsheath::StateComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x20 (32 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_unsheath_StateComponent_Properties[] = {
+    { "field_10", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "field_18", 0x04, FIELD_TYPE_UINT8, 0, true },
+    { "field_19", 0x05, FIELD_TYPE_UINT8, 0, true },
+    { "field_1A", 0x06, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_UnsheathComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_unsheath_StateComponent_Layout = {
     .componentName = "eoc::unsheath::StateComponent",
-    .shortName = "Unsheath",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x23,
-    .properties = g_Gen_UnsheathComponent_Properties,
-    .propertyCount = sizeof(g_Gen_UnsheathComponent_Properties) / sizeof(g_Gen_UnsheathComponent_Properties[0]),
+    .shortName = "State",
+    .componentTypeIndex = 0,
+    .componentSize = 0x20,
+    .properties = g_Gen_eoc_unsheath_StateComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_unsheath_StateComponent_Properties) / sizeof(g_Gen_eoc_unsheath_StateComponent_Properties[0]),
 };
 
-// eoc::use::SocketComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_UseSocketComponent_Properties[] = {
-    { "Sockets", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::user::AvatarComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0xc (12 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_user_AvatarComponent_Properties[] = {
+    { "UserID", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "field_8", 0x04, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_UseSocketComponent_Layout = {
-    .componentName = "eoc::use::SocketComponent",
-    .shortName = "UseSocket",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_UseSocketComponent_Properties,
-    .propertyCount = sizeof(g_Gen_UseSocketComponent_Properties) / sizeof(g_Gen_UseSocketComponent_Properties[0]),
-};
-
-// eoc::user::AvatarComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_UserAvatarComponent_Properties[] = {
-    { "UserID", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "OwnerProfileID", 0x04, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8", 0x08, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_UserAvatarComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_user_AvatarComponent_Layout = {
     .componentName = "eoc::user::AvatarComponent",
-    .shortName = "UserAvatar",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x09,
-    .properties = g_Gen_UserAvatarComponent_Properties,
-    .propertyCount = sizeof(g_Gen_UserAvatarComponent_Properties) / sizeof(g_Gen_UserAvatarComponent_Properties[0]),
+    .shortName = "Avatar",
+    .componentTypeIndex = 0,
+    .componentSize = 0xc,
+    .properties = g_Gen_eoc_user_AvatarComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_user_AvatarComponent_Properties) / sizeof(g_Gen_eoc_user_AvatarComponent_Properties[0]),
 };
 
-// eoc::user::ReservedForComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_UserReservedForComponent_Properties[] = {
-    { "UserID", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// eoc::user::ReservedForComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_eoc_user_ReservedForComponent_Properties[] = {
+    { "UserID", 0x00, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_UserReservedForComponent_Layout = {
+static const ComponentLayoutDef g_Gen_eoc_user_ReservedForComponent_Layout = {
     .componentName = "eoc::user::ReservedForComponent",
-    .shortName = "UserReservedFor",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_UserReservedForComponent_Properties,
-    .propertyCount = sizeof(g_Gen_UserReservedForComponent_Properties) / sizeof(g_Gen_UserReservedForComponent_Properties[0]),
+    .shortName = "ReservedFor",
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_eoc_user_ReservedForComponent_Properties,
+    .propertyCount = sizeof(g_Gen_eoc_user_ReservedForComponent_Properties) / sizeof(g_Gen_eoc_user_ReservedForComponent_Properties[0]),
 };
 
-// esv::ActivationGroupContainerComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerActivationGroupContainerComponent_Properties[] = {
-    { "Groups", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::AnubisExecutorComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_AnubisExecutorComponent_Properties[] = {
+    { "field_10", 0x00, FIELD_TYPE_UINT8, 0, true },
+    { "field_11", 0x01, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerActivationGroupContainerComponent_Layout = {
-    .componentName = "esv::ActivationGroupContainerComponent",
-    .shortName = "ServerActivationGroupContainer",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerActivationGroupContainerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerActivationGroupContainerComponent_Properties) / sizeof(g_Gen_ServerActivationGroupContainerComponent_Properties[0]),
+static const ComponentLayoutDef g_Gen_esv_AnubisExecutorComponent_Layout = {
+    .componentName = "esv::AnubisExecutorComponent",
+    .shortName = "AnubisExecutor",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_esv_AnubisExecutorComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_AnubisExecutorComponent_Properties) / sizeof(g_Gen_esv_AnubisExecutorComponent_Properties[0]),
 };
 
-// esv::BaseDataComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerBaseDataComponent_Properties[] = {
-    { "Weight", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Flags", 0x04, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::BaseDataComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x18 (24 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_BaseDataComponent_Properties[] = {
+    { "Resistances", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "Weight", 0x04, FIELD_TYPE_INT32, 0, true },
+    { "Flags", 0x08, FIELD_TYPE_UINT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerBaseDataComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_BaseDataComponent_Layout = {
     .componentName = "esv::BaseDataComponent",
-    .shortName = "ServerBaseData",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerBaseDataComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerBaseDataComponent_Properties) / sizeof(g_Gen_ServerBaseDataComponent_Properties[0]),
+    .shortName = "BaseData",
+    .componentTypeIndex = 0,
+    .componentSize = 0x18,
+    .properties = g_Gen_esv_BaseDataComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_BaseDataComponent_Properties) / sizeof(g_Gen_esv_BaseDataComponent_Properties[0]),
 };
 
-// esv::BaseSizeComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerBaseSizeComponent_Properties[] = {
-    { "GameSize", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "SoundSize", 0x01, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::BaseSizeComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x2 (2 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_BaseSizeComponent_Properties[] = {
+    { "GameSize", 0x00, FIELD_TYPE_UINT8, 0, true },
+    { "SoundSize", 0x01, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerBaseSizeComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_BaseSizeComponent_Layout = {
     .componentName = "esv::BaseSizeComponent",
-    .shortName = "ServerBaseSize",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x02,
-    .properties = g_Gen_ServerBaseSizeComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerBaseSizeComponent_Properties) / sizeof(g_Gen_ServerBaseSizeComponent_Properties[0]),
+    .shortName = "BaseSize",
+    .componentTypeIndex = 0,
+    .componentSize = 0x2,
+    .properties = g_Gen_esv_BaseSizeComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_BaseSizeComponent_Properties) / sizeof(g_Gen_esv_BaseSizeComponent_Properties[0]),
 };
 
-// esv::BaseStatsComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerBaseStatsComponent_Properties[] = {
-    { "Initiative", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::BaseStatsComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_BaseStatsComponent_Properties[] = {
+    { "Initiative", 0x00, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerBaseStatsComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_BaseStatsComponent_Layout = {
     .componentName = "esv::BaseStatsComponent",
-    .shortName = "ServerBaseStats",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_ServerBaseStatsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerBaseStatsComponent_Properties) / sizeof(g_Gen_ServerBaseStatsComponent_Properties[0]),
+    .shortName = "BaseStats",
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_esv_BaseStatsComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_BaseStatsComponent_Properties) / sizeof(g_Gen_esv_BaseStatsComponent_Properties[0]),
 };
 
-// esv::BaseWeaponComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerBaseWeaponComponent_Properties[] = {
-    { "DamageList", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::BreadcrumbComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10c (268 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_BreadcrumbComponent_Properties[] = {
+    { "field_118", 0x00, FIELD_TYPE_VEC3, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerBaseWeaponComponent_Layout = {
-    .componentName = "esv::BaseWeaponComponent",
-    .shortName = "ServerBaseWeapon",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerBaseWeaponComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerBaseWeaponComponent_Properties) / sizeof(g_Gen_ServerBaseWeaponComponent_Properties[0]),
-};
-
-// esv::BreadcrumbComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerBreadcrumbComponent_Properties[] = {
-    { "field_18", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_118", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerBreadcrumbComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_BreadcrumbComponent_Layout = {
     .componentName = "esv::BreadcrumbComponent",
-    .shortName = "ServerBreadcrumb",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_ServerBreadcrumbComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerBreadcrumbComponent_Properties) / sizeof(g_Gen_ServerBreadcrumbComponent_Properties[0]),
+    .shortName = "Breadcrumb",
+    .componentTypeIndex = 0,
+    .componentSize = 0x10c,
+    .properties = g_Gen_esv_BreadcrumbComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_BreadcrumbComponent_Properties) / sizeof(g_Gen_esv_BreadcrumbComponent_Properties[0]),
 };
 
-// esv::CharacterCreationCustomIconComponent (from CharacterCreation.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerCCCustomIconComponent_Properties[] = {
-    { "Icon", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::GameTimerComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x28 (40 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_GameTimerComponent_Properties[] = {
+    { "field_18", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "field_20", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "field_28", 0x10, FIELD_TYPE_INT32, 0, true },
+    { "field_2C", 0x14, FIELD_TYPE_INT32, 0, true },
+    { "field_30", 0x18, FIELD_TYPE_INT32, 0, true },
+    { "field_34", 0x1c, FIELD_TYPE_INT32, 0, true },
+    { "field_38", 0x20, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerCCCustomIconComponent_Layout = {
-    .componentName = "esv::CharacterCreationCustomIconComponent",
-    .shortName = "ServerCCCustomIcon",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerCCCustomIconComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerCCCustomIconComponent_Properties) / sizeof(g_Gen_ServerCCCustomIconComponent_Properties[0]),
-};
-
-// esv::DisplayNameListComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerDisplayNameListComponent_Properties[] = {
-    { "Names", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Titles", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "HideTitle", 0x10, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerDisplayNameListComponent_Layout = {
-    .componentName = "esv::DisplayNameListComponent",
-    .shortName = "ServerDisplayNameList",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x11,
-    .properties = g_Gen_ServerDisplayNameListComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerDisplayNameListComponent_Properties) / sizeof(g_Gen_ServerDisplayNameListComponent_Properties[0]),
-};
-
-// esv::GameTimerComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerGameTimerComponent_Properties[] = {
-    { "field_18", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_20", 0x08, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_28", 0x10, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_2C", 0x14, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_30", 0x18, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_34", 0x1c, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_38", 0x20, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerGameTimerComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_GameTimerComponent_Layout = {
     .componentName = "esv::GameTimerComponent",
-    .shortName = "ServerGameTimer",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x21,
-    .properties = g_Gen_ServerGameTimerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerGameTimerComponent_Properties) / sizeof(g_Gen_ServerGameTimerComponent_Properties[0]),
+    .shortName = "GameTimer",
+    .componentTypeIndex = 0,
+    .componentSize = 0x28,
+    .properties = g_Gen_esv_GameTimerComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_GameTimerComponent_Properties) / sizeof(g_Gen_esv_GameTimerComponent_Properties[0]),
 };
 
-// esv::GameplayLightEquipmentComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerGameplayLightEquipmentComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::JumpFollowComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x150 (336 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_JumpFollowComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_VEC3, 0, true },
+    { "field_C", 0x10, FIELD_TYPE_VEC3, 0, true },
+    { "field_18", 0x1c, FIELD_TYPE_INT32, 0, true },
+    { "field_1C", 0x20, FIELD_TYPE_INT32, 0, true },
+    { "field_20", 0x24, FIELD_TYPE_INT32, 0, true },
+    { "field_24", 0x28, FIELD_TYPE_VEC3, 0, true },
+    { "field_30", 0x38, FIELD_TYPE_VEC3, 0, true },
+    { "field_3C", 0x44, FIELD_TYPE_FLOAT, 0, true },
+    { "field_40", 0x48, FIELD_TYPE_FLOAT, 0, true },
+    { "field_44", 0x4c, FIELD_TYPE_FLOAT, 0, true },
+    { "field_48", 0x50, FIELD_TYPE_UINT8, 0, true },
+    { "field_4C", 0x54, FIELD_TYPE_FLOAT, 0, true },
+    { "ProjectileTerrainOffset", 0x58, FIELD_TYPE_FLOAT, 0, true },
+    { "field_D0", 0x5c, FIELD_TYPE_UINT8, 0, true },
+    { "field_D4", 0x60, FIELD_TYPE_VEC3, 0, true },
+    { "field_E0", 0x70, FIELD_TYPE_VEC3, 0, true },
+    { "field_EC", 0x7c, FIELD_TYPE_INT32, 0, true },
+    { "field_F0", 0x80, FIELD_TYPE_INT64, 0, true },
+    { "field_F8", 0x88, FIELD_TYPE_INT32, 0, true },
+    { "field_FC", 0x90, FIELD_TYPE_VEC3, 0, true },
+    { "field_108", 0xa0, FIELD_TYPE_VEC3, 0, true },
+    { "field_114", 0xac, FIELD_TYPE_INT32, 0, true },
+    { "field_118", 0xb0, FIELD_TYPE_UINT8, 0, true },
+    { "field_11C", 0xb8, FIELD_TYPE_VEC3, 0, true },
+    { "field_128", 0xc4, FIELD_TYPE_INT32, 0, true },
+    { "field_12C", 0xc8, FIELD_TYPE_INT32, 0, true },
+    { "field_130", 0xcc, FIELD_TYPE_UINT32, 0, true },
+    { "field_134", 0xd0, FIELD_TYPE_UINT32, 0, true },
+    { "field_138", 0xd4, FIELD_TYPE_UINT8, 0, true },
+    { "field_139", 0xd5, FIELD_TYPE_UINT8, 0, true },
+    { "field_13A", 0xd6, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerGameplayLightEquipmentComponent_Layout = {
-    .componentName = "esv::GameplayLightEquipmentComponent",
-    .shortName = "ServerGameplayLightEquipment",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerGameplayLightEquipmentComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerGameplayLightEquipmentComponent_Properties) / sizeof(g_Gen_ServerGameplayLightEquipmentComponent_Properties[0]),
-};
-
-// esv::IconListComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerIconListComponent_Properties[] = {
-    { "Icons", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerIconListComponent_Layout = {
-    .componentName = "esv::IconListComponent",
-    .shortName = "ServerIconList",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerIconListComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerIconListComponent_Properties) / sizeof(g_Gen_ServerIconListComponent_Properties[0]),
-};
-
-// esv::InventoryPropertyCanBePickpocketedComponent (from Inventory.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_InventoryPropertyCanBePickpocketedComponent_Properties[] = {
-    { "Tag", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_InventoryPropertyCanBePickpocketedComponent_Layout = {
-    .componentName = "esv::InventoryPropertyCanBePickpocketedComponent",
-    .shortName = "InventoryPropertyCanBePickpocketed",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_InventoryPropertyCanBePickpocketedComponent_Properties,
-    .propertyCount = sizeof(g_Gen_InventoryPropertyCanBePickpocketedComponent_Properties) / sizeof(g_Gen_InventoryPropertyCanBePickpocketedComponent_Properties[0]),
-};
-
-// esv::InventoryPropertyIsDroppedOnDeathComponent (from Inventory.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_InventoryPropertyIsDroppedOnDeathComponent_Properties[] = {
-    { "Tag", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_InventoryPropertyIsDroppedOnDeathComponent_Layout = {
-    .componentName = "esv::InventoryPropertyIsDroppedOnDeathComponent",
-    .shortName = "InventoryPropertyIsDroppedOnDeath",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_InventoryPropertyIsDroppedOnDeathComponent_Properties,
-    .propertyCount = sizeof(g_Gen_InventoryPropertyIsDroppedOnDeathComponent_Properties) / sizeof(g_Gen_InventoryPropertyIsDroppedOnDeathComponent_Properties[0]),
-};
-
-// esv::InventoryPropertyIsTradableComponent (from Inventory.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_InventoryPropertyIsTradableComponent_Properties[] = {
-    { "Tag", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_InventoryPropertyIsTradableComponent_Layout = {
-    .componentName = "esv::InventoryPropertyIsTradableComponent",
-    .shortName = "InventoryPropertyIsTradable",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_InventoryPropertyIsTradableComponent_Properties,
-    .propertyCount = sizeof(g_Gen_InventoryPropertyIsTradableComponent_Properties) / sizeof(g_Gen_InventoryPropertyIsTradableComponent_Properties[0]),
-};
-
-// esv::JumpFollowComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_JumpFollowComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_C", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_18", 0x10, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_1C", 0x14, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_20", 0x18, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_24", 0x20, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_30", 0x28, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_3C", 0x30, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_40", 0x34, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_44", 0x38, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_48", 0x3c, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_4C", 0x40, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Spell", 0x48, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ProjectileTerrainOffset", 0x50, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "DangerousAuras", 0x58, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_B0_AvoidArea", 0x60, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_C0_AvoidArea", 0x68, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_D0", 0x70, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_D4", 0x78, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_E0", 0x80, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_EC", 0x88, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_F0", 0x90, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_F8", 0x98, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_FC", 0xa0, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_108", 0xa8, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_114", 0xb0, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_118", 0xb4, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_11C", 0xb8, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_128", 0xc0, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_12C", 0xc4, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_130", 0xc8, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_134", 0xcc, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_138", 0xd0, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_139", 0xd1, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_13A", 0xd2, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_JumpFollowComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_JumpFollowComponent_Layout = {
     .componentName = "esv::JumpFollowComponent",
     .shortName = "JumpFollow",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0xd3,
-    .properties = g_Gen_JumpFollowComponent_Properties,
-    .propertyCount = sizeof(g_Gen_JumpFollowComponent_Properties) / sizeof(g_Gen_JumpFollowComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x150,
+    .properties = g_Gen_esv_JumpFollowComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_JumpFollowComponent_Properties) / sizeof(g_Gen_esv_JumpFollowComponent_Properties[0]),
 };
 
-// esv::LeaderComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerLeaderComponent_Properties[] = {
-    { "Followers_M", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::Projectile
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_Projectile_Properties[] = {
+    { "field_8", 0x00, FIELD_TYPE_UINT32, 0, true },
+    { "field_C", 0x04, FIELD_TYPE_UINT32, 0, true },
+    { "Entity", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "Caster", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "Source", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "TargetObject", 0x20, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "HitObject", 0x28, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "ClientHitObject", 0x30, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "BeamSource", 0x38, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "SourceWeapon", 0x40, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "SourcePos", 0x48, FIELD_TYPE_VEC3, 0, true },
+    { "TargetPos", 0x58, FIELD_TYPE_VEC3, 0, true },
+    { "TargetObjectPos", 0x68, FIELD_TYPE_VEC3, 0, true },
+    { "TextKey", 0x74, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "LifeTime", 0x78, FIELD_TYPE_FLOAT, 0, true },
+    { "HitInterpolation", 0x7c, FIELD_TYPE_FLOAT, 0, true },
+    { "FallbackTimer", 0x80, FIELD_TYPE_FLOAT, 0, true },
+    { "ExplodeRadius", 0x84, FIELD_TYPE_FLOAT, 0, true },
+    { "SpellCastingAbility", 0x88, FIELD_TYPE_UINT8, 0, true },
+    { "SpellCastUuid", 0x90, FIELD_TYPE_GUID, 0, true },
+    { "MovingObject", 0xa0, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "SpawnEffect", 0xa8, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "SpawnFXOverridesImpactFX", 0xac, FIELD_TYPE_BOOL, 0, true },
+    { "BeamEffect", 0xb0, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "RequestDelete", 0xb8, FIELD_TYPE_BOOL, 0, true },
+    { "Launched", 0xb9, FIELD_TYPE_BOOL, 0, true },
+    { "IsOnHold", 0xba, FIELD_TYPE_BOOL, 0, true },
+    { "IsTrap", 0xbb, FIELD_TYPE_BOOL, 0, true },
+    { "IsThrown", 0xbc, FIELD_TYPE_BOOL, 0, true },
+    { "IsFromItem", 0xbd, FIELD_TYPE_BOOL, 0, true },
+    { "IgnoreTargetChecks", 0xbe, FIELD_TYPE_BOOL, 0, true },
+    { "IgnoreRoof", 0xbf, FIELD_TYPE_BOOL, 0, true },
+    { "CanDeflect", 0xc0, FIELD_TYPE_BOOL, 0, true },
+    { "IgnoreObjects", 0xc1, FIELD_TYPE_BOOL, 0, true },
+    { "IgnoreSurfaces", 0xc2, FIELD_TYPE_BOOL, 0, true },
+    { "Used", 0xc3, FIELD_TYPE_BOOL, 0, true },
+    { "Success", 0xc4, FIELD_TYPE_BOOL, 0, true },
+    { "field_526", 0xc5, FIELD_TYPE_UINT8, 0, true },
+    { "DamageMovingObjectOnLand", 0xc6, FIELD_TYPE_BOOL, 0, true },
+    { "Reacted", 0xc7, FIELD_TYPE_BOOL, 0, true },
+    { "ItemActivated", 0xc8, FIELD_TYPE_BOOL, 0, true },
+    { "IsChasmRecovery", 0xc9, FIELD_TYPE_BOOL, 0, true },
+    { "StoryActionId", 0xcc, FIELD_TYPE_INT32, 0, true },
+    { "Flags", 0xd0, FIELD_TYPE_UINT64, 0, true },
+    { "SourcePosition", 0xd8, FIELD_TYPE_VEC3, 0, true },
+    { "field_574", 0xe8, FIELD_TYPE_VEC3, 0, true },
+    { "Level", 0xf4, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "ShouldFall", 0xf8, FIELD_TYPE_BOOL, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerLeaderComponent_Layout = {
-    .componentName = "esv::LeaderComponent",
-    .shortName = "ServerLeader",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerLeaderComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerLeaderComponent_Properties) / sizeof(g_Gen_ServerLeaderComponent_Properties[0]),
+static const ComponentLayoutDef g_Gen_esv_Projectile_Layout = {
+    .componentName = "esv::Projectile",
+    .shortName = "Projectile",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_esv_Projectile_Properties,
+    .propertyCount = sizeof(g_Gen_esv_Projectile_Properties) / sizeof(g_Gen_esv_Projectile_Properties[0]),
 };
 
-// esv::MusicVolumeTriggerStateComponent (from Trigger.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerMusicVolumeTriggerStateComponent_Properties[] = {
-    { "Triggered", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::SafePositionComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_SafePositionComponent_Properties[] = {
+    { "Position", 0x00, FIELD_TYPE_VEC3, 0, true },
+    { "field_24", 0x0c, FIELD_TYPE_BOOL, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerMusicVolumeTriggerStateComponent_Layout = {
-    .componentName = "esv::MusicVolumeTriggerStateComponent",
-    .shortName = "ServerMusicVolumeTriggerState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerMusicVolumeTriggerStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerMusicVolumeTriggerStateComponent_Properties) / sizeof(g_Gen_ServerMusicVolumeTriggerStateComponent_Properties[0]),
-};
-
-// esv::OsirisPingRequestSingletonComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerOsirisPingRequestSingletonComponent_Properties[] = {
-    { "Pings", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerOsirisPingRequestSingletonComponent_Layout = {
-    .componentName = "esv::OsirisPingRequestSingletonComponent",
-    .shortName = "ServerOsirisPingRequestSingleton",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerOsirisPingRequestSingletonComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerOsirisPingRequestSingletonComponent_Properties) / sizeof(g_Gen_ServerOsirisPingRequestSingletonComponent_Properties[0]),
-};
-
-// esv::PingCooldownSingletonComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerPingCooldownSingletonComponent_Properties[] = {
-    { "Cooldowns", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerPingCooldownSingletonComponent_Layout = {
-    .componentName = "esv::PingCooldownSingletonComponent",
-    .shortName = "ServerPingCooldownSingleton",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerPingCooldownSingletonComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerPingCooldownSingletonComponent_Properties) / sizeof(g_Gen_ServerPingCooldownSingletonComponent_Properties[0]),
-};
-
-// esv::PingRequestSingletonComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerPingRequestSingletonComponent_Properties[] = {
-    { "Pings", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerPingRequestSingletonComponent_Layout = {
-    .componentName = "esv::PingRequestSingletonComponent",
-    .shortName = "ServerPingRequestSingleton",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerPingRequestSingletonComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerPingRequestSingletonComponent_Properties) / sizeof(g_Gen_ServerPingRequestSingletonComponent_Properties[0]),
-};
-
-// esv::SafePositionComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerSafePositionComponent_Properties[] = {
-    { "Position", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_24", 0x08, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerSafePositionComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_SafePositionComponent_Layout = {
     .componentName = "esv::SafePositionComponent",
-    .shortName = "ServerSafePosition",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x09,
-    .properties = g_Gen_ServerSafePositionComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerSafePositionComponent_Properties) / sizeof(g_Gen_ServerSafePositionComponent_Properties[0]),
+    .shortName = "SafePosition",
+    .componentTypeIndex = 0,
+    .componentSize = 0x10,
+    .properties = g_Gen_esv_SafePositionComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_SafePositionComponent_Properties) / sizeof(g_Gen_esv_SafePositionComponent_Properties[0]),
 };
 
-// esv::action_resource::ResourceChangeResultsSingletonComponent (from ActionResources.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ActionResourceChangeResultsComponent_Properties[] = {
-    { "Results", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::active_roll::InProgressComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x18 (24 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_active_roll_InProgressComponent_Properties[] = {
+    { "Position", 0x00, FIELD_TYPE_VEC3, 0, true },
+    { "Entity", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ActionResourceChangeResultsComponent_Layout = {
-    .componentName = "esv::action_resource::ResourceChangeResultsSingletonComponent",
-    .shortName = "ActionResourceChangeResults",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ActionResourceChangeResultsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ActionResourceChangeResultsComponent_Properties) / sizeof(g_Gen_ActionResourceChangeResultsComponent_Properties[0]),
-};
-
-// esv::active_roll::InProgressComponent (from Roll.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerRollInProgressComponent_Properties[] = {
-    { "Position", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Entity", 0x08, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerRollInProgressComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_active_roll_InProgressComponent_Layout = {
     .componentName = "esv::active_roll::InProgressComponent",
-    .shortName = "ServerRollInProgress",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_ServerRollInProgressComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerRollInProgressComponent_Properties) / sizeof(g_Gen_ServerRollInProgressComponent_Properties[0]),
+    .shortName = "InProgress",
+    .componentTypeIndex = 0,
+    .componentSize = 0x18,
+    .properties = g_Gen_esv_active_roll_InProgressComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_active_roll_InProgressComponent_Properties) / sizeof(g_Gen_esv_active_roll_InProgressComponent_Properties[0]),
 };
 
-// esv::active_roll::StartRequestOneFrameComponent (from Roll.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerRollStartRequestComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_10", 0x10, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::active_roll::StartRequestOneFrameComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x18 (24 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_active_roll_StartRequestOneFrameComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_GUID, 0, true },
+    { "field_10", 0x10, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerRollStartRequestComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_active_roll_StartRequestOneFrameComponent_Layout = {
     .componentName = "esv::active_roll::StartRequestOneFrameComponent",
-    .shortName = "ServerRollStartRequest",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x11,
-    .properties = g_Gen_ServerRollStartRequestComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerRollStartRequestComponent_Properties) / sizeof(g_Gen_ServerRollStartRequestComponent_Properties[0]),
+    .shortName = "StartRequestOneFrame",
+    .componentTypeIndex = 0,
+    .componentSize = 0x18,
+    .properties = g_Gen_esv_active_roll_StartRequestOneFrameComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_active_roll_StartRequestOneFrameComponent_Properties) / sizeof(g_Gen_esv_active_roll_StartRequestOneFrameComponent_Properties[0]),
 };
 
-// esv::ai::combat::AiModifiersComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerAiModifiersComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Modifiers", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::ai::combat::AiModifiersComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x48 (72 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_ai_combat_AiModifiersComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerAiModifiersComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_ai_combat_AiModifiersComponent_Layout = {
     .componentName = "esv::ai::combat::AiModifiersComponent",
-    .shortName = "ServerAiModifiers",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_ServerAiModifiersComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerAiModifiersComponent_Properties) / sizeof(g_Gen_ServerAiModifiersComponent_Properties[0]),
+    .shortName = "AiModifiers",
+    .componentTypeIndex = 0,
+    .componentSize = 0x48,
+    .properties = g_Gen_esv_ai_combat_AiModifiersComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_ai_combat_AiModifiersComponent_Properties) / sizeof(g_Gen_esv_ai_combat_AiModifiersComponent_Properties[0]),
 };
 
-// esv::ai::combat::ArchetypeComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerAiArchetypeComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_4", 0x04, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8", 0x08, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_C", 0x0c, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::ai::combat::ArchetypeComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_ai_combat_ArchetypeComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "field_4", 0x04, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "field_8", 0x08, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "field_C", 0x0c, FIELD_TYPE_FIXEDSTRING, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerAiArchetypeComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_ai_combat_ArchetypeComponent_Layout = {
     .componentName = "esv::ai::combat::ArchetypeComponent",
-    .shortName = "ServerAiArchetype",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .shortName = "Archetype",
+    .componentTypeIndex = 0,
     .componentSize = 0x10,
-    .properties = g_Gen_ServerAiArchetypeComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerAiArchetypeComponent_Properties) / sizeof(g_Gen_ServerAiArchetypeComponent_Properties[0]),
+    .properties = g_Gen_esv_ai_combat_ArchetypeComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_ai_combat_ArchetypeComponent_Properties) / sizeof(g_Gen_esv_ai_combat_ArchetypeComponent_Properties[0]),
 };
 
-// esv::ai::combat::InterestedInItemsComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerAiInterestedInItemsComponent_Properties[] = {
-    { "Items", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::character_creation::GodComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_character_creation_GodComponent_Properties[] = {
+    { "God", 0x00, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerAiInterestedInItemsComponent_Layout = {
-    .componentName = "esv::ai::combat::InterestedInItemsComponent",
-    .shortName = "ServerAiInterestedInItems",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerAiInterestedInItemsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerAiInterestedInItemsComponent_Properties) / sizeof(g_Gen_ServerAiInterestedInItemsComponent_Properties[0]),
-};
-
-// esv::ai::combat::InterestingItemComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerAiInterestingItemComponent_Properties[] = {
-    { "Items", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerAiInterestingItemComponent_Layout = {
-    .componentName = "esv::ai::combat::InterestingItemComponent",
-    .shortName = "ServerAiInterestingItem",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerAiInterestingItemComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerAiInterestingItemComponent_Properties) / sizeof(g_Gen_ServerAiInterestingItemComponent_Properties[0]),
-};
-
-// esv::boost::BaseComponent (from Boosts.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerBoostBaseComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerBoostBaseComponent_Layout = {
-    .componentName = "esv::boost::BaseComponent",
-    .shortName = "ServerBoostBase",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerBoostBaseComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerBoostBaseComponent_Properties) / sizeof(g_Gen_ServerBoostBaseComponent_Properties[0]),
-};
-
-// esv::boost::ConditionalStateComponent (from Boosts.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_BoostConditionalStateComponent_Properties[] = {
-    { "States", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_BoostConditionalStateComponent_Layout = {
-    .componentName = "esv::boost::ConditionalStateComponent",
-    .shortName = "BoostConditionalState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_BoostConditionalStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_BoostConditionalStateComponent_Properties) / sizeof(g_Gen_BoostConditionalStateComponent_Properties[0]),
-};
-
-// esv::boost::ProviderComponent (from Boosts.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_BoostProviderComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_10", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_BoostProviderComponent_Layout = {
-    .componentName = "esv::boost::ProviderComponent",
-    .shortName = "BoostProvider",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_BoostProviderComponent_Properties,
-    .propertyCount = sizeof(g_Gen_BoostProviderComponent_Properties) / sizeof(g_Gen_BoostProviderComponent_Properties[0]),
-};
-
-// esv::character_creation::AppearanceVisualTagComponent (from CharacterCreation.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerCCAppearanceVisualTagComponent_Properties[] = {
-    { "Tags", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerCCAppearanceVisualTagComponent_Layout = {
-    .componentName = "esv::character_creation::AppearanceVisualTagComponent",
-    .shortName = "ServerCCAppearanceVisualTag",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerCCAppearanceVisualTagComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerCCAppearanceVisualTagComponent_Properties) / sizeof(g_Gen_ServerCCAppearanceVisualTagComponent_Properties[0]),
-};
-
-// esv::character_creation::GodComponent (from CharacterCreation.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerCCGodComponent_Properties[] = {
-    { "God", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerCCGodComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_character_creation_GodComponent_Layout = {
     .componentName = "esv::character_creation::GodComponent",
-    .shortName = "ServerCCGod",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .shortName = "God",
+    .componentTypeIndex = 0,
     .componentSize = 0x10,
-    .properties = g_Gen_ServerCCGodComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerCCGodComponent_Properties) / sizeof(g_Gen_ServerCCGodComponent_Properties[0]),
+    .properties = g_Gen_esv_character_creation_GodComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_character_creation_GodComponent_Properties) / sizeof(g_Gen_esv_character_creation_GodComponent_Properties[0]),
 };
 
-// esv::character_creation::UpdatesComponent (from CharacterCreation.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerCCUpdatesComponent_Properties[] = {
-    { "Updates", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::combat::CombatGroupMappingComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x48 (72 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_combat_CombatGroupMappingComponent_Properties[] = {
+    { "Entity", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerCCUpdatesComponent_Layout = {
-    .componentName = "esv::character_creation::UpdatesComponent",
-    .shortName = "ServerCCUpdates",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerCCUpdatesComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerCCUpdatesComponent_Properties) / sizeof(g_Gen_ServerCCUpdatesComponent_Properties[0]),
-};
-
-// esv::combat::CombatGroupMappingComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerCombatGroupMappingComponent_Properties[] = {
-    { "Entity", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerCombatGroupMappingComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_combat_CombatGroupMappingComponent_Layout = {
     .componentName = "esv::combat::CombatGroupMappingComponent",
-    .shortName = "ServerCombatGroupMapping",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerCombatGroupMappingComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerCombatGroupMappingComponent_Properties) / sizeof(g_Gen_ServerCombatGroupMappingComponent_Properties[0]),
+    .shortName = "CombatGroupMapping",
+    .componentTypeIndex = 0,
+    .componentSize = 0x48,
+    .properties = g_Gen_esv_combat_CombatGroupMappingComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_combat_CombatGroupMappingComponent_Properties) / sizeof(g_Gen_esv_combat_CombatGroupMappingComponent_Properties[0]),
 };
 
-// esv::combat::CombatSwitchedComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CombatSwitchedComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8", 0x08, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_18", 0x18, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_28", 0x28, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::combat::CombatSwitchedComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x30 (48 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_combat_CombatSwitchedComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "field_8", 0x08, FIELD_TYPE_GUID, 0, true },
+    { "field_18", 0x18, FIELD_TYPE_GUID, 0, true },
+    { "field_28", 0x28, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CombatSwitchedComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_combat_CombatSwitchedComponent_Layout = {
     .componentName = "esv::combat::CombatSwitchedComponent",
     .shortName = "CombatSwitched",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .componentTypeIndex = 0,
     .componentSize = 0x30,
-    .properties = g_Gen_CombatSwitchedComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CombatSwitchedComponent_Properties) / sizeof(g_Gen_CombatSwitchedComponent_Properties[0]),
+    .properties = g_Gen_esv_combat_CombatSwitchedComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_combat_CombatSwitchedComponent_Properties) / sizeof(g_Gen_esv_combat_CombatSwitchedComponent_Properties[0]),
 };
 
-// esv::combat::EnterRequestComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerEnterRequestComponent_Properties[] = {
-    { "EnterRequests", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::combat::FleeRequestComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x18 (24 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_combat_FleeRequestComponent_Properties[] = {
+    { "RequestGuid", 0x00, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerEnterRequestComponent_Layout = {
-    .componentName = "esv::combat::EnterRequestComponent",
-    .shortName = "ServerEnterRequest",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerEnterRequestComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerEnterRequestComponent_Properties) / sizeof(g_Gen_ServerEnterRequestComponent_Properties[0]),
-};
-
-// esv::combat::FleeRequestComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CombatFleeRequestComponent_Properties[] = {
-    { "RequestGuid", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "UserID", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_CombatFleeRequestComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_combat_FleeRequestComponent_Layout = {
     .componentName = "esv::combat::FleeRequestComponent",
-    .shortName = "CombatFleeRequest",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .shortName = "FleeRequest",
+    .componentTypeIndex = 0,
     .componentSize = 0x18,
-    .properties = g_Gen_CombatFleeRequestComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CombatFleeRequestComponent_Properties) / sizeof(g_Gen_CombatFleeRequestComponent_Properties[0]),
+    .properties = g_Gen_esv_combat_FleeRequestComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_combat_FleeRequestComponent_Properties) / sizeof(g_Gen_esv_combat_FleeRequestComponent_Properties[0]),
 };
 
-// esv::combat::GlobalCombatRequests (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_GlobalCombatRequestsComponent_Properties[] = {
-    { "Requests", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::combat::JoiningComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_combat_JoiningComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_FLOAT, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_GlobalCombatRequestsComponent_Layout = {
-    .componentName = "esv::combat::GlobalCombatRequests",
-    .shortName = "GlobalCombatRequests",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_GlobalCombatRequestsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_GlobalCombatRequestsComponent_Properties) / sizeof(g_Gen_GlobalCombatRequestsComponent_Properties[0]),
-};
-
-// esv::combat::JoiningComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CombatJoiningComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_CombatJoiningComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_combat_JoiningComponent_Layout = {
     .componentName = "esv::combat::JoiningComponent",
-    .shortName = "CombatJoining",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_CombatJoiningComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CombatJoiningComponent_Properties) / sizeof(g_Gen_CombatJoiningComponent_Properties[0]),
+    .shortName = "Joining",
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_esv_combat_JoiningComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_combat_JoiningComponent_Properties) / sizeof(g_Gen_esv_combat_JoiningComponent_Properties[0]),
 };
 
-// esv::combat::LateJoinPenaltyComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CombatLateJoinPenaltyComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::combat::LateJoinPenaltyComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_combat_LateJoinPenaltyComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_FLOAT, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CombatLateJoinPenaltyComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_combat_LateJoinPenaltyComponent_Layout = {
     .componentName = "esv::combat::LateJoinPenaltyComponent",
-    .shortName = "CombatLateJoinPenalty",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_CombatLateJoinPenaltyComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CombatLateJoinPenaltyComponent_Properties) / sizeof(g_Gen_CombatLateJoinPenaltyComponent_Properties[0]),
+    .shortName = "LateJoinPenalty",
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_esv_combat_LateJoinPenaltyComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_combat_LateJoinPenaltyComponent_Properties) / sizeof(g_Gen_esv_combat_LateJoinPenaltyComponent_Properties[0]),
 };
 
-// esv::combat::MergeComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CombatMergeComponent_Properties[] = {
-    { "Combat1", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Combat2", 0x08, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::combat::MergeComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_combat_MergeComponent_Properties[] = {
+    { "Combat1", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "Combat2", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CombatMergeComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_combat_MergeComponent_Layout = {
     .componentName = "esv::combat::MergeComponent",
-    .shortName = "CombatMerge",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .shortName = "Merge",
+    .componentTypeIndex = 0,
     .componentSize = 0x10,
-    .properties = g_Gen_CombatMergeComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CombatMergeComponent_Properties) / sizeof(g_Gen_CombatMergeComponent_Properties[0]),
+    .properties = g_Gen_esv_combat_MergeComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_combat_MergeComponent_Properties) / sizeof(g_Gen_esv_combat_MergeComponent_Properties[0]),
 };
 
-// esv::combat::SurfaceTeamSingletonComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CombatSurfaceTeamSingletonComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::death::DelayDeathCauseComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x18 (24 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_death_DelayDeathCauseComponent_Properties[] = {
+    { "DelayCount", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "Reason", 0x04, FIELD_TYPE_INT32, 0, true },
+    { "field_8", 0x08, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CombatSurfaceTeamSingletonComponent_Layout = {
-    .componentName = "esv::combat::SurfaceTeamSingletonComponent",
-    .shortName = "CombatSurfaceTeamSingleton",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_CombatSurfaceTeamSingletonComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CombatSurfaceTeamSingletonComponent_Properties) / sizeof(g_Gen_CombatSurfaceTeamSingletonComponent_Properties[0]),
-};
-
-// esv::death::DelayDeathCauseComponent (from Death.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerDelayDeathCauseComponent_Properties[] = {
-    { "DelayCount", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Reason", 0x04, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8", 0x08, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerDelayDeathCauseComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_death_DelayDeathCauseComponent_Layout = {
     .componentName = "esv::death::DelayDeathCauseComponent",
-    .shortName = "ServerDelayDeathCause",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .shortName = "DelayDeathCause",
+    .componentTypeIndex = 0,
     .componentSize = 0x18,
-    .properties = g_Gen_ServerDelayDeathCauseComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerDelayDeathCauseComponent_Properties) / sizeof(g_Gen_ServerDelayDeathCauseComponent_Properties[0]),
+    .properties = g_Gen_esv_death_DelayDeathCauseComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_death_DelayDeathCauseComponent_Properties) / sizeof(g_Gen_esv_death_DelayDeathCauseComponent_Properties[0]),
 };
 
-// esv::death::DelayedDeathComponent (from Death.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerDelayDeathComponent_Properties[] = {
-    { "Death", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Reason", 0x08, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_88", 0x10, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::death::DelayedDeathComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x98 (152 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_death_DelayedDeathComponent_Properties[] = {
+    { "Reason", 0x00, FIELD_TYPE_UINT32, 0, true },
+    { "field_88", 0x08, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerDelayDeathComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_death_DelayedDeathComponent_Layout = {
     .componentName = "esv::death::DelayedDeathComponent",
-    .shortName = "ServerDelayDeath",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x20,
-    .properties = g_Gen_ServerDelayDeathComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerDelayDeathComponent_Properties) / sizeof(g_Gen_ServerDelayDeathComponent_Properties[0]),
+    .shortName = "DelayedDeath",
+    .componentTypeIndex = 0,
+    .componentSize = 0x98,
+    .properties = g_Gen_esv_death_DelayedDeathComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_death_DelayedDeathComponent_Properties) / sizeof(g_Gen_esv_death_DelayedDeathComponent_Properties[0]),
 };
 
-// esv::death::KillerComponent (from Death.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerKillerComponent_Properties[] = {
-    { "Killers", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::death::StateComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x4 (4 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_death_StateComponent_Properties[] = {
+    { "Flags", 0x00, FIELD_TYPE_UINT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerKillerComponent_Layout = {
-    .componentName = "esv::death::KillerComponent",
-    .shortName = "ServerKiller",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerKillerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerKillerComponent_Properties) / sizeof(g_Gen_ServerKillerComponent_Properties[0]),
-};
-
-// esv::death::StateComponent (from Death.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerDeathStateComponent_Properties[] = {
-    { "Flags", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerDeathStateComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_death_StateComponent_Layout = {
     .componentName = "esv::death::StateComponent",
-    .shortName = "ServerDeathState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_ServerDeathStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerDeathStateComponent_Properties) / sizeof(g_Gen_ServerDeathStateComponent_Properties[0]),
+    .shortName = "State",
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_esv_death_StateComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_death_StateComponent_Properties) / sizeof(g_Gen_esv_death_StateComponent_Properties[0]),
 };
 
-// esv::escort::FollowerComponent (from Party.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_EscortFollowerComponent_Properties[] = {
-    { "Following", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::escort::FollowerComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_escort_FollowerComponent_Properties[] = {
+    { "Following", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_EscortFollowerComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_escort_FollowerComponent_Layout = {
     .componentName = "esv::escort::FollowerComponent",
-    .shortName = "EscortFollower",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_EscortFollowerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_EscortFollowerComponent_Properties) / sizeof(g_Gen_EscortFollowerComponent_Properties[0]),
+    .shortName = "Follower",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_esv_escort_FollowerComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_escort_FollowerComponent_Properties) / sizeof(g_Gen_esv_escort_FollowerComponent_Properties[0]),
 };
 
-// esv::escort::LeaderComponent (from Party.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_EscortLeaderComponent_Properties[] = {
-    { "Group", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::escort::LeaderComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_escort_LeaderComponent_Properties[] = {
+    { "Group", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_EscortLeaderComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_escort_LeaderComponent_Layout = {
     .componentName = "esv::escort::LeaderComponent",
-    .shortName = "EscortLeader",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_EscortLeaderComponent_Properties,
-    .propertyCount = sizeof(g_Gen_EscortLeaderComponent_Properties) / sizeof(g_Gen_EscortLeaderComponent_Properties[0]),
+    .shortName = "Leader",
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_esv_escort_LeaderComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_escort_LeaderComponent_Properties) / sizeof(g_Gen_esv_escort_LeaderComponent_Properties[0]),
 };
 
-// esv::escort::LeaderPriorityComponent (from Party.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_EscortLeaderPriorityComponent_Properties[] = {
-    { "Priorities", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::escort::MemberComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_escort_MemberComponent_Properties[] = {
+    { "Group", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_EscortLeaderPriorityComponent_Layout = {
-    .componentName = "esv::escort::LeaderPriorityComponent",
-    .shortName = "EscortLeaderPriority",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_EscortLeaderPriorityComponent_Properties,
-    .propertyCount = sizeof(g_Gen_EscortLeaderPriorityComponent_Properties) / sizeof(g_Gen_EscortLeaderPriorityComponent_Properties[0]),
-};
-
-// esv::escort::MemberComponent (from Party.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_EscortMemberComponent_Properties[] = {
-    { "Group", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_EscortMemberComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_escort_MemberComponent_Layout = {
     .componentName = "esv::escort::MemberComponent",
-    .shortName = "EscortMember",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_EscortMemberComponent_Properties,
-    .propertyCount = sizeof(g_Gen_EscortMemberComponent_Properties) / sizeof(g_Gen_EscortMemberComponent_Properties[0]),
+    .shortName = "Member",
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_esv_escort_MemberComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_escort_MemberComponent_Properties) / sizeof(g_Gen_esv_escort_MemberComponent_Properties[0]),
 };
 
-// esv::escort::StragglersTrackerComponent (from Party.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_EscortStragglersTrackerComponent_Properties[] = {
-    { "Stragglers", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_10", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::escort::StragglersTrackerComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x20 (32 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_escort_StragglersTrackerComponent_Properties[] = {
+    { "field_10", 0x00, FIELD_TYPE_VEC3, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_EscortStragglersTrackerComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_escort_StragglersTrackerComponent_Layout = {
     .componentName = "esv::escort::StragglersTrackerComponent",
-    .shortName = "EscortStragglersTracker",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_EscortStragglersTrackerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_EscortStragglersTrackerComponent_Properties) / sizeof(g_Gen_EscortStragglersTrackerComponent_Properties[0]),
+    .shortName = "StragglersTracker",
+    .componentTypeIndex = 0,
+    .componentSize = 0x20,
+    .properties = g_Gen_esv_escort_StragglersTrackerComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_escort_StragglersTrackerComponent_Properties) / sizeof(g_Gen_esv_escort_StragglersTrackerComponent_Properties[0]),
 };
 
-// esv::exp::ExperienceGaveOutComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerExperienceGaveOutComponent_Properties[] = {
-    { "Experience", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::exp::ExperienceGaveOutComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_exp_ExperienceGaveOutComponent_Properties[] = {
+    { "Experience", 0x00, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerExperienceGaveOutComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_exp_ExperienceGaveOutComponent_Layout = {
     .componentName = "esv::exp::ExperienceGaveOutComponent",
-    .shortName = "ServerExperienceGaveOut",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_ServerExperienceGaveOutComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerExperienceGaveOutComponent_Properties) / sizeof(g_Gen_ServerExperienceGaveOutComponent_Properties[0]),
+    .shortName = "ExperienceGaveOut",
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_esv_exp_ExperienceGaveOutComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_exp_ExperienceGaveOutComponent_Properties) / sizeof(g_Gen_esv_exp_ExperienceGaveOutComponent_Properties[0]),
 };
 
-// esv::ftb::SurfaceTeamSingletonComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_FTBSurfaceTeamSingletonComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::ftb::ZoneComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x48 (72 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_ftb_ZoneComponent_Properties[] = {
+    { "Entity", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "field_8", 0x08, FIELD_TYPE_UINT8, 0, true },
+    { "field_10", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "field_18", 0x18, FIELD_TYPE_UINT8, 0, true },
+    { "field_1C", 0x1c, FIELD_TYPE_FLOAT, 0, true },
+    { "field_20", 0x20, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "ZoneGuid", 0x28, FIELD_TYPE_GUID, 0, true },
+    { "Creator", 0x38, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "ByPlayer", 0x40, FIELD_TYPE_BOOL, 0, true },
+    { "Shared", 0x41, FIELD_TYPE_BOOL, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_FTBSurfaceTeamSingletonComponent_Layout = {
-    .componentName = "esv::ftb::SurfaceTeamSingletonComponent",
-    .shortName = "FTBSurfaceTeamSingleton",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_FTBSurfaceTeamSingletonComponent_Properties,
-    .propertyCount = sizeof(g_Gen_FTBSurfaceTeamSingletonComponent_Properties) / sizeof(g_Gen_FTBSurfaceTeamSingletonComponent_Properties[0]),
-};
-
-// esv::ftb::TimeFactorRequestsSingletonComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_FTBTimeFactorRequestsComponent_Properties[] = {
-    { "Requests", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_FTBTimeFactorRequestsComponent_Layout = {
-    .componentName = "esv::ftb::TimeFactorRequestsSingletonComponent",
-    .shortName = "FTBTimeFactorRequests",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_FTBTimeFactorRequestsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_FTBTimeFactorRequestsComponent_Properties) / sizeof(g_Gen_FTBTimeFactorRequestsComponent_Properties[0]),
-};
-
-// esv::ftb::TimeFactorResetRequestsSingletonComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_FTBTimeFactorResetRequestsComponent_Properties[] = {
-    { "Requests", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_FTBTimeFactorResetRequestsComponent_Layout = {
-    .componentName = "esv::ftb::TimeFactorResetRequestsSingletonComponent",
-    .shortName = "FTBTimeFactorResetRequests",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_FTBTimeFactorResetRequestsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_FTBTimeFactorResetRequestsComponent_Properties) / sizeof(g_Gen_FTBTimeFactorResetRequestsComponent_Properties[0]),
-};
-
-// esv::ftb::TurnBasedChangesRequestSingletonComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_FTBTurnBasedChangesRequestComponent_Properties[] = {
-    { "Requests", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_FTBTurnBasedChangesRequestComponent_Layout = {
-    .componentName = "esv::ftb::TurnBasedChangesRequestSingletonComponent",
-    .shortName = "FTBTurnBasedChangesRequest",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_FTBTurnBasedChangesRequestComponent_Properties,
-    .propertyCount = sizeof(g_Gen_FTBTurnBasedChangesRequestComponent_Properties) / sizeof(g_Gen_FTBTurnBasedChangesRequestComponent_Properties[0]),
-};
-
-// esv::ftb::ZoneComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_FTBZoneComponent_Properties[] = {
-    { "Entity", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8", 0x08, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_10", 0x10, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_18", 0x18, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_1C", 0x1c, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_20", 0x20, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ZoneGuid", 0x28, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Creator", 0x38, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ByPlayer", 0x40, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Shared", 0x41, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_FTBZoneComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_ftb_ZoneComponent_Layout = {
     .componentName = "esv::ftb::ZoneComponent",
-    .shortName = "FTBZone",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x42,
-    .properties = g_Gen_FTBZoneComponent_Properties,
-    .propertyCount = sizeof(g_Gen_FTBZoneComponent_Properties) / sizeof(g_Gen_FTBZoneComponent_Properties[0]),
+    .shortName = "Zone",
+    .componentTypeIndex = 0,
+    .componentSize = 0x48,
+    .properties = g_Gen_esv_ftb_ZoneComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_ftb_ZoneComponent_Properties) / sizeof(g_Gen_esv_ftb_ZoneComponent_Properties[0]),
 };
 
-// esv::ftb::ZoneInstigatorComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_FTBZoneInstigatorComponent_Properties[] = {
-    { "Instigator", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Shared", 0x08, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::ftb::ZoneInstigatorComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_ftb_ZoneInstigatorComponent_Properties[] = {
+    { "Instigator", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "Shared", 0x08, FIELD_TYPE_BOOL, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_FTBZoneInstigatorComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_ftb_ZoneInstigatorComponent_Layout = {
     .componentName = "esv::ftb::ZoneInstigatorComponent",
-    .shortName = "FTBZoneInstigator",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x09,
-    .properties = g_Gen_FTBZoneInstigatorComponent_Properties,
-    .propertyCount = sizeof(g_Gen_FTBZoneInstigatorComponent_Properties) / sizeof(g_Gen_FTBZoneInstigatorComponent_Properties[0]),
+    .shortName = "ZoneInstigator",
+    .componentTypeIndex = 0,
+    .componentSize = 0x10,
+    .properties = g_Gen_esv_ftb_ZoneInstigatorComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_ftb_ZoneInstigatorComponent_Properties) / sizeof(g_Gen_esv_ftb_ZoneInstigatorComponent_Properties[0]),
 };
 
-// esv::history::TargetUUIDComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_HistoryTargetUUIDComponent_Properties[] = {
-    { "Target", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::history::TargetUUIDComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_history_TargetUUIDComponent_Properties[] = {
+    { "Target", 0x00, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_HistoryTargetUUIDComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_history_TargetUUIDComponent_Layout = {
     .componentName = "esv::history::TargetUUIDComponent",
-    .shortName = "HistoryTargetUUID",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .shortName = "TargetUUID",
+    .componentTypeIndex = 0,
     .componentSize = 0x10,
-    .properties = g_Gen_HistoryTargetUUIDComponent_Properties,
-    .propertyCount = sizeof(g_Gen_HistoryTargetUUIDComponent_Properties) / sizeof(g_Gen_HistoryTargetUUIDComponent_Properties[0]),
+    .properties = g_Gen_esv_history_TargetUUIDComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_history_TargetUUIDComponent_Properties) / sizeof(g_Gen_esv_history_TargetUUIDComponent_Properties[0]),
 };
 
-// esv::interrupt::ActionRequestsComponent (from Interrupt.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerInterruptActionRequestsComponent_Properties[] = {
-    { "StartRequests", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "StopRequests", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "CombatLogRequests", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::inventory::ContainerDataComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_inventory_ContainerDataComponent_Properties[] = {
+    { "Flags", 0x00, FIELD_TYPE_UINT16, 0, true },
+    { "field_4", 0x04, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerInterruptActionRequestsComponent_Layout = {
-    .componentName = "esv::interrupt::ActionRequestsComponent",
-    .shortName = "ServerInterruptActionRequests",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x18,
-    .properties = g_Gen_ServerInterruptActionRequestsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerInterruptActionRequestsComponent_Properties) / sizeof(g_Gen_ServerInterruptActionRequestsComponent_Properties[0]),
-};
-
-// esv::interrupt::AddRemoveRequestsComponent (from Interrupt.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerInterruptAddRemoveRequestsComponent_Properties[] = {
-    { "Requests", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerInterruptAddRemoveRequestsComponent_Layout = {
-    .componentName = "esv::interrupt::AddRemoveRequestsComponent",
-    .shortName = "ServerInterruptAddRemoveRequests",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerInterruptAddRemoveRequestsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerInterruptAddRemoveRequestsComponent_Properties) / sizeof(g_Gen_ServerInterruptAddRemoveRequestsComponent_Properties[0]),
-};
-
-// esv::interrupt::DataSingletonComponent (from Interrupt.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerInterruptDataSingletonComponent_Properties[] = {
-    { "Events", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "TargetHitInterrupts", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerInterruptDataSingletonComponent_Layout = {
-    .componentName = "esv::interrupt::DataSingletonComponent",
-    .shortName = "ServerInterruptDataSingleton",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_ServerInterruptDataSingletonComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerInterruptDataSingletonComponent_Properties) / sizeof(g_Gen_ServerInterruptDataSingletonComponent_Properties[0]),
-};
-
-// esv::interrupt::InitialParticipantsComponent (from Interrupt.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerInterruptInitialParticipantsComponent_Properties[] = {
-    { "Participants", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerInterruptInitialParticipantsComponent_Layout = {
-    .componentName = "esv::interrupt::InitialParticipantsComponent",
-    .shortName = "ServerInterruptInitialParticipants",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerInterruptInitialParticipantsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerInterruptInitialParticipantsComponent_Properties) / sizeof(g_Gen_ServerInterruptInitialParticipantsComponent_Properties[0]),
-};
-
-// esv::interrupt::TurnOrderInZoneComponent (from Interrupt.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerInterruptTurnOrderInZoneComponent_Properties[] = {
-    { "InZone", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerInterruptTurnOrderInZoneComponent_Layout = {
-    .componentName = "esv::interrupt::TurnOrderInZoneComponent",
-    .shortName = "ServerInterruptTurnOrderInZone",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerInterruptTurnOrderInZoneComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerInterruptTurnOrderInZoneComponent_Properties) / sizeof(g_Gen_ServerInterruptTurnOrderInZoneComponent_Properties[0]),
-};
-
-// esv::interrupt::ZoneRequestsComponent (from Interrupt.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerInterruptZoneRequestsComponent_Properties[] = {
-    { "StartRequests", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "StopRequests", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerInterruptZoneRequestsComponent_Layout = {
-    .componentName = "esv::interrupt::ZoneRequestsComponent",
-    .shortName = "ServerInterruptZoneRequests",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_ServerInterruptZoneRequestsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerInterruptZoneRequestsComponent_Properties) / sizeof(g_Gen_ServerInterruptZoneRequestsComponent_Properties[0]),
-};
-
-// esv::inventory::ContainerDataComponent (from Inventory.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerInventoryContainerDataComponent_Properties[] = {
-    { "Flags", 0x00, FIELD_TYPE_UINT16, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_4", 0x04, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerInventoryContainerDataComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_inventory_ContainerDataComponent_Layout = {
     .componentName = "esv::inventory::ContainerDataComponent",
-    .shortName = "ServerInventoryContainerData",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerInventoryContainerDataComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerInventoryContainerDataComponent_Properties) / sizeof(g_Gen_ServerInventoryContainerDataComponent_Properties[0]),
+    .shortName = "ContainerData",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_esv_inventory_ContainerDataComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_inventory_ContainerDataComponent_Properties) / sizeof(g_Gen_esv_inventory_ContainerDataComponent_Properties[0]),
 };
 
-// esv::inventory::GroupCheckComponent (from Inventory.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerInventoryGroupCheckComponent_Properties[] = {
-    { "Conditions", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::inventory::GroupCheckComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_inventory_GroupCheckComponent_Properties[] = {
+    { "Conditions", 0x00, FIELD_TYPE_UINT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerInventoryGroupCheckComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_inventory_GroupCheckComponent_Layout = {
     .componentName = "esv::inventory::GroupCheckComponent",
-    .shortName = "ServerInventoryGroupCheck",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_ServerInventoryGroupCheckComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerInventoryGroupCheckComponent_Properties) / sizeof(g_Gen_ServerInventoryGroupCheckComponent_Properties[0]),
+    .shortName = "GroupCheck",
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_esv_inventory_GroupCheckComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_inventory_GroupCheckComponent_Properties) / sizeof(g_Gen_esv_inventory_GroupCheckComponent_Properties[0]),
 };
 
-// esv::inventory::ShapeshiftEquipmentHistoryComponent (from Inventory.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerShapeshiftEquipmentHistoryComponent_Properties[] = {
-    { "History", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::item::DynamicLayerOwnerComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_item_DynamicLayerOwnerComponent_Properties[] = {
+    { "Owner", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerShapeshiftEquipmentHistoryComponent_Layout = {
-    .componentName = "esv::inventory::ShapeshiftEquipmentHistoryComponent",
-    .shortName = "ServerShapeshiftEquipmentHistory",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerShapeshiftEquipmentHistoryComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerShapeshiftEquipmentHistoryComponent_Properties) / sizeof(g_Gen_ServerShapeshiftEquipmentHistoryComponent_Properties[0]),
-};
-
-// esv::item::DynamicLayerOwnerComponent (from Item.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerDynamicLayerOwnerComponent_Properties[] = {
-    { "Owner", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerDynamicLayerOwnerComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_item_DynamicLayerOwnerComponent_Layout = {
     .componentName = "esv::item::DynamicLayerOwnerComponent",
-    .shortName = "ServerDynamicLayerOwner",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_ServerDynamicLayerOwnerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerDynamicLayerOwnerComponent_Properties) / sizeof(g_Gen_ServerDynamicLayerOwnerComponent_Properties[0]),
+    .shortName = "DynamicLayerOwner",
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_esv_item_DynamicLayerOwnerComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_item_DynamicLayerOwnerComponent_Properties) / sizeof(g_Gen_esv_item_DynamicLayerOwnerComponent_Properties[0]),
 };
 
-// esv::light::GameplayLightChangesComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerGameplayLightChangesComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_4", 0x04, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8", 0x08, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_9", 0x09, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_A", 0x0a, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::light::GameplayLightChangesComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0xc (12 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_light_GameplayLightChangesComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_UINT32, 0, true },
+    { "field_4", 0x04, FIELD_TYPE_UINT32, 0, true },
+    { "field_8", 0x08, FIELD_TYPE_UINT8, 0, true },
+    { "field_9", 0x09, FIELD_TYPE_UINT8, 0, true },
+    { "field_A", 0x0a, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerGameplayLightChangesComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_light_GameplayLightChangesComponent_Layout = {
     .componentName = "esv::light::GameplayLightChangesComponent",
-    .shortName = "ServerGameplayLightChanges",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x0b,
-    .properties = g_Gen_ServerGameplayLightChangesComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerGameplayLightChangesComponent_Properties) / sizeof(g_Gen_ServerGameplayLightChangesComponent_Properties[0]),
+    .shortName = "GameplayLightChanges",
+    .componentTypeIndex = 0,
+    .componentSize = 0xc,
+    .properties = g_Gen_esv_light_GameplayLightChangesComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_light_GameplayLightChangesComponent_Properties) / sizeof(g_Gen_esv_light_GameplayLightChangesComponent_Properties[0]),
 };
 
-// esv::ownership::IsCurrentOwnerComponent (from Item.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerIsCurrentOwnerComponent_Properties[] = {
-    { "Owner", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::ownership::OwneeHistoryComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x18 (24 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_ownership_OwneeHistoryComponent_Properties[] = {
+    { "OriginalOwner", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "LatestOwner", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "PreviousOwner", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerIsCurrentOwnerComponent_Layout = {
-    .componentName = "esv::ownership::IsCurrentOwnerComponent",
-    .shortName = "ServerIsCurrentOwner",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerIsCurrentOwnerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerIsCurrentOwnerComponent_Properties) / sizeof(g_Gen_ServerIsCurrentOwnerComponent_Properties[0]),
-};
-
-// esv::ownership::IsLatestOwnerComponent (from Item.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerIsLatestOwnerComponent_Properties[] = {
-    { "Owner", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerIsLatestOwnerComponent_Layout = {
-    .componentName = "esv::ownership::IsLatestOwnerComponent",
-    .shortName = "ServerIsLatestOwner",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerIsLatestOwnerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerIsLatestOwnerComponent_Properties) / sizeof(g_Gen_ServerIsLatestOwnerComponent_Properties[0]),
-};
-
-// esv::ownership::IsOriginalOwnerComponent (from Item.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerIsOriginalOwnerComponent_Properties[] = {
-    { "Owner", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerIsOriginalOwnerComponent_Layout = {
-    .componentName = "esv::ownership::IsOriginalOwnerComponent",
-    .shortName = "ServerIsOriginalOwner",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerIsOriginalOwnerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerIsOriginalOwnerComponent_Properties) / sizeof(g_Gen_ServerIsOriginalOwnerComponent_Properties[0]),
-};
-
-// esv::ownership::IsPreviousOwnerComponent (from Item.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerIsPreviousOwnerComponent_Properties[] = {
-    { "Owner", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerIsPreviousOwnerComponent_Layout = {
-    .componentName = "esv::ownership::IsPreviousOwnerComponent",
-    .shortName = "ServerIsPreviousOwner",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerIsPreviousOwnerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerIsPreviousOwnerComponent_Properties) / sizeof(g_Gen_ServerIsPreviousOwnerComponent_Properties[0]),
-};
-
-// esv::ownership::OwneeHistoryComponent (from Item.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerOwneeHistoryComponent_Properties[] = {
-    { "OriginalOwner", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "LatestOwner", 0x08, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "PreviousOwner", 0x10, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerOwneeHistoryComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_ownership_OwneeHistoryComponent_Layout = {
     .componentName = "esv::ownership::OwneeHistoryComponent",
-    .shortName = "ServerOwneeHistory",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .shortName = "OwneeHistory",
+    .componentTypeIndex = 0,
     .componentSize = 0x18,
-    .properties = g_Gen_ServerOwneeHistoryComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerOwneeHistoryComponent_Properties) / sizeof(g_Gen_ServerOwneeHistoryComponent_Properties[0]),
+    .properties = g_Gen_esv_ownership_OwneeHistoryComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_ownership_OwneeHistoryComponent_Properties) / sizeof(g_Gen_esv_ownership_OwneeHistoryComponent_Properties[0]),
 };
 
-// esv::ownership::OwneeRequestComponent (from Item.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerOwneeRequestComponent_Properties[] = {
-    { "NewCurrentOwnee", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "LatestOwner", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "OriginalOwner", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::passive::PersistentDataComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_passive_PersistentDataComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_FLOAT, 0, true },
+    { "field_4", 0x04, FIELD_TYPE_FLOAT, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerOwneeRequestComponent_Layout = {
-    .componentName = "esv::ownership::OwneeRequestComponent",
-    .shortName = "ServerOwneeRequest",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x18,
-    .properties = g_Gen_ServerOwneeRequestComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerOwneeRequestComponent_Properties) / sizeof(g_Gen_ServerOwneeRequestComponent_Properties[0]),
-};
-
-// esv::passive::BaseComponent (from Passives.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerPassiveBaseComponent_Properties[] = {
-    { "Passives", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerPassiveBaseComponent_Layout = {
-    .componentName = "esv::passive::BaseComponent",
-    .shortName = "ServerPassiveBase",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerPassiveBaseComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerPassiveBaseComponent_Properties) / sizeof(g_Gen_ServerPassiveBaseComponent_Properties[0]),
-};
-
-// esv::passive::BoostsComponent (from Passives.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerPassiveBoostsComponent_Properties[] = {
-    { "Boosts", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerPassiveBoostsComponent_Layout = {
-    .componentName = "esv::passive::BoostsComponent",
-    .shortName = "ServerPassiveBoosts",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerPassiveBoostsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerPassiveBoostsComponent_Properties) / sizeof(g_Gen_ServerPassiveBoostsComponent_Properties[0]),
-};
-
-// esv::passive::PersistentDataComponent (from Passives.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerPassivePersistentDataComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_4", 0x04, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerPassivePersistentDataComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_passive_PersistentDataComponent_Layout = {
     .componentName = "esv::passive::PersistentDataComponent",
-    .shortName = "ServerPassivePersistentData",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerPassivePersistentDataComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerPassivePersistentDataComponent_Properties) / sizeof(g_Gen_ServerPassivePersistentDataComponent_Properties[0]),
+    .shortName = "PersistentData",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_esv_passive_PersistentDataComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_passive_PersistentDataComponent_Properties) / sizeof(g_Gen_esv_passive_PersistentDataComponent_Properties[0]),
 };
 
-// esv::passive::ScriptPassivesComponent (from Passives.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerScriptPassivesComponent_Properties[] = {
-    { "Passives", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::photo_mode::CapabilityComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x1 (1 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_photo_mode_CapabilityComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerScriptPassivesComponent_Layout = {
-    .componentName = "esv::passive::ScriptPassivesComponent",
-    .shortName = "ServerScriptPassives",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerScriptPassivesComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerScriptPassivesComponent_Properties) / sizeof(g_Gen_ServerScriptPassivesComponent_Properties[0]),
-};
-
-// esv::passive::ToggledPassivesComponent (from Passives.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerToggledPassivesComponent_Properties[] = {
-    { "Passives", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerToggledPassivesComponent_Layout = {
-    .componentName = "esv::passive::ToggledPassivesComponent",
-    .shortName = "ServerToggledPassives",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerToggledPassivesComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerToggledPassivesComponent_Properties) / sizeof(g_Gen_ServerToggledPassivesComponent_Properties[0]),
-};
-
-// esv::photo_mode::CapabilityComponent (from Dummy.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PhotoModeCapabilityComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_PhotoModeCapabilityComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_photo_mode_CapabilityComponent_Layout = {
     .componentName = "esv::photo_mode::CapabilityComponent",
-    .shortName = "PhotoModeCapability",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x01,
-    .properties = g_Gen_PhotoModeCapabilityComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PhotoModeCapabilityComponent_Properties) / sizeof(g_Gen_PhotoModeCapabilityComponent_Properties[0]),
+    .shortName = "Capability",
+    .componentTypeIndex = 0,
+    .componentSize = 0x1,
+    .properties = g_Gen_esv_photo_mode_CapabilityComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_photo_mode_CapabilityComponent_Properties) / sizeof(g_Gen_esv_photo_mode_CapabilityComponent_Properties[0]),
 };
 
-// esv::pickpocket::PickpocketComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerPickpocketComponent_Properties[] = {
-    { "Items", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::projectile::AttachmentComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_projectile_AttachmentComponent_Properties[] = {
+    { "Attachment", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerPickpocketComponent_Layout = {
-    .componentName = "esv::pickpocket::PickpocketComponent",
-    .shortName = "ServerPickpocket",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerPickpocketComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerPickpocketComponent_Properties) / sizeof(g_Gen_ServerPickpocketComponent_Properties[0]),
-};
-
-// esv::projectile::AttachmentComponent (from Projectile.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerProjectileAttachmentComponent_Properties[] = {
-    { "Attachment", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerProjectileAttachmentComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_projectile_AttachmentComponent_Layout = {
     .componentName = "esv::projectile::AttachmentComponent",
-    .shortName = "ServerProjectileAttachment",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerProjectileAttachmentComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerProjectileAttachmentComponent_Properties) / sizeof(g_Gen_ServerProjectileAttachmentComponent_Properties[0]),
+    .shortName = "Attachment",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_esv_projectile_AttachmentComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_projectile_AttachmentComponent_Properties) / sizeof(g_Gen_esv_projectile_AttachmentComponent_Properties[0]),
 };
 
-// esv::projectile::SpellComponent (from Projectile.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerProjectileSpellComponent_Properties[] = {
-    { "Spell", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Target", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Index", 0x10, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::projectile::SpellComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0xb8 (184 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_projectile_SpellComponent_Properties[] = {
+    { "Spell", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "Index", 0x08, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerProjectileSpellComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_projectile_SpellComponent_Layout = {
     .componentName = "esv::projectile::SpellComponent",
-    .shortName = "ServerProjectileSpell",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x14,
-    .properties = g_Gen_ServerProjectileSpellComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerProjectileSpellComponent_Properties) / sizeof(g_Gen_ServerProjectileSpellComponent_Properties[0]),
+    .shortName = "Spell",
+    .componentTypeIndex = 0,
+    .componentSize = 0xb8,
+    .properties = g_Gen_esv_projectile_SpellComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_projectile_SpellComponent_Properties) / sizeof(g_Gen_esv_projectile_SpellComponent_Properties[0]),
 };
 
-// esv::recruit::RecruitedByComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerRecruitedByComponent_Properties[] = {
-    { "RecruitedBy", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::recruit::RecruitedByComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_recruit_RecruitedByComponent_Properties[] = {
+    { "RecruitedBy", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerRecruitedByComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_recruit_RecruitedByComponent_Layout = {
     .componentName = "esv::recruit::RecruitedByComponent",
-    .shortName = "ServerRecruitedBy",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerRecruitedByComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerRecruitedByComponent_Properties) / sizeof(g_Gen_ServerRecruitedByComponent_Properties[0]),
+    .shortName = "RecruitedBy",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_esv_recruit_RecruitedByComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_recruit_RecruitedByComponent_Properties) / sizeof(g_Gen_esv_recruit_RecruitedByComponent_Properties[0]),
 };
 
-// esv::replication::PeersInRangeComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerPeersInRangeComponent_Properties[] = {
-    { "Peers", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::replication::ReplicationDependencyComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_replication_ReplicationDependencyComponent_Properties[] = {
+    { "Dependency", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerPeersInRangeComponent_Layout = {
-    .componentName = "esv::replication::PeersInRangeComponent",
-    .shortName = "ServerPeersInRange",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerPeersInRangeComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerPeersInRangeComponent_Properties) / sizeof(g_Gen_ServerPeersInRangeComponent_Properties[0]),
-};
-
-// esv::replication::ReplicationDependencyComponent (from Runtime.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerReplicationDependencyComponent_Properties[] = {
-    { "Dependency", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerReplicationDependencyComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_replication_ReplicationDependencyComponent_Layout = {
     .componentName = "esv::replication::ReplicationDependencyComponent",
-    .shortName = "ServerReplicationDependency",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerReplicationDependencyComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerReplicationDependencyComponent_Properties) / sizeof(g_Gen_ServerReplicationDependencyComponent_Properties[0]),
+    .shortName = "ReplicationDependency",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_esv_replication_ReplicationDependencyComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_replication_ReplicationDependencyComponent_Properties) / sizeof(g_Gen_esv_replication_ReplicationDependencyComponent_Properties[0]),
 };
 
-// esv::replication::ReplicationDependencyOwnerComponent (from Runtime.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerReplicationDependencyOwnerComponent_Properties[] = {
-    { "Dependents", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::roll::stream::StreamsComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x28 (40 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_roll_stream_StreamsComponent_Properties[] = {
+    { "LastFrame", 0x00, FIELD_TYPE_UINT64, 0, true },
+    { "BaseSeed", 0x08, FIELD_TYPE_UINT64, 0, true },
+    { "CustomRollExpectedValue", 0x10, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerReplicationDependencyOwnerComponent_Layout = {
-    .componentName = "esv::replication::ReplicationDependencyOwnerComponent",
-    .shortName = "ServerReplicationDependencyOwner",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerReplicationDependencyOwnerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerReplicationDependencyOwnerComponent_Properties) / sizeof(g_Gen_ServerReplicationDependencyOwnerComponent_Properties[0]),
-};
-
-// esv::rest::PendingTypeComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerRestPendingTypeComponent_Properties[] = {
-    { "CancelReason", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Supplies", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerRestPendingTypeComponent_Layout = {
-    .componentName = "esv::rest::PendingTypeComponent",
-    .shortName = "ServerRestPendingType",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_ServerRestPendingTypeComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerRestPendingTypeComponent_Properties) / sizeof(g_Gen_ServerRestPendingTypeComponent_Properties[0]),
-};
-
-// esv::roll::RollFinishedEventOneFrameComponent (from Roll.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerRollFinishedEventComponent_Properties[] = {
-    { "Events", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerRollFinishedEventComponent_Layout = {
-    .componentName = "esv::roll::RollFinishedEventOneFrameComponent",
-    .shortName = "ServerRollFinishedEvent",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerRollFinishedEventComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerRollFinishedEventComponent_Properties) / sizeof(g_Gen_ServerRollFinishedEventComponent_Properties[0]),
-};
-
-// esv::roll::stream::StreamsComponent (from Roll.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerRollStreamsComponent_Properties[] = {
-    { "Streams", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "LastFrame", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "BaseSeed", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RollModeType", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "CustomRollExpectedValue", 0x20, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerRollStreamsComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_roll_stream_StreamsComponent_Layout = {
     .componentName = "esv::roll::stream::StreamsComponent",
-    .shortName = "ServerRollStreams",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x21,
-    .properties = g_Gen_ServerRollStreamsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerRollStreamsComponent_Properties) / sizeof(g_Gen_ServerRollStreamsComponent_Properties[0]),
-};
-
-// esv::shapeshift::HealthReservationComponent (from Shapeshift.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ShapeshiftHealthReservationComponent_Properties[] = {
-    { "Reservations", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ShapeshiftHealthReservationComponent_Layout = {
-    .componentName = "esv::shapeshift::HealthReservationComponent",
-    .shortName = "ShapeshiftHealthReservation",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ShapeshiftHealthReservationComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ShapeshiftHealthReservationComponent_Properties) / sizeof(g_Gen_ShapeshiftHealthReservationComponent_Properties[0]),
-};
-
-// esv::shapeshift::StatesComponent (from Shapeshift.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerShapeshiftStatesComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "States", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerShapeshiftStatesComponent_Layout = {
-    .componentName = "esv::shapeshift::StatesComponent",
-    .shortName = "ServerShapeshiftStates",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_ServerShapeshiftStatesComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerShapeshiftStatesComponent_Properties) / sizeof(g_Gen_ServerShapeshiftStatesComponent_Properties[0]),
-};
-
-// esv::sight::AggregatedDataComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerSightAggregatedDataComponent_Properties[] = {
-    { "EntitySightData", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RemovedEntitySightData", 0x08, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Entities", 0x10, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RemovedEntities", 0x18, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "SightRanges", 0x20, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "MaxSightRange", 0x28, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_144", 0x2c, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "LosChecks", 0x30, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "LosCheckQueues", 0x38, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerSightAggregatedDataComponent_Layout = {
-    .componentName = "esv::sight::AggregatedDataComponent",
-    .shortName = "ServerSightAggregatedData",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x40,
-    .properties = g_Gen_ServerSightAggregatedDataComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerSightAggregatedDataComponent_Properties) / sizeof(g_Gen_ServerSightAggregatedDataComponent_Properties[0]),
-};
-
-// esv::sight::AggregatedGameplayLightDataComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerAggregatedGameplayLightDataComponent_Properties[] = {
-    { "Ranges", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "MovedViewsheds", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "MaxRange", 0x10, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "LosCheckQueue", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "LightLosCheckQueues", 0x20, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerAggregatedGameplayLightDataComponent_Layout = {
-    .componentName = "esv::sight::AggregatedGameplayLightDataComponent",
-    .shortName = "ServerAggregatedGameplayLightData",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .shortName = "Streams",
+    .componentTypeIndex = 0,
     .componentSize = 0x28,
-    .properties = g_Gen_ServerAggregatedGameplayLightDataComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerAggregatedGameplayLightDataComponent_Properties) / sizeof(g_Gen_ServerAggregatedGameplayLightDataComponent_Properties[0]),
+    .properties = g_Gen_esv_roll_stream_StreamsComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_roll_stream_StreamsComponent_Properties) / sizeof(g_Gen_esv_roll_stream_StreamsComponent_Properties[0]),
 };
 
-// esv::sight::AiGridViewshedComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerAiGridViewshedComponent_Properties[] = {
-    { "Count", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::shapeshift::StatesComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x18 (24 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_shapeshift_StatesComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerAiGridViewshedComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_shapeshift_StatesComponent_Layout = {
+    .componentName = "esv::shapeshift::StatesComponent",
+    .shortName = "States",
+    .componentTypeIndex = 0,
+    .componentSize = 0x18,
+    .properties = g_Gen_esv_shapeshift_StatesComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_shapeshift_StatesComponent_Properties) / sizeof(g_Gen_esv_shapeshift_StatesComponent_Properties[0]),
+};
+
+// ======================================================================
+// esv::sight::AggregatedDataComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x168 (360 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_sight_AggregatedDataComponent_Properties[] = {
+    { "MaxSightRange", 0x00, FIELD_TYPE_FLOAT, 0, true },
+    { "field_144", 0x04, FIELD_TYPE_INT32, 0, true },
+};
+
+static const ComponentLayoutDef g_Gen_esv_sight_AggregatedDataComponent_Layout = {
+    .componentName = "esv::sight::AggregatedDataComponent",
+    .shortName = "AggregatedData",
+    .componentTypeIndex = 0,
+    .componentSize = 0x168,
+    .properties = g_Gen_esv_sight_AggregatedDataComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_sight_AggregatedDataComponent_Properties) / sizeof(g_Gen_esv_sight_AggregatedDataComponent_Properties[0]),
+};
+
+// ======================================================================
+// esv::sight::AggregatedGameplayLightDataComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0xa0 (160 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_sight_AggregatedGameplayLightDataComponent_Properties[] = {
+    { "MaxRange", 0x00, FIELD_TYPE_FLOAT, 0, true },
+};
+
+static const ComponentLayoutDef g_Gen_esv_sight_AggregatedGameplayLightDataComponent_Layout = {
+    .componentName = "esv::sight::AggregatedGameplayLightDataComponent",
+    .shortName = "AggregatedGameplayLightData",
+    .componentTypeIndex = 0,
+    .componentSize = 0xa0,
+    .properties = g_Gen_esv_sight_AggregatedGameplayLightDataComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_sight_AggregatedGameplayLightDataComponent_Properties) / sizeof(g_Gen_esv_sight_AggregatedGameplayLightDataComponent_Properties[0]),
+};
+
+// ======================================================================
+// esv::sight::AiGridViewshedComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x48 (72 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_sight_AiGridViewshedComponent_Properties[] = {
+    { "Count", 0x00, FIELD_TYPE_UINT32, 0, true },
+};
+
+static const ComponentLayoutDef g_Gen_esv_sight_AiGridViewshedComponent_Layout = {
     .componentName = "esv::sight::AiGridViewshedComponent",
-    .shortName = "ServerAiGridViewshed",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_ServerAiGridViewshedComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerAiGridViewshedComponent_Properties) / sizeof(g_Gen_ServerAiGridViewshedComponent_Properties[0]),
+    .shortName = "AiGridViewshed",
+    .componentTypeIndex = 0,
+    .componentSize = 0x48,
+    .properties = g_Gen_esv_sight_AiGridViewshedComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_sight_AiGridViewshedComponent_Properties) / sizeof(g_Gen_esv_sight_AiGridViewshedComponent_Properties[0]),
 };
 
-// esv::sight::EntityLosCheckQueueComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerSightEntityLosCheckQueueComponent_Properties[] = {
-    { "LosCheck", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::spell_cast::CacheComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0xf0 (240 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_spell_cast_CacheComponent_Properties[] = {
+    { "TextKeyIndex", 0x00, FIELD_TYPE_UINT32, 0, true },
+    { "field_54", 0x04, FIELD_TYPE_INT32, 0, true },
+    { "MovementTransactionId", 0x08, FIELD_TYPE_UINT32, 0, true },
+    { "HasPathfindTemplate", 0x0c, FIELD_TYPE_BOOL, 0, true },
+    { "PhaseFinished", 0x0d, FIELD_TYPE_BOOL, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerSightEntityLosCheckQueueComponent_Layout = {
-    .componentName = "esv::sight::EntityLosCheckQueueComponent",
-    .shortName = "ServerSightEntityLosCheckQueue",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerSightEntityLosCheckQueueComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerSightEntityLosCheckQueueComponent_Properties) / sizeof(g_Gen_ServerSightEntityLosCheckQueueComponent_Properties[0]),
-};
-
-// esv::sight::LightLosCheckQueueComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerLightLosCheckQueueComponent_Properties[] = {
-    { "Checks", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Checks2", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerLightLosCheckQueueComponent_Layout = {
-    .componentName = "esv::sight::LightLosCheckQueueComponent",
-    .shortName = "ServerLightLosCheckQueue",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_ServerLightLosCheckQueueComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerLightLosCheckQueueComponent_Properties) / sizeof(g_Gen_ServerLightLosCheckQueueComponent_Properties[0]),
-};
-
-// esv::spell::OnDamageSpellsComponent (from Spell.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_OnDamageSpellsComponent_Properties[] = {
-    { "Spells", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_OnDamageSpellsComponent_Layout = {
-    .componentName = "esv::spell::OnDamageSpellsComponent",
-    .shortName = "OnDamageSpells",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_OnDamageSpellsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_OnDamageSpellsComponent_Properties) / sizeof(g_Gen_OnDamageSpellsComponent_Properties[0]),
-};
-
-// esv::spell_cast::CacheComponent (from SpellCast.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerSpellCastCacheComponent_Properties[] = {
-    { "Costs", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "TextKeyIndices", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "TextKeyIndex", 0x10, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_54", 0x14, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "TargetCounts", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "MovementTransactionId", 0x20, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_E0", 0x28, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "HasPathfindTemplate", 0x30, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "PhaseFinished", 0x31, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerSpellCastCacheComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_spell_cast_CacheComponent_Layout = {
     .componentName = "esv::spell_cast::CacheComponent",
-    .shortName = "ServerSpellCastCache",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x32,
-    .properties = g_Gen_ServerSpellCastCacheComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerSpellCastCacheComponent_Properties) / sizeof(g_Gen_ServerSpellCastCacheComponent_Properties[0]),
+    .shortName = "Cache",
+    .componentTypeIndex = 0,
+    .componentSize = 0xf0,
+    .properties = g_Gen_esv_spell_cast_CacheComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_spell_cast_CacheComponent_Properties) / sizeof(g_Gen_esv_spell_cast_CacheComponent_Properties[0]),
 };
 
-// esv::spell_cast::CastHitDelayComponent (from SpellCast.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerSpellCastHitDelayComponent_Properties[] = {
-    { "Delays", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "HitDelay", 0x08, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "HitDelayRemaining", 0x0c, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::spell_cast::CastHitDelayComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x18 (24 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_spell_cast_CastHitDelayComponent_Properties[] = {
+    { "HitDelay", 0x00, FIELD_TYPE_FLOAT, 0, true },
+    { "HitDelayRemaining", 0x04, FIELD_TYPE_FLOAT, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerSpellCastHitDelayComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_spell_cast_CastHitDelayComponent_Layout = {
     .componentName = "esv::spell_cast::CastHitDelayComponent",
-    .shortName = "ServerSpellCastHitDelay",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_ServerSpellCastHitDelayComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerSpellCastHitDelayComponent_Properties) / sizeof(g_Gen_ServerSpellCastHitDelayComponent_Properties[0]),
+    .shortName = "CastHitDelay",
+    .componentTypeIndex = 0,
+    .componentSize = 0x18,
+    .properties = g_Gen_esv_spell_cast_CastHitDelayComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_spell_cast_CastHitDelayComponent_Properties) / sizeof(g_Gen_esv_spell_cast_CastHitDelayComponent_Properties[0]),
 };
 
-// esv::spell_cast::CastRequestsComponent (from SpellCast.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerSpellCastRequestsComponent_Properties[] = {
-    { "StartRequests", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "CancelRequests", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ConfirmRequests", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "PreviewSetRequests", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::spell_cast::CastResponsibleComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x8 (8 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_spell_cast_CastResponsibleComponent_Properties[] = {
+    { "Entity", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerSpellCastRequestsComponent_Layout = {
-    .componentName = "esv::spell_cast::CastRequestsComponent",
-    .shortName = "ServerSpellCastRequests",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x20,
-    .properties = g_Gen_ServerSpellCastRequestsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerSpellCastRequestsComponent_Properties) / sizeof(g_Gen_ServerSpellCastRequestsComponent_Properties[0]),
-};
-
-// esv::spell_cast::CastResponsibleComponent (from SpellCast.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerSpellCastResponsibleComponent_Properties[] = {
-    { "Entity", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerSpellCastResponsibleComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_spell_cast_CastResponsibleComponent_Layout = {
     .componentName = "esv::spell_cast::CastResponsibleComponent",
-    .shortName = "ServerSpellCastResponsible",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerSpellCastResponsibleComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerSpellCastResponsibleComponent_Properties) / sizeof(g_Gen_ServerSpellCastResponsibleComponent_Properties[0]),
+    .shortName = "CastResponsible",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_esv_spell_cast_CastResponsibleComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_spell_cast_CastResponsibleComponent_Properties) / sizeof(g_Gen_esv_spell_cast_CastResponsibleComponent_Properties[0]),
 };
 
-// esv::spell_cast::ExternalsComponent (from SpellCast.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerSpellExternalsComponent_Properties[] = {
-    { "Externals", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::spell_cast::InterruptDataComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x48 (72 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_spell_cast_InterruptDataComponent_Properties[] = {
+    { "SpellCastGuid", 0x00, FIELD_TYPE_GUID, 0, true },
+    { "NextInterruptIndex", 0x10, FIELD_TYPE_INT32, 0, true },
+    { "AnimationIndex", 0x14, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerSpellExternalsComponent_Layout = {
-    .componentName = "esv::spell_cast::ExternalsComponent",
-    .shortName = "ServerSpellExternals",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerSpellExternalsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerSpellExternalsComponent_Properties) / sizeof(g_Gen_ServerSpellExternalsComponent_Properties[0]),
-};
-
-// esv::spell_cast::HitRegisterComponent (from SpellCast.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerSpellHitRegisterComponent_Properties[] = {
-    { "Hits", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerSpellHitRegisterComponent_Layout = {
-    .componentName = "esv::spell_cast::HitRegisterComponent",
-    .shortName = "ServerSpellHitRegister",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerSpellHitRegisterComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerSpellHitRegisterComponent_Properties) / sizeof(g_Gen_ServerSpellHitRegisterComponent_Properties[0]),
-};
-
-// esv::spell_cast::InterruptDataComponent (from Interrupt.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerSpellCastInterruptComponent_Properties[] = {
-    { "SpellCastGuid", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Event", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "NextInterruptIndex", 0x18, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "PausedAnimationEvents", 0x20, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "AnimationInterrupts", 0x28, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "AnimationIndex", 0x30, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerSpellCastInterruptComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_spell_cast_InterruptDataComponent_Layout = {
     .componentName = "esv::spell_cast::InterruptDataComponent",
-    .shortName = "ServerSpellCastInterrupt",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x34,
-    .properties = g_Gen_ServerSpellCastInterruptComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerSpellCastInterruptComponent_Properties) / sizeof(g_Gen_ServerSpellCastInterruptComponent_Properties[0]),
+    .shortName = "InterruptData",
+    .componentTypeIndex = 0,
+    .componentSize = 0x48,
+    .properties = g_Gen_esv_spell_cast_InterruptDataComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_spell_cast_InterruptDataComponent_Properties) / sizeof(g_Gen_esv_spell_cast_InterruptDataComponent_Properties[0]),
 };
 
-// esv::spell_cast::InterruptRequestsComponent (from Interrupt.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerSpellInterruptRequestsComponent_Properties[] = {
-    { "StartRequests", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "StopRequests", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "CombatLogRequests", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "UpdateInterruptorsRequests", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::spell_cast::MovementComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x18 (24 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_spell_cast_MovementComponent_Properties[] = {
+    { "IsMoving", 0x00, FIELD_TYPE_BOOL, 0, true },
+    { "Duration", 0x04, FIELD_TYPE_FLOAT, 0, true },
+    { "Progress", 0x08, FIELD_TYPE_FLOAT, 0, true },
+    { "TextKey", 0x0c, FIELD_TYPE_FIXEDSTRING, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerSpellInterruptRequestsComponent_Layout = {
-    .componentName = "esv::spell_cast::InterruptRequestsComponent",
-    .shortName = "ServerSpellInterruptRequests",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x20,
-    .properties = g_Gen_ServerSpellInterruptRequestsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerSpellInterruptRequestsComponent_Properties) / sizeof(g_Gen_ServerSpellInterruptRequestsComponent_Properties[0]),
-};
-
-// esv::spell_cast::InterruptResultsComponent (from Interrupt.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerSpellInterruptResultsComponent_Properties[] = {
-    { "Results", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Conditionals", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerSpellInterruptResultsComponent_Layout = {
-    .componentName = "esv::spell_cast::InterruptResultsComponent",
-    .shortName = "ServerSpellInterruptResults",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_ServerSpellInterruptResultsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerSpellInterruptResultsComponent_Properties) / sizeof(g_Gen_ServerSpellInterruptResultsComponent_Properties[0]),
-};
-
-// esv::spell_cast::MovementComponent (from SpellCast.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerSpellCastMovementComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "IsMoving", 0x08, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Duration", 0x0c, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Progress", 0x10, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "TextKey", 0x14, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerSpellCastMovementComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_spell_cast_MovementComponent_Layout = {
     .componentName = "esv::spell_cast::MovementComponent",
-    .shortName = "ServerSpellCastMovement",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .shortName = "Movement",
+    .componentTypeIndex = 0,
     .componentSize = 0x18,
-    .properties = g_Gen_ServerSpellCastMovementComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerSpellCastMovementComponent_Properties) / sizeof(g_Gen_ServerSpellCastMovementComponent_Properties[0]),
+    .properties = g_Gen_esv_spell_cast_MovementComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_spell_cast_MovementComponent_Properties) / sizeof(g_Gen_esv_spell_cast_MovementComponent_Properties[0]),
 };
 
-// esv::spell_cast::MovementInfoComponent (from SpellCast.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerSpellCastMovementInfoComponent_Properties[] = {
-    { "Settings", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "PathSettings", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::spell_cast::StateComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x40 (64 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_spell_cast_StateComponent_Properties[] = {
+    { "field_4", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "StoryActionId", 0x04, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerSpellCastMovementInfoComponent_Layout = {
-    .componentName = "esv::spell_cast::MovementInfoComponent",
-    .shortName = "ServerSpellCastMovementInfo",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_ServerSpellCastMovementInfoComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerSpellCastMovementInfoComponent_Properties) / sizeof(g_Gen_ServerSpellCastMovementInfoComponent_Properties[0]),
-};
-
-// esv::spell_cast::PendingRequestsComponent (from SpellCast.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerSpellCastPendingRequestsComponent_Properties[] = {
-    { "ConfirmRequests", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "CancelRequests", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "PreviewSetRequests", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerSpellCastPendingRequestsComponent_Layout = {
-    .componentName = "esv::spell_cast::PendingRequestsComponent",
-    .shortName = "ServerSpellCastPendingRequests",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x18,
-    .properties = g_Gen_ServerSpellCastPendingRequestsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerSpellCastPendingRequestsComponent_Properties) / sizeof(g_Gen_ServerSpellCastPendingRequestsComponent_Properties[0]),
-};
-
-// esv::spell_cast::ProjectileCacheComponent (from Projectile.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerProjectileCacheComponent_Properties[] = {
-    { "Target", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ProjectileDelayTimers", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_390", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ExtraData", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerProjectileCacheComponent_Layout = {
-    .componentName = "esv::spell_cast::ProjectileCacheComponent",
-    .shortName = "ServerProjectileCache",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x20,
-    .properties = g_Gen_ServerProjectileCacheComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerProjectileCacheComponent_Properties) / sizeof(g_Gen_ServerProjectileCacheComponent_Properties[0]),
-};
-
-// esv::spell_cast::ProjectilePathfindCacheComponent (from SpellCast.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerSpellCastProjectilePathfindCacheComponent_Properties[] = {
-    { "Targets", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Trajectories", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerSpellCastProjectilePathfindCacheComponent_Layout = {
-    .componentName = "esv::spell_cast::ProjectilePathfindCacheComponent",
-    .shortName = "ServerSpellCastProjectilePathfindCache",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_ServerSpellCastProjectilePathfindCacheComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerSpellCastProjectilePathfindCacheComponent_Properties) / sizeof(g_Gen_ServerSpellCastProjectilePathfindCacheComponent_Properties[0]),
-};
-
-// esv::spell_cast::StateComponent (from SpellCast.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerSpellCastStateComponent_Properties[] = {
-    { "Phase", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_4", 0x08, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Originator", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "StoryActionId", 0x18, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerSpellCastStateComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_spell_cast_StateComponent_Layout = {
     .componentName = "esv::spell_cast::StateComponent",
-    .shortName = "ServerSpellCastState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x1c,
-    .properties = g_Gen_ServerSpellCastStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerSpellCastStateComponent_Properties) / sizeof(g_Gen_ServerSpellCastStateComponent_Properties[0]),
+    .shortName = "State",
+    .componentTypeIndex = 0,
+    .componentSize = 0x40,
+    .properties = g_Gen_esv_spell_cast_StateComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_spell_cast_StateComponent_Properties) / sizeof(g_Gen_esv_spell_cast_StateComponent_Properties[0]),
 };
 
-// esv::spell_cast::UnsheathFallbackTimerComponent (from SpellCast.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerSpellCastUnsheathFallbackTimerComponent_Properties[] = {
-    { "Time", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::spell_cast::ZoneRangeComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x10 (16 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_spell_cast_ZoneRangeComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "field_4", 0x04, FIELD_TYPE_INT32, 0, true },
+    { "field_8", 0x08, FIELD_TYPE_INT32, 0, true },
+    { "field_C", 0x0c, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerSpellCastUnsheathFallbackTimerComponent_Layout = {
-    .componentName = "esv::spell_cast::UnsheathFallbackTimerComponent",
-    .shortName = "ServerSpellCastUnsheathFallbackTimer",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerSpellCastUnsheathFallbackTimerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerSpellCastUnsheathFallbackTimerComponent_Properties) / sizeof(g_Gen_ServerSpellCastUnsheathFallbackTimerComponent_Properties[0]),
-};
-
-// esv::spell_cast::ZoneRangeComponent (from SpellCast.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerSpellCastZoneRangeComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_4", 0x04, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8", 0x08, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_C", 0x0c, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerSpellCastZoneRangeComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_spell_cast_ZoneRangeComponent_Layout = {
     .componentName = "esv::spell_cast::ZoneRangeComponent",
-    .shortName = "ServerSpellCastZoneRange",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .shortName = "ZoneRange",
+    .componentTypeIndex = 0,
     .componentSize = 0x10,
-    .properties = g_Gen_ServerSpellCastZoneRangeComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerSpellCastZoneRangeComponent_Properties) / sizeof(g_Gen_ServerSpellCastZoneRangeComponent_Properties[0]),
+    .properties = g_Gen_esv_spell_cast_ZoneRangeComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_spell_cast_ZoneRangeComponent_Properties) / sizeof(g_Gen_esv_spell_cast_ZoneRangeComponent_Properties[0]),
 };
 
-// esv::stats::proficiency::BaseProficiencyComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerBaseProficiencyComponent_Properties[] = {
-    { "ProficiencyGroup", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Proficiency", 0x08, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::stats::proficiency::BaseProficiencyComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x10 (16 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_stats_proficiency_BaseProficiencyComponent_Properties[] = {
+    { "Proficiency", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerBaseProficiencyComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_stats_proficiency_BaseProficiencyComponent_Layout = {
     .componentName = "esv::stats::proficiency::BaseProficiencyComponent",
-    .shortName = "ServerBaseProficiency",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x0c,
-    .properties = g_Gen_ServerBaseProficiencyComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerBaseProficiencyComponent_Properties) / sizeof(g_Gen_ServerBaseProficiencyComponent_Properties[0]),
+    .shortName = "BaseProficiency",
+    .componentTypeIndex = 0,
+    .componentSize = 0x10,
+    .properties = g_Gen_esv_stats_proficiency_BaseProficiencyComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_stats_proficiency_BaseProficiencyComponent_Properties) / sizeof(g_Gen_esv_stats_proficiency_BaseProficiencyComponent_Properties[0]),
 };
 
-// esv::stats::proficiency::ProficiencyGroupStatsComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerProficiencyGroupStatsComponent_Properties[] = {
-    { "Stats", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::stats::proficiency::ProficiencyGroupStatsComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_stats_proficiency_ProficiencyGroupStatsComponent_Properties[] = {
+    { "Stats", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerProficiencyGroupStatsComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_stats_proficiency_ProficiencyGroupStatsComponent_Layout = {
     .componentName = "esv::stats::proficiency::ProficiencyGroupStatsComponent",
-    .shortName = "ServerProficiencyGroupStats",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_ServerProficiencyGroupStatsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerProficiencyGroupStatsComponent_Properties) / sizeof(g_Gen_ServerProficiencyGroupStatsComponent_Properties[0]),
+    .shortName = "ProficiencyGroupStats",
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_esv_stats_proficiency_ProficiencyGroupStatsComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_stats_proficiency_ProficiencyGroupStatsComponent_Properties) / sizeof(g_Gen_esv_stats_proficiency_ProficiencyGroupStatsComponent_Properties[0]),
 };
 
-// esv::status::CauseComponent (from Status.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerStatusCauseComponent_Properties[] = {
-    { "Cause", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "StoryActionId", 0x10, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::status::CauseComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x58 (88 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_status_CauseComponent_Properties[] = {
+    { "Cause", 0x00, FIELD_TYPE_GUID, 0, true },
+    { "StoryActionId", 0x10, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerStatusCauseComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_status_CauseComponent_Layout = {
     .componentName = "esv::status::CauseComponent",
-    .shortName = "ServerStatusCause",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x14,
-    .properties = g_Gen_ServerStatusCauseComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerStatusCauseComponent_Properties) / sizeof(g_Gen_ServerStatusCauseComponent_Properties[0]),
+    .shortName = "Cause",
+    .componentTypeIndex = 0,
+    .componentSize = 0x58,
+    .properties = g_Gen_esv_status_CauseComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_status_CauseComponent_Properties) / sizeof(g_Gen_esv_status_CauseComponent_Properties[0]),
 };
 
-// esv::status::OwnershipComponent (from Status.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerStatusOwnershipComponent_Properties[] = {
-    { "Owner", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::status::OwnershipComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_status_OwnershipComponent_Properties[] = {
+    { "Owner", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerStatusOwnershipComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_status_OwnershipComponent_Layout = {
     .componentName = "esv::status::OwnershipComponent",
-    .shortName = "ServerStatusOwnership",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerStatusOwnershipComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerStatusOwnershipComponent_Properties) / sizeof(g_Gen_ServerStatusOwnershipComponent_Properties[0]),
+    .shortName = "Ownership",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_esv_status_OwnershipComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_status_OwnershipComponent_Properties) / sizeof(g_Gen_esv_status_OwnershipComponent_Properties[0]),
 };
 
-// esv::status::PerformingComponent (from Status.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerStatusPerformingComponent_Properties[] = {
-    { "PerformEvent", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::status::PerformingComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_status_PerformingComponent_Properties[] = {
+    { "PerformEvent", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerStatusPerformingComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_status_PerformingComponent_Layout = {
     .componentName = "esv::status::PerformingComponent",
-    .shortName = "ServerStatusPerforming",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_ServerStatusPerformingComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerStatusPerformingComponent_Properties) / sizeof(g_Gen_ServerStatusPerformingComponent_Properties[0]),
+    .shortName = "Performing",
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_esv_status_PerformingComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_status_PerformingComponent_Properties) / sizeof(g_Gen_esv_status_PerformingComponent_Properties[0]),
 };
 
-// esv::status::StatusComponent (from Status.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerStatusComponent_Properties[] = {
-    { "Entity", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "StatusHandle", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "StatusId", 0x10, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Type", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "SpellCastSourceUuid", 0x20, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::status::StatusComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x28 (40 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_status_StatusComponent_Properties[] = {
+    { "Entity", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "StatusHandle", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "StatusId", 0x10, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "SpellCastSourceUuid", 0x18, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerStatusComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_status_StatusComponent_Layout = {
     .componentName = "esv::status::StatusComponent",
-    .shortName = "ServerStatus",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x30,
-    .properties = g_Gen_ServerStatusComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerStatusComponent_Properties) / sizeof(g_Gen_ServerStatusComponent_Properties[0]),
+    .shortName = "Status",
+    .componentTypeIndex = 0,
+    .componentSize = 0x28,
+    .properties = g_Gen_esv_status_StatusComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_status_StatusComponent_Properties) / sizeof(g_Gen_esv_status_StatusComponent_Properties[0]),
 };
 
-// esv::status::StatusRequestsComponent (from Status.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerStatusRequestsComponent_Properties[] = {
-    { "Create", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Add", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Destroy", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Deactivate", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Activate", 0x20, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "UnregisterMachineUpdate", 0x28, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RegisterMachineUpdate", 0x30, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "UpdateLifetime", 0x38, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "OnEvent", 0x40, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "OnTurnStart", 0x48, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "CreatedEvent", 0x50, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "AttemptedEvent", 0x58, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "AppliedEvent", 0x60, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Refresh", 0x68, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "DestroyedEvent", 0x70, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ActivateStatusVisuals", 0x78, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "DeactivateStatusVisuals", 0x79, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::status::aura::RemovedStatusAuraEffectEventOneFrameComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x18 (24 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_status_aura_RemovedStatusAuraEffectEventOneFrameComponent_Properties[] = {
+    { "StatusId", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "StoryActionId", 0x04, FIELD_TYPE_INT32, 0, true },
+    { "Source", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "Subject", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerStatusRequestsComponent_Layout = {
-    .componentName = "esv::status::StatusRequestsComponent",
-    .shortName = "ServerStatusRequests",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x7a,
-    .properties = g_Gen_ServerStatusRequestsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerStatusRequestsComponent_Properties) / sizeof(g_Gen_ServerStatusRequestsComponent_Properties[0]),
-};
-
-// esv::status::UniqueComponent (from Status.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerStatusUniqueComponent_Properties[] = {
-    { "Unique", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerStatusUniqueComponent_Layout = {
-    .componentName = "esv::status::UniqueComponent",
-    .shortName = "ServerStatusUnique",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerStatusUniqueComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerStatusUniqueComponent_Properties) / sizeof(g_Gen_ServerStatusUniqueComponent_Properties[0]),
-};
-
-// esv::status::aura::ContainerComponent (from Status.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerStatusAuraContainerComponent_Properties[] = {
-    { "Auras", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerStatusAuraContainerComponent_Layout = {
-    .componentName = "esv::status::aura::ContainerComponent",
-    .shortName = "ServerStatusAuraContainer",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerStatusAuraContainerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerStatusAuraContainerComponent_Properties) / sizeof(g_Gen_ServerStatusAuraContainerComponent_Properties[0]),
-};
-
-// esv::status::aura::RemovedStatusAuraEffectEventOneFrameComponent (from Status.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerRemovedStatusAuraEffectEventComponent_Properties[] = {
-    { "StatusId", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "StoryActionId", 0x04, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Source", 0x08, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Subject", 0x10, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerRemovedStatusAuraEffectEventComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_status_aura_RemovedStatusAuraEffectEventOneFrameComponent_Layout = {
     .componentName = "esv::status::aura::RemovedStatusAuraEffectEventOneFrameComponent",
-    .shortName = "ServerRemovedStatusAuraEffectEvent",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .shortName = "RemovedStatusAuraEffectEventOneFrame",
+    .componentTypeIndex = 0,
     .componentSize = 0x18,
-    .properties = g_Gen_ServerRemovedStatusAuraEffectEventComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerRemovedStatusAuraEffectEventComponent_Properties) / sizeof(g_Gen_ServerRemovedStatusAuraEffectEventComponent_Properties[0]),
+    .properties = g_Gen_esv_status_aura_RemovedStatusAuraEffectEventOneFrameComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_status_aura_RemovedStatusAuraEffectEventOneFrameComponent_Properties) / sizeof(g_Gen_esv_status_aura_RemovedStatusAuraEffectEventOneFrameComponent_Properties[0]),
 };
 
-// esv::surface::SurfaceComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerSurfaceComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_10", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::surface::SurfaceComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x18 (24 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_surface_SurfaceComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_GUID, 0, true },
+    { "field_10", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerSurfaceComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_surface_SurfaceComponent_Layout = {
     .componentName = "esv::surface::SurfaceComponent",
-    .shortName = "ServerSurface",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .shortName = "Surface",
+    .componentTypeIndex = 0,
     .componentSize = 0x18,
-    .properties = g_Gen_ServerSurfaceComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerSurfaceComponent_Properties) / sizeof(g_Gen_ServerSurfaceComponent_Properties[0]),
+    .properties = g_Gen_esv_surface_SurfaceComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_surface_SurfaceComponent_Properties) / sizeof(g_Gen_esv_surface_SurfaceComponent_Properties[0]),
 };
 
-// esv::tags::AnubisTagComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerAnubisTagComponent_Properties[] = {
-    { "Tags", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::trigger::EventConfigComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x1 (1 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_trigger_EventConfigComponent_Properties[] = {
+    { "Config", 0x00, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerAnubisTagComponent_Layout = {
-    .componentName = "esv::tags::AnubisTagComponent",
-    .shortName = "ServerAnubisTag",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerAnubisTagComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerAnubisTagComponent_Properties) / sizeof(g_Gen_ServerAnubisTagComponent_Properties[0]),
-};
-
-// esv::tags::BoostTagComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerBoostTagComponent_Properties[] = {
-    { "Tags", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerBoostTagComponent_Layout = {
-    .componentName = "esv::tags::BoostTagComponent",
-    .shortName = "ServerBoostTag",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerBoostTagComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerBoostTagComponent_Properties) / sizeof(g_Gen_ServerBoostTagComponent_Properties[0]),
-};
-
-// esv::tags::DialogTagComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerDialogTagComponent_Properties[] = {
-    { "Tags", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerDialogTagComponent_Layout = {
-    .componentName = "esv::tags::DialogTagComponent",
-    .shortName = "ServerDialogTag",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerDialogTagComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerDialogTagComponent_Properties) / sizeof(g_Gen_ServerDialogTagComponent_Properties[0]),
-};
-
-// esv::tags::OsirisTagComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerOsirisTagComponent_Properties[] = {
-    { "Tags", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerOsirisTagComponent_Layout = {
-    .componentName = "esv::tags::OsirisTagComponent",
-    .shortName = "ServerOsirisTag",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerOsirisTagComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerOsirisTagComponent_Properties) / sizeof(g_Gen_ServerOsirisTagComponent_Properties[0]),
-};
-
-// esv::tags::RaceTagComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerRaceTagComponent_Properties[] = {
-    { "Tags", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerRaceTagComponent_Layout = {
-    .componentName = "esv::tags::RaceTagComponent",
-    .shortName = "ServerRaceTag",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerRaceTagComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerRaceTagComponent_Properties) / sizeof(g_Gen_ServerRaceTagComponent_Properties[0]),
-};
-
-// esv::tags::TemplateTagComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerTemplateTagComponent_Properties[] = {
-    { "Tags", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerTemplateTagComponent_Layout = {
-    .componentName = "esv::tags::TemplateTagComponent",
-    .shortName = "ServerTemplateTag",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerTemplateTagComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerTemplateTagComponent_Properties) / sizeof(g_Gen_ServerTemplateTagComponent_Properties[0]),
-};
-
-// esv::trap::DisarmAttemptComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerDisarmAttemptComponent_Properties[] = {
-    { "Attempts", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerDisarmAttemptComponent_Layout = {
-    .componentName = "esv::trap::DisarmAttemptComponent",
-    .shortName = "ServerDisarmAttempt",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerDisarmAttemptComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerDisarmAttemptComponent_Properties) / sizeof(g_Gen_ServerDisarmAttemptComponent_Properties[0]),
-};
-
-// esv::trigger::CachedLeaveEventsComponent (from Trigger.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerTriggerCachedLeaveEventsComponent_Properties[] = {
-    { "Updated", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerTriggerCachedLeaveEventsComponent_Layout = {
-    .componentName = "esv::trigger::CachedLeaveEventsComponent",
-    .shortName = "ServerTriggerCachedLeaveEvents",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerTriggerCachedLeaveEventsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerTriggerCachedLeaveEventsComponent_Properties) / sizeof(g_Gen_ServerTriggerCachedLeaveEventsComponent_Properties[0]),
-};
-
-// esv::trigger::EventConfigComponent (from Trigger.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerTriggerEventConfigComponent_Properties[] = {
-    { "Config", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerTriggerEventConfigComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_trigger_EventConfigComponent_Layout = {
     .componentName = "esv::trigger::EventConfigComponent",
-    .shortName = "ServerTriggerEventConfig",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x01,
-    .properties = g_Gen_ServerTriggerEventConfigComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerTriggerEventConfigComponent_Properties) / sizeof(g_Gen_ServerTriggerEventConfigComponent_Properties[0]),
+    .shortName = "EventConfig",
+    .componentTypeIndex = 0,
+    .componentSize = 0x1,
+    .properties = g_Gen_esv_trigger_EventConfigComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_trigger_EventConfigComponent_Properties) / sizeof(g_Gen_esv_trigger_EventConfigComponent_Properties[0]),
 };
 
-// esv::trigger::RegisteredForComponent (from Trigger.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerTriggerRegisteredForComponent_Properties[] = {
-    { "RegisteredFor", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::trigger::RegistrationSettingsComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x1 (1 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_trigger_RegistrationSettingsComponent_Properties[] = {
+    { "Registered", 0x00, FIELD_TYPE_BOOL, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerTriggerRegisteredForComponent_Layout = {
-    .componentName = "esv::trigger::RegisteredForComponent",
-    .shortName = "ServerTriggerRegisteredFor",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerTriggerRegisteredForComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerTriggerRegisteredForComponent_Properties) / sizeof(g_Gen_ServerTriggerRegisteredForComponent_Properties[0]),
-};
-
-// esv::trigger::RegistrationSettingsComponent (from Trigger.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerRegistrationSettingsComponent_Properties[] = {
-    { "Registered", 0x00, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerRegistrationSettingsComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_trigger_RegistrationSettingsComponent_Layout = {
     .componentName = "esv::trigger::RegistrationSettingsComponent",
-    .shortName = "ServerRegistrationSettings",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x01,
-    .properties = g_Gen_ServerRegistrationSettingsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerRegistrationSettingsComponent_Properties) / sizeof(g_Gen_ServerRegistrationSettingsComponent_Properties[0]),
+    .shortName = "RegistrationSettings",
+    .componentTypeIndex = 0,
+    .componentSize = 0x1,
+    .properties = g_Gen_esv_trigger_RegistrationSettingsComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_trigger_RegistrationSettingsComponent_Properties) / sizeof(g_Gen_esv_trigger_RegistrationSettingsComponent_Properties[0]),
 };
 
-// esv::trigger::UpdatedRegisteredForComponent (from Trigger.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerUpdatedRegisteredForComponent_Properties[] = {
-    { "Updated", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// esv::unsheath::DefaultComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_esv_unsheath_DefaultComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "field_4", 0x04, FIELD_TYPE_BOOL, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerUpdatedRegisteredForComponent_Layout = {
-    .componentName = "esv::trigger::UpdatedRegisteredForComponent",
-    .shortName = "ServerUpdatedRegisteredFor",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerUpdatedRegisteredForComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerUpdatedRegisteredForComponent_Properties) / sizeof(g_Gen_ServerUpdatedRegisteredForComponent_Properties[0]),
-};
-
-// esv::trigger::UpdatedRegisteredForItemsComponent (from Trigger.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerUpdatedRegisteredForItemsComponent_Properties[] = {
-    { "Updated", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerUpdatedRegisteredForItemsComponent_Layout = {
-    .componentName = "esv::trigger::UpdatedRegisteredForItemsComponent",
-    .shortName = "ServerUpdatedRegisteredForItems",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerUpdatedRegisteredForItemsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerUpdatedRegisteredForItemsComponent_Properties) / sizeof(g_Gen_ServerUpdatedRegisteredForItemsComponent_Properties[0]),
-};
-
-// esv::turn::SurfaceTeamSingletonComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_TurnSurfaceTeamSingletonComponent_Properties[] = {
-    { "EndRound", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_TurnSurfaceTeamSingletonComponent_Layout = {
-    .componentName = "esv::turn::SurfaceTeamSingletonComponent",
-    .shortName = "TurnSurfaceTeamSingleton",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_TurnSurfaceTeamSingletonComponent_Properties,
-    .propertyCount = sizeof(g_Gen_TurnSurfaceTeamSingletonComponent_Properties) / sizeof(g_Gen_TurnSurfaceTeamSingletonComponent_Properties[0]),
-};
-
-// esv::turn::SurfaceTrackingComponent (from Combat.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_TurnSurfaceTrackingComponent_Properties[] = {
-    { "Surfaces", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_TurnSurfaceTrackingComponent_Layout = {
-    .componentName = "esv::turn::SurfaceTrackingComponent",
-    .shortName = "TurnSurfaceTracking",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_TurnSurfaceTrackingComponent_Properties,
-    .propertyCount = sizeof(g_Gen_TurnSurfaceTrackingComponent_Properties) / sizeof(g_Gen_TurnSurfaceTrackingComponent_Properties[0]),
-};
-
-// esv::unsheath::DefaultComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerUnsheathComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_4", 0x04, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_ServerUnsheathComponent_Layout = {
+static const ComponentLayoutDef g_Gen_esv_unsheath_DefaultComponent_Layout = {
     .componentName = "esv::unsheath::DefaultComponent",
-    .shortName = "ServerUnsheath",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x05,
-    .properties = g_Gen_ServerUnsheathComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerUnsheathComponent_Properties) / sizeof(g_Gen_ServerUnsheathComponent_Properties[0]),
+    .shortName = "Default",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_esv_unsheath_DefaultComponent_Properties,
+    .propertyCount = sizeof(g_Gen_esv_unsheath_DefaultComponent_Properties) / sizeof(g_Gen_esv_unsheath_DefaultComponent_Properties[0]),
 };
 
-// esv::unsheath::ScriptOverrideComponent (from ServerData.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ServerUnsheathScriptOverrideComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ls::AnimationBlueprintComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ls_AnimationBlueprintComponent_Properties[] = {
+    { "InstanceId", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "Flags", 0x04, FIELD_TYPE_UINT8, 0, true },
+    { "field_40", 0x08, FIELD_TYPE_UINT64, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ServerUnsheathScriptOverrideComponent_Layout = {
-    .componentName = "esv::unsheath::ScriptOverrideComponent",
-    .shortName = "ServerUnsheathScriptOverride",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ServerUnsheathScriptOverrideComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ServerUnsheathScriptOverrideComponent_Properties) / sizeof(g_Gen_ServerUnsheathScriptOverrideComponent_Properties[0]),
+static const ComponentLayoutDef g_Gen_ls_AnimationBlueprintComponent_Layout = {
+    .componentName = "ls::AnimationBlueprintComponent",
+    .shortName = "AnimationBlueprint",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_ls_AnimationBlueprintComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ls_AnimationBlueprintComponent_Properties) / sizeof(g_Gen_ls_AnimationBlueprintComponent_Properties[0]),
 };
 
-// ls::ActiveSkeletonSlotsComponent (from Data.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_ActiveSkeletonSlotsComponent_Properties[] = {
-    { "Slots", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ls::AnimationSetComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ls_AnimationSetComponent_Properties[] = {
+    { "FallbackSubSet", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_ActiveSkeletonSlotsComponent_Layout = {
-    .componentName = "ls::ActiveSkeletonSlotsComponent",
-    .shortName = "ActiveSkeletonSlots",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_ActiveSkeletonSlotsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_ActiveSkeletonSlotsComponent_Properties) / sizeof(g_Gen_ActiveSkeletonSlotsComponent_Properties[0]),
+static const ComponentLayoutDef g_Gen_ls_AnimationSetComponent_Layout = {
+    .componentName = "ls::AnimationSetComponent",
+    .shortName = "AnimationSet",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_ls_AnimationSetComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ls_AnimationSetComponent_Properties) / sizeof(g_Gen_ls_AnimationSetComponent_Properties[0]),
 };
 
-// ls::CameraComponent (from Camera.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CameraComponent_Properties[] = {
-    { "MasterBehaviorType", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ExposureSettingIndex", 0x04, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Active", 0x08, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "AcceptsInput", 0x09, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "UseCameraPPSettings", 0x0a, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "UseSplitScreenFov", 0x0b, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "PostProcess", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ls::CameraComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0xb0 (176 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ls_CameraComponent_Properties[] = {
+    { "MasterBehaviorType", 0x00, FIELD_TYPE_UINT32, 0, true },
+    { "ExposureSettingIndex", 0x04, FIELD_TYPE_INT32, 0, true },
+    { "Active", 0x08, FIELD_TYPE_BOOL, 0, true },
+    { "AcceptsInput", 0x09, FIELD_TYPE_BOOL, 0, true },
+    { "UseCameraPPSettings", 0x0a, FIELD_TYPE_BOOL, 0, true },
+    { "UseSplitScreenFov", 0x0b, FIELD_TYPE_BOOL, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CameraComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ls_CameraComponent_Layout = {
     .componentName = "ls::CameraComponent",
     .shortName = "Camera",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x18,
-    .properties = g_Gen_CameraComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CameraComponent_Properties) / sizeof(g_Gen_CameraComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0xb0,
+    .properties = g_Gen_ls_CameraComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ls_CameraComponent_Properties) / sizeof(g_Gen_ls_CameraComponent_Properties[0]),
 };
 
-// ls::CullComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_CullComponent_Properties[] = {
-    { "CullFlags", 0x00, FIELD_TYPE_UINT16, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ls::CullComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x2 (2 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ls_CullComponent_Properties[] = {
+    { "CullFlags", 0x00, FIELD_TYPE_UINT16, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_CullComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ls_CullComponent_Layout = {
     .componentName = "ls::CullComponent",
     .shortName = "Cull",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x02,
-    .properties = g_Gen_CullComponent_Properties,
-    .propertyCount = sizeof(g_Gen_CullComponent_Properties) / sizeof(g_Gen_CullComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x2,
+    .properties = g_Gen_ls_CullComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ls_CullComponent_Properties) / sizeof(g_Gen_ls_CullComponent_Properties[0]),
 };
 
-// ls::DefaultCameraBehavior (from Camera.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DefaultCameraBehaviorComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Left", 0x04, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Forward", 0x08, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RotationX", 0x0c, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RotationY", 0x10, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Zoom", 0x14, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "CaptureInput", 0x18, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_19", 0x19, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_1A", 0x1a, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ls::DecalComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ls_DecalComponent_Properties[] = {
+    { "field_8", 0x00, FIELD_TYPE_INT64, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_DefaultCameraBehaviorComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ls_DecalComponent_Layout = {
+    .componentName = "ls::DecalComponent",
+    .shortName = "Decal",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_ls_DecalComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ls_DecalComponent_Properties) / sizeof(g_Gen_ls_DecalComponent_Properties[0]),
+};
+
+// ======================================================================
+// ls::DefaultCameraBehavior
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x1c (28 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ls_DefaultCameraBehavior_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_FLOAT, 0, true },
+    { "Left", 0x04, FIELD_TYPE_FLOAT, 0, true },
+    { "Forward", 0x08, FIELD_TYPE_FLOAT, 0, true },
+    { "RotationX", 0x0c, FIELD_TYPE_FLOAT, 0, true },
+    { "RotationY", 0x10, FIELD_TYPE_FLOAT, 0, true },
+    { "Zoom", 0x14, FIELD_TYPE_FLOAT, 0, true },
+    { "CaptureInput", 0x18, FIELD_TYPE_BOOL, 0, true },
+    { "field_19", 0x19, FIELD_TYPE_BOOL, 0, true },
+    { "field_1A", 0x1a, FIELD_TYPE_BOOL, 0, true },
+};
+
+static const ComponentLayoutDef g_Gen_ls_DefaultCameraBehavior_Layout = {
     .componentName = "ls::DefaultCameraBehavior",
     .shortName = "DefaultCameraBehavior",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x1b,
-    .properties = g_Gen_DefaultCameraBehaviorComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DefaultCameraBehaviorComponent_Properties) / sizeof(g_Gen_DefaultCameraBehaviorComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x1c,
+    .properties = g_Gen_ls_DefaultCameraBehavior_Properties,
+    .propertyCount = sizeof(g_Gen_ls_DefaultCameraBehavior_Properties) / sizeof(g_Gen_ls_DefaultCameraBehavior_Properties[0]),
 };
 
-// ls::EffectCameraBehavior (from Camera.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_EffectCameraBehaviorComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ls::EffectCameraBehavior
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0xc (12 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ls_EffectCameraBehavior_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_VEC3, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_EffectCameraBehaviorComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ls_EffectCameraBehavior_Layout = {
     .componentName = "ls::EffectCameraBehavior",
     .shortName = "EffectCameraBehavior",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_EffectCameraBehaviorComponent_Properties,
-    .propertyCount = sizeof(g_Gen_EffectCameraBehaviorComponent_Properties) / sizeof(g_Gen_EffectCameraBehaviorComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0xc,
+    .properties = g_Gen_ls_EffectCameraBehavior_Properties,
+    .propertyCount = sizeof(g_Gen_ls_EffectCameraBehavior_Properties) / sizeof(g_Gen_ls_EffectCameraBehavior_Properties[0]),
 };
 
-// ls::GameplayEffectSetTimeFactorRequestsSingletonComponent (from Effect.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_GameplayEffectSetTimeFactorRequestsComponent_Properties[] = {
-    { "SetTimeFactor", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ls::EffectComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ls_EffectComponent_Properties[] = {
+    { "Entity", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "Initialized", 0x08, FIELD_TYPE_BOOL, 0, true },
+    { "OverridingFadeOpacity", 0x09, FIELD_TYPE_BOOL, 0, true },
+    { "EffectName", 0x0c, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "AnimationName", 0x10, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "UpdateQueued", 0x14, FIELD_TYPE_BOOL, 0, true },
+    { "SoundEntity", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "ConstructFlagsAndSalt", 0x20, FIELD_TYPE_UINT16, 0, true },
+    { "_Pad", 0x28, FIELD_TYPE_UINT64, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_GameplayEffectSetTimeFactorRequestsComponent_Layout = {
-    .componentName = "ls::GameplayEffectSetTimeFactorRequestsSingletonComponent",
-    .shortName = "GameplayEffectSetTimeFactorRequests",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_GameplayEffectSetTimeFactorRequestsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_GameplayEffectSetTimeFactorRequestsComponent_Properties) / sizeof(g_Gen_GameplayEffectSetTimeFactorRequestsComponent_Properties[0]),
+static const ComponentLayoutDef g_Gen_ls_EffectComponent_Layout = {
+    .componentName = "ls::EffectComponent",
+    .shortName = "Effect",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_ls_EffectComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ls_EffectComponent_Properties) / sizeof(g_Gen_ls_EffectComponent_Properties[0]),
 };
 
-// ls::GameplayVFXSetPlayTimeRequestsSingletonComponent (from Effect.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_GameplayVFXSetPlayTimeRequestsComponent_Properties[] = {
-    { "SetPlayTime", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ls::LevelComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ls_LevelComponent_Properties[] = {
+    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "LevelName", 0x08, FIELD_TYPE_FIXEDSTRING, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_GameplayVFXSetPlayTimeRequestsComponent_Layout = {
-    .componentName = "ls::GameplayVFXSetPlayTimeRequestsSingletonComponent",
-    .shortName = "GameplayVFXSetPlayTimeRequests",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_GameplayVFXSetPlayTimeRequestsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_GameplayVFXSetPlayTimeRequestsComponent_Properties) / sizeof(g_Gen_GameplayVFXSetPlayTimeRequestsComponent_Properties[0]),
-};
-
-// ls::GameplayVFXSingletonComponent (from Effect.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_GameplayVFXComponent_Properties[] = {
-    { "VFX", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_GameplayVFXComponent_Layout = {
-    .componentName = "ls::GameplayVFXSingletonComponent",
-    .shortName = "GameplayVFX",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_GameplayVFXComponent_Properties,
-    .propertyCount = sizeof(g_Gen_GameplayVFXComponent_Properties) / sizeof(g_Gen_GameplayVFXComponent_Properties[0]),
-};
-
-// ls::LevelComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_LevelComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "LevelName", 0x08, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_LevelComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ls_LevelComponent_Layout = {
     .componentName = "ls::LevelComponent",
     .shortName = "Level",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x0c,
-    .properties = g_Gen_LevelComponent_Properties,
-    .propertyCount = sizeof(g_Gen_LevelComponent_Properties) / sizeof(g_Gen_LevelComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x10,
+    .properties = g_Gen_ls_LevelComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ls_LevelComponent_Properties) / sizeof(g_Gen_ls_LevelComponent_Properties[0]),
 };
 
-// ls::LevelInstanceComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_LevelInstanceComponent_Properties[] = {
-    { "LevelInstanceID", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "LevelName", 0x04, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "LevelInstanceTemplate", 0x08, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "LevelType", 0x0c, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Active", 0x0d, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Platform", 0x0e, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "MovingPlatform", 0x0f, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "DynamicLayer", 0x10, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "NeedsPhysics", 0x11, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_12", 0x12, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_13", 0x13, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_14", 0x14, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_15", 0x15, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "qword18", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "dword20", 0x20, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_24", 0x24, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_28", 0x28, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_2C", 0x2c, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_30", 0x30, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_34", 0x34, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_38", 0x38, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_3C", 0x3c, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ls::LevelInstanceComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x40 (64 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ls_LevelInstanceComponent_Properties[] = {
+    { "LevelInstanceID", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "LevelName", 0x04, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "LevelInstanceTemplate", 0x08, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "LevelType", 0x0c, FIELD_TYPE_UINT8, 0, true },
+    { "Active", 0x0d, FIELD_TYPE_BOOL, 0, true },
+    { "Platform", 0x0e, FIELD_TYPE_BOOL, 0, true },
+    { "MovingPlatform", 0x0f, FIELD_TYPE_BOOL, 0, true },
+    { "DynamicLayer", 0x10, FIELD_TYPE_BOOL, 0, true },
+    { "NeedsPhysics", 0x11, FIELD_TYPE_BOOL, 0, true },
+    { "field_12", 0x12, FIELD_TYPE_UINT8, 0, true },
+    { "field_13", 0x13, FIELD_TYPE_UINT8, 0, true },
+    { "field_14", 0x14, FIELD_TYPE_UINT8, 0, true },
+    { "field_15", 0x15, FIELD_TYPE_UINT8, 0, true },
+    { "qword18", 0x18, FIELD_TYPE_UINT64, 0, true },
+    { "dword20", 0x20, FIELD_TYPE_INT32, 0, true },
+    { "field_24", 0x24, FIELD_TYPE_INT32, 0, true },
+    { "field_28", 0x28, FIELD_TYPE_INT32, 0, true },
+    { "field_2C", 0x2c, FIELD_TYPE_INT32, 0, true },
+    { "field_30", 0x30, FIELD_TYPE_INT32, 0, true },
+    { "field_34", 0x34, FIELD_TYPE_FLOAT, 0, true },
+    { "field_38", 0x38, FIELD_TYPE_FLOAT, 0, true },
+    { "field_3C", 0x3c, FIELD_TYPE_FLOAT, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_LevelInstanceComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ls_LevelInstanceComponent_Layout = {
     .componentName = "ls::LevelInstanceComponent",
     .shortName = "LevelInstance",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .componentTypeIndex = 0,
     .componentSize = 0x40,
-    .properties = g_Gen_LevelInstanceComponent_Properties,
-    .propertyCount = sizeof(g_Gen_LevelInstanceComponent_Properties) / sizeof(g_Gen_LevelInstanceComponent_Properties[0]),
+    .properties = g_Gen_ls_LevelInstanceComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ls_LevelInstanceComponent_Properties) / sizeof(g_Gen_ls_LevelInstanceComponent_Properties[0]),
 };
 
-// ls::LevelInstanceStateComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_LevelInstanceStateComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_30", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_60", 0x10, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "LocalBound", 0x18, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "WorldBound", 0x20, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "MergedLevelTemplateUUID", 0x28, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "LevelInstanceID", 0x2c, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "LevelName", 0x30, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "LevelName2", 0x34, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Destroyed", 0x38, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "MovingPlatform", 0x39, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_A6", 0x3a, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_A8", 0x3c, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_AC", 0x40, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_B0", 0x44, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_B4", 0x48, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_B8", 0x4c, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_BC", 0x50, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_C0", 0x54, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_C4", 0x58, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_C8", 0x5c, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_CC", 0x60, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ls::LevelInstanceStateComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0xd0 (208 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ls_LevelInstanceStateComponent_Properties[] = {
+    { "field_60", 0x00, FIELD_TYPE_INT32, 0, true },
+    { "MergedLevelTemplateUUID", 0x04, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "LevelInstanceID", 0x08, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "LevelName", 0x0c, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "LevelName2", 0x10, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "Destroyed", 0x14, FIELD_TYPE_BOOL, 0, true },
+    { "MovingPlatform", 0x15, FIELD_TYPE_BOOL, 0, true },
+    { "field_A6", 0x16, FIELD_TYPE_UINT8, 0, true },
+    { "field_A8", 0x18, FIELD_TYPE_FLOAT, 0, true },
+    { "field_AC", 0x1c, FIELD_TYPE_FLOAT, 0, true },
+    { "field_B0", 0x20, FIELD_TYPE_FLOAT, 0, true },
+    { "field_B4", 0x24, FIELD_TYPE_FLOAT, 0, true },
+    { "field_B8", 0x28, FIELD_TYPE_FLOAT, 0, true },
+    { "field_BC", 0x2c, FIELD_TYPE_FLOAT, 0, true },
+    { "field_C0", 0x30, FIELD_TYPE_FLOAT, 0, true },
+    { "field_C4", 0x34, FIELD_TYPE_FLOAT, 0, true },
+    { "field_C8", 0x38, FIELD_TYPE_FLOAT, 0, true },
+    { "field_CC", 0x3c, FIELD_TYPE_FLOAT, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_LevelInstanceStateComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ls_LevelInstanceStateComponent_Layout = {
     .componentName = "ls::LevelInstanceStateComponent",
     .shortName = "LevelInstanceState",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x64,
-    .properties = g_Gen_LevelInstanceStateComponent_Properties,
-    .propertyCount = sizeof(g_Gen_LevelInstanceStateComponent_Properties) / sizeof(g_Gen_LevelInstanceStateComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0xd0,
+    .properties = g_Gen_ls_LevelInstanceStateComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ls_LevelInstanceStateComponent_Properties) / sizeof(g_Gen_ls_LevelInstanceStateComponent_Properties[0]),
 };
 
-// ls::LevelRootComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_LevelRootComponent_Properties[] = {
-    { "LevelName", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ls::LevelRootComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ls_LevelRootComponent_Properties[] = {
+    { "LevelName", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_LevelRootComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ls_LevelRootComponent_Layout = {
     .componentName = "ls::LevelRootComponent",
     .shortName = "LevelRoot",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_LevelRootComponent_Properties,
-    .propertyCount = sizeof(g_Gen_LevelRootComponent_Properties) / sizeof(g_Gen_LevelRootComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_ls_LevelRootComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ls_LevelRootComponent_Properties) / sizeof(g_Gen_ls_LevelRootComponent_Properties[0]),
 };
 
-// ls::PhysicsComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_PhysicsComponent_Properties[] = {
-    { "PhysicsGroup", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "CollidesWith", 0x04, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "ExtraFlags", 0x08, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "HasPhysics", 0x0c, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_15", 0x0d, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "IsClustered", 0x0e, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ls::PhysicsComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x18 (24 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ls_PhysicsComponent_Properties[] = {
+    { "PhysicsGroup", 0x00, FIELD_TYPE_UINT32, 0, true },
+    { "CollidesWith", 0x04, FIELD_TYPE_UINT32, 0, true },
+    { "ExtraFlags", 0x08, FIELD_TYPE_UINT32, 0, true },
+    { "field_15", 0x0c, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_PhysicsComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ls_PhysicsComponent_Layout = {
     .componentName = "ls::PhysicsComponent",
     .shortName = "Physics",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x0f,
-    .properties = g_Gen_PhysicsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_PhysicsComponent_Properties) / sizeof(g_Gen_PhysicsComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x18,
+    .properties = g_Gen_ls_PhysicsComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ls_PhysicsComponent_Properties) / sizeof(g_Gen_ls_PhysicsComponent_Properties[0]),
 };
 
-// ls::SoundComponent (from Sound.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_SoundComponent_Properties[] = {
-    { "Entity", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Flags", 0x08, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Duration", 0x0c, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Effect", 0x10, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_1C", 0x14, FIELD_TYPE_FLOAT, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ls::SoundComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x20 (32 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ls_SoundComponent_Properties[] = {
+    { "Entity", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "Flags", 0x08, FIELD_TYPE_UINT32, 0, true },
+    { "Duration", 0x0c, FIELD_TYPE_FLOAT, 0, true },
+    { "Effect", 0x10, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "field_1C", 0x14, FIELD_TYPE_FLOAT, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_SoundComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ls_SoundComponent_Layout = {
     .componentName = "ls::SoundComponent",
     .shortName = "Sound",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x18,
-    .properties = g_Gen_SoundComponent_Properties,
-    .propertyCount = sizeof(g_Gen_SoundComponent_Properties) / sizeof(g_Gen_SoundComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x20,
+    .properties = g_Gen_ls_SoundComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ls_SoundComponent_Properties) / sizeof(g_Gen_ls_SoundComponent_Properties[0]),
 };
 
-// ls::StaticPhysicsComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_StaticPhysicsComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ls::TimeFactorComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x4 (4 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ls_TimeFactorComponent_Properties[] = {
+    { "Value", 0x00, FIELD_TYPE_FLOAT, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_StaticPhysicsComponent_Layout = {
-    .componentName = "ls::StaticPhysicsComponent",
-    .shortName = "StaticPhysics",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x04,
-    .properties = g_Gen_StaticPhysicsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_StaticPhysicsComponent_Properties) / sizeof(g_Gen_StaticPhysicsComponent_Properties[0]),
+static const ComponentLayoutDef g_Gen_ls_TimeFactorComponent_Layout = {
+    .componentName = "ls::TimeFactorComponent",
+    .shortName = "TimeFactor",
+    .componentTypeIndex = 0,
+    .componentSize = 0x4,
+    .properties = g_Gen_ls_TimeFactorComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ls_TimeFactorComponent_Properties) / sizeof(g_Gen_ls_TimeFactorComponent_Properties[0]),
 };
 
-// ls::TransformComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_TransformComponent_Properties[] = {
-    { "Transform", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ls::VisualAttachRequestOneFrameComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x10 (16 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ls_VisualAttachRequestOneFrameComponent_Properties[] = {
+    { "Entity", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
+    { "field_8", 0x08, FIELD_TYPE_INT32, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_TransformComponent_Layout = {
-    .componentName = "ls::TransformComponent",
-    .shortName = "Transform",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_TransformComponent_Properties,
-    .propertyCount = sizeof(g_Gen_TransformComponent_Properties) / sizeof(g_Gen_TransformComponent_Properties[0]),
-};
-
-// ls::VisualAttachRequestOneFrameComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_VisualAttachRequestComponent_Properties[] = {
-    { "Entity", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_8", 0x08, FIELD_TYPE_INT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_VisualAttachRequestComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ls_VisualAttachRequestOneFrameComponent_Layout = {
     .componentName = "ls::VisualAttachRequestOneFrameComponent",
-    .shortName = "VisualAttachRequest",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x0c,
-    .properties = g_Gen_VisualAttachRequestComponent_Properties,
-    .propertyCount = sizeof(g_Gen_VisualAttachRequestComponent_Properties) / sizeof(g_Gen_VisualAttachRequestComponent_Properties[0]),
+    .shortName = "VisualAttachRequestOneFrame",
+    .componentTypeIndex = 0,
+    .componentSize = 0x10,
+    .properties = g_Gen_ls_VisualAttachRequestOneFrameComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ls_VisualAttachRequestOneFrameComponent_Properties) / sizeof(g_Gen_ls_VisualAttachRequestOneFrameComponent_Properties[0]),
 };
 
-// ls::VisualChangeRequestOneFrameComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_VisualChangeRequestComponent_Properties[] = {
-    { "VisualTemplate", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RenderFlags", 0x04, FIELD_TYPE_UINT16, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ls::VisualChangeRequestOneFrameComponent
+// Generated from Windows BG3SE headers
+// Windows Size: 0x8 (8 bytes) - Estimated
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ls_VisualChangeRequestOneFrameComponent_Properties[] = {
+    { "VisualTemplate", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "RenderFlags", 0x04, FIELD_TYPE_UINT16, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_VisualChangeRequestComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ls_VisualChangeRequestOneFrameComponent_Layout = {
     .componentName = "ls::VisualChangeRequestOneFrameComponent",
-    .shortName = "VisualChangeRequest",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x06,
-    .properties = g_Gen_VisualChangeRequestComponent_Properties,
-    .propertyCount = sizeof(g_Gen_VisualChangeRequestComponent_Properties) / sizeof(g_Gen_VisualChangeRequestComponent_Properties[0]),
+    .shortName = "VisualChangeRequestOneFrame",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_ls_VisualChangeRequestOneFrameComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ls_VisualChangeRequestOneFrameComponent_Properties) / sizeof(g_Gen_ls_VisualChangeRequestOneFrameComponent_Properties[0]),
 };
 
-// ls::VisualComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_VisualComponent_Properties[] = {
-    { "field_8", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "field_9", 0x01, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "NotClustered", 0x02, FIELD_TYPE_BOOL, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ls::VisualComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ls_VisualComponent_Properties[] = {
+    { "field_8", 0x00, FIELD_TYPE_UINT8, 0, true },
+    { "field_9", 0x01, FIELD_TYPE_UINT8, 0, true },
+    { "NotClustered", 0x02, FIELD_TYPE_BOOL, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_VisualComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ls_VisualComponent_Layout = {
     .componentName = "ls::VisualComponent",
     .shortName = "Visual",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x03,
-    .properties = g_Gen_VisualComponent_Properties,
-    .propertyCount = sizeof(g_Gen_VisualComponent_Properties) / sizeof(g_Gen_VisualComponent_Properties[0]),
-};
-
-// ls::VisualLoadDesciptionComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_VisualLoadDescriptionComponent_Properties[] = {
-    { "VisualTemplate", 0x00, FIELD_TYPE_UINT32, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RenderFlags", 0x04, FIELD_TYPE_UINT16, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RenderChannel", 0x06, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_VisualLoadDescriptionComponent_Layout = {
-    .componentName = "ls::VisualLoadDesciptionComponent",
-    .shortName = "VisualLoadDescription",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x07,
-    .properties = g_Gen_VisualLoadDescriptionComponent_Properties,
-    .propertyCount = sizeof(g_Gen_VisualLoadDescriptionComponent_Properties) / sizeof(g_Gen_VisualLoadDescriptionComponent_Properties[0]),
-};
-
-// ls::VisualLoadRequestsSingletonComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_VisualLoadRequestsComponent_Properties[] = {
-    { "Requests", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_VisualLoadRequestsComponent_Layout = {
-    .componentName = "ls::VisualLoadRequestsSingletonComponent",
-    .shortName = "VisualLoadRequests",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_VisualLoadRequestsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_VisualLoadRequestsComponent_Properties) / sizeof(g_Gen_VisualLoadRequestsComponent_Properties[0]),
-};
-
-// ls::animation::AnimationWaterfallComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_AnimationWaterfallComponent_Properties[] = {
-    { "Waterfall", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Overrides", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_AnimationWaterfallComponent_Layout = {
-    .componentName = "ls::animation::AnimationWaterfallComponent",
-    .shortName = "AnimationWaterfall",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .componentTypeIndex = 0,
     .componentSize = 0x10,
-    .properties = g_Gen_AnimationWaterfallComponent_Properties,
-    .propertyCount = sizeof(g_Gen_AnimationWaterfallComponent_Properties) / sizeof(g_Gen_AnimationWaterfallComponent_Properties[0]),
+    .properties = g_Gen_ls_VisualComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ls_VisualComponent_Properties) / sizeof(g_Gen_ls_VisualComponent_Properties[0]),
 };
 
-// ls::animation::DynamicAnimationTagsComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_DynamicAnimationTagsComponent_Properties[] = {
-    { "Tags", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ls::VisualLoadDesciptionComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ls_VisualLoadDesciptionComponent_Properties[] = {
+    { "VisualTemplate", 0x00, FIELD_TYPE_FIXEDSTRING, 0, true },
+    { "RenderFlags", 0x04, FIELD_TYPE_UINT16, 0, true },
+    { "RenderChannel", 0x06, FIELD_TYPE_UINT8, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_DynamicAnimationTagsComponent_Layout = {
-    .componentName = "ls::animation::DynamicAnimationTagsComponent",
-    .shortName = "DynamicAnimationTags",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_DynamicAnimationTagsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_DynamicAnimationTagsComponent_Properties) / sizeof(g_Gen_DynamicAnimationTagsComponent_Properties[0]),
+static const ComponentLayoutDef g_Gen_ls_VisualLoadDesciptionComponent_Layout = {
+    .componentName = "ls::VisualLoadDesciptionComponent",
+    .shortName = "VisualLoadDesciption",
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_ls_VisualLoadDesciptionComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ls_VisualLoadDesciptionComponent_Properties) / sizeof(g_Gen_ls_VisualLoadDesciptionComponent_Properties[0]),
 };
 
-// ls::animation::GameplayEventsSingletonComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_AnimationGameplayEventsSingletonComponent_Properties[] = {
-    { "Events", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ls::level::LevelInstanceTempDestroyedComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x8 (8 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ls_level_LevelInstanceTempDestroyedComponent_Properties[] = {
+    { "Level", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_AnimationGameplayEventsSingletonComponent_Layout = {
-    .componentName = "ls::animation::GameplayEventsSingletonComponent",
-    .shortName = "AnimationGameplayEventsSingleton",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_AnimationGameplayEventsSingletonComponent_Properties,
-    .propertyCount = sizeof(g_Gen_AnimationGameplayEventsSingletonComponent_Properties) / sizeof(g_Gen_AnimationGameplayEventsSingletonComponent_Properties[0]),
-};
-
-// ls::animation::TemplateAnimationSetOverrideComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_TemplateAnimationSetOverrideComponent_Properties[] = {
-    { "Overrides", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_TemplateAnimationSetOverrideComponent_Layout = {
-    .componentName = "ls::animation::TemplateAnimationSetOverrideComponent",
-    .shortName = "TemplateAnimationSetOverride",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_TemplateAnimationSetOverrideComponent_Properties,
-    .propertyCount = sizeof(g_Gen_TemplateAnimationSetOverrideComponent_Properties) / sizeof(g_Gen_TemplateAnimationSetOverrideComponent_Properties[0]),
-};
-
-// ls::animation::TextKeyEventsSingletonComponent (from Visual.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_AnimationTextKeyEventsSingletonComponent_Properties[] = {
-    { "Events", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_AnimationTextKeyEventsSingletonComponent_Layout = {
-    .componentName = "ls::animation::TextKeyEventsSingletonComponent",
-    .shortName = "AnimationTextKeyEventsSingleton",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_AnimationTextKeyEventsSingletonComponent_Properties,
-    .propertyCount = sizeof(g_Gen_AnimationTextKeyEventsSingletonComponent_Properties) / sizeof(g_Gen_AnimationTextKeyEventsSingletonComponent_Properties[0]),
-};
-
-// ls::level::LevelInstanceTempDestroyedComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_LevelInstanceTempDestroyedComponent_Properties[] = {
-    { "Level", 0x00, FIELD_TYPE_UINT64, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_LevelInstanceTempDestroyedComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ls_level_LevelInstanceTempDestroyedComponent_Layout = {
     .componentName = "ls::level::LevelInstanceTempDestroyedComponent",
     .shortName = "LevelInstanceTempDestroyed",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_LevelInstanceTempDestroyedComponent_Properties,
-    .propertyCount = sizeof(g_Gen_LevelInstanceTempDestroyedComponent_Properties) / sizeof(g_Gen_LevelInstanceTempDestroyedComponent_Properties[0]),
+    .componentTypeIndex = 0,
+    .componentSize = 0x8,
+    .properties = g_Gen_ls_level_LevelInstanceTempDestroyedComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ls_level_LevelInstanceTempDestroyedComponent_Properties) / sizeof(g_Gen_ls_level_LevelInstanceTempDestroyedComponent_Properties[0]),
 };
 
-// ls::trigger::AreaComponent (from Trigger.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_TriggerAreaComponent_Properties[] = {
-    { "Physics", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Bounds", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "RotationInv", 0x10, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ls::trigger::AreaComponent
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x88 (136 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ls_trigger_AreaComponent_Properties[] = {
+    { "RotationInv", 0x00, FIELD_TYPE_VEC4, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_TriggerAreaComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ls_trigger_AreaComponent_Layout = {
     .componentName = "ls::trigger::AreaComponent",
-    .shortName = "TriggerArea",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x18,
-    .properties = g_Gen_TriggerAreaComponent_Properties,
-    .propertyCount = sizeof(g_Gen_TriggerAreaComponent_Properties) / sizeof(g_Gen_TriggerAreaComponent_Properties[0]),
+    .shortName = "Area",
+    .componentTypeIndex = 0,
+    .componentSize = 0x88,
+    .properties = g_Gen_ls_trigger_AreaComponent_Properties,
+    .propertyCount = sizeof(g_Gen_ls_trigger_AreaComponent_Properties) / sizeof(g_Gen_ls_trigger_AreaComponent_Properties[0]),
 };
 
-// ls::trigger::ContainerComponent (from Trigger.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_TriggerContainerComponent_Properties[] = {
-    { "field_0", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-    { "Events", 0x08, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
+// ======================================================================
+// ls::uuid::Component
+// Generated from Windows BG3SE headers
+// ARM64 Size: 0x10 (16 bytes) - Ghidra verified
+// ======================================================================
+
+static const ComponentPropertyDef g_Gen_ls_uuid_Component_Properties[] = {
+    { "EntityUuid", 0x00, FIELD_TYPE_GUID, 0, true },
 };
 
-static const ComponentLayoutDef g_Gen_TriggerContainerComponent_Layout = {
-    .componentName = "ls::trigger::ContainerComponent",
-    .shortName = "TriggerContainer",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x10,
-    .properties = g_Gen_TriggerContainerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_TriggerContainerComponent_Properties) / sizeof(g_Gen_TriggerContainerComponent_Properties[0]),
-};
-
-// ls::trigger::IsInsideOfComponent (from Trigger.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_TriggerIsInsideOfComponent_Properties[] = {
-    { "InsideOf", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_TriggerIsInsideOfComponent_Layout = {
-    .componentName = "ls::trigger::IsInsideOfComponent",
-    .shortName = "TriggerIsInsideOf",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_TriggerIsInsideOfComponent_Properties,
-    .propertyCount = sizeof(g_Gen_TriggerIsInsideOfComponent_Properties) / sizeof(g_Gen_TriggerIsInsideOfComponent_Properties[0]),
-};
-
-// ls::trigger::UpdatedContainerComponent (from Trigger.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_TriggerUpdatedContainerComponent_Properties[] = {
-    { "Updates", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_TriggerUpdatedContainerComponent_Layout = {
-    .componentName = "ls::trigger::UpdatedContainerComponent",
-    .shortName = "TriggerUpdatedContainer",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_TriggerUpdatedContainerComponent_Properties,
-    .propertyCount = sizeof(g_Gen_TriggerUpdatedContainerComponent_Properties) / sizeof(g_Gen_TriggerUpdatedContainerComponent_Properties[0]),
-};
-
-// ls::trigger::UpdatedPhysicsComponent (from Trigger.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_TriggerUpdatedPhysicsComponent_Properties[] = {
-    { "Updates", 0x00, FIELD_TYPE_ENTITY_HANDLE, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_TriggerUpdatedPhysicsComponent_Layout = {
-    .componentName = "ls::trigger::UpdatedPhysicsComponent",
-    .shortName = "TriggerUpdatedPhysics",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_TriggerUpdatedPhysicsComponent_Properties,
-    .propertyCount = sizeof(g_Gen_TriggerUpdatedPhysicsComponent_Properties) / sizeof(g_Gen_TriggerUpdatedPhysicsComponent_Properties[0]),
-};
-
-// ls::uuid::Component (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_UuidComponent_Properties[] = {
-    { "EntityUuid", 0x00, FIELD_TYPE_UINT8, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_UuidComponent_Layout = {
+static const ComponentLayoutDef g_Gen_ls_uuid_Component_Layout = {
     .componentName = "ls::uuid::Component",
-    .shortName = "Uuid",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
+    .shortName = "",
+    .componentTypeIndex = 0,
     .componentSize = 0x10,
-    .properties = g_Gen_UuidComponent_Properties,
-    .propertyCount = sizeof(g_Gen_UuidComponent_Properties) / sizeof(g_Gen_UuidComponent_Properties[0]),
+    .properties = g_Gen_ls_uuid_Component_Properties,
+    .propertyCount = sizeof(g_Gen_ls_uuid_Component_Properties) / sizeof(g_Gen_ls_uuid_Component_Properties[0]),
 };
 
-// ls::uuid::ToHandleMappingComponent (from Components.h)
-// WARNING: Offsets are ESTIMATED from Windows x64. Verify for ARM64!
-static const ComponentPropertyDef g_Gen_UuidToHandleMappingComponent_Properties[] = {
-    { "Mappings", 0x00, FIELD_TYPE_GUID, 0, false, ELEM_TYPE_UNKNOWN, 0 },
-};
-
-static const ComponentLayoutDef g_Gen_UuidToHandleMappingComponent_Layout = {
-    .componentName = "ls::uuid::ToHandleMappingComponent",
-    .shortName = "UuidToHandleMapping",
-    .componentTypeIndex = 0,  // Set dynamically from TypeId
-    .componentSize = 0x08,
-    .properties = g_Gen_UuidToHandleMappingComponent_Properties,
-    .propertyCount = sizeof(g_Gen_UuidToHandleMappingComponent_Properties) / sizeof(g_Gen_UuidToHandleMappingComponent_Properties[0]),
-};
-
-// ============================================================================
-// Generated Layouts Array
-// Add these to g_AllComponentLayouts[] in component_offsets.h
-// ============================================================================
-
-#define GENERATED_COMPONENT_COUNT 504
+#define GENERATED_COMPONENT_COUNT 293
 
 static const ComponentLayoutDef* g_GeneratedComponentLayouts[] = {
-    &g_Gen_ClientCharacterIconRequestComponent_Layout,
-    &g_Gen_ClientCharacterIconResultComponent_Layout,
-    &g_Gen_CharacterLightComponent_Layout,
-    &g_Gen_CharacterLightSingletonComponent_Layout,
-    &g_Gen_ClientTimelineActorControlComponent_Layout,
-    &g_Gen_ClientEquipmentVisualsComponent_Layout,
-    &g_Gen_GameCameraBehaviorComponent_Layout,
-    &g_Gen_ClientPaperdollComponent_Layout,
-    &g_Gen_CameraCombatTargetComponent_Layout,
-    &g_Gen_CameraSelectorModeComponent_Layout,
-    &g_Gen_CameraTargetComponent_Layout,
-    &g_Gen_ClientCCBaseDefinitionStateComponent_Layout,
-    &g_Gen_ClientCCChangeAppearanceDefinitionComponent_Layout,
-    &g_Gen_ClientCCCompanionDefinitionComponent_Layout,
-    &g_Gen_ClientCCDefinitionStateComponent_Layout,
-    &g_Gen_ClientCCDefinitionStateExComponent_Layout,
-    &g_Gen_ClientCCDummyDefinitionComponent_Layout,
-    &g_Gen_ClientCCFullRespecDefinitionComponent_Layout,
-    &g_Gen_ClientCCLevelUpDefinitionComponent_Layout,
-    &g_Gen_DummyAnimationStateComponent_Layout,
-    &g_Gen_DummyAvailableAnimationsComponent_Layout,
-    &g_Gen_DummyCharacterVFXInitializationComponent_Layout,
-    &g_Gen_DummiesCreatedSingletonComponent_Layout,
-    &g_Gen_DummyComponent_Layout,
-    &g_Gen_DummyEquipmentVisualsStateComponent_Layout,
-    &g_Gen_DummyFootIKStateComponent_Layout,
-    &g_Gen_HasDummyComponent_Layout,
-    &g_Gen_DummyOriginalTransformComponent_Layout,
-    &g_Gen_DummySpellVFXInitializationComponent_Layout,
-    &g_Gen_DummySplatterComponent_Layout,
-    &g_Gen_DummyStoredClothComponent_Layout,
-    &g_Gen_DummyTransformRequestsSingletonComponent_Layout,
-    &g_Gen_DummyUnsheathComponent_Layout,
-    &g_Gen_DummyVFXEntitiesComponent_Layout,
-    &g_Gen_ClientVisualsDesiredStateComponent_Layout,
-    &g_Gen_ClientEquipmentVisibilityStateComponent_Layout,
-    &g_Gen_ClientInterruptPlayerDecisionComponent_Layout,
-    &g_Gen_PhotoModeCameraOffsetComponent_Layout,
-    &g_Gen_PhotoModeCameraSavedTransformComponent_Layout,
-    &g_Gen_PhotoModeCameraTiltComponent_Layout,
-    &g_Gen_PhotoModeCameraTrackingComponent_Layout,
-    &g_Gen_PhotoModeDummyAnimationUpdateSingletonComponent_Layout,
-    &g_Gen_PhotoModeDummyEquipmentSetupOneFrameComponent_Layout,
-    &g_Gen_PhotoModeDummyEquipmentVisualUpdateSingletonComponent_Layout,
-    &g_Gen_PhotoModeDummySplatterUpdateSingletonComponent_Layout,
-    &g_Gen_PhotoModeDummyTransformUpdateSingletonComponent_Layout,
-    &g_Gen_PhotoModeInvisibilityRequestSingletonComponent_Layout,
-    &g_Gen_PhotoModeRequestedSingletonComponent_Layout,
-    &g_Gen_ArmorComponent_Layout,
-    &g_Gen_AttributeFlagsComponent_Layout,
-    &g_Gen_BackgroundComponent_Layout,
-    &g_Gen_BackgroundPassivesComponent_Layout,
-    &g_Gen_BackgroundTagComponent_Layout,
-    &g_Gen_BaseHpComponent_Layout,
-    &g_Gen_BaseStatsComponent_Layout,
-    &g_Gen_BlockAbilityModifierFromACBoostComponent_Layout,
-    &g_Gen_BodyTypeComponent_Layout,
-    &g_Gen_BoostConditionComponent_Layout,
-    &g_Gen_BoostInfoComponent_Layout,
-    &g_Gen_BoostsContainerComponent_Layout,
-    &g_Gen_CanBeDisarmedComponent_Layout,
-    &g_Gen_CanBeLootedComponent_Layout,
-    &g_Gen_CanDeflectProjectilesComponent_Layout,
-    &g_Gen_CanDoActionsComponent_Layout,
-    &g_Gen_CanDoRestComponent_Layout,
-    &g_Gen_CanInteractComponent_Layout,
-    &g_Gen_CanModifyHealthComponent_Layout,
-    &g_Gen_CanMoveComponent_Layout,
-    &g_Gen_CanSenseComponent_Layout,
-    &g_Gen_CanSpeakComponent_Layout,
-    &g_Gen_CanTravelComponent_Layout,
-    &g_Gen_CharacterCreationStatsComponent_Layout,
-    &g_Gen_ClassTagComponent_Layout,
-    &g_Gen_ClassesComponent_Layout,
-    &g_Gen_CustomIconComponent_Layout,
-    &g_Gen_CustomIconsStorageComponent_Layout,
-    &g_Gen_CustomNameComponent_Layout,
-    &g_Gen_CustomStatsComponent_Layout,
-    &g_Gen_DamageReductionBoostComponent_Layout,
-    &g_Gen_DarknessComponent_Layout,
-    &g_Gen_DataComponent_Layout,
-    &g_Gen_DetachedComponent_Layout,
-    &g_Gen_DifficultyCheckComponent_Layout,
-    &g_Gen_DisabledEquipmentComponent_Layout,
-    &g_Gen_DisarmableComponent_Layout,
-    &g_Gen_DisplayNameComponent_Layout,
-    &g_Gen_DualWieldingComponent_Layout,
-    &g_Gen_EquipableComponent_Layout,
-    &g_Gen_FleeCapabilityComponent_Layout,
-    &g_Gen_FloatingComponent_Layout,
-    &g_Gen_GameObjectVisualComponent_Layout,
-    &g_Gen_GameplayLightComponent_Layout,
-    &g_Gen_GravityDisabledUntilMovedComponent_Layout,
-    &g_Gen_HealthComponent_Layout,
-    &g_Gen_HearingComponent_Layout,
-    &g_Gen_IconComponent_Layout,
-    &g_Gen_IncreaseMaxHPBoostComponent_Layout,
-    &g_Gen_InteractionFilterComponent_Layout,
-    &g_Gen_InvisibilityComponent_Layout,
-    &g_Gen_ItemBoostsComponent_Layout,
-    &g_Gen_EocLevelComponent_Layout,
-    &g_Gen_LootComponent_Layout,
-    &g_Gen_LootingStateComponent_Layout,
-    &g_Gen_MaterialParameterOverrideComponent_Layout,
-    &g_Gen_MovementComponent_Layout,
-    &g_Gen_ObjectInteractionComponent_Layout,
-    &g_Gen_ObjectSizeComponent_Layout,
-    &g_Gen_OriginAppearanceTagComponent_Layout,
-    &g_Gen_OriginComponent_Layout,
-    &g_Gen_OriginPassivesComponent_Layout,
-    &g_Gen_OriginTagComponent_Layout,
-    &g_Gen_PassiveComponent_Layout,
-    &g_Gen_PassiveContainerComponent_Layout,
-    &g_Gen_PathingComponent_Layout,
-    &g_Gen_RaceComponent_Layout,
-    &g_Gen_RequestedRollComponent_Layout,
-    &g_Gen_ResistancesComponent_Layout,
-    &g_Gen_SpeakerComponent_Layout,
-    &g_Gen_StatsComponent_Layout,
-    &g_Gen_StealthComponent_Layout,
-    &g_Gen_SteeringComponent_Layout,
-    &g_Gen_SurfacePathInfluencesComponent_Layout,
-    &g_Gen_TagComponent_Layout,
-    &g_Gen_TimelineActorDataComponent_Layout,
-    &g_Gen_TurnBasedComponent_Layout,
-    &g_Gen_TurnOrderComponent_Layout,
-    &g_Gen_UseBoostsComponent_Layout,
-    &g_Gen_UseComponent_Layout,
-    &g_Gen_ValueComponent_Layout,
-    &g_Gen_VoiceComponent_Layout,
-    &g_Gen_VoiceTagComponent_Layout,
-    &g_Gen_WeaponComponent_Layout,
-    &g_Gen_WeaponSetComponent_Layout,
-    &g_Gen_WieldingComponent_Layout,
-    &g_Gen_ActionUseConditionsComponent_Layout,
-    &g_Gen_RollModifiersComponent_Layout,
-    &g_Gen_ApprovalRatingsComponent_Layout,
-    &g_Gen_ArmorSetStateComponent_Layout,
-    &g_Gen_AttitudesToPlayersComponent_Layout,
-    &g_Gen_CalendarDaysPassedComponent_Layout,
-    &g_Gen_CalendarStartingDateComponent_Layout,
-    &g_Gen_CampChestComponent_Layout,
-    &g_Gen_CampEndTheDayStateComponent_Layout,
-    &g_Gen_CampQualityComponent_Layout,
-    &g_Gen_CampSettingsComponent_Layout,
-    &g_Gen_CampSupplyComponent_Layout,
-    &g_Gen_CampTotalSuppliesComponent_Layout,
-    &g_Gen_EquipmentVisualComponent_Layout,
-    &g_Gen_CharacterCreationAppearanceComponent_Layout,
-    &g_Gen_CCChangeAppearanceDefinitionComponent_Layout,
-    &g_Gen_CCCharacterDefinitionComponent_Layout,
-    &g_Gen_CCCompanionDefinitionComponent_Layout,
-    &g_Gen_CCDefinitionCommonComponent_Layout,
-    &g_Gen_CCFullRespecDefinitionComponent_Layout,
-    &g_Gen_CCLevelUpComponent_Layout,
-    &g_Gen_CCLevelUpDefinitionComponent_Layout,
-    &g_Gen_CCRespecDefinitionComponent_Layout,
-    &g_Gen_CCSessionCommonComponent_Layout,
-    &g_Gen_CCStateComponent_Layout,
-    &g_Gen_CCCreationComponent_Layout,
-    &g_Gen_CCFullRespecComponent_Layout,
-    &g_Gen_CCDefinitionLevelUpComponent_Layout,
-    &g_Gen_CCRespecComponent_Layout,
-    &g_Gen_CanEnterChasmComponent_Layout,
-    &g_Gen_IsCombatPausedComponent_Layout,
-    &g_Gen_CombatIsThreatenedComponent_Layout,
-    &g_Gen_CombatParticipantComponent_Layout,
-    &g_Gen_CombatStateComponent_Layout,
-    &g_Gen_ThreatRangeComponent_Layout,
-    &g_Gen_ConcentrationComponent_Layout,
-    &g_Gen_DeadByDefaultComponent_Layout,
-    &g_Gen_DeathTypeComponent_Layout,
-    &g_Gen_DownedComponent_Layout,
-    &g_Gen_DeathStateComponent_Layout,
-    &g_Gen_DialogStateComponent_Layout,
-    &g_Gen_EncumbranceStateComponent_Layout,
-    &g_Gen_EncumbranceStatsComponent_Layout,
-    &g_Gen_AvailableLevelComponent_Layout,
-    &g_Gen_ExperienceComponent_Layout,
-    &g_Gen_ExpertiseComponent_Layout,
-    &g_Gen_FTBParticipantComponent_Layout,
-    &g_Gen_FTBZoneBlockReasonComponent_Layout,
-    &g_Gen_GodComponent_Layout,
-    &g_Gen_GodTagComponent_Layout,
-    &g_Gen_HitAttackerComponent_Layout,
-    &g_Gen_HitLifetimeComponent_Layout,
-    &g_Gen_HitMetaComponent_Layout,
-    &g_Gen_HitProxyComponent_Layout,
-    &g_Gen_HitProxyOwnerComponent_Layout,
-    &g_Gen_HitReactionComponent_Layout,
-    &g_Gen_HitTargetComponent_Layout,
-    &g_Gen_HitThrownObjectComponent_Layout,
-    &g_Gen_HitWeaponComponent_Layout,
-    &g_Gen_HotbarContainerComponent_Layout,
-    &g_Gen_HotbarDecksComponent_Layout,
-    &g_Gen_IdentityComponent_Layout,
-    &g_Gen_OriginalIdentityComponent_Layout,
-    &g_Gen_IdentityStateComponent_Layout,
-    &g_Gen_ImprovisedWeaponWieldedComponent_Layout,
-    &g_Gen_ImprovisedWeaponWieldingComponent_Layout,
-    &g_Gen_InterruptActionStateComponent_Layout,
-    &g_Gen_InterruptConditionallyDisabledComponent_Layout,
-    &g_Gen_InterruptContainerComponent_Layout,
-    &g_Gen_InterruptDataComponent_Layout,
-    &g_Gen_InterruptDecisionComponent_Layout,
-    &g_Gen_InterruptPreferencesComponent_Layout,
-    &g_Gen_InterruptPreparedComponent_Layout,
-    &g_Gen_InterruptZoneComponent_Layout,
-    &g_Gen_InterruptZoneParticipantComponent_Layout,
-    &g_Gen_InterruptZoneSourceComponent_Layout,
-    &g_Gen_InventoryContainerComponent_Layout,
-    &g_Gen_InventoryDataComponent_Layout,
-    &g_Gen_InventoryIsOwnedComponent_Layout,
-    &g_Gen_InventoryMemberComponent_Layout,
-    &g_Gen_InventoryMemberTransformComponent_Layout,
-    &g_Gen_InventoryOwnerComponent_Layout,
-    &g_Gen_InventoryStackComponent_Layout,
-    &g_Gen_InventoryStackMemberComponent_Layout,
-    &g_Gen_InventoryTopOwnerComponent_Layout,
-    &g_Gen_TradeBuybackDataComponent_Layout,
-    &g_Gen_InventoryWeightComponent_Layout,
-    &g_Gen_WieldedComponent_Layout,
-    &g_Gen_WieldingHistoryComponent_Layout,
-    &g_Gen_ItemDestroyedComponent_Layout,
-    &g_Gen_ItemDyeComponent_Layout,
-    &g_Gen_MapMarkerStyleComponent_Layout,
-    &g_Gen_ItemPortalComponent_Layout,
-    &g_Gen_ActionTypeComponent_Layout,
-    &g_Gen_UseActionComponent_Layout,
-    &g_Gen_ActiveCharacterLightComponent_Layout,
-    &g_Gen_KeyComponent_Layout,
-    &g_Gen_LockComponent_Layout,
-    &g_Gen_MultiplayerUserComponent_Layout,
-    &g_Gen_AppearanceOverrideComponent_Layout,
-    &g_Gen_CharacterCreationTemplateOverrideComponent_Layout,
-    &g_Gen_OwneeCurrentComponent_Layout,
-    &g_Gen_PartyCompositionComponent_Layout,
-    &g_Gen_PartyFollowerComponent_Layout,
-    &g_Gen_PartyMemberComponent_Layout,
-    &g_Gen_PartyPortalsComponent_Layout,
-    &g_Gen_PartyRecipesComponent_Layout,
-    &g_Gen_PartyViewComponent_Layout,
-    &g_Gen_PartyWaypointsComponent_Layout,
-    &g_Gen_PassiveUsageCountComponent_Layout,
-    &g_Gen_PhotoModeCameraTransformComponent_Layout,
-    &g_Gen_PhotoModeDummyAnimationStateComponent_Layout,
-    &g_Gen_PhotoModeDummyComponent_Layout,
-    &g_Gen_PhotoModeDummyEquipmentVisualComponent_Layout,
-    &g_Gen_PhotoModeDummyShowSplatterComponent_Layout,
-    &g_Gen_PhotoModeDummyTransformComponent_Layout,
-    &g_Gen_PhotoModeSessionComponent_Layout,
-    &g_Gen_PickUpRequestComponent_Layout,
-    &g_Gen_ProgressionAbilityImprovementsComponent_Layout,
-    &g_Gen_ProgressionFeatComponent_Layout,
-    &g_Gen_LevelUpComponent_Layout,
-    &g_Gen_ProgressionMetaComponent_Layout,
-    &g_Gen_ProgressionPassivesComponent_Layout,
-    &g_Gen_ProgressionReplicatedFeatComponent_Layout,
-    &g_Gen_ProgressionSkillsComponent_Layout,
-    &g_Gen_ProgressionSpellsComponent_Layout,
-    &g_Gen_ProjectileSourceComponent_Layout,
-    &g_Gen_RecruiterComponent_Layout,
-    &g_Gen_FactionComponent_Layout,
-    &g_Gen_RelationComponent_Layout,
-    &g_Gen_ReposeComponent_Layout,
-    &g_Gen_LongRestStateComponent_Layout,
-    &g_Gen_LongRestTimelineComponent_Layout,
-    &g_Gen_LongRestTimersComponent_Layout,
-    &g_Gen_LongRestUsersComponent_Layout,
-    &g_Gen_RestingEntitiesComponent_Layout,
-    &g_Gen_RulesetComponent_Layout,
-    &g_Gen_ShapeshiftAnimationComponent_Layout,
-    &g_Gen_ShapeshiftRecoveryAnimationComponent_Layout,
-    &g_Gen_ShapeshiftReplicatedChangesComponent_Layout,
-    &g_Gen_ShapeshiftSourceCacheComponent_Layout,
-    &g_Gen_ShapeshiftStateComponent_Layout,
-    &g_Gen_SightComponent_Layout,
-    &g_Gen_SightDataComponent_Layout,
-    &g_Gen_SightEntityViewshedComponent_Layout,
-    &g_Gen_IgnoreSurfacesComponent_Layout,
-    &g_Gen_SpatialGridComponent_Layout,
-    &g_Gen_AddedSpellsComponent_Layout,
-    &g_Gen_SpellAiConditionsComponent_Layout,
-    &g_Gen_AttackSpellOverrideComponent_Layout,
-    &g_Gen_SpellBookComponent_Layout,
-    &g_Gen_SpellBookCooldownsComponent_Layout,
-    &g_Gen_SpellBookPreparesComponent_Layout,
-    &g_Gen_CCPrepareSpellComponent_Layout,
-    &g_Gen_SpellContainerComponent_Layout,
-    &g_Gen_LearnedSpellsComponent_Layout,
-    &g_Gen_PlayerPrepareSpellComponent_Layout,
-    &g_Gen_ScriptedExplosionComponent_Layout,
-    &g_Gen_SpellCastAnimationInfoComponent_Layout,
-    &g_Gen_SpellCastCacheComponent_Layout,
-    &g_Gen_SpellCastDataCacheComponent_Layout,
-    &g_Gen_SpellCastExecutionTimeComponent_Layout,
-    &g_Gen_SpellCastInterruptResultsComponent_Layout,
-    &g_Gen_SpellCastIsCastingComponent_Layout,
-    &g_Gen_SpellCastMovementComponent_Layout,
-    &g_Gen_SpellCastOutcomeComponent_Layout,
-    &g_Gen_SpellCastRollsComponent_Layout,
-    &g_Gen_SpellCastStateComponent_Layout,
-    &g_Gen_SpellSyncTargetingComponent_Layout,
-    &g_Gen_ProficiencyComponent_Layout,
-    &g_Gen_ProficiencyGroupComponent_Layout,
-    &g_Gen_StatusCauseComponent_Layout,
-    &g_Gen_StatusContainerComponent_Layout,
-    &g_Gen_StatusIDComponent_Layout,
-    &g_Gen_StatusIncapacitatedComponent_Layout,
-    &g_Gen_StatusLifetimeComponent_Layout,
-    &g_Gen_StatusLoseControlComponent_Layout,
-    &g_Gen_StatusVisualDisabledComponent_Layout,
-    &g_Gen_SummonContainerComponent_Layout,
-    &g_Gen_IsSummonComponent_Layout,
-    &g_Gen_SummonLifetimeComponent_Layout,
-    &g_Gen_TadpolePowersComponent_Layout,
-    &g_Gen_TadpoleTreeStateComponent_Layout,
-    &g_Gen_OriginalTemplateComponent_Layout,
-    &g_Gen_ShootThroughTypeComponent_Layout,
-    &g_Gen_TriggerTypeComponent_Layout,
-    &g_Gen_UnsheathComponent_Layout,
-    &g_Gen_UseSocketComponent_Layout,
-    &g_Gen_UserAvatarComponent_Layout,
-    &g_Gen_UserReservedForComponent_Layout,
-    &g_Gen_ServerActivationGroupContainerComponent_Layout,
-    &g_Gen_ServerBaseDataComponent_Layout,
-    &g_Gen_ServerBaseSizeComponent_Layout,
-    &g_Gen_ServerBaseStatsComponent_Layout,
-    &g_Gen_ServerBaseWeaponComponent_Layout,
-    &g_Gen_ServerBreadcrumbComponent_Layout,
-    &g_Gen_ServerCCCustomIconComponent_Layout,
-    &g_Gen_ServerDisplayNameListComponent_Layout,
-    &g_Gen_ServerGameTimerComponent_Layout,
-    &g_Gen_ServerGameplayLightEquipmentComponent_Layout,
-    &g_Gen_ServerIconListComponent_Layout,
-    &g_Gen_InventoryPropertyCanBePickpocketedComponent_Layout,
-    &g_Gen_InventoryPropertyIsDroppedOnDeathComponent_Layout,
-    &g_Gen_InventoryPropertyIsTradableComponent_Layout,
-    &g_Gen_JumpFollowComponent_Layout,
-    &g_Gen_ServerLeaderComponent_Layout,
-    &g_Gen_ServerMusicVolumeTriggerStateComponent_Layout,
-    &g_Gen_ServerOsirisPingRequestSingletonComponent_Layout,
-    &g_Gen_ServerPingCooldownSingletonComponent_Layout,
-    &g_Gen_ServerPingRequestSingletonComponent_Layout,
-    &g_Gen_ServerSafePositionComponent_Layout,
-    &g_Gen_ActionResourceChangeResultsComponent_Layout,
-    &g_Gen_ServerRollInProgressComponent_Layout,
-    &g_Gen_ServerRollStartRequestComponent_Layout,
-    &g_Gen_ServerAiModifiersComponent_Layout,
-    &g_Gen_ServerAiArchetypeComponent_Layout,
-    &g_Gen_ServerAiInterestedInItemsComponent_Layout,
-    &g_Gen_ServerAiInterestingItemComponent_Layout,
-    &g_Gen_ServerBoostBaseComponent_Layout,
-    &g_Gen_BoostConditionalStateComponent_Layout,
-    &g_Gen_BoostProviderComponent_Layout,
-    &g_Gen_ServerCCAppearanceVisualTagComponent_Layout,
-    &g_Gen_ServerCCGodComponent_Layout,
-    &g_Gen_ServerCCUpdatesComponent_Layout,
-    &g_Gen_ServerCombatGroupMappingComponent_Layout,
-    &g_Gen_CombatSwitchedComponent_Layout,
-    &g_Gen_ServerEnterRequestComponent_Layout,
-    &g_Gen_CombatFleeRequestComponent_Layout,
-    &g_Gen_GlobalCombatRequestsComponent_Layout,
-    &g_Gen_CombatJoiningComponent_Layout,
-    &g_Gen_CombatLateJoinPenaltyComponent_Layout,
-    &g_Gen_CombatMergeComponent_Layout,
-    &g_Gen_CombatSurfaceTeamSingletonComponent_Layout,
-    &g_Gen_ServerDelayDeathCauseComponent_Layout,
-    &g_Gen_ServerDelayDeathComponent_Layout,
-    &g_Gen_ServerKillerComponent_Layout,
-    &g_Gen_ServerDeathStateComponent_Layout,
-    &g_Gen_EscortFollowerComponent_Layout,
-    &g_Gen_EscortLeaderComponent_Layout,
-    &g_Gen_EscortLeaderPriorityComponent_Layout,
-    &g_Gen_EscortMemberComponent_Layout,
-    &g_Gen_EscortStragglersTrackerComponent_Layout,
-    &g_Gen_ServerExperienceGaveOutComponent_Layout,
-    &g_Gen_FTBSurfaceTeamSingletonComponent_Layout,
-    &g_Gen_FTBTimeFactorRequestsComponent_Layout,
-    &g_Gen_FTBTimeFactorResetRequestsComponent_Layout,
-    &g_Gen_FTBTurnBasedChangesRequestComponent_Layout,
-    &g_Gen_FTBZoneComponent_Layout,
-    &g_Gen_FTBZoneInstigatorComponent_Layout,
-    &g_Gen_HistoryTargetUUIDComponent_Layout,
-    &g_Gen_ServerInterruptActionRequestsComponent_Layout,
-    &g_Gen_ServerInterruptAddRemoveRequestsComponent_Layout,
-    &g_Gen_ServerInterruptDataSingletonComponent_Layout,
-    &g_Gen_ServerInterruptInitialParticipantsComponent_Layout,
-    &g_Gen_ServerInterruptTurnOrderInZoneComponent_Layout,
-    &g_Gen_ServerInterruptZoneRequestsComponent_Layout,
-    &g_Gen_ServerInventoryContainerDataComponent_Layout,
-    &g_Gen_ServerInventoryGroupCheckComponent_Layout,
-    &g_Gen_ServerShapeshiftEquipmentHistoryComponent_Layout,
-    &g_Gen_ServerDynamicLayerOwnerComponent_Layout,
-    &g_Gen_ServerGameplayLightChangesComponent_Layout,
-    &g_Gen_ServerIsCurrentOwnerComponent_Layout,
-    &g_Gen_ServerIsLatestOwnerComponent_Layout,
-    &g_Gen_ServerIsOriginalOwnerComponent_Layout,
-    &g_Gen_ServerIsPreviousOwnerComponent_Layout,
-    &g_Gen_ServerOwneeHistoryComponent_Layout,
-    &g_Gen_ServerOwneeRequestComponent_Layout,
-    &g_Gen_ServerPassiveBaseComponent_Layout,
-    &g_Gen_ServerPassiveBoostsComponent_Layout,
-    &g_Gen_ServerPassivePersistentDataComponent_Layout,
-    &g_Gen_ServerScriptPassivesComponent_Layout,
-    &g_Gen_ServerToggledPassivesComponent_Layout,
-    &g_Gen_PhotoModeCapabilityComponent_Layout,
-    &g_Gen_ServerPickpocketComponent_Layout,
-    &g_Gen_ServerProjectileAttachmentComponent_Layout,
-    &g_Gen_ServerProjectileSpellComponent_Layout,
-    &g_Gen_ServerRecruitedByComponent_Layout,
-    &g_Gen_ServerPeersInRangeComponent_Layout,
-    &g_Gen_ServerReplicationDependencyComponent_Layout,
-    &g_Gen_ServerReplicationDependencyOwnerComponent_Layout,
-    &g_Gen_ServerRestPendingTypeComponent_Layout,
-    &g_Gen_ServerRollFinishedEventComponent_Layout,
-    &g_Gen_ServerRollStreamsComponent_Layout,
-    &g_Gen_ShapeshiftHealthReservationComponent_Layout,
-    &g_Gen_ServerShapeshiftStatesComponent_Layout,
-    &g_Gen_ServerSightAggregatedDataComponent_Layout,
-    &g_Gen_ServerAggregatedGameplayLightDataComponent_Layout,
-    &g_Gen_ServerAiGridViewshedComponent_Layout,
-    &g_Gen_ServerSightEntityLosCheckQueueComponent_Layout,
-    &g_Gen_ServerLightLosCheckQueueComponent_Layout,
-    &g_Gen_OnDamageSpellsComponent_Layout,
-    &g_Gen_ServerSpellCastCacheComponent_Layout,
-    &g_Gen_ServerSpellCastHitDelayComponent_Layout,
-    &g_Gen_ServerSpellCastRequestsComponent_Layout,
-    &g_Gen_ServerSpellCastResponsibleComponent_Layout,
-    &g_Gen_ServerSpellExternalsComponent_Layout,
-    &g_Gen_ServerSpellHitRegisterComponent_Layout,
-    &g_Gen_ServerSpellCastInterruptComponent_Layout,
-    &g_Gen_ServerSpellInterruptRequestsComponent_Layout,
-    &g_Gen_ServerSpellInterruptResultsComponent_Layout,
-    &g_Gen_ServerSpellCastMovementComponent_Layout,
-    &g_Gen_ServerSpellCastMovementInfoComponent_Layout,
-    &g_Gen_ServerSpellCastPendingRequestsComponent_Layout,
-    &g_Gen_ServerProjectileCacheComponent_Layout,
-    &g_Gen_ServerSpellCastProjectilePathfindCacheComponent_Layout,
-    &g_Gen_ServerSpellCastStateComponent_Layout,
-    &g_Gen_ServerSpellCastUnsheathFallbackTimerComponent_Layout,
-    &g_Gen_ServerSpellCastZoneRangeComponent_Layout,
-    &g_Gen_ServerBaseProficiencyComponent_Layout,
-    &g_Gen_ServerProficiencyGroupStatsComponent_Layout,
-    &g_Gen_ServerStatusCauseComponent_Layout,
-    &g_Gen_ServerStatusOwnershipComponent_Layout,
-    &g_Gen_ServerStatusPerformingComponent_Layout,
-    &g_Gen_ServerStatusComponent_Layout,
-    &g_Gen_ServerStatusRequestsComponent_Layout,
-    &g_Gen_ServerStatusUniqueComponent_Layout,
-    &g_Gen_ServerStatusAuraContainerComponent_Layout,
-    &g_Gen_ServerRemovedStatusAuraEffectEventComponent_Layout,
-    &g_Gen_ServerSurfaceComponent_Layout,
-    &g_Gen_ServerAnubisTagComponent_Layout,
-    &g_Gen_ServerBoostTagComponent_Layout,
-    &g_Gen_ServerDialogTagComponent_Layout,
-    &g_Gen_ServerOsirisTagComponent_Layout,
-    &g_Gen_ServerRaceTagComponent_Layout,
-    &g_Gen_ServerTemplateTagComponent_Layout,
-    &g_Gen_ServerDisarmAttemptComponent_Layout,
-    &g_Gen_ServerTriggerCachedLeaveEventsComponent_Layout,
-    &g_Gen_ServerTriggerEventConfigComponent_Layout,
-    &g_Gen_ServerTriggerRegisteredForComponent_Layout,
-    &g_Gen_ServerRegistrationSettingsComponent_Layout,
-    &g_Gen_ServerUpdatedRegisteredForComponent_Layout,
-    &g_Gen_ServerUpdatedRegisteredForItemsComponent_Layout,
-    &g_Gen_TurnSurfaceTeamSingletonComponent_Layout,
-    &g_Gen_TurnSurfaceTrackingComponent_Layout,
-    &g_Gen_ServerUnsheathComponent_Layout,
-    &g_Gen_ServerUnsheathScriptOverrideComponent_Layout,
-    &g_Gen_ActiveSkeletonSlotsComponent_Layout,
-    &g_Gen_CameraComponent_Layout,
-    &g_Gen_CullComponent_Layout,
-    &g_Gen_DefaultCameraBehaviorComponent_Layout,
-    &g_Gen_EffectCameraBehaviorComponent_Layout,
-    &g_Gen_GameplayEffectSetTimeFactorRequestsComponent_Layout,
-    &g_Gen_GameplayVFXSetPlayTimeRequestsComponent_Layout,
-    &g_Gen_GameplayVFXComponent_Layout,
-    &g_Gen_LevelComponent_Layout,
-    &g_Gen_LevelInstanceComponent_Layout,
-    &g_Gen_LevelInstanceStateComponent_Layout,
-    &g_Gen_LevelRootComponent_Layout,
-    &g_Gen_PhysicsComponent_Layout,
-    &g_Gen_SoundComponent_Layout,
-    &g_Gen_StaticPhysicsComponent_Layout,
-    &g_Gen_TransformComponent_Layout,
-    &g_Gen_VisualAttachRequestComponent_Layout,
-    &g_Gen_VisualChangeRequestComponent_Layout,
-    &g_Gen_VisualComponent_Layout,
-    &g_Gen_VisualLoadDescriptionComponent_Layout,
-    &g_Gen_VisualLoadRequestsComponent_Layout,
-    &g_Gen_AnimationWaterfallComponent_Layout,
-    &g_Gen_DynamicAnimationTagsComponent_Layout,
-    &g_Gen_AnimationGameplayEventsSingletonComponent_Layout,
-    &g_Gen_TemplateAnimationSetOverrideComponent_Layout,
-    &g_Gen_AnimationTextKeyEventsSingletonComponent_Layout,
-    &g_Gen_LevelInstanceTempDestroyedComponent_Layout,
-    &g_Gen_TriggerAreaComponent_Layout,
-    &g_Gen_TriggerContainerComponent_Layout,
-    &g_Gen_TriggerIsInsideOfComponent_Layout,
-    &g_Gen_TriggerUpdatedContainerComponent_Layout,
-    &g_Gen_TriggerUpdatedPhysicsComponent_Layout,
-    &g_Gen_UuidComponent_Layout,
-    &g_Gen_UuidToHandleMappingComponent_Layout,
+    &g_Gen_ecl_CharacterIconRequestComponent_Layout,
+    &g_Gen_ecl_CharacterLightComponent_Layout,
+    &g_Gen_ecl_ClientTimelineActorControlComponent_Layout,
+    &g_Gen_ecl_EquipmentVisualsComponent_Layout,
+    &g_Gen_ecl_GameCameraBehavior_Layout,
+    &g_Gen_ecl_PaperdollComponent_Layout,
+    &g_Gen_ecl_Scenery_Layout,
+    &g_Gen_ecl_TLPreviewDummy_Layout,
+    &g_Gen_ecl_camera_SelectorModeComponent_Layout,
+    &g_Gen_ecl_character_creation_CompanionDefinitionComponent_Layout,
+    &g_Gen_ecl_character_creation_DefinitionStateComponent_Layout,
+    &g_Gen_ecl_character_creation_DefinitionStateExComponent_Layout,
+    &g_Gen_ecl_character_creation_DummyDefinitionComponent_Layout,
+    &g_Gen_ecl_character_creation_FullRespecDefinitionComponent_Layout,
+    &g_Gen_ecl_dummy_DummyComponent_Layout,
+    &g_Gen_ecl_dummy_EquipmentVisualsStateComponent_Layout,
+    &g_Gen_ecl_dummy_FootIKStateComponent_Layout,
+    &g_Gen_ecl_dummy_HasDummyComponent_Layout,
+    &g_Gen_ecl_dummy_SplatterComponent_Layout,
+    &g_Gen_ecl_dummy_UnsheathComponent_Layout,
+    &g_Gen_ecl_equipment_VisualsVisibilityStateComponent_Layout,
+    &g_Gen_ecl_photo_mode_CameraOffsetComponent_Layout,
+    &g_Gen_ecl_photo_mode_CameraSavedTransformComponent_Layout,
+    &g_Gen_ecl_photo_mode_CameraTiltComponent_Layout,
+    &g_Gen_ecl_photo_mode_CameraTrackingComponent_Layout,
+    &g_Gen_ecl_photo_mode_DummyEquipmentSetupOneFrameComponent_Layout,
+    &g_Gen_ecl_photo_mode_RequestedSingletonComponent_Layout,
+    &g_Gen_eoc_ArmorComponent_Layout,
+    &g_Gen_eoc_AttributeFlagsComponent_Layout,
+    &g_Gen_eoc_BackgroundComponent_Layout,
+    &g_Gen_eoc_BaseHpComponent_Layout,
+    &g_Gen_eoc_BlockAbilityModifierFromACComponent_Layout,
+    &g_Gen_eoc_BodyTypeComponent_Layout,
+    &g_Gen_eoc_BoostConditionComponent_Layout,
+    &g_Gen_eoc_BoostInfoComponent_Layout,
+    &g_Gen_eoc_CanBeDisarmedComponent_Layout,
+    &g_Gen_eoc_CanBeLootedComponent_Layout,
+    &g_Gen_eoc_CanDeflectProjectilesComponent_Layout,
+    &g_Gen_eoc_CanInteractComponent_Layout,
+    &g_Gen_eoc_CanModifyHealthComponent_Layout,
+    &g_Gen_eoc_CanMoveComponent_Layout,
+    &g_Gen_eoc_CanSenseComponent_Layout,
+    &g_Gen_eoc_CanSpeakComponent_Layout,
+    &g_Gen_eoc_CanTravelComponent_Layout,
+    &g_Gen_eoc_CharacterCreationStatsComponent_Layout,
+    &g_Gen_eoc_CombinedLightComponent_Layout,
+    &g_Gen_eoc_CustomIconComponent_Layout,
+    &g_Gen_eoc_DamageReductionBoostComponent_Layout,
+    &g_Gen_eoc_DarknessComponent_Layout,
+    &g_Gen_eoc_DataComponent_Layout,
+    &g_Gen_eoc_DetachedComponent_Layout,
+    &g_Gen_eoc_DifficultyCheckComponent_Layout,
+    &g_Gen_eoc_DisabledEquipmentComponent_Layout,
+    &g_Gen_eoc_DisarmableComponent_Layout,
+    &g_Gen_eoc_DualWieldingComponent_Layout,
+    &g_Gen_eoc_FloatingComponent_Layout,
+    &g_Gen_eoc_FogVolumeRequestComponent_Layout,
+    &g_Gen_eoc_GameObjectVisualComponent_Layout,
+    &g_Gen_eoc_GameplayLightComponent_Layout,
+    &g_Gen_eoc_HealthComponent_Layout,
+    &g_Gen_eoc_HearingComponent_Layout,
+    &g_Gen_eoc_IconComponent_Layout,
+    &g_Gen_eoc_IncreaseMaxHPBoostComponent_Layout,
+    &g_Gen_eoc_InteractionFilterComponent_Layout,
+    &g_Gen_eoc_InvisibilityComponent_Layout,
+    &g_Gen_eoc_LevelComponent_Layout,
+    &g_Gen_eoc_LootComponent_Layout,
+    &g_Gen_eoc_LootingStateComponent_Layout,
+    &g_Gen_eoc_MovementComponent_Layout,
+    &g_Gen_eoc_ObjectSizeComponent_Layout,
+    &g_Gen_eoc_OriginComponent_Layout,
+    &g_Gen_eoc_PassiveComponent_Layout,
+    &g_Gen_eoc_PathingComponent_Layout,
+    &g_Gen_eoc_RaceComponent_Layout,
+    &g_Gen_eoc_RequestedRollComponent_Layout,
+    &g_Gen_eoc_ResistancesComponent_Layout,
+    &g_Gen_eoc_StatsComponent_Layout,
+    &g_Gen_eoc_StealthComponent_Layout,
+    &g_Gen_eoc_SteeringComponent_Layout,
+    &g_Gen_eoc_TimelineActorDataComponent_Layout,
+    &g_Gen_eoc_TurnBasedComponent_Layout,
+    &g_Gen_eoc_TurnOrderComponent_Layout,
+    &g_Gen_eoc_UseComponent_Layout,
+    &g_Gen_eoc_ValueComponent_Layout,
+    &g_Gen_eoc_VoiceComponent_Layout,
+    &g_Gen_eoc_WeaponComponent_Layout,
+    &g_Gen_eoc_WieldingComponent_Layout,
+    &g_Gen_eoc_active_roll_ModifiersComponent_Layout,
+    &g_Gen_eoc_calendar_DaysPassedComponent_Layout,
+    &g_Gen_eoc_calendar_StartingDateComponent_Layout,
+    &g_Gen_eoc_camp_ChestComponent_Layout,
+    &g_Gen_eoc_camp_EndTheDayStateComponent_Layout,
+    &g_Gen_eoc_camp_QualityComponent_Layout,
+    &g_Gen_eoc_camp_SettingsComponent_Layout,
+    &g_Gen_eoc_camp_SupplyComponent_Layout,
+    &g_Gen_eoc_camp_TotalSuppliesComponent_Layout,
+    &g_Gen_eoc_character_EquipmentVisualComponent_Layout,
+    &g_Gen_eoc_character_creation_AppearanceComponent_Layout,
+    &g_Gen_eoc_character_creation_ChangeAppearanceDefinitionComponent_Layout,
+    &g_Gen_eoc_character_creation_CharacterDefinitionComponent_Layout,
+    &g_Gen_eoc_character_creation_CompanionDefinitionComponent_Layout,
+    &g_Gen_eoc_character_creation_DefinitionCommonComponent_Layout,
+    &g_Gen_eoc_character_creation_FullRespecDefinitionComponent_Layout,
+    &g_Gen_eoc_character_creation_LevelUpDefinitionComponent_Layout,
+    &g_Gen_eoc_character_creation_RespecDefinitionComponent_Layout,
+    &g_Gen_eoc_character_creation_SessionCommonComponent_Layout,
+    &g_Gen_eoc_character_creation_StateComponent_Layout,
+    &g_Gen_eoc_character_creation_definition_CreationComponent_Layout,
+    &g_Gen_eoc_character_creation_definition_LevelUpComponent_Layout,
+    &g_Gen_eoc_chasm_CanEnterChasmComponent_Layout,
+    &g_Gen_eoc_combat_ParticipantComponent_Layout,
+    &g_Gen_eoc_combat_StateComponent_Layout,
+    &g_Gen_eoc_combat_ThreatRangeComponent_Layout,
+    &g_Gen_eoc_death_DeadByDefaultComponent_Layout,
+    &g_Gen_eoc_death_DeathTypeComponent_Layout,
+    &g_Gen_eoc_death_DownedComponent_Layout,
+    &g_Gen_eoc_death_StateComponent_Layout,
+    &g_Gen_eoc_dialog_StateComponent_Layout,
+    &g_Gen_eoc_encumbrance_StateComponent_Layout,
+    &g_Gen_eoc_exp_AvailableLevelComponent_Layout,
+    &g_Gen_eoc_exp_ExperienceComponent_Layout,
+    &g_Gen_eoc_ftb_ParticipantComponent_Layout,
+    &g_Gen_eoc_ftb_ZoneBlockReasonComponent_Layout,
+    &g_Gen_eoc_god_GodComponent_Layout,
+    &g_Gen_eoc_hit_AttackerComponent_Layout,
+    &g_Gen_eoc_hit_LifetimeComponent_Layout,
+    &g_Gen_eoc_hit_MetaComponent_Layout,
+    &g_Gen_eoc_hit_ProxyComponent_Layout,
+    &g_Gen_eoc_hit_TargetComponent_Layout,
+    &g_Gen_eoc_hit_ThrownObjectComponent_Layout,
+    &g_Gen_eoc_hit_WeaponComponent_Layout,
+    &g_Gen_eoc_hotbar_ContainerComponent_Layout,
+    &g_Gen_eoc_identity_IdentityComponent_Layout,
+    &g_Gen_eoc_identity_OriginalIdentityComponent_Layout,
+    &g_Gen_eoc_improvised_weapon_WieldedComponent_Layout,
+    &g_Gen_eoc_improvised_weapon_WieldingComponent_Layout,
+    &g_Gen_eoc_interrupt_ActionStateComponent_Layout,
+    &g_Gen_eoc_interrupt_ConditionallyDisabledComponent_Layout,
+    &g_Gen_eoc_interrupt_DataComponent_Layout,
+    &g_Gen_eoc_interrupt_PreparedComponent_Layout,
+    &g_Gen_eoc_interrupt_ZoneComponent_Layout,
+    &g_Gen_eoc_interrupt_ZoneSourceComponent_Layout,
+    &g_Gen_eoc_inventory_IsOwnedComponent_Layout,
+    &g_Gen_eoc_inventory_MemberComponent_Layout,
+    &g_Gen_eoc_inventory_OwnerComponent_Layout,
+    &g_Gen_eoc_inventory_StackMemberComponent_Layout,
+    &g_Gen_eoc_inventory_TopOwnerComponent_Layout,
+    &g_Gen_eoc_inventory_TradeBuybackDataComponent_Layout,
+    &g_Gen_eoc_inventory_WeightComponent_Layout,
+    &g_Gen_eoc_inventory_WieldedComponent_Layout,
+    &g_Gen_eoc_inventory_WieldingHistoryComponent_Layout,
+    &g_Gen_eoc_item_DyeComponent_Layout,
+    &g_Gen_eoc_item_MapMarkerStyleComponent_Layout,
+    &g_Gen_eoc_item_PortalComponent_Layout,
+    &g_Gen_eoc_light_ActiveCharacterLightComponent_Layout,
+    &g_Gen_eoc_lock_KeyComponent_Layout,
+    &g_Gen_eoc_lock_LockComponent_Layout,
+    &g_Gen_eoc_object_visual_CharacterCreationTemplateOverrideComponent_Layout,
+    &g_Gen_eoc_ownership_OwneeCurrentComponent_Layout,
+    &g_Gen_eoc_party_CompositionComponent_Layout,
+    &g_Gen_eoc_party_FollowerComponent_Layout,
+    &g_Gen_eoc_party_MemberComponent_Layout,
+    &g_Gen_eoc_photo_mode_DummyAnimationStateComponent_Layout,
+    &g_Gen_eoc_photo_mode_DummyComponent_Layout,
+    &g_Gen_eoc_photo_mode_DummyEquipmentVisualComponent_Layout,
+    &g_Gen_eoc_photo_mode_DummyShowSplatterComponent_Layout,
+    &g_Gen_eoc_photo_mode_SessionComponent_Layout,
+    &g_Gen_eoc_pickup_PickUpRequestComponent_Layout,
+    &g_Gen_eoc_progression_FeatComponent_Layout,
+    &g_Gen_eoc_progression_MetaComponent_Layout,
+    &g_Gen_eoc_progression_ReplicatedFeatComponent_Layout,
+    &g_Gen_eoc_projectile_SourceInfoComponent_Layout,
+    &g_Gen_eoc_relation_FactionComponent_Layout,
+    &g_Gen_eoc_repose_StateComponent_Layout,
+    &g_Gen_eoc_rest_LongRestState_Layout,
+    &g_Gen_eoc_rest_LongRestTimeline_Layout,
+    &g_Gen_eoc_rest_LongRestTimers_Layout,
+    &g_Gen_eoc_rest_LongRestUsers_Layout,
+    &g_Gen_eoc_rest_RestingEntities_Layout,
+    &g_Gen_eoc_ruleset_RulesetComponent_Layout,
+    &g_Gen_eoc_shapeshift_AnimationComponent_Layout,
+    &g_Gen_eoc_shapeshift_RecoveryAnimationComponent_Layout,
+    &g_Gen_eoc_shapeshift_ReplicatedChangesComponent_Layout,
+    &g_Gen_eoc_sight_DataComponent_Layout,
+    &g_Gen_eoc_spatial_grid_DataComponent_Layout,
+    &g_Gen_eoc_spell_ScriptedExplosionComponent_Layout,
+    &g_Gen_eoc_spell_cast_AnimationInfoComponent_Layout,
+    &g_Gen_eoc_spell_cast_CacheComponent_Layout,
+    &g_Gen_eoc_spell_cast_InterruptResultsComponent_Layout,
+    &g_Gen_eoc_spell_cast_IsCastingComponent_Layout,
+    &g_Gen_eoc_spell_cast_MovementComponent_Layout,
+    &g_Gen_eoc_spell_cast_StateComponent_Layout,
+    &g_Gen_eoc_spell_cast_SyncTargetingComponent_Layout,
+    &g_Gen_eoc_status_CauseComponent_Layout,
+    &g_Gen_eoc_status_IDComponent_Layout,
+    &g_Gen_eoc_status_IncapacitatedComponent_Layout,
+    &g_Gen_eoc_status_LifetimeComponent_Layout,
+    &g_Gen_eoc_status_LoseControlComponent_Layout,
+    &g_Gen_eoc_summon_IsSummonComponent_Layout,
+    &g_Gen_eoc_tadpole_tree_TreeStateComponent_Layout,
+    &g_Gen_eoc_templates_OriginalTemplateComponent_Layout,
+    &g_Gen_eoc_through_ShootThroughTypeComponent_Layout,
+    &g_Gen_eoc_trigger_TypeComponent_Layout,
+    &g_Gen_eoc_unsheath_StateComponent_Layout,
+    &g_Gen_eoc_user_AvatarComponent_Layout,
+    &g_Gen_eoc_user_ReservedForComponent_Layout,
+    &g_Gen_esv_AnubisExecutorComponent_Layout,
+    &g_Gen_esv_BaseDataComponent_Layout,
+    &g_Gen_esv_BaseSizeComponent_Layout,
+    &g_Gen_esv_BaseStatsComponent_Layout,
+    &g_Gen_esv_BreadcrumbComponent_Layout,
+    &g_Gen_esv_GameTimerComponent_Layout,
+    &g_Gen_esv_JumpFollowComponent_Layout,
+    &g_Gen_esv_Projectile_Layout,
+    &g_Gen_esv_SafePositionComponent_Layout,
+    &g_Gen_esv_active_roll_InProgressComponent_Layout,
+    &g_Gen_esv_active_roll_StartRequestOneFrameComponent_Layout,
+    &g_Gen_esv_ai_combat_AiModifiersComponent_Layout,
+    &g_Gen_esv_ai_combat_ArchetypeComponent_Layout,
+    &g_Gen_esv_character_creation_GodComponent_Layout,
+    &g_Gen_esv_combat_CombatGroupMappingComponent_Layout,
+    &g_Gen_esv_combat_CombatSwitchedComponent_Layout,
+    &g_Gen_esv_combat_FleeRequestComponent_Layout,
+    &g_Gen_esv_combat_JoiningComponent_Layout,
+    &g_Gen_esv_combat_LateJoinPenaltyComponent_Layout,
+    &g_Gen_esv_combat_MergeComponent_Layout,
+    &g_Gen_esv_death_DelayDeathCauseComponent_Layout,
+    &g_Gen_esv_death_DelayedDeathComponent_Layout,
+    &g_Gen_esv_death_StateComponent_Layout,
+    &g_Gen_esv_escort_FollowerComponent_Layout,
+    &g_Gen_esv_escort_LeaderComponent_Layout,
+    &g_Gen_esv_escort_MemberComponent_Layout,
+    &g_Gen_esv_escort_StragglersTrackerComponent_Layout,
+    &g_Gen_esv_exp_ExperienceGaveOutComponent_Layout,
+    &g_Gen_esv_ftb_ZoneComponent_Layout,
+    &g_Gen_esv_ftb_ZoneInstigatorComponent_Layout,
+    &g_Gen_esv_history_TargetUUIDComponent_Layout,
+    &g_Gen_esv_inventory_ContainerDataComponent_Layout,
+    &g_Gen_esv_inventory_GroupCheckComponent_Layout,
+    &g_Gen_esv_item_DynamicLayerOwnerComponent_Layout,
+    &g_Gen_esv_light_GameplayLightChangesComponent_Layout,
+    &g_Gen_esv_ownership_OwneeHistoryComponent_Layout,
+    &g_Gen_esv_passive_PersistentDataComponent_Layout,
+    &g_Gen_esv_photo_mode_CapabilityComponent_Layout,
+    &g_Gen_esv_projectile_AttachmentComponent_Layout,
+    &g_Gen_esv_projectile_SpellComponent_Layout,
+    &g_Gen_esv_recruit_RecruitedByComponent_Layout,
+    &g_Gen_esv_replication_ReplicationDependencyComponent_Layout,
+    &g_Gen_esv_roll_stream_StreamsComponent_Layout,
+    &g_Gen_esv_shapeshift_StatesComponent_Layout,
+    &g_Gen_esv_sight_AggregatedDataComponent_Layout,
+    &g_Gen_esv_sight_AggregatedGameplayLightDataComponent_Layout,
+    &g_Gen_esv_sight_AiGridViewshedComponent_Layout,
+    &g_Gen_esv_spell_cast_CacheComponent_Layout,
+    &g_Gen_esv_spell_cast_CastHitDelayComponent_Layout,
+    &g_Gen_esv_spell_cast_CastResponsibleComponent_Layout,
+    &g_Gen_esv_spell_cast_InterruptDataComponent_Layout,
+    &g_Gen_esv_spell_cast_MovementComponent_Layout,
+    &g_Gen_esv_spell_cast_StateComponent_Layout,
+    &g_Gen_esv_spell_cast_ZoneRangeComponent_Layout,
+    &g_Gen_esv_stats_proficiency_BaseProficiencyComponent_Layout,
+    &g_Gen_esv_stats_proficiency_ProficiencyGroupStatsComponent_Layout,
+    &g_Gen_esv_status_CauseComponent_Layout,
+    &g_Gen_esv_status_OwnershipComponent_Layout,
+    &g_Gen_esv_status_PerformingComponent_Layout,
+    &g_Gen_esv_status_StatusComponent_Layout,
+    &g_Gen_esv_status_aura_RemovedStatusAuraEffectEventOneFrameComponent_Layout,
+    &g_Gen_esv_surface_SurfaceComponent_Layout,
+    &g_Gen_esv_trigger_EventConfigComponent_Layout,
+    &g_Gen_esv_trigger_RegistrationSettingsComponent_Layout,
+    &g_Gen_esv_unsheath_DefaultComponent_Layout,
+    &g_Gen_ls_AnimationBlueprintComponent_Layout,
+    &g_Gen_ls_AnimationSetComponent_Layout,
+    &g_Gen_ls_CameraComponent_Layout,
+    &g_Gen_ls_CullComponent_Layout,
+    &g_Gen_ls_DecalComponent_Layout,
+    &g_Gen_ls_DefaultCameraBehavior_Layout,
+    &g_Gen_ls_EffectCameraBehavior_Layout,
+    &g_Gen_ls_EffectComponent_Layout,
+    &g_Gen_ls_LevelComponent_Layout,
+    &g_Gen_ls_LevelInstanceComponent_Layout,
+    &g_Gen_ls_LevelInstanceStateComponent_Layout,
+    &g_Gen_ls_LevelRootComponent_Layout,
+    &g_Gen_ls_PhysicsComponent_Layout,
+    &g_Gen_ls_SoundComponent_Layout,
+    &g_Gen_ls_TimeFactorComponent_Layout,
+    &g_Gen_ls_VisualAttachRequestOneFrameComponent_Layout,
+    &g_Gen_ls_VisualChangeRequestOneFrameComponent_Layout,
+    &g_Gen_ls_VisualComponent_Layout,
+    &g_Gen_ls_VisualLoadDesciptionComponent_Layout,
+    &g_Gen_ls_level_LevelInstanceTempDestroyedComponent_Layout,
+    &g_Gen_ls_trigger_AreaComponent_Layout,
+    &g_Gen_ls_uuid_Component_Layout,
+    NULL
 };
 
 #endif // GENERATED_PROPERTY_DEFS_H

@@ -4,6 +4,7 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 
 | Component | Hex | Bytes | Notes |
 |-----------|-----|-------|-------|
+| esv::combat:: | 1 |  |  |
 | esv::combat::CanStartCombatComponent | 0x01 | 1 | Tag component |
 | esv::combat::CombatScheduledForDeleteOneFrameComponent | 0x01 | 1 | OneFrame event |
 | esv::combat::CombatStateComponent | 0x18 | 24 |  |
@@ -27,4 +28,4 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | esv::combat::SurprisedJoinRequestOneFrameComponent | 0x01 | 1 | OneFrame event |
 | esv::combat::SurprisedStealthRequestOneFrameComponent | 0x01 | 1 | OneFrame event |
 
-**Total: 22 components**
+**Total: 23 components**

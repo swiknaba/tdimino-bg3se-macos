@@ -4,6 +4,7 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 
 | Component | Hex | Bytes | Notes |
 |-----------|-----|-------|-------|
+| esv::escort:: | 3 |  |  |
 | esv::escort::FollowerComponent | 0x08 | 8 |  |
 | esv::escort::GroupRequestCompletedComponent | 0x01 | 1 | Group request completed |
 | esv::escort::GroupsSingletonComponent | 0x40 | 64 | Has vtable pointer |
@@ -16,4 +17,4 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | esv::escort::MemberComponent | 0x04 | 4 | Escort member |
 | esv::escort::StragglersTrackerComponent | esv::escort | No AddComponent/GetComponent with size found |  |
 
-**Total: 11 components**
+**Total: 12 components**

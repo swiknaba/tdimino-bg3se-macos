@@ -12,10 +12,11 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | eoc::spell::BookPreparesComponent | 0x90 | 144 | Multiple arrays + HashTables |
 | eoc::spell::CCPrepareSpellComponent | 0x10 | 16 | DynamicArray<MetaId> |
 | eoc::spell::ContainerComponent | 0x10 | 16 | DynamicArray<SpellMeta> |
+| eoc::spell::LastUsedLimbComponent | 1 | `(ulong)(uVar3 >> 0x10)` - no multiply |  |
 | eoc::spell::LearnedSpellsComponent | 0x70 | 112 | Multiple HashTables |
 | eoc::spell::ModificationContainerComponent | 0x40 | 64 | Spell modifications |
 | eoc::spell::PlayerPrepareSpellComponent | 0x18 | 24 | DynamicArray + bool |
 | eoc::spell::ScriptedExplosionComponent | 0x04 | 4 | Scripted explosion |
 | eoc::spell::SpellInvalidationLockedComponent | 0x01 | 1 | Spell invalidation lock flag |
 
-**Total: 13 components**
+**Total: 14 components**

@@ -4,6 +4,7 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 
 | Component | Hex | Bytes | Notes |
 |-----------|-----|-------|-------|
+| esv::spell_cast:: | 12 |  |  |
 | esv::spell_cast::CastHitDelayComponent | 24 | 0x18 | GetComponent<esv::spell_cast::CastHitDelayComponent,false> |
 | esv::spell_cast::ExternalsComponent | 16 | GetComponent | `<< 4` = 16 bytes |
 | esv::spell_cast::HitRegisterComponent | Not found | No GetComponent function |  |
@@ -16,4 +17,4 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | esv::spell_cast::ZoneRangeComponent | esv::spell_cast | Server-side zone range |  |
 | esv::spell_cast::random::ResultEventOneFrameComponent | 0x68 | 104 | Random result event |
 
-**Total: 11 components**
+**Total: 12 components**

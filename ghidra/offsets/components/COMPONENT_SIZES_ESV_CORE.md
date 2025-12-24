@@ -4,11 +4,13 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 
 | Component | Hex | Bytes | Notes |
 |-----------|-----|-------|-------|
+| esv:: (core) | ~35 |  |  |
 | esv::AIHintAreaTrigger | 0x08 | 8 | AI hint trigger |
 | esv::ActivationGroupContainerComponent | 0x10 | 16 | Activation groups |
 | esv::ActiveCharacterLightComponent | 0x4 | 4 |  |
 | esv::ActiveMusicVolumeComponent | 0x08 | 8 | Audio trigger |
 | esv::AiGridAreaTrigger | 0x08 | 8 | AI grid trigger |
+| esv::AnubisExecutorComponent | 8 (ptr) | `* 8` (ptr deref) | GetComponent<esv::AnubisExecutorComponent,false> @ 0x102af24e4 |
 | esv::ArmorClassComponent | 0x20 | 32 |  |
 | esv::AtmosphereTrigger | 0x08 | 8 | Atmosphere trigger |
 | esv::AvailableLevelComponent | 0x8 | 8 |  |
@@ -73,6 +75,7 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | esv::Item | 0x08 | 8 | Ptr to 0xb0 (176b) malloc |
 | esv::ItemComponent | 0x18 | 24 |  |
 | esv::JumpFollowComponent | 0x150 | 336 | Jump follow (large!) |
+| esv::LeaderComponent | 48 |  |  |
 | esv::LevelComponent | 0x4 | 4 |  |
 | esv::LightingTrigger | 0x90 | 144 | Lighting |
 | esv::LockComponent | 0x28 | 40 |  |
@@ -82,6 +85,7 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | esv::OriginalTemplateComponent | 0x4 | 4 |  |
 | esv::OsirisPingRequestSingletonComponent | 16 (0x10) | Struct analysis | Array<PingRequestData> = 16 bytes |
 | esv::PartyMemberComponent | 0x4 | 4 |  |
+| esv::PerItemSpellSourceComponent | 16 |  |  |
 | esv::PingCooldownSingletonComponent | 64 (0x40) | Struct analysis | HashMap<int16_t, float> = 64 bytes |
 | esv::PingRequestSingletonComponent | 16 (0x10) | Struct analysis | Array<PingRequestData> = 16 bytes |
 | esv::PlayerComponent | 0x10 | 16 |  |
@@ -101,6 +105,9 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | esv::ScriptPropertyIsTradableComponent | 0x1 | 1 |  |
 | esv::ServerDisplayNameListComponent | 0x4 | 4 |  |
 | esv::ServerReplicationDependencyOwnerComponent | 0x1 | 1 |  |
+| esv::ServerTimelineCreationConfirmationComponent | 88 |  |  |
+| esv::ServerTimelineDataComponent | 24 |  |  |
+| esv::ServerTimelineWorldCinematicComponent | 16 |  |  |
 | esv::SetGravityActiveRequestOneFrameComponent | 0x10 | 16 | OneFrame component |
 | esv::ShapeshiftCustomIconComponent | 0x58 | 88 | Has invoke function |
 | esv::SightComponent | 0x60 | 96 |  |
@@ -120,4 +127,4 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | esv::UserReservedComponent | 0x18 | 24 |  |
 | esv::VariableManagerComponent | 0x01 | 1 | Tag - variable manager |
 
-**Total: 115 components**
+**Total: 122 components**

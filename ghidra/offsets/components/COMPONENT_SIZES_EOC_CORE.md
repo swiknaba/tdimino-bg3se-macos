@@ -115,5 +115,6 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | eoc::WeaponComponent | 0x50 | 80 | Weapon data |
 | eoc::WeaponSetChangedEventOneFrameComponent | 0x02 | 2 | OneFrame event |
 | eoc::WeaponSetComponent | 0x1 | 1 | Weapon set ID |
+| eoc::WieldingComponent | 8 (via `<< 3`) |  |  |
 
-**Total: 111 components**
+**Total: 112 components**

@@ -4,6 +4,7 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 
 | Component | Hex | Bytes | Notes |
 |-----------|-----|-------|-------|
+| esv::item:: | 2 |  |  |
 | esv::item::DestroyRequestComponent | 0x80 | 128 | Destroy request |
 | esv::item::DestroyingEventOneFrameComponent | 0x01 | 1 | Destroying event |
 | esv::item::DestroyingWaitingForDeactivationComponent | 0x02 | 2 | Waiting for deactivation |
@@ -18,4 +19,4 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | esv::item::animation::PendingRequestComponent | 0x02 | 2 | Pending request |
 | esv::item::animation::StateComponent | 0x06 | 6 | Animation state |
 
-**Total: 13 components**
+**Total: 14 components**

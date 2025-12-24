@@ -15,9 +15,14 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | eoc::item::ISDoorClosedAnimationFinishedOneFrameComponent | 0x1 | 1 | OneFrame |
 | eoc::item::ISDoorClosedAnimationRequestOneFrameComponent | 0x1 | 1 | OneFrame |
 | eoc::item::ISDoorClosedComponent | 0x8 | 8 |  |
+| eoc::item::ISDoorClosingComponent | 1 | `(ulong)(uVar3 >> 0x10)` - no multiplier |  |
 | eoc::item::ISDoorOpenedAnimationFinishedOneFrameComponent | 0x1 | 1 | OneFrame |
 | eoc::item::ISDoorOpenedAnimationRequestOneFrameComponent | 0x1 | 1 | OneFrame |
 | eoc::item::ISDoorOpenedComponent | 0x8 | 8 |  |
+| eoc::item::ISDoorOpeningComponent | 1 | `(ulong)(uVar3 >> 0x10)` - no multiplier |  |
+| eoc::item::ISFallingComponent | 1 | `(ulong)(uVar3 >> 0x10)` - no multiplier |  |
+| eoc::item::ISRotateComponent | 1 | `(ulong)(uVar3 >> 0x10)` - no multiplier |  |
+| eoc::item::ISTeleportFallComponent | 1 | `(ulong)(uVar3 >> 0x10)` - no multiplier |  |
 | eoc::item::IdentityComponent | 0x01 | 1 | Tag - item identity |
 | eoc::item::InUseComponent | 0x01 | 1 | Tag - in use |
 | eoc::item::IsGoldComponent | 0x01 | 1 | Tag - is gold |
@@ -39,4 +44,4 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | eoc::item::WieldingComponent | 0x08 | 8 | Wielding entity ref |
 | eoc::item::animation::RequestComponent | 0x04 | 4 | Animation request ID |
 
-**Total: 34 components**
+**Total: 39 components**

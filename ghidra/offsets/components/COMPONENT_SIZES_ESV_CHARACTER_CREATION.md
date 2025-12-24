@@ -4,6 +4,7 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 
 | Component | Hex | Bytes | Notes |
 |-----------|-----|-------|-------|
+| esv::character_creation:: | 8 |  |  |
 | esv::character_creation::AppearanceComponent | 0x4 | 4 |  |
 | esv::character_creation::AppearanceVisualTagComponent | 0x10 | 16 | Has invoke function |
 | esv::character_creation::BackupDefinitionComponent | 0xa8 | 168 | Has invoke function |
@@ -16,4 +17,4 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | esv::character_creation::SessionOwnerComponent | 0x10 | 16 | Session owner |
 | esv::character_creation::UpdatesComponent | esv::character_creation | Updates tracking |  |
 
-**Total: 11 components**
+**Total: 12 components**

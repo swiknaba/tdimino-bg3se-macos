@@ -296,19 +296,21 @@ python3 tools/generate_component_stubs.py --namespace eoc > eoc_stubs.c
 
 ### Component Coverage Statistics (Dec 2025)
 
-**Two-Tier Registration System:**
-- **438 size-verified** - ARM64 sizes via Ghidra MCP decompilation
-- **462 generated layouts** - Windows offsets (estimated), runtime-safe defaults
-- **~900 total layouts** (~45% coverage)
+**Unified Size Database:**
+- **1,577 ARM64 sizes** - Ghidra MCP decompilation (AddComponent pattern)
+- **702 Windows estimates** - Parsed from C++ headers
+- **1,730 total with size info** (87% of 1,999 TypeIds)
 
-| Namespace | Available | Size-Verified | Generated | Total Layouts |
-|-----------|-----------|---------------|-----------|---------------|
-| eoc::     | 701       | ~290          | ~350      | ~640          |
-| esv::     | 596       | ~58           | ~50       | ~108          |
-| ecl::     | 429       | ~19           | ~30       | ~49           |
-| ls::      | 233       | ~60           | ~32       | ~92           |
-| navcloud::| 13        | 9             | 0         | 9             |
-| **Total** | **1,999** | **438**       | **462**   | **~900**      |
+| Namespace | TypeIds | Ghidra | Windows | Missing |
+|-----------|---------|--------|---------|---------|
+| eoc::     | 913     | 758    | 367     | 126     |
+| esv::     | 889     | 512    | 222     | 298     |
+| ecl::     | 542     | 155    | 56      | 351     |
+| ls::      | 263     | 130    | 57      | 118     |
+| navcloud::| 18      | 16     | 0       | 2       |
+| **Total** | **2,652** | **1,577** | **702** | **922** |
+
+**Note:** Total exceeds 1,999 TypeIds due to sub-namespace variants discovered in Ghidra.
 
 **Implementation notes:**
 - Verified layouts from `g_AllComponentLayouts` take precedence over generated

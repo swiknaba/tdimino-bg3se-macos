@@ -4,6 +4,7 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 
 | Component | Hex | Bytes | Notes |
 |-----------|-----|-------|-------|
+| esv::summon:: | 1 |  |  |
 | esv::summon::AddConcentrationRequestOneFrameComponent | 0x48 | 72 | Add concentration request |
 | esv::summon::AddToExistingConcentrationRequestOneFrameComponent | 0x10 | 16 |  |
 | esv::summon::AttachToProjectileRequestOneFrameComponent | 0x08 | 8 | OneFrame request |
@@ -20,4 +21,4 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | esv::summon::SetLifetimeRequestOneFrameComponent | 0x08 | 8 | OneFrame request |
 | esv::summon::SpawnCreatedEventOneFrameComponent | 0x08 | 8 | OneFrame event |
 
-**Total: 15 components**
+**Total: 16 components**

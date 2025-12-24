@@ -4,6 +4,7 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 
 | Component | Hex | Bytes | Notes |
 |-----------|-----|-------|-------|
+| eoc::platform::DestructionParticipantComponent | 1 | `(uVar3 >> 0x10)` |  |
 | eoc::platform::MovablePlatformComponent | 0x1 | 1 |  |
 | eoc::platform::MoveOnSplineComponent | 0x1c | 28 | Has invoke PTR |
 | eoc::platform::MoveOnSplineProgressComponent | 0x18 | 24 |  |
@@ -15,4 +16,4 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | eoc::platform::PlatformComponent | 0x48 | 72 | Platform state |
 | eoc::platform::RepresentativeComponent | 0x08 | 8 | Representative ref |
 
-**Total: 10 components**
+**Total: 11 components**

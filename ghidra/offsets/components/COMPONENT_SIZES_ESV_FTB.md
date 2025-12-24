@@ -4,6 +4,7 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 
 | Component | Hex | Bytes | Notes |
 |-----------|-----|-------|-------|
+| esv::ftb:: | 2 |  |  |
 | esv::ftb::ModeChangedEventOneFrameComponent | 0x10 | 16 | Mode changed event |
 | esv::ftb::PlayersTurnEndedEventOneFrameComponent | 0x01 | 1 | Players turn ended |
 | esv::ftb::PlayersTurnStartedEventOneFrameComponent | 0x01 | 1 | Players turn started |
@@ -15,4 +16,4 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | esv::ftb::ZoneComponent | 0x48 | 72 | Zone data |
 | esv::ftb::ZoneInstigatorComponent | 0x10 | 16 | Zone instigator |
 
-**Total: 10 components**
+**Total: 11 components**

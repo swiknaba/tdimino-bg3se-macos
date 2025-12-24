@@ -4,6 +4,7 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 
 | Component | Hex | Bytes | Notes |
 |-----------|-----|-------|-------|
+| esv::crowds:: | 8 |  |  |
 | esv::crowds::AnimationComponent | 0x0c | 12 | Animation state |
 | esv::crowds::BehaviourRequestOneFrameComponent | 0x01 | 1 | OneFrame event |
 | esv::crowds::DeactivateCharacterComponent | 0x01 | 1 | Tag component |
@@ -19,4 +20,4 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | esv::crowds::SpawnComponent | 0x30 | 48 | Spawn config |
 | esv::crowds::TriggerSpawnStateComponent | 0x0c | 12 | Spawn trigger state |
 
-**Total: 14 components**
+**Total: 15 components**

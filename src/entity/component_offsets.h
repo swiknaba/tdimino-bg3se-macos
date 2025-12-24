@@ -774,6 +774,90 @@ static const ComponentLayoutDef g_BoostsContainerComponent_Layout = {
 };
 
 // ============================================================================
+// Boost Type Components (Ghidra-verified sizes, Dec 2025)
+// ARM64 sizes extracted from AddComponent<T> decompilations
+// ============================================================================
+
+// AbilityBoostComponent (eoc::AbilityBoostComponent)
+// ARM64 Verified: Size 0x10 (16 bytes)
+static const ComponentPropertyDef g_AbilityBoostComponent_Properties[] = {
+    { "Ability", 0x00, FIELD_TYPE_UINT8, 0, true },
+    { "Value",   0x04, FIELD_TYPE_INT32, 0, true },
+};
+
+static const ComponentLayoutDef g_AbilityBoostComponent_Layout = {
+    .componentName = "eoc::AbilityBoostComponent",
+    .shortName = "AbilityBoost",
+    .componentTypeIndex = 0,
+    .componentSize = 0x10,
+    .properties = g_AbilityBoostComponent_Properties,
+    .propertyCount = sizeof(g_AbilityBoostComponent_Properties) / sizeof(g_AbilityBoostComponent_Properties[0]),
+};
+
+// ArmorClassBoostComponent (eoc::ArmorClassBoostComponent)
+// ARM64 Verified: Size 0x04 (4 bytes)
+static const ComponentPropertyDef g_ArmorClassBoostComponent_Properties[] = {
+    { "AC", 0x00, FIELD_TYPE_INT32, 0, true },
+};
+
+static const ComponentLayoutDef g_ArmorClassBoostComponent_Layout = {
+    .componentName = "eoc::ArmorClassBoostComponent",
+    .shortName = "ArmorClassBoost",
+    .componentTypeIndex = 0,
+    .componentSize = 0x04,
+    .properties = g_ArmorClassBoostComponent_Properties,
+    .propertyCount = sizeof(g_ArmorClassBoostComponent_Properties) / sizeof(g_ArmorClassBoostComponent_Properties[0]),
+};
+
+// AdvantageBoostComponent (eoc::AdvantageBoostComponent)
+// ARM64 Verified: Size 0x18 (24 bytes)
+static const ComponentPropertyDef g_AdvantageBoostComponent_Properties[] = {
+    { "Type",      0x00, FIELD_TYPE_UINT8, 0, true },  // Advantage/Disadvantage enum
+    { "Ability",   0x04, FIELD_TYPE_UINT8, 0, true },
+    { "SkillType", 0x08, FIELD_TYPE_UINT32, 0, true },
+    { "Tags",      0x10, FIELD_TYPE_UINT64, 0, true },  // Tag bitfield
+};
+
+static const ComponentLayoutDef g_AdvantageBoostComponent_Layout = {
+    .componentName = "eoc::AdvantageBoostComponent",
+    .shortName = "AdvantageBoost",
+    .componentTypeIndex = 0,
+    .componentSize = 0x18,
+    .properties = g_AdvantageBoostComponent_Properties,
+    .propertyCount = sizeof(g_AdvantageBoostComponent_Properties) / sizeof(g_AdvantageBoostComponent_Properties[0]),
+};
+
+// AddTagBoostComponent (eoc::AddTagBoostComponent)
+// ARM64 Verified: Size 0x10 (16 bytes)
+static const ComponentPropertyDef g_AddTagBoostComponent_Properties[] = {
+    { "Tag", 0x00, FIELD_TYPE_GUID, 0, true },  // Guid (16 bytes)
+};
+
+static const ComponentLayoutDef g_AddTagBoostComponent_Layout = {
+    .componentName = "eoc::AddTagBoostComponent",
+    .shortName = "AddTagBoost",
+    .componentTypeIndex = 0,
+    .componentSize = 0x10,
+    .properties = g_AddTagBoostComponent_Properties,
+    .propertyCount = sizeof(g_AddTagBoostComponent_Properties) / sizeof(g_AddTagBoostComponent_Properties[0]),
+};
+
+// AttributeBoostComponent (eoc::AttributeBoostComponent)
+// ARM64 Verified: Size 0x04 (4 bytes)
+static const ComponentPropertyDef g_AttributeBoostComponent_Properties[] = {
+    { "AttributeFlags", 0x00, FIELD_TYPE_UINT32, 0, true },
+};
+
+static const ComponentLayoutDef g_AttributeBoostComponent_Layout = {
+    .componentName = "eoc::AttributeBoostComponent",
+    .shortName = "AttributeBoost",
+    .componentTypeIndex = 0,
+    .componentSize = 0x04,
+    .properties = g_AttributeBoostComponent_Properties,
+    .propertyCount = sizeof(g_AttributeBoostComponent_Properties) / sizeof(g_AttributeBoostComponent_Properties[0]),
+};
+
+// ============================================================================
 // DisplayNameComponent (eoc::DisplayNameComponent)
 // From: BG3Extender/GameDefinitions/Components/Visual.h:64-70
 // ARM64 Verified: Size 0x40 (via Ghidra AddComponent<eoc::DisplayNameComponent>)
@@ -2092,6 +2176,83 @@ static const ComponentLayoutDef g_LevelInstanceUnloadingComponent_Layout = {
 };
 
 // ============================================================================
+// Client Components (ecl::) - Ghidra-verified sizes, Dec 2025
+// ARM64 sizes extracted from AddComponent<T> and Create/malloc patterns
+// Note: Some components use malloc with ptr storage (marked with "malloc" note)
+// ============================================================================
+
+// EquipmentVisualsComponent (ecl::EquipmentVisualsComponent)
+// ARM64 Verified: Size 0x48 (72 bytes)
+static const ComponentPropertyDef g_ClientEquipmentVisualsComponent_Properties[] = {
+    { "State", 0x00, FIELD_TYPE_UINT32, 0, true },
+    // Complex visual data follows (meshes, materials, etc.)
+};
+
+static const ComponentLayoutDef g_ClientEquipmentVisualsComponent_Layout = {
+    .componentName = "ecl::EquipmentVisualsComponent",
+    .shortName = "ClientEquipmentVisuals",
+    .componentTypeIndex = 0,
+    .componentSize = 0x48,
+    .properties = g_ClientEquipmentVisualsComponent_Properties,
+    .propertyCount = sizeof(g_ClientEquipmentVisualsComponent_Properties) / sizeof(g_ClientEquipmentVisualsComponent_Properties[0]),
+};
+
+// Character (ecl::Character)
+// ARM64 Verified: Size 0x158 (344 bytes) - allocated via malloc
+static const ComponentLayoutDef g_ClientCharacterComponent_Layout = {
+    .componentName = "ecl::Character",
+    .shortName = "ClientCharacter",
+    .componentTypeIndex = 0,
+    .componentSize = 0x158,
+    .properties = NULL,
+    .propertyCount = 0,
+};
+
+// Item (ecl::Item)
+// ARM64 Verified: Size 0x70 (112 bytes) - allocated via malloc
+static const ComponentLayoutDef g_ClientItemComponent_Layout = {
+    .componentName = "ecl::Item",
+    .shortName = "ClientItem",
+    .componentTypeIndex = 0,
+    .componentSize = 0x70,
+    .properties = NULL,
+    .propertyCount = 0,
+};
+
+// Projectile (ecl::Projectile)
+// ARM64 Verified: Size 0x240 (576 bytes) - LARGEST COMPONENT
+static const ComponentLayoutDef g_ClientProjectileComponent_Layout = {
+    .componentName = "ecl::Projectile",
+    .shortName = "ClientProjectile",
+    .componentTypeIndex = 0,
+    .componentSize = 0x240,
+    .properties = NULL,
+    .propertyCount = 0,
+};
+
+// Scenery (ecl::Scenery)
+// ARM64 Verified: Size 0x40 (64 bytes) - allocated via malloc
+static const ComponentLayoutDef g_ClientSceneryComponent_Layout = {
+    .componentName = "ecl::Scenery",
+    .shortName = "ClientScenery",
+    .componentTypeIndex = 0,
+    .componentSize = 0x40,
+    .properties = NULL,
+    .propertyCount = 0,
+};
+
+// PaperdollComponent (ecl::PaperdollComponent)
+// ARM64 Verified: Size 0x10 (16 bytes)
+static const ComponentLayoutDef g_ClientPaperdollComponent_Layout = {
+    .componentName = "ecl::PaperdollComponent",
+    .shortName = "ClientPaperdoll",
+    .componentTypeIndex = 0,
+    .componentSize = 0x10,
+    .properties = NULL,
+    .propertyCount = 0,
+};
+
+// ============================================================================
 // All Component Layouts (for bulk registration)
 // ============================================================================
 
@@ -2136,6 +2297,12 @@ static const ComponentLayoutDef* g_AllComponentLayouts[] = {
     &g_SpellContainerComponent_Layout,
     &g_ConcentrationComponent_Layout,
     &g_BoostsContainerComponent_Layout,
+    // Ghidra-verified boost type components (Dec 2025)
+    &g_AbilityBoostComponent_Layout,
+    &g_ArmorClassBoostComponent_Layout,
+    &g_AdvantageBoostComponent_Layout,
+    &g_AddTagBoostComponent_Layout,
+    &g_AttributeBoostComponent_Layout,
     &g_DisplayNameComponent_Layout,
     // Phase 2 batch 6 (Issue #33) - Simple components
     &g_DeathStateComponent_Layout,
@@ -2273,6 +2440,13 @@ static const ComponentLayoutDef* g_AllComponentLayouts[] = {
     &g_NetComponent_Layout,
     // Template components (Issue #41 - Ext.Template support)
     &g_OriginalTemplateComponent_Layout,
+    // Ghidra-verified client components (Dec 2025)
+    &g_ClientEquipmentVisualsComponent_Layout,
+    &g_ClientCharacterComponent_Layout,
+    &g_ClientItemComponent_Layout,
+    &g_ClientProjectileComponent_Layout,
+    &g_ClientSceneryComponent_Layout,
+    &g_ClientPaperdollComponent_Layout,
     NULL  // Sentinel
 };
 

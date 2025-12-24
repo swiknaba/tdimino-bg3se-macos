@@ -13,6 +13,35 @@ Each entry includes:
 
 ---
 
+## [v0.36.8] - 2025-12-24
+
+**Parity:** ~77% | **Category:** Component System | **Issues:** #52
+
+### Added
+- **Unified Component Database** - Merged all component size sources
+  - 1,577 ARM64 sizes from Ghidra decompilation (79% of TypeIds)
+  - 702 Windows estimates from BG3SE C++ header parsing
+  - 1,730 total components with size info (87% coverage)
+  - `ghidra/offsets/COMPONENT_DATABASE.md` - Master reference merging all sources
+
+- **New Analysis Tools**
+  - `tools/extract_windows_sizes.py` - Parse Windows BG3SE C++ headers
+  - `tools/compare_component_sizes.py` - Cross-reference Ghidra vs Windows vs TypeIds
+  - `tools/create_unified_database.py` - Merge all sources into unified database
+  - `tools/generate_layouts.py` - Generate C property layouts with ARM64-verified sizes
+
+- **Improved Property Layout Generation**
+  - 293 generated layouts (down from 504) with valid field types only
+  - Ghidra-verified ARM64 sizes used where available
+  - Skips complex container types (Array, HashMap) that can't be exposed to Lua
+
+### Technical
+- **Size Sources Priority**: Ghidra ARM64 > Windows estimates > TypeId only
+- **Field Type Validation**: Only generates layouts with valid FIELD_TYPE_* constants
+- **Cross-Platform Comparison**: 404 matches, 136 discrepancies between Windows/ARM64
+
+---
+
 ## [v0.36.7] - 2025-12-23
 
 **Parity:** ~77% | **Category:** Component System | **Issues:** #52

@@ -142,14 +142,6 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | eoc::improvised_weapon::CanBeWieldedComponent | 0x01 | 1 | Tag - can be wielded |
 | eoc::improvised_weapon::WieldedComponent | 0x10 | 16 | Wielded weapon data |
 | eoc::improvised_weapon::WieldingComponent | 0x08 | 8 | Wielding entity ref |
-| eoc::item_template::ActionTypeComponent | 0x30 | 48 | Action type with hash |
-| eoc::item_template::CanMoveComponent | 0x01 | 1 | Tag - can move |
-| eoc::item_template::ClimbOnComponent | 0x01 | 1 | Tag - climbable |
-| eoc::item_template::DestroyedComponent | 0x01 | 1 | Tag - destroyed |
-| eoc::item_template::InteractionDisabledComponent | 0x01 | 1 | Tag - no interaction |
-| eoc::item_template::IsStoryItemComponent | 0x01 | 1 | Tag - story item |
-| eoc::item_template::LadderComponent | 0x01 | 1 | Tag - ladder |
-| eoc::item_template::UseActionComponent | 0x10 | 16 |  |
 | eoc::jump::ActivationEventOneFrameComponent | 0x1 | 1 | OneFrame |
 | eoc::jump::AnimationRequestOneFrameComponent | 0xc | 12 | OneFrame |
 | eoc::jump::InfoComponent | 0x20 | 32 | Jump mechanics |
@@ -174,6 +166,7 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | eoc::object_visual::AppearanceOverrideComponent | 0xd8 | 216 | Appearance override (large!) |
 | eoc::object_visual::CharacterCreationTemplateOverrideComponent | 0x04 | 4 | CC template override |
 | eoc::ownership::OwnedAsLootComponent | 0x1 | 1 |  |
+| eoc::ownership::OwneeCurrentComponent | 8 | `<< 3` |  |
 | eoc::passive::UsageCountComponent | 0x40 | 64 | Passive usage counts |
 | eoc::photo_mode::CameraTransformComponent | 0x28 | 40 | Camera transform |
 | eoc::photo_mode::DummyAnimationStateComponent | 0x18 | 24 | Dummy anim state |
@@ -265,6 +258,7 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | eoc::summon::IsSpawnComponent | 0x01 | 1 | Tag - is spawn |
 | eoc::summon::IsSummonComponent | 0x30 | 48 | Is summon |
 | eoc::summon::LifetimeComponent | 0x08 | 8 | Lifetime |
+| eoc::swap_places::AnimationRequestComponent | 24 | `* 0x18` pattern |  |
 | eoc::tadpole_tree::FullIllithidComponent | 0x1 | 1 |  |
 | eoc::tadpole_tree::HalfIllithidComponent | 0x1 | 1 |  |
 | eoc::tadpole_tree::PowerContainerComponent | 0x10 | 16 |  |
@@ -298,9 +292,10 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | eoc::trigger::TypeComponent | 0x01 | 1 | Tag - trigger type |
 | eoc::tutorial::RevealedEntriesComponent | 0x30 | 48 | Tutorial entries |
 | eoc::unsheath::SpellAnimationOverrideComponent | 0x04 | 4 | Spell anim override |
+| eoc::unsheath::StateComponent | 32 | `<< 5` in array index |  |
 | eoc::use::SocketComponent | 0x40 | 64 | Socket data |
 | eoc::user::AvatarComponent | 0x0c | 12 | Avatar data |
 | eoc::user::DismissedComponent | 0x1 | 1 |  |
 | eoc::user::ReservedForComponent | 4 | 0x4 | AddComponent @ 0x101e2a99c |
 
-**Total: 298 components**
+**Total: 293 components**

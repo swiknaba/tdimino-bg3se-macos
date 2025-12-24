@@ -4,6 +4,7 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 
 | Component | Hex | Bytes | Notes |
 |-----------|-----|-------|-------|
+| esv::camp:: | 1 |  |  |
 | esv::camp::AvatarContainerRequestsComponent | 0x60 | 96 | Avatar container requests |
 | esv::camp::AvatarContainerTriggerComponent | 0x08 | 8 | Avatar container trigger |
 | esv::camp::DataComponent | 0x98 | 152 | Camp data |
@@ -17,4 +18,4 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | esv::camp::SuppliesToConsumeCacheSingletonComponent | 0x40 | 64 | Supplies cache |
 | esv::camp::TriggerComponent | 0x08 | 8 | Camp trigger |
 
-**Total: 12 components**
+**Total: 13 components**

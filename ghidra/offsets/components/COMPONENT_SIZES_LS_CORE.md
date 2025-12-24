@@ -84,7 +84,10 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | ls::SceneAttachComponent | 0x08 | 8 | Scene pointer |
 | ls::ScrollingObjectComponent | 0x30 | 48 | Scrolling object |
 | ls::SeeThroughStateComponent | 0x40 | 64 | Multi-vector state |
+| ls::SkeletonSoundObjectTransformComponent | 0x2c | GetComponent |  |
+| ls::SkeletonSoundObjectsComponent | 0x100 | GetComponent |  |
 | ls::SoundActivatedComponent | 0x1 | 1 |  |
+| ls::SoundCameraComponent | 0x40 | GetComponent |  |
 | ls::SoundComponent | 0x20 | 32 | Sound component |
 | ls::SoundRoomCurrentStateComponent | 1 | AddComponentUnchecked<ls::SoundRoomCurrentStateComponent> | Tag component |
 | ls::SoundRoomNeighborStateComponent | 0x20 | 32 | Sound room neighbor state |
@@ -105,5 +108,6 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | ls::VisualStreamComponent | 0x10 | 16 | Stream component |
 | ls::VisualStreamHintComponent | 0x04 | 4 | Streaming hint |
 | ls::VisualStreamLoadComponent | 0x08 | 8 | Stream load |
+| ls::WorldMapCameraBehavior | 0x20 | GetComponent |  |
 
-**Total: 101 components**
+**Total: 105 components**

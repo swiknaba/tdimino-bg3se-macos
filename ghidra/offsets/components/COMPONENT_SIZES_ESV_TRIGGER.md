@@ -4,6 +4,7 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 
 | Component | Hex | Bytes | Notes |
 |-----------|-----|-------|-------|
+| esv::trigger:: | 6 |  |  |
 | esv::trigger::CachedLeaveEventsComponent | 0x10 | 16 | Cached leave events |
 | esv::trigger::EventConfigComponent | 0x01 | 1 | Event config tag |
 | esv::trigger::LoadedHandledComponent | 0x1 | 1 |  |
@@ -15,4 +16,4 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | esv::trigger::UpdatedRegisteredForComponent | 0x10 | 16 | Updated registration |
 | esv::trigger::UpdatedRegisteredForItemsComponent | 0x10 | 16 | Updated items registration |
 
-**Total: 10 components**
+**Total: 11 components**

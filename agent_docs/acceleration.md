@@ -733,3 +733,110 @@ DEFINE_TAG_COMPONENT(eoc::combat, IsInCombat, IsInCombat)
 - **Issue #33** - Component Property Layouts Expansion (main tracking issue)
 - **Issue #44** - ARM64 Hooking Infrastructure
 - **Issue #15** - Client Lua State (unlocks ecl:: components)
+
+---
+
+## Ghidra MCP Batch Extraction (Dec 2025)
+
+**BREAKTHROUGH:** Using Ghidra MCP server with parallel Claude subagents achieves massive component size extraction throughput.
+
+### Methodology
+
+**Pattern:** Component sizes are embedded in `AddComponent<T>` template functions:
+```cpp
+ComponentFrameStorageAllocRaw(
+    (ComponentFrameStorage*)(this_00 + 0x48),
+    SIZE,  // ← Second argument is component size in bytes
+    (ComponentFrameStorageIndex*)(pIVar8 + 8)
+);
+```
+
+**Workflow:**
+1. Search for `AddComponent` functions via Ghidra MCP (`search_functions_by_name`)
+2. Paginate through results (50 functions per batch, offset parameter)
+3. Decompile each function (`decompile_function` or `decompile_function_by_address`)
+4. Extract SIZE from `ComponentFrameStorageAllocRaw` call
+5. Document in namespace-organized markdown files
+
+### Parallel Agent Strategy
+
+Deploy 8-10 Claude subagents simultaneously, each processing a different offset range:
+
+```
+Agent 1: offsets 0-50      → extracts ~30 components
+Agent 2: offsets 50-100    → extracts ~30 components
+Agent 3: offsets 100-150   → extracts ~30 components
+...
+Agent 10: offsets 450-500  → extracts ~30 components
+```
+
+**Results:** 300+ components extracted per batch, ~15 minutes wall-clock time.
+
+### MCP Tool Usage
+
+```javascript
+// 1. Paginated function search
+search_functions_by_name({ query: "AddComponent", offset: 1200, limit: 50 })
+
+// 2. Decompile by name (for unique names)
+decompile_function({ name: "AddComponent<eoc::HealthComponent>" })
+
+// 3. Decompile by address (when name is ambiguous)
+decompile_function_by_address({ address: "0x103bc9594" })
+```
+
+### Documentation Structure
+
+Components organized into modular files by namespace:
+
+```
+ghidra/offsets/
+├── COMPONENT_SIZES.md           # Master index with statistics
+├── COMPONENT_SIZES_EOC_CORE.md  # Core eoc:: components (52)
+├── COMPONENT_SIZES_EOC_BOOST.md # All *BoostComponent classes (55)
+├── COMPONENT_SIZES_EOC_NAMESPACED.md # 56 sub-namespaces (185)
+├── COMPONENT_SIZES_LS.md        # Larian engine components (60)
+├── COMPONENT_SIZES_ESV.md       # Server-side components (58)
+├── COMPONENT_SIZES_ECL.md       # Client-side components (19)
+└── COMPONENT_SIZES_NAVCLOUD.md  # Navigation/pathfinding (9)
+```
+
+### Key Discoveries (Dec 23, 2025)
+
+**Largest Components Found:**
+| Component | Size | Notes |
+|-----------|------|-------|
+| eoc::BoostsComponent | 832 bytes | All boosts container |
+| eoc::character_creation::CharacterCreatedComponent | 992 bytes | Full character state |
+| eoc::character::CharacterDefinitionComponent | 656 bytes | Character definition |
+| eoc::hit::HitResultEventOneFrameComponent | 488 bytes | Hit result event |
+| eoc::spell_cast::CastEventOneFrameComponent | 448 bytes | Spell cast event |
+
+**New Namespaces Discovered:**
+- `navcloud::` - 9 navigation/pathfinding components
+- `ls::cluster::` - 9 clustering/instancing components
+- `ls::anubis::` - 3 savegame/framework components
+- `eoc::hit::` - 5 hit notification event components
+- `eoc::door::` - 6 door state animation components
+
+**OneFrameComponent Pattern:**
+28+ components follow the `*OneFrameComponent` pattern for event-driven ECS updates. These exist for exactly one frame to signal state changes.
+
+### Extraction Statistics
+
+| Metric | Count |
+|--------|-------|
+| Total AddComponent functions | ~1,700 |
+| Size-verified components | 438 |
+| Coverage of 1,999 TypeIds | 22% |
+| Namespaces with sizes | 7 major, 56+ sub-namespaces |
+| Agent batches run | 30+ |
+
+### Tips for Effective Extraction
+
+1. **Use offset pagination** - Don't try to process all 1,700 functions at once
+2. **Decompile by address** when names contain special characters
+3. **Look for the pattern** - ComponentFrameStorageAllocRaw is consistent
+4. **Group by namespace** - Easier to organize and validate
+5. **Run agents in parallel** - 8-10 concurrent agents is optimal
+6. **Document immediately** - Add to markdown files before context is lost

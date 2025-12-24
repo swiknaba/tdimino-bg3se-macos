@@ -4,6 +4,7 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 
 | Component | Hex | Bytes | Notes |
 |-----------|-----|-------|-------|
+| ecl::ActiveTurnComponent | 0xc | 12 |  |
 | ecl::AiSeederTrigger | 0x78 | 120 | AI seeder trigger |
 | ecl::AtmosphereTrigger | 0x90 | 144 | Atmosphere trigger |
 | ecl::CameraBlockerTrigger | 0x78 | 120 | Camera blocker |
@@ -16,6 +17,7 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | ecl::CinematicArenaTrigger | 0xb0 | 176 | Cinematic arena |
 | ecl::ClientTimelineActorControlComponent | 0x28 | 40 | Timeline control |
 | ecl::ClientTimelineControlComponent | 0x88 | 136 | Client timeline control |
+| ecl::CombatTimelineDataComponent | 352 | `* 0x160` at 0x103741d18 |  |
 | ecl::CullTrigger | 0x78 | 120 | Cull trigger |
 | ecl::DeathDetachEffectRequestOneFrameComponent | 0x01 | 1 | OneFrame tag |
 | ecl::DeathEffectComponent | `0x8` | 8 | Has destructor (PTR___invoke_1083fe360) |
@@ -29,9 +31,12 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | ecl::FadeTrigger | 0x80 | 128 | Fade trigger |
 | ecl::FloorTrigger | 0x80 | 128 | Floor trigger |
 | ecl::GameCameraBehavior | 0x258 | 600 | Game camera (largest ecl!) |
+| ecl::GroundMaterialComponent | 0x2 | 2 |  |
 | ecl::IgnoredComponent | 0x01 | 1 | Tag - ignored |
 | ecl::InSelectComponent | 0x01 | 1 | Tag - in selection |
 | ecl::InvisibilityAttachmentComponent | 0x01 | 1 | Tag |
+| ecl::InvisibilityFadingComponent | 0xc | 12 |  |
+| ecl::InvisibilityVisualComponent | 0xc | 12 |  |
 | ecl::IsHoveredOverComponent | 0x01 | 1 | Tag - hovered |
 | ecl::Item | 0x70 | 112 | Item (inline) |
 | ecl::Item (no template) | 0x8 | 8 | Pointer storage |
@@ -60,6 +65,7 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | ecl::SoundVolumeTrigger | 0x8 | 8 | Pointer storage |
 | ecl::SpectatorCameraBehavior | 0x88 | 136 | Spectator camera |
 | ecl::SpectatorTrigger | 0x8 | 8 | Pointer storage |
+| ecl::SurfaceLightComponent | 64 (0x40) | GetComponent<ecl::SurfaceLightComponent,false> @ 0x1031f6550 |  |
 | ecl::SyncedTimelineControlComponent | 0xf8 | 248 | Synced timeline control (large!) |
 | ecl::TLPreviewDummy | 0x08 | 8 | Timeline preview dummy ptr |
 | ecl::TerrainWalkableAreaComponent | 0x50 | 80 | Terrain walkable area |
@@ -85,4 +91,4 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | ecl::WalkableSurfaceComponent | 0x10 | 16 | Walkable surface |
 | ecl::WeaponComponent | 0x50 | 80 | Weapon state |
 
-**Total: 80 components**
+**Total: 86 components**

@@ -4,6 +4,7 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 
 | Component | Hex | Bytes | Notes |
 |-----------|-----|-------|-------|
+| esv::death:: | 4 |  |  |
 | esv::death::ApplyKnockedOutOneFrameComponent | 0x18 | 24 | OneFrame event |
 | esv::death::DeathContinueComponent | 0x01 | 1 | Death continue flag |
 | esv::death::DeathRequestOneFrameComponent | 0x88 | 136 | Death request event |
@@ -19,4 +20,4 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | esv::death::ResurrectionRequestOneFrameComponent | 0x18 | 24 | OneFrame event |
 | esv::death::TickOneFrameComponent | 0x01 | 1 | Tag - death tick |
 
-**Total: 14 components**
+**Total: 15 components**

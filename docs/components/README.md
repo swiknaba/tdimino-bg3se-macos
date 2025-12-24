@@ -94,10 +94,10 @@ python3 tools/parse_component_headers.py --component Health  # Show specific com
 ## Coverage Status
 
 **Current:** 1,999 components registered (TypeId detection)
-**Ghidra Verified:** 27 components with exact ARM64 sizes via AddComponent<T> decompilation
-**Property Access:** 55 components with verified ARM64 layouts
+**Ghidra Verified:** 70 components with exact ARM64 sizes via AddComponent<T> decompilation
+**Property Access:** 169 components with verified ARM64 layouts
 **Windows Reference:** 504 components with estimated layouts (need ARM64 verification)
-**Target:** Property access for 150+ high-priority components
+**Target:** Property access for 200+ high-priority components
 
 ## Adding Property Access
 

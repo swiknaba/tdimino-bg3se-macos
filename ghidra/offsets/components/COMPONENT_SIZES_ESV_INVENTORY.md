@@ -4,6 +4,7 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 
 | Component | Hex | Bytes | Notes |
 |-----------|-----|-------|-------|
+| esv::inventory:: | 5 |  |  |
 | esv::inventory::CharacterHasGeneratedTradeTreasureComponent | 0x01 | 1 | Trade treasure generated |
 | esv::inventory::ContainerDataComponent | 0x08 | 8 | Container data |
 | esv::inventory::EntityHasGeneratedTreasureComponent | 0x01 | 1 | Treasure generated |
@@ -20,4 +21,4 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | esv::inventory::ShapeshiftUnequippedEquipmentComponent | 0x10 | 16 | Shapeshift unequipped |
 | esv::inventory::StackBlockedDuringTradeComponent | 0x01 | 1 | Stack blocked in trade |
 
-**Total: 15 components**
+**Total: 16 components**

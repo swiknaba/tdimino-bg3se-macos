@@ -4,6 +4,7 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 
 | Component | Hex | Bytes | Notes |
 |-----------|-----|-------|-------|
+| esv::character:: | 1 |  |  |
 | esv::character::AutomatedDialogActorComponent | 0x28 | 40 | Automated dialog |
 | esv::character::CanOpenDoorsOverrideComponent | 0x01 | 1 | Tag - door override |
 | esv::character::DefinitionComponent | 0xa8 | 168 | Character definition |
@@ -16,4 +17,4 @@ Extracted via Ghidra MCP decompilation of `AddComponent<T>` functions.
 | esv::character::SessionCommonComponent | 0x01 | 1 | Tag - session common |
 | esv::character::TurnActionsComponent | 0x150 | 336 | Turn actions (large!) |
 
-**Total: 11 components**
+**Total: 12 components**
