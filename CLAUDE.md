@@ -53,7 +53,7 @@ Use `bg3se-macos-ghidra` skill for Ghidra workflows and ARM64 patterns.
 - **Osi.*** - Dynamic metatable (40+ functions)
 - **Ext.Osiris** - RegisterListener, NewCall/NewQuery/NewEvent (server context guards)
 - **Context System** - Ext.IsServer/IsClient/GetContext, two-phase bootstrap (v0.36.4)
-- **Ext.Entity** - GUID lookup, **1,999 components registered** (631 layouts: 169 verified + 462 generated), **1,030 ARM64 sizes extracted**, GetByHandle
+- **Ext.Entity** - GUID lookup, **1,999 components registered** (631 layouts: 169 verified + 462 generated), **1,538 ARM64 sizes extracted** (77% coverage), GetByHandle
 - **Ext.Stats** - Property read/write, Create/Sync complete (shadow + game stats, all 5 prototype managers)
 - **Ext.Events** - 10 events with priority ordering, Once flag, Prevent pattern
 - **Ext.Timer** - **20 functions**: WaitFor, WaitForRealtime, Cancel/Pause/Resume, GameTime/DeltaTime/Ticks, **Persistent timers** (save/load support)

@@ -180,7 +180,7 @@ end
 - [x] Component accessors via GetComponent template addresses
 
 ### 2.2 Component Access & Property System
-**Status:** ✅ Complete (v0.36.7) - **1,999 components registered** (631 layouts: 169 verified + 462 generated), **1,030 ARM64 sizes extracted via Ghidra**
+**Status:** ✅ Complete (v0.36.7) - **1,999 components registered** (631 layouts: 169 verified + 462 generated), **1,538 ARM64 sizes extracted via Ghidra** (77% coverage)
 
 **Key Discovery (Dec 2025):** macOS ARM64 has NO `GetRawComponent` dispatcher like Windows. Template functions are **completely inlined** - calling template addresses directly returns NULL.
 
@@ -1383,7 +1383,7 @@ See **[docs/CHANGELOG.md](docs/CHANGELOG.md)** for detailed version history with
 
 | Version | Date | Highlights |
 |---------|------|------------|
-| v0.36.7 | 2025-12-23 | **1,030 ARM64 Sizes** - Crossed 1000-component milestone via parallel Ghidra extraction, 51.5% coverage (#52) |
+| v0.36.7 | 2025-12-24 | **1,538 ARM64 Sizes** - 77% coverage via parallel Ghidra extraction + AddComponent pattern (#52) |
 | v0.36.6 | 2025-12-23 | **631 Component Layouts** - Two-tier registration (169 verified + 462 generated), Gen_ prefix strategy, 1,999 TypeIds, 504 property defs, 70 Ghidra-verified sizes (#52) |
 | v0.36.5 | 2025-12-22 | **Math/Timer/IO APIs Complete** - 16 quaternion ops, **20 timer functions** (persistent timers + GameTime), path overrides (#47, #49, #50 all complete) |
 | v0.36.4 | 2025-12-22 | **Context System** - Server/Client context awareness, two-phase bootstrap, API guards (#15) |
@@ -1600,7 +1600,7 @@ ComponentFrameStorageAllocRaw((ComponentFrameStorage*)(this_00 + 0x48), SIZE, ..
 3. Decompile and extract sizes from ComponentFrameStorageAllocRaw calls
 4. Consolidate results into modular documentation
 
-**Results:** 438 components size-verified, organized by namespace:
+**Results:** 1,538 components size-verified (deduplicated), organized by namespace:
 - `COMPONENT_SIZES_EOC_CORE.md` - 52 core eoc:: components
 - `COMPONENT_SIZES_EOC_BOOST.md` - 55 boost components
 - `COMPONENT_SIZES_EOC_NAMESPACED.md` - 185 sub-namespaced components (56 namespaces)
