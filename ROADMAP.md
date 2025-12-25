@@ -2,7 +2,7 @@
 
 This document tracks the development roadmap for achieving feature parity with Windows BG3SE (Norbyte's Script Extender).
 
-## Current Status: v0.36.7
+## Current Status: v0.36.9
 
 **Overall Feature Parity: ~77%** (based on comprehensive API function count analysis)
 
@@ -180,7 +180,7 @@ end
 - [x] Component accessors via GetComponent template addresses
 
 ### 2.2 Component Access & Property System
-**Status:** ✅ Complete (v0.36.7) - **1,999 components registered** (631 layouts: 169 verified + 462 generated), **1,577 ARM64 sizes** + **702 Windows estimates** = **1,730 total** (87% coverage)
+**Status:** ✅ Complete (v0.36.9) - **1,999 components registered** (534 layouts: 169 verified + 365 generated), **1,577 ARM64 sizes** + **702 Windows estimates** = **1,730 total** (87% coverage)
 
 **Key Discovery (Dec 2025):** macOS ARM64 has NO `GetRawComponent` dispatcher like Windows. Template functions are **completely inlined** - calling template addresses directly returns NULL.
 
@@ -1383,6 +1383,7 @@ See **[docs/CHANGELOG.md](docs/CHANGELOG.md)** for detailed version history with
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| v0.36.9 | 2025-12-24 | **534 Component Layouts** - 3.2x increase (169→534), integrated 365 new layouts from Windows headers (#52) |
 | v0.36.8 | 2025-12-24 | **Unified Component Database** - 1,730 sizes (87% coverage), 4 new analysis tools, 293 valid generated layouts (#52) |
 | v0.36.7 | 2025-12-23 | **1,538 ARM64 Sizes** - Parallel Ghidra extraction workflow, modular namespace documentation (#52) |
 | v0.36.6 | 2025-12-23 | **631 Component Layouts** - Two-tier registration (169 verified + 462 generated), Gen_ prefix strategy, 1,999 TypeIds, 504 property defs, 70 Ghidra-verified sizes (#52) |
