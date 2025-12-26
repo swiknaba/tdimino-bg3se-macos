@@ -2,9 +2,9 @@
 
 This document tracks the development roadmap for achieving feature parity with Windows BG3SE (Norbyte's Script Extender).
 
-## Current Status: v0.36.9
+## Current Status: v0.36.11
 
-**Overall Feature Parity: ~78%** (based on comprehensive API function count analysis)
+**Overall Feature Parity: ~80%** (based on comprehensive API function count analysis)
 
 **Working Features:**
 - DYLD injection and Dobby hooking infrastructure
@@ -38,7 +38,7 @@ This document tracks the development roadmap for achieving feature parity with W
 | `Ext.IO` | ✅ Full (4) | ✅ LoadFile, SaveFile, AddPathOverride, GetPathOverride (4) | **100%** | 1 |
 | `Ext.Entity` | ✅ Full (26) | ⚠️ Get, GetByHandle, components, enumeration (16) | **62%** | 2 |
 | `Ext.Stats` | ✅ Full (52) | ✅ Get, GetAll, Create, Sync (all), property read/write (18) | **35%** | 3 |
-| `Ext.Events` | ✅ Full (~30) | ✅ 18 events (10 lifecycle + 8 engine) + Subscribe/Unsubscribe/Prevent | **60%** | 2.5 |
+| `Ext.Events` | ✅ Full (~30) | ✅ 30 events (13 lifecycle + 17 engine) + Subscribe/Unsubscribe/Prevent | **100%** | 2.5 |
 | `Ext.Timer` | ✅ Full (13) | ✅ WaitFor, WaitForRealtime, Cancel, Pause, Resume, IsPaused, MonotonicTime, MicrosecTime, ClockEpoch, ClockTime, GameTime, DeltaTime, Ticks, IsGamePaused, +6 persistent (20) | **100%** | 2.3 |
 | `Ext.Debug` | ✅ Full (8) | ✅ Memory introspection (11 macOS-specific) | **100%** | 2.3 |
 | `Ext.Vars` | ✅ Full (8) | ✅ User + Mod Variables (12) | **100%** | 2.6 |
@@ -1398,6 +1398,8 @@ See **[docs/CHANGELOG.md](docs/CHANGELOG.md)** for detailed version history with
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| v0.36.11 | 2025-12-26 | **30 Events Complete** - 11 new events (death, spell, hit, rest, approval, lifecycle), completes Issue #51 |
+| v0.36.10 | 2025-12-26 | **Logging & Debugging** - Ext.Log convenience functions, Ext.Events.Log callback, combat-tested structured logging (#8, #42) |
 | v0.36.9 | 2025-12-24 | **534 Component Layouts** - 3.2x increase (169→534), integrated 365 new layouts from Windows headers (#52) |
 | v0.36.8 | 2025-12-24 | **Unified Component Database** - 1,730 sizes (87% coverage), 4 new analysis tools, 293 valid generated layouts (#52) |
 | v0.36.7 | 2025-12-23 | **1,538 ARM64 Sizes** - Parallel Ghidra extraction workflow, modular namespace documentation (#52) |

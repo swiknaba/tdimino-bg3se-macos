@@ -165,6 +165,10 @@ bool storage_data_get_component_slot(void *storageData, uint16_t typeIndex,
                                       uint8_t *outSlot) {
     if (!storageData || !outSlot) return false;
 
+    // Skip lookup for unresolved TypeIds (0xFFFF = COMPONENT_INDEX_UNDEFINED)
+    // This avoids log spam when polling for one-frame components that haven't been discovered yet
+    if (typeIndex == 0xFFFF) return false;
+
     // ComponentTypeToIndex is at offset 0x180 from EntityStorageData
     void *map = (char *)storageData + STORAGE_DATA_COMPONENT_TYPE_TO_INDEX;
 

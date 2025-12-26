@@ -205,6 +205,35 @@ int log_register_callback(LogCallback callback, void* userdata,
 void log_unregister_callback(int callback_id);
 
 // ============================================================================
+// Debug Callback (VS Code Debugger Support - Issue #42)
+// ============================================================================
+
+/**
+ * Debug callback function type.
+ * Called synchronously when an error-level message is logged.
+ * Intended for VS Code debugger's "breakOnGenericError" feature.
+ *
+ * @param level   Log level of the message
+ * @param module  Module that generated the message
+ * @param message Formatted message
+ */
+typedef void (*DebugLogCallback)(LogLevel level, LogModule module, const char* message);
+
+/**
+ * Set the debug callback for error-level messages.
+ * This callback is invoked for all LOG_LEVEL_ERROR messages,
+ * allowing a debugger to break when errors are logged.
+ *
+ * @param callback Function to call on error messages (NULL to disable)
+ */
+void log_set_debug_callback(DebugLogCallback callback);
+
+/**
+ * Get the current debug callback.
+ */
+DebugLogCallback log_get_debug_callback(void);
+
+// ============================================================================
 // Core Logging Functions
 // ============================================================================
 

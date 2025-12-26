@@ -13,6 +13,100 @@ Each entry includes:
 
 ---
 
+## [v0.36.11] - 2025-12-26
+
+**Parity:** ~80% | **Category:** Events System | **Issues:** #51 (complete)
+
+### Added
+- **Engine Events Expansion Phase 2** - 11 new events (30 total, up from 19)
+  - Death events: `Died`, `Downed`, `Resurrected`
+  - Spell events: `SpellCast`, `SpellCastFinished`
+  - Combat events: `HitNotification`
+  - Rest events: `ShortRestStarted`
+  - Social events: `ApprovalChanged`
+  - Lifecycle events: `StatsStructureLoaded`, `ModuleResume`, `Shutdown`
+
+- **One-Frame Component Polling** - 8 new polling handlers
+  - `esv::death::ExecuteDieLogicEventOneFrameComponent`
+  - `esv::death::DownedEventOneFrameComponent`
+  - `esv::death::ResurrectedEventOneFrameComponent`
+  - `eoc::spell_cast::CastEventOneFrameComponent`
+  - `eoc::spell_cast::FinishedEventOneFrameComponent`
+  - `esv::hit::HitNotificationEventOneFrameComponent`
+  - `esv::rest::ShortRestResultEventOneFrameComponent`
+  - `esv::approval::RatingsChangedOneFrameComponent`
+
+- **Lifecycle Event Hooks**
+  - `StatsStructureLoaded` - Fired before StatsLoaded (raw stats parsing)
+  - `ModuleResume` - Fired on save game load (session resume)
+  - `Shutdown` - Fired on game exit (cleanup opportunity)
+
+### Fixed
+- **TypeId Discovery for All Components** - Critical fix
+  - Previously only 164 known TypeIds were discovered at runtime
+  - Now discovers from all 1,999 generated component TypeId addresses
+  - Enables `Ext.Entity.GetAllEntitiesWithComponent()` for all components
+  - Fixes one-frame event polling (events now actually fire)
+
+- **Unresolved TypeId Guards** - Prevents log spam and hangs
+  - Skip component lookups when TypeId = 65535 (unresolved)
+  - Silently return empty tables instead of spamming debug logs
+  - Prevents save load hangs from excessive logging
+
+### Technical
+- Event system now has 30 events (Issue #51 complete)
+- Lifecycle events integrated into destructor and COsiris::Load hook
+- Event parity with Windows BG3SE core events achieved
+- `component_typeid_discover_all_generated()` iterates all namespace arrays
+
+---
+
+## [v0.36.10] - 2025-12-26
+
+**Parity:** ~78% | **Category:** Logging & Debugging | **Issues:** #8, #42 (partial)
+
+### Added
+- **Ext.Log Convenience Functions** - Windows BG3SE parity
+  - `Ext.Log.Print(...)` - Log INFO with varargs (like print())
+  - `Ext.Log.PrintWarning(...)` - Log WARN level
+  - `Ext.Log.PrintError(...)` - Log ERROR level
+
+- **Ext.Events.Log** - Log message interception for mods
+  - Subscribe to intercept all log messages
+  - Event data: `{Level, Module, Message, Prevent}`
+  - Set `e.Prevent = true` to suppress default logging
+  - Recursion prevention for log handlers that log
+
+- **Debug Log Callback** - Infrastructure for Issue #42 debugger
+  - `log_set_debug_callback()` / `log_get_debug_callback()` C API
+  - Invoked for ERROR-level messages
+  - Called outside mutex lock (deadlock prevention)
+
+- **Log Monitoring Script** - `scripts/tail_log.sh`
+  - `--no-osiris` flag to filter noisy Osiris events
+  - `-g PATTERN` for grep filtering
+  - Designed for Claude Code subagent monitoring
+
+### Changed
+- **File I/O Optimization** - Persistent log file handle
+  - Log file opened once at init with line buffering
+  - Eliminates fopen/fclose overhead per message
+
+### Verified (Combat Testing)
+- **Live combat event logging confirmed** - Tested Dec 26, 2025
+  - Osiris events captured: EnteredCombat, CombatStarted, CombatRoundStarted, TurnStarted, TurnEnded
+  - Callback dispatch logged: `[INFO ] [Osiris ] Dispatching TurnStarted callback (after, arity=1)`
+  - Structured format working: `[timestamp] [LEVEL] [Module] message`
+  - No errors or warnings during combat session
+  - Module tags displaying correctly: `[Osiris]`, `[Events]`, `[Timer]`, etc.
+
+### Technical
+- `LOG_OUTPUT_CALLBACK` flag auto-enabled when callback registered
+- Ext.Log namespace now has 12 functions (was 9)
+- Event tracing available via `Ext.Debug.TraceEvents(true/false)`
+
+---
+
 ## [v0.36.9] - 2025-12-24
 
 **Parity:** ~78% | **Category:** Events System | **Issues:** #51

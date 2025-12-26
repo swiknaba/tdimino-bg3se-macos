@@ -2062,6 +2062,14 @@ static int lua_entity_get_all_with_component(lua_State *L) {
         return 1;
     }
 
+    // Check if TypeId has been resolved (65535 = COMPONENT_INDEX_UNDEFINED)
+    if (info->index == 0xFFFF) {
+        // TypeId not yet discovered - silently return empty table
+        // This is normal for one-frame components before first discovery
+        lua_newtable(L);
+        return 1;
+    }
+
     // Get all entity handles with this component
     static uint64_t handles[65536];  // Static to avoid large stack allocation
     int count = component_lookup_get_all_with_component(info->index, handles, 65536);

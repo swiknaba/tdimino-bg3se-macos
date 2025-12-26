@@ -27,6 +27,7 @@ typedef enum {
     EVENT_KEY_INPUT,           // Keyboard input event
     EVENT_DO_CONSOLE_COMMAND,  // Console command interception
     EVENT_LUA_CONSOLE_INPUT,   // Raw Lua console input
+    EVENT_LOG,                 // Log message event (for mod interception)
     // Engine events (Issue #51) - Polled from one-frame components
     EVENT_TURN_STARTED,        // Combat turn started
     EVENT_TURN_ENDED,          // Combat turn ended
@@ -36,6 +37,19 @@ typedef enum {
     EVENT_STATUS_REMOVED,      // Status effect removed
     EVENT_EQUIPMENT_CHANGED,   // Equipment slot changed
     EVENT_LEVEL_UP,            // Character level increased
+    // Additional engine events (Issue #51 expansion)
+    EVENT_DIED,                // Character/entity died
+    EVENT_DOWNED,              // Character downed (0 HP)
+    EVENT_RESURRECTED,         // Character resurrected
+    EVENT_SPELL_CAST,          // Spell cast started
+    EVENT_SPELL_CAST_FINISHED, // Spell cast finished
+    EVENT_HIT_NOTIFICATION,    // Hit notification
+    EVENT_SHORT_REST_STARTED,  // Short rest result
+    EVENT_APPROVAL_CHANGED,    // Companion approval changed
+    // Lifecycle events (Issue #51 expansion)
+    EVENT_STATS_STRUCTURE_LOADED, // Stats structure loaded (before StatsLoaded)
+    EVENT_MODULE_RESUME,       // Module resumed from save
+    EVENT_SHUTDOWN,            // Game shutdown
     EVENT_MAX
 } BG3SEEventType;
 
@@ -175,5 +189,51 @@ void events_fire_turn_started(lua_State *L, uint64_t entity, int round);
  * @param source   The source entity
  */
 void events_fire_status_applied(lua_State *L, uint64_t entity, const char *statusId, uint64_t source);
+
+/**
+ * Fire the Log event with log message data.
+ * Handlers receive {Level = string, Module = string, Message = string} table.
+ * Returns true if any handler requested to prevent default logging.
+ *
+ * This matches Windows BG3SE's Ext.Events.Log pattern, allowing mods to
+ * intercept, filter, or redirect log messages.
+ *
+ * @param L       Lua state
+ * @param level   Log level ("DEBUG", "INFO", "WARN", "ERROR")
+ * @param module  Module name ("Lua", "Stats", etc.)
+ * @param message The log message
+ * @return true if logging should be prevented (a handler set e.Prevent = true)
+ */
+bool events_fire_log(lua_State *L, const char *level, const char *module, const char *message);
+
+/**
+ * Initialize the Log event callback with the logging system.
+ * Must be called after both event system and logging system are initialized.
+ *
+ * @param L Lua state to use for firing events
+ */
+void events_init_log_callback(lua_State *L);
+
+// ============================================================================
+// Event Tracing (Debug)
+// ============================================================================
+
+/**
+ * Enable or disable event tracing.
+ * When enabled, all event activity is logged with detailed timing info.
+ *
+ * @param enabled Whether to enable tracing
+ */
+void events_set_trace_enabled(bool enabled);
+
+/**
+ * Check if event tracing is enabled.
+ */
+bool events_get_trace_enabled(void);
+
+/**
+ * Get the name of an event type.
+ */
+const char *events_get_name(BG3SEEventType event);
 
 #endif /* LUA_EVENTS_H */

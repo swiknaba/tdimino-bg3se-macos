@@ -254,6 +254,14 @@ static const TypeIdEntry g_KnownTypeIds[] = {
     { "ls::game::PauseExcludedComponent",             0x10893e930, 0, false },
     { "ls::level::LevelInstanceUnloadingComponent",   0x10893b468, 0, false },
 
+    // =====================================================================
+    // Issue #51 Event Components - One-frame event components for Ext.Events
+    // Discovered via Ghidra MCP decompilation of RegisterType<T> functions
+    // =====================================================================
+    { "esv::TurnStartedEventOneFrameComponent",       0x1083f1848, 0, false },
+    { "esv::TurnEndedEventOneFrameComponent",         0x1083f1810, 0, false },
+    { "esv::stats::LevelChangedOneFrameComponent",    0x1083f2050, 0, false },
+
     // Sentinel
     { NULL, 0, 0, false }
 };
@@ -378,13 +386,77 @@ int component_typeid_discover(void) {
         }
     }
 
-    LOG_ENTITY_DEBUG("Discovered %d component type indices", discovered);
+    LOG_ENTITY_DEBUG("Discovered %d component type indices from known list", discovered);
+
+    // Also discover TypeIds for all 1999 generated components
+    int generated = component_typeid_discover_all_generated();
+    discovered += generated;
+
+    LOG_ENTITY_DEBUG("Discovered %d total component type indices", discovered);
     return discovered;
 }
 
 // ============================================================================
 // Debug
 // ============================================================================
+
+// Forward declaration for console output
+extern void console_printf(const char *format, ...);
+
+/**
+ * Dump TypeId status to console.
+ * Shows resolved/unresolved count and details for each component.
+ */
+void component_typeid_dump_to_console(void) {
+    if (!component_typeid_ready()) {
+        console_printf("TypeId system not initialized");
+        return;
+    }
+
+    console_printf("Component TypeId Resolution Status:");
+    console_printf("------------------------------------");
+
+    int resolved = 0;
+    int total = 0;
+
+    for (int i = 0; g_KnownTypeIds[i].componentName != NULL; i++) {
+        const TypeIdEntry *entry = &g_KnownTypeIds[i];
+        total++;
+
+        mach_vm_address_t runtimeAddr = entry->ghidraAddr - GHIDRA_BASE_ADDRESS + (mach_vm_address_t)g_BinaryBase;
+
+        // Check if address is readable
+        SafeMemoryInfo info = safe_memory_check_address(runtimeAddr);
+        if (!info.is_valid || !info.is_readable) {
+            console_printf("%-55s UNREADABLE", entry->componentName);
+            continue;
+        }
+
+        if (safe_memory_is_gpu_region(runtimeAddr)) {
+            console_printf("%-55s GPU_REGION", entry->componentName);
+            continue;
+        }
+
+        // Safely read the value
+        int32_t rawValue = -1;
+        if (!safe_memory_read_i32(runtimeAddr, &rawValue)) {
+            console_printf("%-55s READ_FAILED", entry->componentName);
+            continue;
+        }
+
+        if (rawValue >= 0 && rawValue <= 0xFFFF && rawValue != 0xFFFF) {
+            console_printf("%-55s RESOLVED (typeIndex=%u)", entry->componentName, (uint16_t)rawValue);
+            resolved++;
+        } else if (rawValue == 0xFFFF || rawValue == -1) {
+            console_printf("%-55s UNRESOLVED (typeIndex=65535)", entry->componentName);
+        } else {
+            console_printf("%-55s INVALID (rawValue=%d)", entry->componentName, rawValue);
+        }
+    }
+
+    console_printf("------------------------------------");
+    console_printf("Resolved: %d/%d (%d%%)", resolved, total, total > 0 ? (resolved * 100 / total) : 0);
+}
 
 void component_typeid_dump(void) {
     if (!component_typeid_ready()) {

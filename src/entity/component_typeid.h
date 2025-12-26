@@ -42,6 +42,13 @@ bool component_typeid_ready(void);
 int component_typeid_discover(void);
 
 /**
+ * Discover TypeIds for all generated components (1999 components).
+ * Called after component_typeid_discover() to fill in the rest.
+ * @return Number of additional components discovered
+ */
+int component_typeid_discover_all_generated(void);
+
+/**
  * Read a specific TypeId global address.
  * @param ghidraAddr The Ghidra address of the m_TypeIndex global
  * @param outIndex Output: the type index value
@@ -54,8 +61,15 @@ bool component_typeid_read(uint64_t ghidraAddr, uint16_t *outIndex);
 // ============================================================================
 
 /**
- * Dump all known TypeId addresses and their values.
+ * Dump all known TypeId addresses and their values (to log file).
  */
 void component_typeid_dump(void);
+
+/**
+ * Dump TypeId status to console.
+ * Shows resolved/unresolved count for each known component TypeId.
+ * Used by the !typeids console command.
+ */
+void component_typeid_dump_to_console(void);
 
 #endif // COMPONENT_TYPEID_H

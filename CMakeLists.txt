@@ -58,6 +58,7 @@ add_library(bg3se SHARED
     src/lua/lua_osiris.c
     src/lua/lua_stats.c
     src/lua/lua_debug.c
+    src/lua/lua_logging.c
     src/mod/mod_loader.c
     src/osiris/pattern_scan.c
     src/osiris/osiris_functions.c

@@ -10,7 +10,7 @@
  */
 
 #include "lua_events.h"
-#include "logging.h"
+#include "../core/logging.h"
 
 #include <string.h>
 
@@ -47,6 +47,7 @@ static int g_handler_counts[EVENT_MAX] = {0};
 static uint64_t g_next_handler_id = 1;  // Global counter, never reuse
 static int g_dispatch_depth[EVENT_MAX] = {0};  // Reentrancy tracking
 static int g_initialized = 0;
+static bool g_trace_enabled = false;  // Event tracing for debugging
 
 // Deferred unsubscriptions (processed after dispatch completes)
 static DeferredUnsubscribe g_deferred_unsubs[MAX_DEFERRED_OPERATIONS];
@@ -64,6 +65,7 @@ static const char *g_event_names[EVENT_MAX] = {
     "KeyInput",
     "DoConsoleCommand",
     "LuaConsoleInput",
+    "Log",                 // Log message interception (Windows parity)
     // Engine events (Issue #51)
     "TurnStarted",
     "TurnEnded",
@@ -72,7 +74,20 @@ static const char *g_event_names[EVENT_MAX] = {
     "StatusApplied",
     "StatusRemoved",
     "EquipmentChanged",
-    "LevelUp"
+    "LevelUp",
+    // Additional engine events (Issue #51 expansion)
+    "Died",
+    "Downed",
+    "Resurrected",
+    "SpellCast",
+    "SpellCastFinished",
+    "HitNotification",
+    "ShortRestStarted",
+    "ApprovalChanged",
+    // Lifecycle events (Issue #51 expansion)
+    "StatsStructureLoaded",
+    "ModuleResume",
+    "Shutdown"
 };
 
 // ============================================================================
@@ -559,6 +574,19 @@ const char *events_get_name(BG3SEEventType event) {
 }
 
 // ============================================================================
+// Public API: Event Tracing
+// ============================================================================
+
+void events_set_trace_enabled(bool enabled) {
+    g_trace_enabled = enabled;
+    LOG_EVENTS_INFO("Event tracing %s", enabled ? "ENABLED" : "DISABLED");
+}
+
+bool events_get_trace_enabled(void) {
+    return g_trace_enabled;
+}
+
+// ============================================================================
 // Lua API: Subscribe
 // ============================================================================
 
@@ -762,6 +790,9 @@ void lua_events_register(lua_State *L, int ext_table_index) {
     lua_setfield(L, ext_table_index, "OnNextTick");
 
     LOG_EVENTS_INFO("Ext.Events namespace registered with %d event types", EVENT_MAX);
+
+    // Initialize Log event callback with the logging system
+    events_init_log_callback(L);
 }
 
 // ============================================================================
@@ -876,6 +907,143 @@ void events_fire_status_applied(lua_State *L, uint64_t entity, const char *statu
 }
 
 // ============================================================================
+// Log Event (Windows BG3SE Parity)
+// ============================================================================
+
+// Static Lua state for log callback (set during init)
+static lua_State *g_log_callback_L = NULL;
+static int g_log_callback_id = -1;
+static bool g_log_event_dispatching = false;  // Prevent recursion
+
+/**
+ * Fire the Log event with message data.
+ * Returns true if any handler set e.Prevent = true.
+ */
+bool events_fire_log(lua_State *L, const char *level, const char *module, const char *message) {
+    if (!L) return false;
+
+    // Prevent infinite recursion (logging from within log handler)
+    if (g_log_event_dispatching) return false;
+
+    int count = g_handler_counts[EVENT_LOG];
+    if (count == 0) return false;
+
+    g_log_event_dispatching = true;
+    g_dispatch_depth[EVENT_LOG]++;
+
+    bool prevented = false;
+
+    for (int i = 0; i < g_handler_counts[EVENT_LOG]; i++) {
+        EventHandler *h = &g_handlers[EVENT_LOG][i];
+        if (h->callback_ref == LUA_NOREF || h->callback_ref == LUA_REFNIL) {
+            continue;
+        }
+
+        lua_rawgeti(L, LUA_REGISTRYINDEX, h->callback_ref);
+        if (!lua_isfunction(L, -1)) {
+            lua_pop(L, 1);
+            continue;
+        }
+
+        // Create event data table
+        lua_newtable(L);
+
+        lua_pushstring(L, level ? level : "INFO");
+        lua_setfield(L, -2, "Level");
+
+        lua_pushstring(L, module ? module : "Core");
+        lua_setfield(L, -2, "Module");
+
+        lua_pushstring(L, message ? message : "");
+        lua_setfield(L, -2, "Message");
+
+        // Add Prevent field (initialized to false)
+        lua_pushboolean(L, 0);
+        lua_setfield(L, -2, "Prevent");
+
+        // Keep a reference to check Prevent after call
+        lua_pushvalue(L, -1);
+        int event_ref = luaL_ref(L, LUA_REGISTRYINDEX);
+
+        if (lua_pcall(L, 1, 0, 0) != LUA_OK) {
+            const char *err = lua_tostring(L, -1);
+            // Don't use LOG_EVENTS_ERROR here - would cause recursion!
+            fprintf(stderr, "[BG3SE] Log event handler error: %s\n", err ? err : "unknown");
+            lua_pop(L, 1);
+        }
+
+        // Check if Prevent was set
+        lua_rawgeti(L, LUA_REGISTRYINDEX, event_ref);
+        lua_getfield(L, -1, "Prevent");
+        if (lua_toboolean(L, -1)) {
+            prevented = true;
+        }
+        lua_pop(L, 2);  // Pop Prevent and event table
+        luaL_unref(L, LUA_REGISTRYINDEX, event_ref);
+
+        if (h->once) {
+            if (g_deferred_unsub_count < MAX_DEFERRED_OPERATIONS) {
+                g_deferred_unsubs[g_deferred_unsub_count++] =
+                    (DeferredUnsubscribe){EVENT_LOG, h->handler_id};
+            }
+        }
+
+        if (prevented) break;  // Stop early if prevented
+    }
+
+    g_dispatch_depth[EVENT_LOG]--;
+
+    if (g_dispatch_depth[EVENT_LOG] == 0) {
+        process_deferred_unsubscribes(L, EVENT_LOG);
+    }
+
+    g_log_event_dispatching = false;
+    return prevented;
+}
+
+/**
+ * Log callback for the C logging system.
+ * Forwards log messages to Lua handlers.
+ */
+static void log_event_callback(LogLevel level, LogModule module,
+                               const char *message, void *userdata) {
+    (void)userdata;
+
+    if (!g_log_callback_L) return;
+    if (g_log_event_dispatching) return;  // Prevent recursion
+
+    // Convert level and module to strings
+    const char *level_str = log_level_name(level);
+    const char *module_str = log_module_name(module);
+
+    events_fire_log(g_log_callback_L, level_str, module_str, message);
+}
+
+/**
+ * Initialize the Log event callback with the logging system.
+ */
+void events_init_log_callback(lua_State *L) {
+    if (g_log_callback_id >= 0) {
+        // Already registered
+        return;
+    }
+
+    g_log_callback_L = L;
+
+    // Register callback with the logging system
+    // Only forward messages that pass the current level filter
+    g_log_callback_id = log_register_callback(log_event_callback, NULL,
+                                              LOG_LEVEL_DEBUG, 0);
+
+    if (g_log_callback_id >= 0) {
+        // Enable callback output flag so callbacks actually get invoked
+        uint32_t flags = log_get_output_flags();
+        log_set_output_flags(flags | LOG_OUTPUT_CALLBACK);
+        LOG_LUA_INFO("Log event callback registered (id=%d)", g_log_callback_id);
+    }
+}
+
+// ============================================================================
 // One-Frame Component Polling (Issue #51)
 // ============================================================================
 
@@ -885,6 +1053,10 @@ extern int lua_entity_get_all_with_component(lua_State *L);
 // Helper: Poll for entities with a specific component and call handler for each
 static void poll_oneframe_component(lua_State *L, const char *componentName,
                                     void (*handler)(lua_State*, uint64_t)) {
+    if (g_trace_enabled) {
+        LOG_EVENTS_INFO("[TRACE] Polling component: %s", componentName);
+    }
+
     lua_getglobal(L, "Ext");
     if (!lua_istable(L, -1)) { lua_pop(L, 1); return; }
 
@@ -896,13 +1068,29 @@ static void poll_oneframe_component(lua_State *L, const char *componentName,
 
     lua_pushstring(L, componentName);
     if (lua_pcall(L, 1, 1, 0) == LUA_OK && lua_istable(L, -1)) {
+        int entity_count = 0;
         lua_pushnil(L);
         while (lua_next(L, -2) != 0) {
             if (lua_isinteger(L, -1)) {
                 uint64_t entity = (uint64_t)lua_tointeger(L, -1);
+                entity_count++;
+                if (g_trace_enabled) {
+                    LOG_EVENTS_INFO("[TRACE] Found entity 0x%llx with %s",
+                                    (unsigned long long)entity, componentName);
+                }
                 handler(L, entity);
             }
             lua_pop(L, 1);  // Pop value, keep key
+        }
+        if (g_trace_enabled && entity_count > 0) {
+            LOG_EVENTS_INFO("[TRACE] %s: %d entities processed", componentName, entity_count);
+        }
+    } else if (g_trace_enabled) {
+        // Log if the component wasn't found (typeIndex=65535 case)
+        const char *err = lua_tostring(L, -1);
+        if (err) {
+            LOG_EVENTS_DEBUG("[TRACE] GetAllEntitiesWithComponent failed for %s: %s",
+                            componentName, err);
         }
     }
     lua_pop(L, 3);  // Pop result + Entity + Ext
@@ -1105,12 +1293,233 @@ static void handle_level_up(lua_State *L, uint64_t entity) {
     if (g_dispatch_depth[EVENT_LEVEL_UP] == 0) process_deferred_unsubscribes(L, EVENT_LEVEL_UP);
 }
 
+// ============================================================================
+// Additional One-Frame Handlers (Issue #51 expansion)
+// ============================================================================
+
+static void handle_died(lua_State *L, uint64_t entity) {
+    if (g_handler_counts[EVENT_DIED] == 0) return;
+
+    g_dispatch_depth[EVENT_DIED]++;
+    for (int i = 0; i < g_handler_counts[EVENT_DIED]; i++) {
+        EventHandler *h = &g_handlers[EVENT_DIED][i];
+        if (h->callback_ref == LUA_NOREF || h->callback_ref == LUA_REFNIL) continue;
+
+        lua_rawgeti(L, LUA_REGISTRYINDEX, h->callback_ref);
+        if (lua_isfunction(L, -1)) {
+            lua_newtable(L);
+            lua_pushinteger(L, (lua_Integer)entity);
+            lua_setfield(L, -2, "Entity");
+            if (lua_pcall(L, 1, 0, 0) != LUA_OK) {
+                lua_pop(L, 1);
+            }
+        } else {
+            lua_pop(L, 1);
+        }
+        if (h->once && g_deferred_unsub_count < MAX_DEFERRED_OPERATIONS) {
+            g_deferred_unsubs[g_deferred_unsub_count++] = (DeferredUnsubscribe){EVENT_DIED, h->handler_id};
+        }
+    }
+    g_dispatch_depth[EVENT_DIED]--;
+    if (g_dispatch_depth[EVENT_DIED] == 0) process_deferred_unsubscribes(L, EVENT_DIED);
+}
+
+static void handle_downed(lua_State *L, uint64_t entity) {
+    if (g_handler_counts[EVENT_DOWNED] == 0) return;
+
+    g_dispatch_depth[EVENT_DOWNED]++;
+    for (int i = 0; i < g_handler_counts[EVENT_DOWNED]; i++) {
+        EventHandler *h = &g_handlers[EVENT_DOWNED][i];
+        if (h->callback_ref == LUA_NOREF || h->callback_ref == LUA_REFNIL) continue;
+
+        lua_rawgeti(L, LUA_REGISTRYINDEX, h->callback_ref);
+        if (lua_isfunction(L, -1)) {
+            lua_newtable(L);
+            lua_pushinteger(L, (lua_Integer)entity);
+            lua_setfield(L, -2, "Entity");
+            if (lua_pcall(L, 1, 0, 0) != LUA_OK) {
+                lua_pop(L, 1);
+            }
+        } else {
+            lua_pop(L, 1);
+        }
+        if (h->once && g_deferred_unsub_count < MAX_DEFERRED_OPERATIONS) {
+            g_deferred_unsubs[g_deferred_unsub_count++] = (DeferredUnsubscribe){EVENT_DOWNED, h->handler_id};
+        }
+    }
+    g_dispatch_depth[EVENT_DOWNED]--;
+    if (g_dispatch_depth[EVENT_DOWNED] == 0) process_deferred_unsubscribes(L, EVENT_DOWNED);
+}
+
+static void handle_resurrected(lua_State *L, uint64_t entity) {
+    if (g_handler_counts[EVENT_RESURRECTED] == 0) return;
+
+    g_dispatch_depth[EVENT_RESURRECTED]++;
+    for (int i = 0; i < g_handler_counts[EVENT_RESURRECTED]; i++) {
+        EventHandler *h = &g_handlers[EVENT_RESURRECTED][i];
+        if (h->callback_ref == LUA_NOREF || h->callback_ref == LUA_REFNIL) continue;
+
+        lua_rawgeti(L, LUA_REGISTRYINDEX, h->callback_ref);
+        if (lua_isfunction(L, -1)) {
+            lua_newtable(L);
+            lua_pushinteger(L, (lua_Integer)entity);
+            lua_setfield(L, -2, "Entity");
+            if (lua_pcall(L, 1, 0, 0) != LUA_OK) {
+                lua_pop(L, 1);
+            }
+        } else {
+            lua_pop(L, 1);
+        }
+        if (h->once && g_deferred_unsub_count < MAX_DEFERRED_OPERATIONS) {
+            g_deferred_unsubs[g_deferred_unsub_count++] = (DeferredUnsubscribe){EVENT_RESURRECTED, h->handler_id};
+        }
+    }
+    g_dispatch_depth[EVENT_RESURRECTED]--;
+    if (g_dispatch_depth[EVENT_RESURRECTED] == 0) process_deferred_unsubscribes(L, EVENT_RESURRECTED);
+}
+
+static void handle_spell_cast(lua_State *L, uint64_t entity) {
+    if (g_handler_counts[EVENT_SPELL_CAST] == 0) return;
+
+    g_dispatch_depth[EVENT_SPELL_CAST]++;
+    for (int i = 0; i < g_handler_counts[EVENT_SPELL_CAST]; i++) {
+        EventHandler *h = &g_handlers[EVENT_SPELL_CAST][i];
+        if (h->callback_ref == LUA_NOREF || h->callback_ref == LUA_REFNIL) continue;
+
+        lua_rawgeti(L, LUA_REGISTRYINDEX, h->callback_ref);
+        if (lua_isfunction(L, -1)) {
+            lua_newtable(L);
+            lua_pushinteger(L, (lua_Integer)entity);
+            lua_setfield(L, -2, "Entity");
+            // TODO: Extract SpellId from component
+            if (lua_pcall(L, 1, 0, 0) != LUA_OK) {
+                lua_pop(L, 1);
+            }
+        } else {
+            lua_pop(L, 1);
+        }
+        if (h->once && g_deferred_unsub_count < MAX_DEFERRED_OPERATIONS) {
+            g_deferred_unsubs[g_deferred_unsub_count++] = (DeferredUnsubscribe){EVENT_SPELL_CAST, h->handler_id};
+        }
+    }
+    g_dispatch_depth[EVENT_SPELL_CAST]--;
+    if (g_dispatch_depth[EVENT_SPELL_CAST] == 0) process_deferred_unsubscribes(L, EVENT_SPELL_CAST);
+}
+
+static void handle_spell_cast_finished(lua_State *L, uint64_t entity) {
+    if (g_handler_counts[EVENT_SPELL_CAST_FINISHED] == 0) return;
+
+    g_dispatch_depth[EVENT_SPELL_CAST_FINISHED]++;
+    for (int i = 0; i < g_handler_counts[EVENT_SPELL_CAST_FINISHED]; i++) {
+        EventHandler *h = &g_handlers[EVENT_SPELL_CAST_FINISHED][i];
+        if (h->callback_ref == LUA_NOREF || h->callback_ref == LUA_REFNIL) continue;
+
+        lua_rawgeti(L, LUA_REGISTRYINDEX, h->callback_ref);
+        if (lua_isfunction(L, -1)) {
+            lua_newtable(L);
+            lua_pushinteger(L, (lua_Integer)entity);
+            lua_setfield(L, -2, "Entity");
+            if (lua_pcall(L, 1, 0, 0) != LUA_OK) {
+                lua_pop(L, 1);
+            }
+        } else {
+            lua_pop(L, 1);
+        }
+        if (h->once && g_deferred_unsub_count < MAX_DEFERRED_OPERATIONS) {
+            g_deferred_unsubs[g_deferred_unsub_count++] = (DeferredUnsubscribe){EVENT_SPELL_CAST_FINISHED, h->handler_id};
+        }
+    }
+    g_dispatch_depth[EVENT_SPELL_CAST_FINISHED]--;
+    if (g_dispatch_depth[EVENT_SPELL_CAST_FINISHED] == 0) process_deferred_unsubscribes(L, EVENT_SPELL_CAST_FINISHED);
+}
+
+static void handle_hit_notification(lua_State *L, uint64_t entity) {
+    if (g_handler_counts[EVENT_HIT_NOTIFICATION] == 0) return;
+
+    g_dispatch_depth[EVENT_HIT_NOTIFICATION]++;
+    for (int i = 0; i < g_handler_counts[EVENT_HIT_NOTIFICATION]; i++) {
+        EventHandler *h = &g_handlers[EVENT_HIT_NOTIFICATION][i];
+        if (h->callback_ref == LUA_NOREF || h->callback_ref == LUA_REFNIL) continue;
+
+        lua_rawgeti(L, LUA_REGISTRYINDEX, h->callback_ref);
+        if (lua_isfunction(L, -1)) {
+            lua_newtable(L);
+            lua_pushinteger(L, (lua_Integer)entity);
+            lua_setfield(L, -2, "Entity");
+            if (lua_pcall(L, 1, 0, 0) != LUA_OK) {
+                lua_pop(L, 1);
+            }
+        } else {
+            lua_pop(L, 1);
+        }
+        if (h->once && g_deferred_unsub_count < MAX_DEFERRED_OPERATIONS) {
+            g_deferred_unsubs[g_deferred_unsub_count++] = (DeferredUnsubscribe){EVENT_HIT_NOTIFICATION, h->handler_id};
+        }
+    }
+    g_dispatch_depth[EVENT_HIT_NOTIFICATION]--;
+    if (g_dispatch_depth[EVENT_HIT_NOTIFICATION] == 0) process_deferred_unsubscribes(L, EVENT_HIT_NOTIFICATION);
+}
+
+static void handle_short_rest_started(lua_State *L, uint64_t entity) {
+    if (g_handler_counts[EVENT_SHORT_REST_STARTED] == 0) return;
+
+    g_dispatch_depth[EVENT_SHORT_REST_STARTED]++;
+    for (int i = 0; i < g_handler_counts[EVENT_SHORT_REST_STARTED]; i++) {
+        EventHandler *h = &g_handlers[EVENT_SHORT_REST_STARTED][i];
+        if (h->callback_ref == LUA_NOREF || h->callback_ref == LUA_REFNIL) continue;
+
+        lua_rawgeti(L, LUA_REGISTRYINDEX, h->callback_ref);
+        if (lua_isfunction(L, -1)) {
+            lua_newtable(L);
+            lua_pushinteger(L, (lua_Integer)entity);
+            lua_setfield(L, -2, "Entity");
+            if (lua_pcall(L, 1, 0, 0) != LUA_OK) {
+                lua_pop(L, 1);
+            }
+        } else {
+            lua_pop(L, 1);
+        }
+        if (h->once && g_deferred_unsub_count < MAX_DEFERRED_OPERATIONS) {
+            g_deferred_unsubs[g_deferred_unsub_count++] = (DeferredUnsubscribe){EVENT_SHORT_REST_STARTED, h->handler_id};
+        }
+    }
+    g_dispatch_depth[EVENT_SHORT_REST_STARTED]--;
+    if (g_dispatch_depth[EVENT_SHORT_REST_STARTED] == 0) process_deferred_unsubscribes(L, EVENT_SHORT_REST_STARTED);
+}
+
+static void handle_approval_changed(lua_State *L, uint64_t entity) {
+    if (g_handler_counts[EVENT_APPROVAL_CHANGED] == 0) return;
+
+    g_dispatch_depth[EVENT_APPROVAL_CHANGED]++;
+    for (int i = 0; i < g_handler_counts[EVENT_APPROVAL_CHANGED]; i++) {
+        EventHandler *h = &g_handlers[EVENT_APPROVAL_CHANGED][i];
+        if (h->callback_ref == LUA_NOREF || h->callback_ref == LUA_REFNIL) continue;
+
+        lua_rawgeti(L, LUA_REGISTRYINDEX, h->callback_ref);
+        if (lua_isfunction(L, -1)) {
+            lua_newtable(L);
+            lua_pushinteger(L, (lua_Integer)entity);
+            lua_setfield(L, -2, "Entity");
+            if (lua_pcall(L, 1, 0, 0) != LUA_OK) {
+                lua_pop(L, 1);
+            }
+        } else {
+            lua_pop(L, 1);
+        }
+        if (h->once && g_deferred_unsub_count < MAX_DEFERRED_OPERATIONS) {
+            g_deferred_unsubs[g_deferred_unsub_count++] = (DeferredUnsubscribe){EVENT_APPROVAL_CHANGED, h->handler_id};
+        }
+    }
+    g_dispatch_depth[EVENT_APPROVAL_CHANGED]--;
+    if (g_dispatch_depth[EVENT_APPROVAL_CHANGED] == 0) process_deferred_unsubscribes(L, EVENT_APPROVAL_CHANGED);
+}
+
 void events_poll_oneframe_components(lua_State *L) {
     if (!L) return;
 
     // Only poll if we have subscribers to any engine events
     int total_handlers = 0;
-    for (int i = EVENT_TURN_STARTED; i <= EVENT_LEVEL_UP; i++) {
+    for (int i = EVENT_TURN_STARTED; i <= EVENT_APPROVAL_CHANGED; i++) {
         total_handlers += g_handler_counts[i];
     }
     if (total_handlers == 0) return;
@@ -1150,5 +1559,43 @@ void events_poll_oneframe_components(lua_State *L) {
     // Level up event - now registered via Ghidra discovery
     if (g_handler_counts[EVENT_LEVEL_UP] > 0) {
         poll_oneframe_component(L, "esv::stats::LevelChangedOneFrameComponent", handle_level_up);
+    }
+
+    // ========================================================================
+    // Additional events (Issue #51 expansion)
+    // ========================================================================
+
+    // Death events
+    if (g_handler_counts[EVENT_DIED] > 0) {
+        poll_oneframe_component(L, "esv::death::ExecuteDieLogicEventOneFrameComponent", handle_died);
+    }
+    if (g_handler_counts[EVENT_DOWNED] > 0) {
+        poll_oneframe_component(L, "esv::death::DownedEventOneFrameComponent", handle_downed);
+    }
+    if (g_handler_counts[EVENT_RESURRECTED] > 0) {
+        poll_oneframe_component(L, "esv::death::ResurrectedEventOneFrameComponent", handle_resurrected);
+    }
+
+    // Spell events
+    if (g_handler_counts[EVENT_SPELL_CAST] > 0) {
+        poll_oneframe_component(L, "eoc::spell_cast::CastEventOneFrameComponent", handle_spell_cast);
+    }
+    if (g_handler_counts[EVENT_SPELL_CAST_FINISHED] > 0) {
+        poll_oneframe_component(L, "eoc::spell_cast::FinishedEventOneFrameComponent", handle_spell_cast_finished);
+    }
+
+    // Hit events
+    if (g_handler_counts[EVENT_HIT_NOTIFICATION] > 0) {
+        poll_oneframe_component(L, "esv::hit::HitNotificationEventOneFrameComponent", handle_hit_notification);
+    }
+
+    // Rest events
+    if (g_handler_counts[EVENT_SHORT_REST_STARTED] > 0) {
+        poll_oneframe_component(L, "esv::rest::ShortRestResultEventOneFrameComponent", handle_short_rest_started);
+    }
+
+    // Approval events
+    if (g_handler_counts[EVENT_APPROVAL_CHANGED] > 0) {
+        poll_oneframe_component(L, "esv::approval::RatingsChangedOneFrameComponent", handle_approval_changed);
     }
 }

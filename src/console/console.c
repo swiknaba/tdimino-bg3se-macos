@@ -13,6 +13,7 @@
 #include "../lua/lua_events.h"
 #include "../overlay/overlay.h"
 #include "../lifetime/lifetime.h"
+#include "../entity/component_typeid.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -393,6 +394,7 @@ static int dispatch_console_command(lua_State *L, const char *line, int client_s
         console_printf("  !help - Show this help");
         console_printf("  !events - Show event handler counts");
         console_printf("  !status - Show BG3SE status");
+        console_printf("  !typeids - Show TypeId resolution status");
         for (int i = 0; i < s_command_count; i++) {
             console_printf("  !%s", s_commands[i].name);
         }
@@ -420,6 +422,12 @@ static int dispatch_console_command(lua_State *L, const char *line, int client_s
         }
         console_printf("  Connected clients: %d", client_count);
         console_printf("  Registered commands: %d", s_command_count);
+        return 1;
+    }
+
+    // Built-in !typeids command
+    if (strcmp(cmd_name, "typeids") == 0) {
+        component_typeid_dump_to_console();
         return 1;
     }
 

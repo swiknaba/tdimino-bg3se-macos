@@ -63,6 +63,7 @@ extern "C" {
 #include "lua_osiris.h"
 #include "lua_stats.h"
 #include "lua_debug.h"
+#include "lua_logging.h"
 
 // Stats system
 #include "stats_manager.h"
@@ -678,6 +679,9 @@ static void register_ext_api(lua_State *L) {
 
     // Ext.Debug namespace (memory introspection)
     lua_ext_register_debug(L, -1);
+
+    // Ext.Log namespace (logging API)
+    lua_ext_register_log(L, -1);
 
     // Ext.Types namespace (type introspection)
     lua_ext_register_types(L, -1);
@@ -1900,6 +1904,10 @@ static int fake_Load(void *thisPtr, void *smartBuf) {
         // This enables Ext.StaticData.GetAll() without Frida
         staticdata_post_init_capture();
 
+        // Fire StatsStructureLoaded event (raw stats structures parsed, before StatsLoaded)
+        // Mods can use this to inspect/modify stats before full initialization
+        events_fire(L, EVENT_STATS_STRUCTURE_LOADED);
+
         // Fire StatsLoaded event (stats system is now ready)
         events_fire(L, EVENT_STATS_LOADED);
 
@@ -1912,6 +1920,10 @@ static int fake_Load(void *thisPtr, void *smartBuf) {
 
         // Fire SessionLoaded event after subsystems are ready
         events_fire(L, EVENT_SESSION_LOADED);
+
+        // Fire ModuleResume event AFTER SessionLoaded (all systems ready)
+        // This indicates a session resumed from a save file
+        events_fire(L, EVENT_MODULE_RESUME);
     }
 
     return result;
@@ -2774,6 +2786,13 @@ static void bg3se_init(void) {
 __attribute__((destructor))
 static void bg3se_cleanup(void) {
     LOG_CORE_INFO("=== %s shutting down ===", BG3SE_NAME);
+
+    // Fire Shutdown event before cleanup (if Lua is still running)
+    // This allows mods to perform cleanup tasks (save state, close resources)
+    if (L) {
+        events_fire(L, EVENT_SHUTDOWN);
+    }
+
     LOG_HOOKS_INFO("Final hook call counts:");
     LOG_OSIRIS_DEBUG("  COsiris::InitGame: %d calls", initGame_call_count);
     LOG_OSIRIS_DEBUG("  COsiris::Load: %d calls", load_call_count);

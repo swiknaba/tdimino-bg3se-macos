@@ -6,6 +6,7 @@
  */
 
 #include "lua_debug.h"
+#include "lua_events.h"
 #include "../core/logging.h"
 #include "../core/safe_memory.h"
 #include "../strings/fixed_string.h"
@@ -658,6 +659,33 @@ int lua_debug_print_time(lua_State *L) {
 }
 
 // ============================================================================
+// Event Tracing
+// ============================================================================
+
+/**
+ * Ext.Debug.TraceEvents(enabled) - Enable/disable event tracing
+ *
+ * When enabled, logs detailed info about one-frame component polling
+ * and event dispatching. Useful for debugging why events aren't firing.
+ *
+ * @param enabled Boolean to enable/disable tracing
+ */
+static int lua_debug_trace_events(lua_State *L) {
+    bool enabled = lua_toboolean(L, 1);
+    events_set_trace_enabled(enabled);
+    return 0;
+}
+
+/**
+ * Ext.Debug.IsTracingEvents() - Check if event tracing is enabled
+ * @return Boolean
+ */
+static int lua_debug_is_tracing_events(lua_State *L) {
+    lua_pushboolean(L, events_get_trace_enabled());
+    return 1;
+}
+
+// ============================================================================
 // Registration
 // ============================================================================
 
@@ -730,6 +758,13 @@ void lua_ext_register_debug(lua_State *L, int ext_table_index) {
 
     lua_pushcfunction(L, lua_debug_classify_pointer);
     lua_setfield(L, -2, "ClassifyPointer");
+
+    // Event tracing
+    lua_pushcfunction(L, lua_debug_trace_events);
+    lua_setfield(L, -2, "TraceEvents");
+
+    lua_pushcfunction(L, lua_debug_is_tracing_events);
+    lua_setfield(L, -2, "IsTracingEvents");
 
     // Set Ext.Debug = table
     lua_setfield(L, ext_table_index, "Debug");

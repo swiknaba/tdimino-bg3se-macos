@@ -14,6 +14,24 @@ cd build && cmake .. && cmake --build .
 tail -f "/Users/tomdimino/Library/Application Support/BG3SE/bg3se.log"
 ```
 
+### Log Monitoring Script
+
+For Claude Code subagents and cleaner log output:
+
+```bash
+# Basic usage (excludes noisy Osiris events)
+./scripts/tail_log.sh --no-osiris
+
+# Filter for specific patterns
+./scripts/tail_log.sh -g "ERROR\|WARN"
+
+# Show last N lines, no follow
+./scripts/tail_log.sh -n 100
+
+# All options
+./scripts/tail_log.sh [-n LINES] [-f] [-g GREP_PATTERN] [--no-osiris]
+```
+
 ## Live Console (Rapid Iteration)
 
 Send Lua commands to the running game without restart.
@@ -284,8 +302,9 @@ python3 tools/generate_component_stubs.py --namespace eoc > eoc_stubs.c
    - **Pattern matching:** Compare with similar verified components
 
 4. **Add to codebase:**
-   - `src/entity/component_typeid.c` - Add TypeIdEntry
-   - `src/entity/component_offsets.h` - Add property definitions and registry entry
+   - `src/entity/generated_typeids.h` - Add TYPEID_* macro (auto-generated)
+   - `src/entity/generated_component_registry.c` - Add to namespace array (auto-generated)
+   - `src/entity/component_offsets.h` - Add property definitions and registry entry (manual)
 
 5. **Build and test:**
    ```bash
@@ -319,6 +338,29 @@ python3 tools/generate_component_stubs.py --namespace eoc > eoc_stubs.c
 - Verified layouts from `g_AllComponentLayouts` take precedence over generated
 - Generated layouts use `Gen_` prefix to avoid symbol conflicts
 - MAX_COMPONENT_LAYOUTS = 1024 (increased from 128)
+
+### TypeId Discovery Flow
+
+At runtime, TypeId globals are read to discover component type indices:
+
+1. **Registration** (`component_registry_register_all_generated()`)
+   - All 1,999 components registered with `COMPONENT_INDEX_UNDEFINED` (65535)
+   - TypeId addresses stored but not yet read
+
+2. **Discovery** (`component_typeid_discover()`)
+   - Reads known TypeIds from `g_KnownTypeIds` (164 manually verified)
+   - Calls `component_typeid_discover_all_generated()` for remaining 1,835
+   - Iterates all namespace arrays in `generated_component_registry.c`
+   - Updates registry with actual TypeIndex values
+
+3. **Result**
+   - Components with valid TypeIndex (0-65534) → can be queried
+   - Components with TypeIndex 65535 → address wrong or not initialized
+
+**Key files:**
+- `src/entity/generated_typeids.h` - TYPEID_* macros (Ghidra addresses)
+- `src/entity/generated_component_registry.c` - Component arrays + discovery
+- `src/entity/component_typeid.c` - Memory reading logic
 
 ## Ghidra MCP Batch Extraction Workflow
 

@@ -373,6 +373,12 @@ _P(tostring(combined))  -- "Backstab, Torch"
 
 Event subscription system for game lifecycle events.
 
+> **⚠️ API Note:** The API uses **per-event objects** with colon syntax:
+> ```lua
+> Ext.Events.LevelUp:Subscribe(fn)     -- ✅ Correct
+> Ext.Events.Subscribe("LevelUp", fn)  -- ❌ Wrong (Subscribe is not on Events table)
+> ```
+
 | Event | Status | Event Data | Description |
 |-------|--------|------------|-------------|
 | `Ext.Events.SessionLoading` | ✅ | {} | Before save loads |

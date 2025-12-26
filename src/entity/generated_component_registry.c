@@ -2132,3 +2132,41 @@ void component_registry_register_all_generated(void) {
 // Get count of generated components
 int component_registry_generated_count(void) { return 1999; }
 
+// ============================================================================
+// TypeId Discovery for Generated Components
+// ============================================================================
+
+// Forward declaration from component_typeid.c
+extern bool component_typeid_read(uint64_t ghidraAddr, uint16_t *outIndex);
+
+// Helper to discover TypeIds for an array of generated components
+static int discover_typeid_array(const GeneratedComponentEntry *entries, int count) {
+    int discovered = 0;
+    for (int i = 0; i < count; i++) {
+        uint16_t typeIndex;
+        if (component_typeid_read(entries[i].typeid_addr, &typeIndex)) {
+            // Update registry with discovered index
+            if (component_registry_register(entries[i].name, typeIndex, 0, false)) {
+                discovered++;
+            }
+        }
+    }
+    return discovered;
+}
+
+// Discover TypeIds for all 1999 generated components
+int component_typeid_discover_all_generated(void) {
+    int total = 0;
+
+    total += discover_typeid_array(g_EocComponents, EOC_COMPONENT_COUNT);
+    total += discover_typeid_array(g_EsvComponents, ESV_COMPONENT_COUNT);
+    total += discover_typeid_array(g_EclComponents, ECL_COMPONENT_COUNT);
+    total += discover_typeid_array(g_LsComponents, LS_COMPONENT_COUNT);
+    total += discover_typeid_array(g_GuiComponents, GUI_COMPONENT_COUNT);
+    total += discover_typeid_array(g_NavcloudComponents, NAVCLOUD_COMPONENT_COUNT);
+    total += discover_typeid_array(g_EcsComponents, ECS_COMPONENT_COUNT);
+
+    LOG_ENTITY_INFO("Discovered %d TypeIds from generated components", total);
+    return total;
+}
+

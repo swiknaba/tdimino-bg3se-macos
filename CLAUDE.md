@@ -2,7 +2,7 @@
 
 macOS port of Norbyte's Script Extender for Baldur's Gate 3. Goal: feature parity with Windows BG3SE.
 
-**Version:** v0.36.9 | **Parity:** ~78% | **Target:** Full Windows BG3SE mod compatibility
+**Version:** v0.36.11 | **Parity:** ~80% | **Target:** Full Windows BG3SE mod compatibility
 
 ## Stack
 
@@ -55,7 +55,7 @@ Use `bg3se-macos-ghidra` skill for Ghidra workflows and ARM64 patterns.
 - **Context System** - Ext.IsServer/IsClient/GetContext, two-phase bootstrap (v0.36.4)
 - **Ext.Entity** - GUID lookup, **1,999 components registered** (462 layouts: 169 verified + 293 generated), **1,730 sizes** (1,577 Ghidra + 153 Windows-only, 87% coverage), GetByHandle
 - **Ext.Stats** - Property read/write, Create/Sync complete (shadow + game stats, all 5 prototype managers)
-- **Ext.Events** - 18 events with priority ordering, Once flag, Prevent pattern (10 lifecycle + 8 engine events)
+- **Ext.Events** - 30 events with priority ordering, Once flag, Prevent pattern (13 lifecycle + 17 engine events)
 - **Ext.Timer** - **20 functions**: WaitFor, WaitForRealtime, Cancel/Pause/Resume, GameTime/DeltaTime/Ticks, **Persistent timers** (save/load support)
 - **Ext.Vars** - PersistentVars, User Variables, Mod Variables
 - **Ext.StaticData** - Immutable game data (**All 9 types**: Feat, Race, Background, Origin, God, Class, Progression, ActionResource, FeatDescription via ForceCapture)
@@ -77,6 +77,12 @@ You run console commands via `echo 'cmd' | nc -U /tmp/bg3se.sock`. User launches
 **Note:** When user says "run the commands" during in-game testing, Claude should immediately execute test commands via nc - this is faster and more efficient than asking the user to run them manually.
 
 **Important:** After rebuilding, the game must be restarted to load the new dylib. Check build timestamps vs game start time if APIs appear missing.
+
+**Log Monitoring:** Subagents have permission issues (known bug #11934). Use periodic manual checks instead:
+```bash
+./scripts/monitor_log.sh 30 10   # 30s monitoring, 10s intervals
+tail -50 "$LOG" | grep -v Osiris  # Quick check for non-Osiris entries
+```
 
 Use `!test` to run automated regression tests. Use `Debug.*` helpers for memory probing.
 

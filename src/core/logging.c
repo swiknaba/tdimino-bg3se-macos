@@ -102,6 +102,9 @@ static LogConfig g_config = {
     .initialized = false
 };
 
+// Persistent file handle for log file (performance optimization)
+static FILE *g_log_file = NULL;
+
 // ============================================================================
 // Data Directory Management (from original logging.c)
 // ============================================================================
@@ -278,34 +281,44 @@ void log_init(void) {
 
     g_config.initialized = true;
 
-    // Write log header
+    // Open persistent log file handle (performance optimization)
     const char *log_path = bg3se_get_data_path(BG3SE_LOG_FILENAME);
-    FILE *f = fopen(log_path, "a");
-    if (f) {
+    g_log_file = fopen(log_path, "a");
+    if (g_log_file) {
+        // Set line buffering for timely writes without too much overhead
+        setvbuf(g_log_file, NULL, _IOLBF, 0);
+
+        // Write log header
         time_t now = time(NULL);
         struct tm *t = localtime(&now);
 
         if (g_config.format == LOG_FORMAT_JSON) {
-            fprintf(f, "{\"type\":\"header\",\"ts\":\"%04d-%02d-%02dT%02d:%02d:%02dZ\",\"name\":\"%s\",\"version\":\"%s\"}\n",
+            fprintf(g_log_file, "{\"type\":\"header\",\"ts\":\"%04d-%02d-%02dT%02d:%02d:%02dZ\",\"name\":\"%s\",\"version\":\"%s\"}\n",
                     t->tm_year + 1900, t->tm_mon + 1, t->tm_mday,
                     t->tm_hour, t->tm_min, t->tm_sec,
                     BG3SE_NAME, BG3SE_VERSION);
         } else {
-            fprintf(f, "\n\n========================================\n");
-            fprintf(f, "=== %s v%s ===\n", BG3SE_NAME, BG3SE_VERSION);
-            fprintf(f, "Log file: %s\n", log_path);
-            fprintf(f, "Log level: %s\n", log_level_name(g_config.global_level));
-            fprintf(f, "Timestamp: %04d-%02d-%02d %02d:%02d:%02d\n",
+            fprintf(g_log_file, "\n\n========================================\n");
+            fprintf(g_log_file, "=== %s v%s ===\n", BG3SE_NAME, BG3SE_VERSION);
+            fprintf(g_log_file, "Log file: %s\n", log_path);
+            fprintf(g_log_file, "Log level: %s\n", log_level_name(g_config.global_level));
+            fprintf(g_log_file, "Timestamp: %04d-%02d-%02d %02d:%02d:%02d\n",
                     t->tm_year + 1900, t->tm_mon + 1, t->tm_mday,
                     t->tm_hour, t->tm_min, t->tm_sec);
-            fprintf(f, "========================================\n");
+            fprintf(g_log_file, "========================================\n");
         }
-        fclose(f);
     }
 }
 
 void log_shutdown(void) {
     if (!g_config.initialized) return;
+
+    // Close persistent log file handle
+    if (g_log_file) {
+        fclose(g_log_file);
+        g_log_file = NULL;
+    }
+
     pthread_mutex_destroy(&g_config.mutex);
     g_config.initialized = false;
 }
@@ -397,6 +410,20 @@ void log_unregister_callback(int callback_id) {
     pthread_mutex_lock(&g_config.mutex);
     g_config.callbacks[callback_id].active = false;
     pthread_mutex_unlock(&g_config.mutex);
+}
+
+// ============================================================================
+// Debug Callback (VS Code Debugger Support - Issue #42)
+// ============================================================================
+
+static DebugLogCallback g_debug_callback = NULL;
+
+void log_set_debug_callback(DebugLogCallback callback) {
+    g_debug_callback = callback;
+}
+
+DebugLogCallback log_get_debug_callback(void) {
+    return g_debug_callback;
 }
 
 // ============================================================================
@@ -529,14 +556,10 @@ void log_write_v(LogLevel level, LogModule module,
     // Lock for output
     pthread_mutex_lock(&g_config.mutex);
 
-    // Write to file
-    if (g_config.output_flags & LOG_OUTPUT_FILE) {
-        const char *log_path = bg3se_get_data_path(BG3SE_LOG_FILENAME);
-        FILE *f = fopen(log_path, "a");
-        if (f) {
-            fprintf(f, "%s\n", formatted);
-            fclose(f);
-        }
+    // Write to file (uses persistent handle for performance)
+    if ((g_config.output_flags & LOG_OUTPUT_FILE) && g_log_file) {
+        fprintf(g_log_file, "%s\n", formatted);
+        // Line buffering handles flushing automatically
     }
 
     // Write to syslog (map levels)
@@ -576,7 +599,17 @@ void log_write_v(LogLevel level, LogModule module,
         }
     }
 
+    // Invoke debug callback for error messages (VS Code debugger - Issue #42)
+    // This is called after releasing the mutex to avoid potential deadlock
+    // if the debug callback triggers a breakpoint
+    DebugLogCallback debug_cb = g_debug_callback;
+
     pthread_mutex_unlock(&g_config.mutex);
+
+    // Fire debug callback outside of lock
+    if (debug_cb && level >= LOG_LEVEL_ERROR) {
+        debug_cb(level, module, message);
+    }
 }
 
 void log_write(LogLevel level, LogModule module,
