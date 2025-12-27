@@ -5,7 +5,8 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 BUILD_DYLIB="$PROJECT_DIR/build/lib/libbg3se.dylib"
 STEAM_DIR="$HOME/Library/Application Support/Steam/steamapps/common/Baldurs Gate 3"
-STEAM_DYLIB="$STEAM_DIR/libbg3se.dylib"
+# Deploy inside .app bundle where DYLD_INSERT_LIBRARIES loads from
+STEAM_DYLIB="$STEAM_DIR/Baldur's Gate 3.app/Contents/MacOS/libbg3se.dylib"
 
 if [[ ! -f "$BUILD_DYLIB" ]]; then
     echo "Error: Build dylib not found at $BUILD_DYLIB"

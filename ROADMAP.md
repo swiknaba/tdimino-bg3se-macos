@@ -2,7 +2,7 @@
 
 This document tracks the development roadmap for achieving feature parity with Windows BG3SE (Norbyte's Script Extender).
 
-## Current Status: v0.36.11
+## Current Status: v0.36.12
 
 **Overall Feature Parity: ~80%** (based on comprehensive API function count analysis)
 

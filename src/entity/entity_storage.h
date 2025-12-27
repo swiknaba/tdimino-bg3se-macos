@@ -48,6 +48,26 @@ extern "C" {
 // Invalid indices
 #define STORAGE_INDEX_INVALID           0xFFFF
 
+// One-frame component detection (bit 15 indicates one-frame component)
+// From Windows BG3SE: IsOneFrame(idx) = (idx & 0x8000) == 0x8000
+#define ONEFRAME_TYPE_MASK              0x8000
+
+// One-frame component storage offsets (verified from Windows BG3SE EntitySystem.h:520-527)
+// EntityStorageData layout after InstanceToPageMap (0x1C0):
+//   0x200 = AddedComponentFrameStorageIDs (HashMap<uint64_t, uint16_t>)
+//   0x240 = RemovedComponentFrameStorageIDs2 (HashMap<uint64_t, uint16_t>)
+//   0x280 = ComponentAddedEntityMap (Array<Array<EntityHandle>>)
+//   0x290 = ComponentRemovedEntityMap (Array<Array<EntityHandle>>)
+//   0x2A0 = OneFrameComponents (HashMap<ComponentTypeIndex, HashMap<EntityHandle, void*>>)
+//   0x2E0 = HasOneFrameComponents (bool)
+#define STORAGE_DATA_ONEFRAME_COMPONENTS 0x2A0  // HashMap<ComponentTypeIndex, HashMap<EntityHandle, void*>>
+#define STORAGE_DATA_HAS_ONEFRAME        0x2e0  // bool HasOneFrameComponents
+
+// Check if a component type index indicates a one-frame component
+static inline bool is_oneframe_component(uint16_t typeIndex) {
+    return (typeIndex & ONEFRAME_TYPE_MASK) == ONEFRAME_TYPE_MASK;
+}
+
 // ============================================================================
 // EntityStorageIndex - Location of an entity in component pages
 // ============================================================================

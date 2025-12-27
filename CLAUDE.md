@@ -2,7 +2,7 @@
 
 macOS port of Norbyte's Script Extender for Baldur's Gate 3. Goal: feature parity with Windows BG3SE.
 
-**Version:** v0.36.11 | **Parity:** ~80% | **Target:** Full Windows BG3SE mod compatibility
+**Version:** v0.36.12 | **Parity:** ~80% | **Target:** Full Windows BG3SE mod compatibility
 
 ## Stack
 
@@ -74,14 +74,19 @@ Use `bg3se-macos-ghidra` skill for Ghidra workflows and ARM64 patterns.
 
 You run console commands via `echo 'cmd' | nc -U /tmp/bg3se.sock`. User launches game.
 
+**Console Access:** You can ALWAYS connect to the BG3SE console when the game is running. Prefer this over log parsing - it's faster and provides real-time feedback. Use `nc -U /tmp/bg3se.sock` for quick one-liners.
+
 **Note:** When user says "run the commands" during in-game testing, Claude should immediately execute test commands via nc - this is faster and more efficient than asking the user to run them manually.
 
 **Important:** After rebuilding, the game must be restarted to load the new dylib. Check build timestamps vs game start time if APIs appear missing.
 
-**Log Monitoring:** Subagents have permission issues (known bug #11934). Use periodic manual checks instead:
+**Session Logs:** Each game launch creates a new log file:
 ```bash
-./scripts/monitor_log.sh 30 10   # 30s monitoring, 10s intervals
-tail -50 "$LOG" | grep -v Osiris  # Quick check for non-Osiris entries
+# Latest session (symlink)
+tail -f "/Users/tomdimino/Library/Application Support/BG3SE/logs/latest.log"
+
+# Specific session (e.g., 2025-12-26_18-05-00)
+ls "/Users/tomdimino/Library/Application Support/BG3SE/logs/"
 ```
 
 Use `!test` to run automated regression tests. Use `Debug.*` helpers for memory probing.

@@ -161,6 +161,35 @@ static uint64_t hash_component_type_index(uint16_t typeIndex) {
     return h0 | (h0 << 16);
 }
 
+// Generic HashMap find_index for uint16_t keys (proper bucket-based lookup)
+// Matches Windows BG3SE CoreLib/Base/BaseMap.h:153-164
+static int hashmap_find_index_u16(void *map, uint16_t key) {
+    StaticArray *hashKeys = GET_HASH_KEYS(map);   // +0x00: bucket array
+    GenericArray *nextIds = GET_NEXT_IDS(map);    // +0x10: collision chains
+    GenericArray *keys = GET_KEYS(map);           // +0x20: key array
+
+    if (!hashKeys->buf || hashKeys->size == 0) return -1;
+    if (!keys->buf || keys->size == 0) return -1;
+
+    // Hash and get bucket
+    uint64_t hash = hash_component_type_index(key);
+    uint32_t bucket = (uint32_t)(hash % hashKeys->size);
+
+    // Get initial key index from bucket
+    int32_t keyIndex = ((int32_t *)hashKeys->buf)[bucket];
+
+    // Follow collision chain
+    uint16_t *keyArray = (uint16_t *)keys->buf;
+    int32_t *nextArray = nextIds->buf ? (int32_t *)nextIds->buf : NULL;
+
+    while (keyIndex >= 0 && (uint32_t)keyIndex < keys->size) {
+        if (keyArray[keyIndex] == key) return keyIndex;
+        keyIndex = (nextArray && (uint32_t)keyIndex < nextIds->size)
+                   ? nextArray[keyIndex] : -1;
+    }
+    return -1;
+}
+
 bool storage_data_get_component_slot(void *storageData, uint16_t typeIndex,
                                       uint8_t *outSlot) {
     if (!storageData || !outSlot) return false;
@@ -458,6 +487,77 @@ int storage_data_enumerate_component_types(void *storageData,
 // Entity Enumeration
 // ============================================================================
 
+// Helper: Get entities from OneFrameComponents pool (HashMap<ComponentTypeIndex, HashMap<EntityHandle, void*>>)
+// Uses proper bucket-based HashMap lookup matching Windows BG3SE implementation
+static int get_oneframe_entities(void *storageData, uint16_t componentTypeIndex,
+                                  uint64_t *outHandles, int maxHandles) {
+    // Check if this storage class has one-frame components
+    // HasOneFrameComponents flag is at offset 0x2e0
+    uint8_t hasOneFrame = *(uint8_t *)((char *)storageData + STORAGE_DATA_HAS_ONEFRAME);
+    if (!hasOneFrame) {
+        return 0;
+    }
+
+    LOG_ENTITY_DEBUG("  OneFrame: storageData=%p has oneFrame components, checking map...", storageData);
+
+    // OneFrameComponents is at offset 0x2A0 (HashMap<ComponentTypeIndex, HashMap<EntityHandle, void*>>)
+    void *oneFrameMap = (char *)storageData + STORAGE_DATA_ONEFRAME_COMPONENTS;
+
+    // Outer HashMap lookup: find ComponentTypeIndex in the OneFrameComponents map
+    // Keys are stored WITHOUT the 0x8000 bit in the HashMap
+    uint16_t searchKey = componentTypeIndex & 0x7FFF;  // Strip one-frame bit for lookup
+
+    LOG_ENTITY_DEBUG("  OneFrame: looking up searchKey=%u (0x%x) in outer map", searchKey, searchKey);
+
+    // Use proper bucket-based HashMap lookup
+    int outerIdx = hashmap_find_index_u16(oneFrameMap, searchKey);
+    if (outerIdx < 0) {
+        LOG_ENTITY_DEBUG("  OneFrame: component type not found in OneFrameComponents map");
+        return 0;
+    }
+
+    LOG_ENTITY_DEBUG("  OneFrame: found at outerIdx=%d", outerIdx);
+
+    // Get the inner HashMap (EntityHandle → void*) from Values array
+    GenericArray *outerValues = GET_VALUES(oneFrameMap);
+    if (!outerValues->buf || (uint32_t)outerIdx >= outerValues->size) {
+        LOG_ENTITY_DEBUG("  OneFrame: outerValues invalid or outerIdx out of bounds");
+        return 0;
+    }
+
+    // Values array contains pointers to inner HashMaps
+    void **valuePtrArray = (void **)outerValues->buf;
+    void *innerMap = valuePtrArray[outerIdx];
+    if (!innerMap) {
+        LOG_ENTITY_DEBUG("  OneFrame: innerMap is NULL");
+        return 0;
+    }
+
+    LOG_ENTITY_DEBUG("  OneFrame: innerMap=%p", innerMap);
+
+    // Inner HashMap has EntityHandle keys at +0x20
+    // We collect all EntityHandles from the keys array (they all have this component)
+    GenericArray *entityKeys = GET_KEYS(innerMap);
+    if (!entityKeys->buf || entityKeys->size == 0) {
+        LOG_ENTITY_DEBUG("  OneFrame: innerMap has no entities");
+        return 0;
+    }
+
+    uint64_t *handleArray = (uint64_t *)entityKeys->buf;
+    uint32_t entriesToCopy = entityKeys->size;
+
+    if ((int)entriesToCopy > maxHandles) {
+        entriesToCopy = (uint32_t)maxHandles;
+    }
+
+    for (uint32_t j = 0; j < entriesToCopy; j++) {
+        outHandles[j] = handleArray[j];
+    }
+
+    LOG_ENTITY_DEBUG("  OneFrame: found %u entities for typeIndex=0x%x", entriesToCopy, componentTypeIndex);
+    return (int)entriesToCopy;
+}
+
 int component_lookup_get_all_with_component(uint16_t componentTypeIndex,
                                              uint64_t *outHandles,
                                              int maxHandles) {
@@ -465,11 +565,15 @@ int component_lookup_get_all_with_component(uint16_t componentTypeIndex,
         return 0;
     }
 
+    // Check if this is a one-frame component (bit 15 set)
+    bool isOneFrame = is_oneframe_component(componentTypeIndex);
+
     // Get Entities array from StorageContainer
     GenericArray *entities = storage_container_get_entities(g_StorageContainer);
 
     // Debug: dump raw bytes to understand layout
-    LOG_ENTITY_DEBUG("GetAllWithComponent: StorageContainer=%p", g_StorageContainer);
+    LOG_ENTITY_DEBUG("GetAllWithComponent: StorageContainer=%p (oneFrame=%s)",
+               g_StorageContainer, isOneFrame ? "YES" : "no");
     LOG_ENTITY_DEBUG("  Entities.buf=%p, capacity=%u, size=%u",
                entities->buf, entities->capacity, entities->size);
 
@@ -478,8 +582,8 @@ int component_lookup_get_all_with_component(uint16_t componentTypeIndex,
         return 0;
     }
 
-    LOG_ENTITY_DEBUG("GetAllWithComponent: Searching %u entity classes for typeIndex=%u",
-               entities->size, componentTypeIndex);
+    LOG_ENTITY_DEBUG("GetAllWithComponent: Searching %u entity classes for typeIndex=0x%x%s",
+               entities->size, componentTypeIndex, isOneFrame ? " (one-frame)" : "");
 
     int totalCount = 0;
     void **entityClasses = (void **)entities->buf;
@@ -489,45 +593,93 @@ int component_lookup_get_all_with_component(uint16_t componentTypeIndex,
         void *storageData = entityClasses[classIdx];
         if (!storageData) continue;
 
-        // Check if this class has the component
-        uint8_t slot;
-        if (!storage_data_get_component_slot(storageData, componentTypeIndex, &slot)) {
-            continue;  // This class doesn't have this component type
+        if (isOneFrame) {
+            // One-frame components are stored in the OneFrameComponents pool
+            int count = get_oneframe_entities(storageData, componentTypeIndex,
+                                               outHandles + totalCount, maxHandles - totalCount);
+            if (count > 0) {
+                totalCount += count;
+                LOG_ENTITY_DEBUG("  Class %u: found %d one-frame entities (total: %d)",
+                           classIdx, count, totalCount);
+            }
+        } else {
+            // Regular components - check ComponentTypeToIndex HashMap
+            uint8_t slot;
+            if (!storage_data_get_component_slot(storageData, componentTypeIndex, &slot)) {
+                continue;  // This class doesn't have this component type
+            }
+
+            // This class has the component - collect all entity handles from InstanceToPageMap
+            void *instanceMap = (char *)storageData + STORAGE_DATA_INSTANCE_TO_PAGE_MAP;
+            GenericArray *keys = GET_KEYS(instanceMap);
+
+            if (!keys->buf || keys->size == 0) {
+                continue;
+            }
+
+            uint64_t *handleArray = (uint64_t *)keys->buf;
+            uint32_t entriesToCopy = keys->size;
+
+            // Limit to remaining space in output buffer
+            if (totalCount + (int)entriesToCopy > maxHandles) {
+                entriesToCopy = (uint32_t)(maxHandles - totalCount);
+            }
+
+            // Copy handles
+            for (uint32_t i = 0; i < entriesToCopy; i++) {
+                outHandles[totalCount++] = handleArray[i];
+            }
+
+            LOG_ENTITY_DEBUG("  Class %u: found %u entities with component (total: %d)",
+                       classIdx, keys->size, totalCount);
         }
-
-        // This class has the component - collect all entity handles from InstanceToPageMap
-        void *instanceMap = (char *)storageData + STORAGE_DATA_INSTANCE_TO_PAGE_MAP;
-        GenericArray *keys = GET_KEYS(instanceMap);
-
-        if (!keys->buf || keys->size == 0) {
-            continue;
-        }
-
-        uint64_t *handleArray = (uint64_t *)keys->buf;
-        uint32_t entriesToCopy = keys->size;
-
-        // Limit to remaining space in output buffer
-        if (totalCount + (int)entriesToCopy > maxHandles) {
-            entriesToCopy = (uint32_t)(maxHandles - totalCount);
-        }
-
-        // Copy handles
-        for (uint32_t i = 0; i < entriesToCopy; i++) {
-            outHandles[totalCount++] = handleArray[i];
-        }
-
-        LOG_ENTITY_DEBUG("  Class %u: found %u entities with component (total: %d)",
-                   classIdx, keys->size, totalCount);
     }
 
-    LOG_ENTITY_DEBUG("GetAllWithComponent: Found %d total entities", totalCount);
+    LOG_ENTITY_DEBUG("GetAllWithComponent: Found %d total entities%s",
+               totalCount, isOneFrame ? " (one-frame)" : "");
     return totalCount;
+}
+
+// Helper: Count entities in OneFrameComponents pool
+static int count_oneframe_entities(void *storageData, uint16_t componentTypeIndex) {
+    uint8_t hasOneFrame = *(uint8_t *)((char *)storageData + STORAGE_DATA_HAS_ONEFRAME);
+    if (!hasOneFrame) {
+        return 0;
+    }
+
+    void *oneFrameMap = (char *)storageData + STORAGE_DATA_ONEFRAME_COMPONENTS;
+    GenericArray *keys = (GenericArray *)((char *)oneFrameMap + 0x20);
+    if (!keys->buf || keys->size == 0) {
+        return 0;
+    }
+
+    uint16_t searchKey = componentTypeIndex & 0x7FFF;
+    uint16_t *keyArray = (uint16_t *)keys->buf;
+    void **valueArray = *(void ***)((char *)oneFrameMap + 0x30);
+
+    if (!valueArray) return 0;
+
+    for (uint32_t i = 0; i < keys->size; i++) {
+        if ((keyArray[i] & 0x7FFF) == searchKey) {
+            void *innerMap = valueArray[i];
+            if (!innerMap) continue;
+
+            GenericArray *entityKeys = (GenericArray *)((char *)innerMap + 0x20);
+            if (entityKeys->buf && entityKeys->size > 0) {
+                return (int)entityKeys->size;
+            }
+        }
+    }
+
+    return 0;
 }
 
 int component_lookup_count_with_component(uint16_t componentTypeIndex) {
     if (!component_lookup_ready()) {
         return 0;
     }
+
+    bool isOneFrame = is_oneframe_component(componentTypeIndex);
 
     // Get Entities array from StorageContainer
     GenericArray *entities = storage_container_get_entities(g_StorageContainer);
@@ -544,18 +696,23 @@ int component_lookup_count_with_component(uint16_t componentTypeIndex) {
         void *storageData = entityClasses[classIdx];
         if (!storageData) continue;
 
-        // Check if this class has the component
-        uint8_t slot;
-        if (!storage_data_get_component_slot(storageData, componentTypeIndex, &slot)) {
-            continue;
-        }
+        if (isOneFrame) {
+            // One-frame components are stored in the OneFrameComponents pool
+            totalCount += count_oneframe_entities(storageData, componentTypeIndex);
+        } else {
+            // Regular components - check ComponentTypeToIndex HashMap
+            uint8_t slot;
+            if (!storage_data_get_component_slot(storageData, componentTypeIndex, &slot)) {
+                continue;
+            }
 
-        // This class has the component - count entities from InstanceToPageMap
-        void *instanceMap = (char *)storageData + STORAGE_DATA_INSTANCE_TO_PAGE_MAP;
-        GenericArray *keys = GET_KEYS(instanceMap);
+            // This class has the component - count entities from InstanceToPageMap
+            void *instanceMap = (char *)storageData + STORAGE_DATA_INSTANCE_TO_PAGE_MAP;
+            GenericArray *keys = GET_KEYS(instanceMap);
 
-        if (keys->buf && keys->size > 0) {
-            totalCount += (int)keys->size;
+            if (keys->buf && keys->size > 0) {
+                totalCount += (int)keys->size;
+            }
         }
     }
 

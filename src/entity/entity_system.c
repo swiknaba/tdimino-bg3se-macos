@@ -2064,8 +2064,8 @@ static int lua_entity_get_all_with_component(lua_State *L) {
 
     // Check if TypeId has been resolved (65535 = COMPONENT_INDEX_UNDEFINED)
     if (info->index == 0xFFFF) {
-        // TypeId not yet discovered - silently return empty table
-        // This is normal for one-frame components before first discovery
+        // TypeId not yet discovered - return empty table
+        LOG_ENTITY_DEBUG("GetAllEntitiesWithComponent: TypeId unresolved for '%s' (index=65535)", componentName);
         lua_newtable(L);
         return 1;
     }

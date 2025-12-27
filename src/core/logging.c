@@ -104,12 +104,14 @@ static LogConfig g_config = {
 
 // Persistent file handle for log file (performance optimization)
 static FILE *g_log_file = NULL;
+static char g_session_log_path[512] = {0};
 
 // ============================================================================
 // Data Directory Management (from original logging.c)
 // ============================================================================
 
 static char g_DataDir[512] = {0};
+static char g_LogsDir[512] = {0};
 static char g_DataPath[512] = {0};
 static pthread_once_t g_DataDirOnce = PTHREAD_ONCE_INIT;
 
@@ -131,6 +133,9 @@ static void init_data_dir(void) {
         mkdir(path, 0755);
 
         if (mkdir(g_DataDir, 0755) == 0 || errno == EEXIST) {
+            // Create logs subdirectory for session-based logs
+            snprintf(g_LogsDir, sizeof(g_LogsDir), "%s/logs", g_DataDir);
+            mkdir(g_LogsDir, 0755);
             return;
         }
     }
@@ -138,6 +143,10 @@ static void init_data_dir(void) {
     // Fallback to /tmp/BG3SE/
     snprintf(g_DataDir, sizeof(g_DataDir), "/tmp/%s", BG3SE_DATA_DIR_NAME);
     mkdir(g_DataDir, 0755);
+
+    // Create logs subdirectory
+    snprintf(g_LogsDir, sizeof(g_LogsDir), "%s/logs", g_DataDir);
+    mkdir(g_LogsDir, 0755);
 }
 
 const char *bg3se_get_data_dir(void) {
@@ -281,33 +290,48 @@ void log_init(void) {
 
     g_config.initialized = true;
 
-    // Open persistent log file handle (performance optimization)
-    const char *log_path = bg3se_get_data_path(BG3SE_LOG_FILENAME);
-    g_log_file = fopen(log_path, "a");
+    // Generate session-based log filename: logs/bg3se_YYYY-MM-DD_HH-MM-SS.log
+    time_t now = time(NULL);
+    struct tm *t = localtime(&now);
+
+    // Ensure logs directory exists
+    pthread_once(&g_DataDirOnce, init_data_dir);
+
+    snprintf(g_session_log_path, sizeof(g_session_log_path),
+             "%s/bg3se_%04d-%02d-%02d_%02d-%02d-%02d.log",
+             g_LogsDir,
+             t->tm_year + 1900, t->tm_mon + 1, t->tm_mday,
+             t->tm_hour, t->tm_min, t->tm_sec);
+
+    // Open session log file (new file each session)
+    g_log_file = fopen(g_session_log_path, "w");
     if (g_log_file) {
         // Set line buffering for timely writes without too much overhead
         setvbuf(g_log_file, NULL, _IOLBF, 0);
 
         // Write log header
-        time_t now = time(NULL);
-        struct tm *t = localtime(&now);
-
         if (g_config.format == LOG_FORMAT_JSON) {
             fprintf(g_log_file, "{\"type\":\"header\",\"ts\":\"%04d-%02d-%02dT%02d:%02d:%02dZ\",\"name\":\"%s\",\"version\":\"%s\"}\n",
                     t->tm_year + 1900, t->tm_mon + 1, t->tm_mday,
                     t->tm_hour, t->tm_min, t->tm_sec,
                     BG3SE_NAME, BG3SE_VERSION);
         } else {
-            fprintf(g_log_file, "\n\n========================================\n");
+            fprintf(g_log_file, "========================================\n");
             fprintf(g_log_file, "=== %s v%s ===\n", BG3SE_NAME, BG3SE_VERSION);
-            fprintf(g_log_file, "Log file: %s\n", log_path);
-            fprintf(g_log_file, "Log level: %s\n", log_level_name(g_config.global_level));
-            fprintf(g_log_file, "Timestamp: %04d-%02d-%02d %02d:%02d:%02d\n",
+            fprintf(g_log_file, "Session: %04d-%02d-%02d %02d:%02d:%02d\n",
                     t->tm_year + 1900, t->tm_mon + 1, t->tm_mday,
                     t->tm_hour, t->tm_min, t->tm_sec);
+            fprintf(g_log_file, "Log file: %s\n", g_session_log_path);
+            fprintf(g_log_file, "Log level: %s\n", log_level_name(g_config.global_level));
             fprintf(g_log_file, "========================================\n");
         }
     }
+
+    // Also create a symlink to the latest log for easy access
+    char latest_link[512];
+    snprintf(latest_link, sizeof(latest_link), "%s/latest.log", g_LogsDir);
+    unlink(latest_link);  // Remove old symlink
+    symlink(g_session_log_path, latest_link);
 }
 
 void log_shutdown(void) {

@@ -13,6 +13,37 @@ Each entry includes:
 
 ---
 
+## [v0.36.12] - 2025-12-26
+
+**Parity:** ~80% | **Category:** Logging Infrastructure | **Issues:** #8 (partial)
+
+### Added
+- **Session-Based Logging** - Each game session creates a new timestamped log file
+  - Logs stored in `~/Library/Application Support/BG3SE/logs/`
+  - Format: `bg3se_YYYY-MM-DD_HH-MM-SS.log`
+  - `latest.log` symlink always points to current session
+  - Cleaner log headers with session timestamp
+
+- **OneFrame Component Pool Access** - Infrastructure for server-side events
+  - Proper bucket-based HashMap lookup (`hashmap_find_index_u16`)
+  - `get_oneframe_entities()` accesses OneFrameComponents pool at offset 0x2A0
+  - `HasOneFrameComponents` flag check at offset 0x2E0
+  - Debug logging for OneFrame pool traversal
+
+### Verified
+- **Osiris Turn Events** - Confirmed working in actual combat
+  - `TurnStarted` fires when character's turn begins
+  - `TurnEnded` fires when character's turn ends
+  - Both events provide character GUID as argument
+  - Note: Only fire in combat, not in force turn-based exploration
+
+### Technical
+- Session logs prevent single log file from growing indefinitely
+- OneFrame pool access code runs correctly (returns 0 in client context - server EntityWorld needed for esv:: components)
+- Ext.Log API verified working with module-aware logging
+
+---
+
 ## [v0.36.11] - 2025-12-26
 
 **Parity:** ~80% | **Category:** Events System | **Issues:** #51 (complete)

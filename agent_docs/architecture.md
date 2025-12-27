@@ -15,7 +15,7 @@ src/
 │   └── arm64_call.c/h     # ARM64 ABI wrappers (x8 indirect return)
 ├── hooks/          # Legacy hook stubs (actual hooks in main.c)
 ├── injector/       # Main injection logic (main.c)
-├── lua/            # Lua API modules (lua_ext, lua_json, lua_osiris, lua_stats)
+├── lua/            # Lua API modules (lua_ext, lua_json, lua_osiris, lua_stats, lua_events, lua_logging)
 ├── mod/            # Mod detection and loading
 ├── osiris/         # Osiris types, functions, pattern scanning
 ├── pak/            # LSPK v18 PAK file reading

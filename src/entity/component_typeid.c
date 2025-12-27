@@ -30,6 +30,7 @@ typedef struct {
     uint64_t ghidraAddr;        // Ghidra address of m_TypeIndex global
     uint16_t expectedSize;      // Expected component size (0 = unknown)
     bool isProxy;               // Is this a proxy component?
+    bool isPointer;             // If true, ghidraAddr points to TypeInfo*, read value at *ptr
 } TypeIdEntry;
 
 static const TypeIdEntry g_KnownTypeIds[] = {
@@ -256,14 +257,15 @@ static const TypeIdEntry g_KnownTypeIds[] = {
 
     // =====================================================================
     // Issue #51 Event Components - One-frame event components for Ext.Events
-    // Discovered via Ghidra MCP decompilation of RegisterType<T> functions
+    // These addresses contain POINTERS to TypeIndex storage.
+    // Must dereference: TypeIndex = *(uint32_t*)(*ptr)
+    // Discovered via Ghidra: RegisterQueryDescription uses PTR_m_TypeIndex pattern.
     // =====================================================================
-    { "esv::TurnStartedEventOneFrameComponent",       0x1083f1848, 0, false },
-    { "esv::TurnEndedEventOneFrameComponent",         0x1083f1810, 0, false },
-    { "esv::stats::LevelChangedOneFrameComponent",    0x1083f2050, 0, false },
+    { "esv::TurnStartedEventOneFrameComponent",       0x1083ced18, 0, false, true },  // TypeIndex 167
+    { "esv::TurnEndedEventOneFrameComponent",         0x1083ceca8, 0, false, true },  // TypeIndex 164
 
     // Sentinel
-    { NULL, 0, 0, false }
+    { NULL, 0, 0, false, false }
 };
 
 // ============================================================================
@@ -345,6 +347,76 @@ bool component_typeid_read(uint64_t ghidraAddr, uint16_t *outIndex) {
     return true;
 }
 
+/**
+ * Read TypeIndex from a pointer-based address.
+ * Some components (like one-frame event components) store a pointer to TypeInfo,
+ * and the TypeIndex is at offset 0 of that structure.
+ *
+ * Pattern from Ghidra:
+ *   puVar3 = PTR_m_TypeIndex_XXXXXXXX;
+ *   uVar1 = *(uint *)PTR_m_TypeIndex_XXXXXXXX;
+ */
+bool component_typeid_read_pointer(uint64_t ghidraAddr, uint16_t *outIndex) {
+    if (!component_typeid_ready() || !outIndex) {
+        return false;
+    }
+
+    /* Calculate runtime address of the pointer */
+    uint64_t offset = ghidraAddr - GHIDRA_BASE_ADDRESS;
+    mach_vm_address_t ptrAddr = offset + (mach_vm_address_t)g_BinaryBase;
+
+    /* Validate the pointer address */
+    SafeMemoryInfo info = safe_memory_check_address(ptrAddr);
+    if (!info.is_valid || !info.is_readable) {
+        LOG_ENTITY_DEBUG("  Pointer address 0x%llx (Ghidra 0x%llx) is not readable",
+                   (unsigned long long)ptrAddr, (unsigned long long)ghidraAddr);
+        return false;
+    }
+
+    /* Read the pointer value */
+    void *typeInfoPtr = NULL;
+    if (!safe_memory_read_pointer(ptrAddr, &typeInfoPtr)) {
+        LOG_ENTITY_DEBUG("  Failed to read pointer from 0x%llx (Ghidra 0x%llx)",
+                   (unsigned long long)ptrAddr, (unsigned long long)ghidraAddr);
+        return false;
+    }
+
+    if (!typeInfoPtr) {
+        LOG_ENTITY_DEBUG("  Null pointer at 0x%llx (Ghidra 0x%llx)",
+                   (unsigned long long)ptrAddr, (unsigned long long)ghidraAddr);
+        return false;
+    }
+
+    /* Validate the dereferenced address */
+    mach_vm_address_t valueAddr = (mach_vm_address_t)typeInfoPtr;
+    SafeMemoryInfo derefInfo = safe_memory_check_address(valueAddr);
+    if (!derefInfo.is_valid || !derefInfo.is_readable) {
+        LOG_ENTITY_DEBUG("  Dereferenced address 0x%llx is not readable (ptr at Ghidra 0x%llx)",
+                   (unsigned long long)valueAddr, (unsigned long long)ghidraAddr);
+        return false;
+    }
+
+    /* Read the TypeIndex from the dereferenced address */
+    int32_t rawValue = -1;
+    if (!safe_memory_read_i32(valueAddr, &rawValue)) {
+        LOG_ENTITY_DEBUG("  Failed to read TypeIndex from 0x%llx (ptr at Ghidra 0x%llx)",
+                   (unsigned long long)valueAddr, (unsigned long long)ghidraAddr);
+        return false;
+    }
+
+    /* Check for valid TypeIndex range */
+    if (rawValue < 0 || rawValue > 0xFFFF) {
+        LOG_ENTITY_DEBUG("  Invalid TypeIndex value %d at *0x%llx (expected 0-65535)",
+                   rawValue, (unsigned long long)valueAddr);
+        return false;
+    }
+
+    *outIndex = (uint16_t)rawValue;
+    LOG_ENTITY_DEBUG("  TypeIndex=%u at *0x%llx (ptr at Ghidra 0x%llx)",
+               *outIndex, (unsigned long long)valueAddr, (unsigned long long)ghidraAddr);
+    return true;
+}
+
 // ============================================================================
 // Discovery
 // ============================================================================
@@ -363,14 +435,32 @@ int component_typeid_discover(void) {
         const TypeIdEntry *entry = &g_KnownTypeIds[i];
 
         uint16_t typeIndex;
-        if (component_typeid_read(entry->ghidraAddr, &typeIndex)) {
-            LOG_ENTITY_DEBUG("  %s: index=%u (from 0x%llx)",
-                       entry->componentName, typeIndex, (unsigned long long)entry->ghidraAddr);
+        bool success;
 
-            // Update the component registry with this discovered index
+        // Use pointer-based read for one-frame components (isPointer flag)
+        if (entry->isPointer) {
+            success = component_typeid_read_pointer(entry->ghidraAddr, &typeIndex);
+        } else {
+            success = component_typeid_read(entry->ghidraAddr, &typeIndex);
+        }
+
+        if (success) {
+            // One-frame components (isPointer=true) need the 0x8000 bit set
+            // This tells the storage lookup to search the OneFrameComponents pool
+            uint16_t registeredIndex = typeIndex;
+            if (entry->isPointer) {
+                registeredIndex = typeIndex | 0x8000;  // Set one-frame bit
+            }
+
+            LOG_ENTITY_DEBUG("  %s: index=%u (registered=%u, from 0x%llx, oneFrame=%s)",
+                       entry->componentName, typeIndex, registeredIndex,
+                       (unsigned long long)entry->ghidraAddr,
+                       entry->isPointer ? "yes" : "no");
+
+            // Update the component registry with the proper index (with 0x8000 for one-frame)
             bool registered = component_registry_register(
                 entry->componentName,
-                typeIndex,
+                registeredIndex,
                 entry->expectedSize,
                 entry->isProxy
             );
@@ -381,8 +471,9 @@ int component_typeid_discover(void) {
                 discovered++;
             }
         } else {
-            LOG_ENTITY_DEBUG("  %s: FAILED to read from 0x%llx",
-                       entry->componentName, (unsigned long long)entry->ghidraAddr);
+            LOG_ENTITY_DEBUG("  %s: FAILED to read from 0x%llx (ptr=%s)",
+                       entry->componentName, (unsigned long long)entry->ghidraAddr,
+                       entry->isPointer ? "yes" : "no");
         }
     }
 
